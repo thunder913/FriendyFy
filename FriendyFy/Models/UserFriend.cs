@@ -14,5 +14,6 @@ namespace FriendyFy.Models
         public string UserOneId { get; set; }
         public virtual ApplicationUser UserTwo { get; set; }
         public string UserTwoId { get; set; }
+        public DateTime CreatedOn { get; set; }
     }
 }
