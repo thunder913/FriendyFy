@@ -22,6 +22,8 @@ namespace FriendyFy.Data
         public DbSet<Interest> Interests { get; set; }
         public DbSet<Post> Posts { get; set; }
 
+        public DbSet<UserFriend> UserFriends { get; set; }
+
         protected override void OnModelCreating(ModelBuilder builder)
         {
             base.OnModelCreating(builder);
@@ -37,6 +39,10 @@ namespace FriendyFy.Data
             builder.Entity<Post>()
                 .HasOne(x => x.Creator)
                 .WithMany(x => x.Posts);
+
+            builder.Entity<ApplicationUser>()
+                .HasMany(x => x.Friends)
+                .WithOne(x => x.UserOne);
         }
     }
 }

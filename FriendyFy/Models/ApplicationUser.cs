@@ -14,6 +14,6 @@ namespace FriendyFy.Models
         public ICollection<Post> Posts { get; set; } = new HashSet<Post>();
         public ICollection<Interest> Interests { get; set; } = new HashSet<Interest>();
         public ICollection<Event> Events { get; set; } = new HashSet<Event>();
-        public ICollection<ApplicationUser> Friends { get; set; } = new HashSet<ApplicationUser>();
+        public ICollection<UserFriend> Friends { get; set; } = new HashSet<UserFriend>();
     }
 }
