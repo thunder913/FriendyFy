@@ -17,5 +17,26 @@ namespace FriendyFy.Data
             IOptions<OperationalStoreOptions> operationalStoreOptions) : base(options, operationalStoreOptions)
         {
         }
+
+        public DbSet<Event> Events { get; set; }
+        public DbSet<Interest> Interests { get; set; }
+        public DbSet<Post> Posts { get; set; }
+
+        protected override void OnModelCreating(ModelBuilder builder)
+        {
+            base.OnModelCreating(builder);
+
+            builder.Entity<Event>()
+                .HasMany(x => x.Users)
+                .WithMany(x => x.Events);
+
+            builder.Entity<Interest>()
+                .HasMany(x => x.Users)
+                .WithMany(x => x.Interests);
+
+            builder.Entity<Post>()
+                .HasOne(x => x.Creator)
+                .WithMany(x => x.Posts);
+        }
     }
 }
