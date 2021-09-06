@@ -7,24 +7,26 @@
     flex-wrap: nowrap;
     overflow-x:scroll;
     bottom: -10px;
+    scroll-behavior: smooth;
 }
 
 .site-footer::-webkit-scrollbar {
     width: 10px;
-    background-color: black;
   }
   
   /* Track */
   .site-footer::-webkit-scrollbar-track {
-    background: #f1f1f1;
+    background: rgb(92, 92, 92);
   }
   
   /* Handle */
   .site-footer::-webkit-scrollbar-thumb {
     background: #888;
+    border-radius: 30%;
+    scrollbar-color: red;
   }
   
   /* Handle on hover */
   .site-footer::-webkit-scrollbar-thumb:hover {
-    background: #555;
+    background: rgb(61, 61, 61);
   }

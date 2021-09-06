@@ -1,0 +1,42 @@
+.friend-search-form{
+    margin: 12px 0px auto 20px;
+}
+
+.friend-search-form > form > input{
+    background-color: rgb(104, 102, 102);
+    padding: 0px 20px 0px 10px;
+    border: 3px solid rgb(92, 91, 90, 0.4);
+    border-radius: 20px;
+    color: rgb(221, 221, 221);
+    outline: none;
+    box-shadow: 0px 0px 33px 0px rgba(0,0,0,0.4);
+}
+
+.friend-search-form > form > input::placeholder{
+    color: rgba(170, 170, 170, 0.856);
+    font-family: Arial, Helvetica, sans-serif;
+    text-align: left;
+}
+
+.friend-search-button{
+    position: relative;
+    right: 25px;
+    padding: 0px 7px;
+    border-radius: 0px 20px 20px 0px;
+    border: 0px;
+    background-color: rgb(73, 71, 71);
+    font-size: 16px;
+    transition: 0.5s;
+    color: rgba(170, 170, 170, 0.856);
+    border: 3px solid rgba(82, 81, 80, 0.4);
+}
+
+.friend-search-button:hover{
+    background-color: rgb(128, 128, 128);
+    color: rgb(221, 221, 221);
+    border: 3px solid rgb(92, 91, 90, 0.1);
+}
+
+.friend-search-form > form{
+    display: flex;
+}

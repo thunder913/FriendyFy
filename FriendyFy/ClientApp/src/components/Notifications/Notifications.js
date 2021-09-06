@@ -6,7 +6,7 @@ import './Notifications.css';
 const Notifications = () =>(
     <div className="notifications circle-right">
         <FontAwesomeIcon icon={faBell} />
-        <div class="new-notification">10</div>
+        <div className="new-notification">10</div>
     </div>
     )
 

@@ -1,12 +1,71 @@
 .user-chat-head img{
     width: 100%;
+    object-fit: cover;
+    border-radius: 50%;
 }
 
 .footer-user-image{
     width: 40px;
+    height: 40px;
+    border-radius: 50%;
+    margin-right: 5px;
 }
 
 .user-chat-head{
-    margin-left: 50px;
+    margin-left: 20px;
     display: flex;
+    transition: 0.3s;
+    padding: 2px;
+    border-radius: 25px;
+    align-items: center;
+}
+
+.user-chat-head{
+    margin-top: 3px;
+    color: rgb(207, 202, 202);
+    font-weight: 500;
+
+}
+
+.user-chat-head:hover{
+        background-color: rgb(112, 111, 111);
+        box-shadow: 0px 0px 33px 0px rgba(0,0,0,0.2);
+        cursor: pointer;
+}
+
+.user-online, .user-offline{
+    margin-left: -15px;
+    top: 10px;
+    left: -5px;
+    border-radius: 50%;
+    position: relative;
+    width: 15px;
+    height: 15px;
+}
+
+.user-offline{
+    background-color: rgb(255, 166, 0);
+    border: 2px solid rgb(189, 138, 44);
+}
+
+.user-online{
+    background-color: rgb(18, 195, 77);
+    border: 2px solid rgb(11, 151, 58);
+}
+
+.user-has-messages{
+    width: 25px;
+    height: 25px;
+    background-color: rgb(233, 8, 8);
+    border-radius: 50%;
+    position: relative;
+    margin-left: -25px;
+    border: 5px solid rgb(218, 8, 8);
+    top: -15px;
+    left: -25px;
+}
+
+.user-has-messages > span{
+    position:relative;
+    top: -5px
 }
