@@ -23,6 +23,10 @@ const events = [
             {name: "Gosho", photo: "https://tinyurl.com/44t28uud"},
             {name: "Pesho", photo: "https://tinyurl.com/44t28uud"},
             {name: "Bai Ivan", photo: "https://tinyurl.com/44t28uud"},
+            {name: "Petran", photo: "https://tinyurl.com/44t28uud"},
+            {name: "Gosho", photo: "https://tinyurl.com/44t28uud"},
+            {name: "Pesho", photo: "https://tinyurl.com/44t28uud"},
+            {name: "Bai Ivan", photo: "https://tinyurl.com/44t28uud"},
             {name: "Petran", photo: "https://tinyurl.com/44t28uud"}],
             interests: ["Drinking", "Fun", "Dance", "Interest", "Interest", "Interest", "Interest"],
             location: "Plaza Disco",
@@ -36,8 +40,6 @@ const events = [
             name: "Disko",
             attending: [
             {name: "Gosho", photo: "https://tinyurl.com/44t28uud"},
-            {name: "Pesho", photo: "https://tinyurl.com/44t28uud"},
-            {name: "Bai Ivan", photo: "https://tinyurl.com/44t28uud"},
             {name: "Petran", photo: "https://tinyurl.com/44t28uud"}],
             interests: ["Drinking", "Fun", "Dance", "Interest", "Interest", "Interest", "Interest"],
             location: "Plaza Disco",
@@ -61,9 +63,6 @@ const events = [
         {
             name: "Disko",
             attending: [
-            {name: "Gosho", photo: "https://tinyurl.com/44t28uud"},
-            {name: "Pesho", photo: "https://tinyurl.com/44t28uud"},
-            {name: "Bai Ivan", photo: "https://tinyurl.com/44t28uud"},
             {name: "Petran", photo: "https://tinyurl.com/44t28uud"}],
             interests: ["Drinking", "Fun", "Dance", "Interest", "Interest", "Interest", "Interest"],
             location: "Plaza Disco",
@@ -72,9 +71,6 @@ const events = [
         {
             name: "Disko",
             attending: [
-            {name: "Gosho", photo: "https://tinyurl.com/44t28uud"},
-            {name: "Pesho", photo: "https://tinyurl.com/44t28uud"},
-            {name: "Bai Ivan", photo: "https://tinyurl.com/44t28uud"},
             {name: "Petran", photo: "https://tinyurl.com/44t28uud"}],
             interests: ["Drinking", "Fun", "Dance", "Interest", "Interest", "Interest", "Interest"],
             location: "Plaza Disco",
