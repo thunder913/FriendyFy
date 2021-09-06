@@ -27,4 +27,5 @@
 .user-info:hover{
     background-color: rgb(104, 102, 102);
     box-shadow: 0px 0px 33px 0px rgba(0,0,0,0.2);
+    cursor: pointer;
 }

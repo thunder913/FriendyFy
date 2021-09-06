@@ -1,0 +1,12 @@
+.user-chat-head img{
+    width: 100%;
+}
+
+.footer-user-image{
+    width: 40px;
+}
+
+.user-chat-head{
+    margin-left: 50px;
+    display: flex;
+}

@@ -1,0 +1,30 @@
+.site-footer{
+    position: fixed;
+    background-color: rgb(92, 92, 92);
+    width: 100%;
+    padding: 5px;
+    display: flex;
+    flex-wrap: nowrap;
+    overflow-x:scroll;
+    bottom: -10px;
+}
+
+.site-footer::-webkit-scrollbar {
+    width: 10px;
+    background-color: black;
+  }
+  
+  /* Track */
+  .site-footer::-webkit-scrollbar-track {
+    background: #f1f1f1;
+  }
+  
+  /* Handle */
+  .site-footer::-webkit-scrollbar-thumb {
+    background: #888;
+  }
+  
+  /* Handle on hover */
+  .site-footer::-webkit-scrollbar-thumb:hover {
+    background: #555;
+  }
