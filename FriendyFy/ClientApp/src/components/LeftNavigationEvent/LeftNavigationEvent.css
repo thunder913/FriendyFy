@@ -1,0 +1,19 @@
+.attending-user-photo{
+    width: 20px;
+    border-radius: 50%;
+}
+
+.attending-user-photo img{
+    width: 100%;
+    border-radius: 50%;
+}
+
+.event{
+    flex-basis: 49%;
+    border: 2px solid black;
+    height: 200px;
+}
+
+.attendingUsers{
+    display: flex;
+}

@@ -11,7 +11,7 @@ function UserChatHeadFooter({person}){
     }
     if (person.hasUnreadMessages) {
         unreadMessages = <div className="user-has-messages">
-            <span>9+</span>
+            <span>1</span>
         </div>;
     }
 

@@ -7,4 +7,5 @@
     right: 15px;
     top: -10px;
     margin-bottom: -18px;
+    user-select: none;
 }

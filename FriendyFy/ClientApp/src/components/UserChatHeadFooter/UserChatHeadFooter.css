@@ -12,12 +12,13 @@
 }
 
 .user-chat-head{
-    margin-left: 20px;
+    margin-left: 10px;
     display: flex;
     transition: 0.3s;
-    padding: 2px;
+    padding: 2px 10px 0px 0px;
     border-radius: 25px;
     align-items: center;
+    user-select: none;
 }
 
 .user-chat-head{
@@ -67,5 +68,6 @@
 
 .user-has-messages > span{
     position:relative;
-    top: -5px
+    top: -6px;
+    left: 4px;
 }

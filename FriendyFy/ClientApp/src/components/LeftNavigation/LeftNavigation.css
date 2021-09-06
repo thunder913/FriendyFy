@@ -1,0 +1,5 @@
+.side-navigation{
+    flex-basis: 20%;
+    border-right: 1px solid black;
+    color: white;
+}
