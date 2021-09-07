@@ -12,5 +12,38 @@
 }
 
 .main-content > .events{
-    flex-basis: 30%
+    flex-basis: 31%
+}
+
+.event-tab-title{
+    writing-mode:vertical-lr;
+    text-orientation:sideways;
+    transform: rotate(180deg);
+    margin: auto 0px;
+    font-size: 28px;
+    height: 166px;
+    text-align: center;
+    background-color: rgba(182, 68, 68, 0.883);;
+    border-radius: 0px 10px 10px 0px;
+    margin-right: 10px;
+    padding-left: 8px;
+    height: 100%;
+}
+
+.event-row{
+    display: flex;
+    margin-top: 20px;
+    border: 2px solid black;
+    border-radius: 12px 0px 0px 12px;
+    box-shadow: 2px 3px 30px 10px rgba(0,0,0,0.3);
+    height: 162px;
+    white-space: nowrap;
+}
+
+.event-tab{
+    flex-grow: 1;
+    background-color: #5C5C5C;
+    border-left: 0px;
+    height: 100%;
+    flex-wrap: nowrap;
 }

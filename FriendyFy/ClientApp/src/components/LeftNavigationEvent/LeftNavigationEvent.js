@@ -3,18 +3,18 @@ import './LeftNavigationEvent.css';
 
 const LeftNavigationEvent = ({data}) =>(
         <div className="event">
-            <header class="event-header">
+            <header className="event-header">
                 <h4>{data.name}</h4>
                 <div className="event-information">
-                    <span class="location"><a href="#">{data.location}</a></span>
-                    <span class="separator">|</span>
+                    <span className="location"><a href="#">{data.location}</a></span>
+                    <span className="separator">|</span>
                     <span>next month</span>
                 </div>
             </header>
             <main className="event-card">
             <div className="left-side">
                 <section className="interests">
-                    {data.interests.map(interest => (<div class="interest">{interest}</div>))}
+                    {data.interests.map(interest => (<div className="interest">{interest}</div>))}
                 </section>
             </div>
             <div className="right-side">
@@ -27,6 +27,7 @@ const LeftNavigationEvent = ({data}) =>(
                     </div>
                 ))}
             </div>
+            <button>Text</button>
             </div>
             </main>
         </div>

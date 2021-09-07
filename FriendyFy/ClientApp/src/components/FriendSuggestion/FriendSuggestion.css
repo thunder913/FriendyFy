@@ -1,0 +1,27 @@
+.people-you-may-know{
+    margin-top: 20px;
+}
+
+.friend-suggestions{
+    display: flex;
+    flex-direction: row;
+    flex-wrap: wrap;
+}
+
+.friend-image{
+    width: 60px;
+}
+
+.friend-image > img{
+    width: 100%;
+    border-radius: 50%;
+}
+
+.friend-suggestion{
+    display: flex;
+    background-color: white;
+    margin-left: 5px;
+    flex-grow: 1;
+    flex-basis: 49%;
+    margin-bottom: 5px;
+}

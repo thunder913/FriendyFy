@@ -6,7 +6,7 @@ const LeftNavigationEvents = ({events}) =>(
     <div className="events">
         {events.map(event => (
             <div className="event-row">
-            <h3>{event.title}</h3>
+            <h3 className="event-tab-title">{event.title}</h3>
             <div className="event-tab">
                 {event.events.map(data => <LeftNavigationEvent data={data}/>)}
             </div>
