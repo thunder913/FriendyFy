@@ -12,6 +12,7 @@
 .event{
     flex-basis: 49%;
     border: 2px solid black;
+    height: 162px;
 }
 
 .attendingUsers{
@@ -19,31 +20,109 @@
     flex-direction: row;
     flex-wrap: wrap;
     width: 55px;
-    margin-bottom: 5px;
 }
 
 .event-header{
     display: flex;
+    flex-direction: column;
     justify-content: space-between;
-    margin: 5px 5px 0px 5px;
+    margin: 5px 5px 0px 0px;
+}
+
+.event-header h4{
+    margin-bottom: 4px;
+    align-self: center;
 }
 
 .interests{
     display: flex;
     flex-wrap: wrap;
-    justify-content: center;
+    justify-content:space-evenly;
     margin-top: 10px;
+    height: 65px;
+    overflow-y: hidden;
+    width: 90%;
 }
 
 .interest{
-    padding: 2px;
     margin: 2px;
     background-color: #535050;
     border-radius: 10px;
     color: rgb(255, 255, 255, 0.7);
+    user-select: none;
+    padding: 2px 5px;
 }
 
 .event-card{
     display: flex;
     align-items: center;
+    justify-content:space-between;
+}
+
+.w-1 .attending-user-photo{
+    width: 50px;
+    align-self: flex-end;
+    box-shadow: 5px 5px 29px 15px rgba(0,0,0,0.15);
+}
+
+.w-1 .attending-user{
+    align-self: center;
+}
+
+.w-1.attendingUsers{
+    margin-right: 16px;
+    margin-top: 16px;
+}
+
+.w-2 .attending-user-photo{
+    width: 40px;
+    align-self: flex-end;
+    box-shadow: 5px 5px 29px 15px rgba(0,0,0,0.15);
+}
+
+.w-3 .attending-user-photo{
+    width: 30px;
+    align-self: flex-end;
+    box-shadow: 5px 5px 29px 15px rgba(0,0,0,0.15);
+}
+
+.w-3.attendingUsers{
+    flex-direction: column;
+    flex-wrap: wrap;
+    display: inline-flex;
+    max-height: 60px;
+    margin: 12px 24px 0px 0px
+}
+
+.w-4.attendingUsers{
+    margin-bottom: 12px;
+    max-height: 60px;
+    width: 90px;
+}
+
+.location > a{
+    color: white;
+    text-decoration: none;
+    transition: 0.5s;
+    padding: 5px;
+    margin-left: 5px;
+}
+
+.location > a:hover{
+    text-decoration: none;
+    border-radius: 30px;
+    background-color: rgb(104, 102, 102);
+    box-shadow: 0px 0px 33px 0px rgba(0,0,0,0.2);
+}
+
+.right-side{
+    height: 90px;
+    display: flex;
+    align-items: center;
+    margin: auto;
+}
+
+.event-information{
+    display: flex;
+    justify-content: space-between;
 }
