@@ -1,5 +1,7 @@
 .people-you-may-know{
     margin-top: 20px;
+    padding-left: 5px;
+    background-color: #5C5C5C;
 }
 
 .friend-suggestions{
@@ -15,16 +17,17 @@
 .friend-image > img{
     width: 100%;
     border-radius: 50%;
+    box-shadow: 5px 5px 29px 15px rgba(0,0,0,0.08);
 }
 
 .friend-suggestion{
     display: flex;
     background-color: white;
-    margin-left: 5px;
     flex-grow: 1;
     flex-basis: 49%;
-    margin-bottom: 5px;
-    border-radius: 20px;
+    margin-bottom: 1px;
+    background-color: #5C5C5C;
+    margin-right: 5px;
 }
 
 .friend-suggestion > .left-side{
@@ -36,12 +39,10 @@
 }
 
 .friend-suggestion > .right-side{
-    flex-basis: 80%;
+    flex-basis: 85%;
     flex-grow: 1;
-}
-
-.friend-suggestion > .right-side{
-    font-size: 14px;
+    color: white;
+    font-size: 12px;
     display: flex;
     justify-content: center;
     align-items: flex-start;
@@ -56,28 +57,53 @@
 }
 
 .friend-friends, .friend-interests{
-    margin-left: 10px;
+    margin-left: 5px;
     font-weight: 300;
 }
 
 .common-stuff{
     display: flex;
     flex-direction: column;
+    justify-content: space-evenly;
 }
 
 .main-suggestion-body{
     display: flex;
+    margin-top: 5px;
+    width: 100%;
+    justify-content: space-between;
+    padding-right: 10px;
 }
 
 .friend-buttons > button{
     width: 100%;
     border-radius: 20px;
+    transition: 0.3s;
+    user-select: none;
+    color: white;
+    font-weight: 400;
 }
 
 .friend-buttons > button:nth-child(2n){
     margin-top: 5px;
 }
 
-.friend-buttons{
-    margin-right: 5px;
+.friend-buttons .add-friend{
+    background-color: rgb(35, 87, 155);
+    border: 2px solid rgba(19, 60, 114, 0.2);
+}
+
+.friend-buttons .add-friend:hover{
+    background-color: rgb(58, 108, 173);
+    border: 2px solid rgba(54, 101, 163, 0.2);
+}
+
+.friend-buttons .remove-suggestion{
+    background-color: #807b7b;
+    border: 2px solid rgba(90, 86, 86, 0.3);
+}
+
+.friend-buttons .remove-suggestion:hover{
+    background-color: rgb(158, 149, 149);
+    border: 2px solid rgba(141, 133, 133, 0.3);
 }

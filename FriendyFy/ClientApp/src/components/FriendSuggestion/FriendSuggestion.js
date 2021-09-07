@@ -16,8 +16,8 @@ const FriendSuggestion = ({friend}) =>(
                         <span className="friend-interests">{friend.commonInterests.length} common interests</span>
                     </div>
                     <div className="friend-buttons">
-                        <button>Add</button>
-                        <button>Remove</button>
+                        <button class="add-friend">Add</button>
+                        <button class="remove-suggestion">Remove</button>
                     </div>
                 </div>
 

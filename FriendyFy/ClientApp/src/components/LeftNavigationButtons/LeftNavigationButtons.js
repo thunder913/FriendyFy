@@ -90,7 +90,7 @@ const events = [
 const friends =
     [
         {
-            name: "Gosho Goshov",
+            name: "Gosho GoshovGosho",
             image: "https://tinyurl.com/44t28uud",
             mutualFriends:
                 [
@@ -221,7 +221,6 @@ const LeftNavigationButtons = () => (
     <div className="left-navigation">
         <LeftNavigationEvents events={events} />
         <div className="people-you-may-know">
-            <h3>People you may know</h3>
             <div className="friend-suggestions">
                 {friends.map(friend => <FriendSuggestion friend={friend} />)}
             </div>
