@@ -9,9 +9,18 @@ const FriendSuggestion = ({friend}) =>(
                 </div>
             </div>
             <div className="right-side">
-                <span>{friend.name}</span>
-                <span>{friend.mutualFriends.length} mutual friends</span>
-                <span>{friend.commonInterests.length} common interests</span>
+                <span className="friend-name">{friend.name}</span>
+                <div className="main-suggestion-body">
+                    <div className="common-stuff">
+                        <span className="friend-friends">{friend.mutualFriends.length} mutual friends</span>
+                        <span className="friend-interests">{friend.commonInterests.length} common interests</span>
+                    </div>
+                    <div className="friend-buttons">
+                        <button>Add</button>
+                        <button>Remove</button>
+                    </div>
+                </div>
+
             </div>
         </div>
     )

@@ -24,4 +24,60 @@
     flex-grow: 1;
     flex-basis: 49%;
     margin-bottom: 5px;
+    border-radius: 20px;
+}
+
+.friend-suggestion > .left-side{
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-basis: 30%;
+    flex-shrink: 1;
+}
+
+.friend-suggestion > .right-side{
+    flex-basis: 80%;
+    flex-grow: 1;
+}
+
+.friend-suggestion > .right-side{
+    font-size: 14px;
+    display: flex;
+    justify-content: center;
+    align-items: flex-start;
+    flex-direction: column;
+}
+
+.friend-name{
+    margin-left: 10px;
+    font-size: 16px;
+    font-weight: 600;
+    margin-bottom: 0px;
+}
+
+.friend-friends, .friend-interests{
+    margin-left: 10px;
+    font-weight: 300;
+}
+
+.common-stuff{
+    display: flex;
+    flex-direction: column;
+}
+
+.main-suggestion-body{
+    display: flex;
+}
+
+.friend-buttons > button{
+    width: 100%;
+    border-radius: 20px;
+}
+
+.friend-buttons > button:nth-child(2n){
+    margin-top: 5px;
+}
+
+.friend-buttons{
+    margin-right: 5px;
 }
