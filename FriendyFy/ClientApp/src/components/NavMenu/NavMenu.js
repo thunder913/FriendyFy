@@ -1,7 +1,6 @@
 import React, { Component } from 'react';
-import { Collapse, Navbar, NavbarBrand, NavbarToggler, NavItem, NavLink } from 'reactstrap';
+import { Navbar, NavbarBrand } from 'reactstrap';
 import { Link } from 'react-router-dom';
-import { LoginMenu } from '../api-authorization/LoginMenu';
 import './NavMenu.css';
 import SearchBar from '../SearchBar/SearchBar';
 import UserOptions from '../UserOptions/UserOptions';
