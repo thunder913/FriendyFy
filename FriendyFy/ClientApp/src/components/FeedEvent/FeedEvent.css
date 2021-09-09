@@ -15,6 +15,12 @@
 
 .feed-event{
     margin-top: 12px;
+    background-color: rgba(36, 37, 38, 0.8);
+    color: white;
+    border-radius: 5px;
+    padding: 5px 5px 15px 5px;
+    -webkit-box-shadow: 29px 16px 27px -5px rgba(0,0,0,0.1); 
+    box-shadow: 29px 16px 27px -5px rgba(0,0,0,0.1);
 }
 
  .feed-event .event{
@@ -28,4 +34,52 @@
  .second-row, .third-row{
      display: flex;
      justify-content: space-between;
+     margin: 0px 30px 0px 10px;
  }
+
+ .second-row > h2{
+     margin-bottom: 2px;
+ }
+
+ .second-row button{
+     padding: 2px 50px;
+     height: 100%;
+     border-radius: 20px;
+     border: 0px;
+     background-color: rgb(35, 87, 155);
+     border: 2px solid rgba(19, 60, 114, 0.2);
+     transition: 0.3s;
+ }
+
+ .second-row button:hover{
+     background-color: rgb(64, 112, 175);
+ }
+
+ .third-row span{
+     font-weight: 200;
+ }
+
+ .feed .interest{
+    margin: 5px;
+    border-radius: 10px;
+    color: rgba(255, 255, 255, 0.856);
+    -webkit-user-select: none;
+    user-select: none;
+    padding: 2px 5px;
+    height: 28px;
+    background-color: #3a3838;
+ }
+
+ .feed .interests{
+    display: flex;
+    flex-wrap: wrap;
+    justify-content:start;
+    overflow-y: hidden;
+    width: 90%;
+    overflow-x: hidden;
+ }
+
+ .feed .interest:hover{
+    cursor: pointer;
+    background-color: #666262;
+}

@@ -8,7 +8,7 @@ export class Home extends Component {
     const events = [
       {name: "Event_Name1",
        location: 'Plaza Disco',
-       time: 'in a month',
+       time: '23.05.2021 at 22:00',
        interests: ['Rakiya', 'Drinking', 'Dance', 'Fun', 'Rakiya', 'Drinking', 'Dance', 'Fun'],
        attending: [
         { name: "Gosho", photo: "https://tinyurl.com/44t28uud" },
@@ -26,7 +26,7 @@ export class Home extends Component {
       },
       {name: "Event_Name2",
       location: 'Plaza Disco',
-      time: 'in 3 weeks',
+      time: '23.05.2021 at 22:00',
       interests: ['Rakiya', 'Drinking', 'Dance', 'Fun'],
       attending: [
        { name: "Gosho", photo: "https://tinyurl.com/44t28uud" },
@@ -36,7 +36,7 @@ export class Home extends Component {
      },
      {name: "Event_Name3",
      location: 'Plaza Disco',
-     time: 'in 3 weeks',
+     time: '23.05.2021 at 22:00',
      interests: ['Rakiya', 'Drinking', 'Dance', 'Fun'],
      attending: [
       { name: "Gosho", photo: "https://tinyurl.com/44t28uud" },
@@ -46,7 +46,7 @@ export class Home extends Component {
     },
     {name: "Event_Name4",
     location: 'Plaza Disco',
-    time: 'in 3 weeks',
+    time: '23.05.2021 at 22:00',
     interests: ['Rakiya', 'Drinking', 'Dance', 'Fun'],
     attending: [
      { name: "Gosho", photo: "https://tinyurl.com/44t28uud" },
@@ -58,7 +58,7 @@ export class Home extends Component {
     return (
       <div>
         <div className="feed">
-          <FeedEvent events={events}/>
+          {events.map(event => <FeedEvent event={event}/>)}
         </div>
         <h1>Hello, world!</h1>
         <p>Welcome to your new single-page application, built with:</p>

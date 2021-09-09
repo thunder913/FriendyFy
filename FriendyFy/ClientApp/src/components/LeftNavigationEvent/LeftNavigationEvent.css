@@ -36,7 +36,7 @@
     align-self: center;
 }
 
-.interests{
+.event .interests{
     display: flex;
     flex-wrap: wrap;
     justify-content:space-evenly;
@@ -46,7 +46,7 @@
     overflow-x: hidden;
 }
 
-.interest{
+.event .interest{
     margin: 2px;
     background-color: #3a3838;
     border-radius: 10px;
@@ -56,7 +56,7 @@
     height: 28px;
 }
 
-.interest:hover{
+.event .interest:hover{
     cursor: pointer;
     background-color: #252424;
 }
