@@ -22,15 +22,13 @@
     flex-direction: row;
     justify-content:center;
     align-items: baseline;
-    width: 55px;
-    height: 100%;
 }
 
 .event-header{
     display: flex;
     flex-direction: column;
     justify-content: space-between;
-    margin: 5px 5px 0px 0px;
+    margin: 5px 5px 5px 0px;
 }
 
 .event-header h4{
@@ -42,7 +40,6 @@
     display: flex;
     flex-wrap: wrap;
     justify-content:space-evenly;
-    margin-top: 10px;
     height: 65px;
     overflow-y: hidden;
     width: 90%;
@@ -56,6 +53,7 @@
     color: rgba(255, 255, 255, 0.856);
     user-select: none;
     padding: 2px 5px;
+    height: 28px;
 }
 
 .interest:hover{
@@ -69,6 +67,14 @@
     justify-content:space-between;
 }
 
+.event-card .left-side{
+    flex-basis: 50%;
+}
+
+.event-card .rigth-side{
+    flex-basis: 50%;
+}
+
 .w-1 .attending-user{
     align-self: baseline;
     margin-top: 10px;
@@ -77,12 +83,12 @@
 .w-1 .attending-user-photo{
     width: 40px;
     align-self: flex-end;
-    box-shadow: 5px 5px 29px 15px rgba(0,0,0,0.15);
+    box-shadow: 5px 5px 29px 15px rgba(0,0,0,0.05);
 }
 .w-2 .attending-user-photo{
     width: 40px;
     align-self: flex-end;
-    box-shadow: 5px 5px 29px 15px rgba(0,0,0,0.15);
+    box-shadow: 5px 5px 29px 15px rgba(0,0,0,0.05);
     margin-left: -20px;
 }
 
@@ -94,7 +100,7 @@
 .w-3 .attending-user-photo{
     width: 30px;
     align-self: flex-end;
-    box-shadow: 5px 5px 29px 15px rgba(0,0,0,0.15);
+    box-shadow: 5px 5px 29px 15px rgba(0,0,0,0.05);
 }
 
 .w-3.attendingUsers{
@@ -125,10 +131,11 @@
 
 .right-side{
     height: 90px;
+    flex-basis: 50%;
     display: flex;
     flex-direction: column;
     align-items: center;
-    margin: auto;
+    justify-content: space-evenly;
 }
 
 .event-information{
