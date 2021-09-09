@@ -5,7 +5,7 @@
 
 .friend-suggestions{
     display: flex;
-    flex-direction: row;
+    flex-direction: column;
     flex-wrap: wrap;
     border: 1px solid rgb(32, 32, 32, 0.5);
 }

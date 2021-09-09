@@ -1,6 +1,12 @@
 .search-form{
     margin-left: 15px;
     margin: auto;
+    position: absolute;
+    left: 0;
+    right: 0;
+    margin-left: auto;
+    margin-right: auto;
+    width: 250px;
 }
 
 .search-form > form > input{

@@ -1,0 +1,31 @@
+.feed-event .user-photo{
+    width: 40px;
+    margin-right: 3px;
+}
+
+.feed-event .user-photo img{
+    width: 100%;
+    border-radius: 50%;
+}
+
+.event-images{
+    display: flex;
+    padding: 15px 15px 0px 15px;
+}
+
+.feed-event{
+    margin-top: 12px;
+}
+
+ .feed-event .event{
+    display: flex;
+    flex-direction: column;
+    height: 200px;
+    justify-content: space-between;
+    margin: 0px auto 10px auto;
+}
+
+ .second-row, .third-row{
+     display: flex;
+     justify-content: space-between;
+ }

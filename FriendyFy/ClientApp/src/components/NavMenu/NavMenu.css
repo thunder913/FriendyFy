@@ -45,8 +45,13 @@ html {
 
 .navbar{
   padding: 0.25rem 1rem;
+  justify-content: space-between;
 }
 
 .bottom-border{
   border-bottom: 2px solid rgb(141, 140, 140, 0.5);
+}
+
+.nav-right{
+  display: flex;
 }

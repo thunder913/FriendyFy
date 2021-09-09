@@ -1,3 +1,31 @@
 .left-navigation{
     width: 100%;
+    margin-top: 5px;
+    overflow-y: auto;
+    height: 1000px;
+    position: fixed;
+    width: 25%;
+    padding-bottom: 75px;
+    padding-top: 52px;
 }
+
+.left-navigation::-webkit-scrollbar {
+    width: 5px;
+  }
+  
+  /* Track */
+  .left-navigation::-webkit-scrollbar-track {
+    background: transparent;
+  }
+  
+  /* Handle */
+  .left-navigation::-webkit-scrollbar-thumb {
+    background: #888;
+    border-radius: 40%;
+  }
+  
+  /* Handle on hover */
+  .left-navigation::-webkit-scrollbar-thumb:hover {
+    background: rgb(61, 61, 61);
+  }
+

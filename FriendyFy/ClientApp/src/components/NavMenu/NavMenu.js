@@ -10,7 +10,7 @@ import UserHeader from '../UserHeader/UserHeader';
 export class NavMenu extends Component {
   static displayName = NavMenu.name;
 
-  constructor (props) {
+  constructor(props) {
     super(props);
 
     this.toggleNavbar = this.toggleNavbar.bind(this);
@@ -19,22 +19,25 @@ export class NavMenu extends Component {
     };
   }
 
-  toggleNavbar () {
+  toggleNavbar() {
     this.setState({
       collapsed: !this.state.collapsed
     });
   }
 
-  render () {
+  render() {
     return (
       <header className="site-header">
         <Navbar className="navbar-expand-sm navbar-toggleable-sm ng-white bottom-border box-shadow" light>
-            <NavbarBrand tag={Link} to="/">FriendyFy</NavbarBrand>
-            <SearchBar/>
-            <UserHeader/>
-            <Notifications/>
-            <UserOptions/>
-            {/* <NavbarToggler onClick={this.toggleNavbar} className="mr-2" />
+          <NavbarBrand tag={Link} to="/">FriendyFy</NavbarBrand>
+          <SearchBar />
+          <div className="nav-right">
+            <UserHeader />
+            <Notifications />
+            <UserOptions />
+          </div>
+
+          {/* <NavbarToggler onClick={this.toggleNavbar} className="mr-2" />
             <Collapse className="d-sm-inline-flex flex-sm-row-reverse" isOpen={!this.state.collapsed} navbar>
               <ul className="navbar-nav flex-grow">
                 <NavItem>

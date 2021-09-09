@@ -1,5 +1,9 @@
 .side-navigation{
-    flex-basis: 20%;
+    flex-basis: 30%;
     border-right: 1px solid black;
     color: white;
+}
+
+.events{
+    transition: 0.1s;
 }

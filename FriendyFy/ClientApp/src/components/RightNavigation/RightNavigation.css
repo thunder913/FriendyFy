@@ -1,0 +1,8 @@
+.right-navigation{
+    background-color: red;
+    width: 20%;
+    height: 1000px;
+    position: fixed;
+    right: 0px;
+    flex-basis: 30%;
+}

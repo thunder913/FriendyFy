@@ -1,6 +1,7 @@
 import React from 'react';
 import FriendSuggestion from '../FriendSuggestion/FriendSuggestion';
 import LeftNavigationEvents from '../LeftNavigationEvents/LeftNavigationEvents';
+import TermsOfService from '../TermsOfService/TermsOfService';
 import './LeftNavigationButtons.css';
 
 const events = [
@@ -226,7 +227,7 @@ const LeftNavigationButtons = () => (
             </div>
         </div>
         <div className="tos">
-
+            <TermsOfService/>
         </div>
     </div>
 )

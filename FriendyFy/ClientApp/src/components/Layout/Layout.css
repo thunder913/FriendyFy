@@ -6,3 +6,12 @@
 .container{
     margin-left: 0px;
 }
+
+.site{
+    display: flex;
+    flex-direction: column;
+}
+
+.main-content{
+    margin: 0% 30%;
+}

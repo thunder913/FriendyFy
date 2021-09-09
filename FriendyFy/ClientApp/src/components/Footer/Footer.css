@@ -1,5 +1,5 @@
 .site-footer{
-    position: fixed;
+    position: sticky;
     background-color: rgb(92, 92, 92);
     width: 100%;
     padding: 5px 0px 0px 0px;
