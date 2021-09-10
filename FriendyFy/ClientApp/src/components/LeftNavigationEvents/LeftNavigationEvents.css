@@ -33,13 +33,12 @@
 
 .event-row{
     display: flex;
-    margin-top: 5px;
     border: 2px solid rgb(32, 32, 32);
     border-radius: 12px 0px 0px 12px;
     box-shadow: 2px 3px 30px 10px rgba(0,0,0,0.3);
     height: 320px;
     white-space: nowrap;
-    margin-left: 7px;
+    margin: 5px 10px 0px 10px;
 }
 
 .event-tab{
@@ -49,15 +48,20 @@
     flex-wrap: nowrap;
 }
 
-.line{
+.line-parent{
     height: 50px;
     width: 100px;
     transform: rotate(270deg);
     border-bottom: 1px solid rgb(197, 189, 189, 0.4);
     position: absolute;
-    left: 0;
-    right: 0;
-    margin-left: auto;
-    margin-right: auto;
+    left: 0; 
+    right: 0; 
+    margin-left: auto; 
+    margin-right: auto; 
     margin-top: 70px;
+}
+
+.line{
+    position: relative;
+    left: -50%;
 }

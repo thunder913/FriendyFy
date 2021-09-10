@@ -1,5 +1,5 @@
 .site-footer{
-    position: sticky;
+    position: fixed;
     background-color: rgb(92, 92, 92);
     width: 100%;
     padding: 5px 0px 0px 0px;
@@ -7,15 +7,16 @@
     flex-wrap: nowrap;
     align-items: center;
     overflow-x:scroll;
-    bottom: -10px;
+    bottom: 0px;
     scroll-behavior: smooth;
     vertical-align: middle;
     box-shadow: 0px 0px 33px 0px rgba(0,0,0,0.2);
 }
 
 .site-footer::-webkit-scrollbar {
-    width: 10px;
-  }
+  height: 5px;
+}
+
   
   /* Track */
   .site-footer::-webkit-scrollbar-track {
@@ -24,12 +25,15 @@
   
   /* Handle */
   .site-footer::-webkit-scrollbar-thumb {
-    background: #888;
-    border-radius: 30%;
-    scrollbar-color: red;
+    background: transparent;
+    border-radius: 30px;
   }
   
   /* Handle on hover */
   .site-footer::-webkit-scrollbar-thumb:hover {
     background: rgb(61, 61, 61);
+  }
+
+  .site-footer:hover::-webkit-scrollbar-thumb{
+    background: #888;
   }

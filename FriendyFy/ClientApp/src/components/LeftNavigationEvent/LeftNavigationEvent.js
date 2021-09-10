@@ -3,7 +3,9 @@ import './LeftNavigationEvent.css';
 
 const LeftNavigationEvent = ({data}) =>(
         <div className="event">
-            <div className="line"></div>
+            <div className="line-parent">
+                <div className="line"></div>
+            </div>
             <header className="event-header">
                 <h4>{data.name}</h4>
                 <div className="event-information">

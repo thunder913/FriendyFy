@@ -1,0 +1,32 @@
+.profile-picture{
+    width: 160px;
+    position: relative;
+    bottom: 100px;
+    margin-bottom: -100px;
+}
+
+.profile-picture > img{
+    width: 100%;
+    border-radius: 20px;
+    border: 3px solid rgba(75, 72, 72, 0.733);
+}
+
+
+.cover-photo > img{
+    width: 100%;
+    border-radius: 30px;
+}
+
+.profile-top{
+    display: flex;
+    align-items: center;
+    flex-direction: column;
+    justify-content: center;
+    color: white;
+}
+
+.profile-container{
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
