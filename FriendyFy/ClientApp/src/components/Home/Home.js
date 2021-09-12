@@ -9,7 +9,7 @@ export class Home extends Component {
       {name: "Event_Name1",
        location: 'Plaza Disco',
        time: '23.05.2021 at 22:00',
-       interests: ['Rakiya', 'Drinking', 'Dance', 'Fun', 'Rakiya', 'Drinking', 'Dance', 'Fun'],
+       interests: ['Rakiya', 'Drinking', 'Dance', 'Fun', 'Rakiya', 'Drinking', 'Dance', 'Fun', 'Rakiya', 'Drinking', 'Dance', 'Fun', 'Rakiya', 'Drinking', 'Dance', 'Fun', ],
        attending: [
         { name: "Gosho", photo: "https://tinyurl.com/44t28uud" },
         { name: "Pesho", photo: "https://tinyurl.com/44t28uud" },

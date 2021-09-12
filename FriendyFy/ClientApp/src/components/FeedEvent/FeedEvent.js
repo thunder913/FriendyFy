@@ -13,7 +13,7 @@ const FeedEvent = ({event}) => (
                 <button className="join">Join</button>
             </div>
             <div className="interests">
-                {event.interests.map(interest => <div className="interest">interest</div>)}
+                {event.interests.map(interest => <div className="interest">{interest}</div>)}
             </div>
             <div className="third-row">
                 <span>Location: {event.location}</span>

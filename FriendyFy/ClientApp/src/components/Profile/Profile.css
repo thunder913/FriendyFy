@@ -68,13 +68,14 @@
 
 .user-name{
     width: 80%;
+    margin-bottom: 0px;
     text-align: center;
 }
 
 .user-interest{    
     margin: 2px;
     background-color: #575151;
-    border-radius: 10px;
+    border-radius: 5px;
     color: rgba(255, 255, 255, 0.856);
     -webkit-user-select: none;
     user-select: none;
@@ -94,12 +95,13 @@
 .pictures{
     display: flex;
     flex-wrap: wrap;
-    width: 344px;
+    justify-content: center;
+    width: 100%;
 }
 
 .small-profile-photo{
-    width: 110px;
-    margin: 2px;
+    width: 100px;
+    margin: 1px;
 }
 
 .small-profile-photo > img{
@@ -107,17 +109,15 @@
 }
 
 .profile-sidebar{
-    position: fixed;
-    left: 25%;
-    width: 20%;
-    background-color: orange;
     overflow-y: scroll;
-    height: 458px;
     -ms-overflow-style: none; /* for Internet Explorer, Edge */
     scrollbar-width: none;
     display: flex;
     flex-direction: column;
-    align-items: center;
+    margin-right: 15px;
+    margin-top: 12px;
+    border-radius: 10px;
+    flex-basis: 50%;
 }
 
 .profile-sidebar::-webkit-scrollbar {
@@ -127,7 +127,12 @@
 .user-information{
       display: flex;
       flex-direction: column;   
-      margin-left: 10px;
+      background-color: #2A2A2A;
+      padding: 10px 0px;
+    }
+
+.user-information > h2{
+    padding-left: 10px;
 }
 
 .user-details{
@@ -136,10 +141,52 @@
     margin-left: 20px;
 }
 
-.profile-feed{
-    padding-left: 40%;
-}
-
 .profile-main{
     width: 100%;
+    display: flex;
+    justify-content: space-between;
+    flex-direction: row;
+}
+
+.profile-feed{
+    flex-basis: 50%;
+}
+
+.main-content{
+    margin: 0% 25%;
+}
+
+.user-details > p{
+    margin-bottom: 0px;
+}
+
+.user-photos{
+    margin: 15px 0px;
+    background-color: #2A2A2A;
+    padding: 20px 5px;
+    border-radius: 10px;
+}
+
+.user-photos > header.headline{
+    display: flex;
+    justify-content: space-between;
+    padding: 0px 15px 10px 15px;
+    align-items: center;
+    vertical-align: middle;
+}
+
+header.headline > h2, header.headline > p{
+    margin-bottom: 0px;
+}
+
+.see-all-photos a{
+    color: white;
+    text-decoration: none;
+    padding: 5px;
+    border-radius: 3px;
+    transition: 0.5s;
+}
+
+.see-all-photos a:hover{
+    background-color: #5d5c5c;
 }
