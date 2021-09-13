@@ -51,6 +51,44 @@ const events = [
  }
   ]
 
+  const friends = [
+      {
+          name: "Ivan Petrov",
+          image: "https://tinyurl.com/44t28uud",
+      }
+    ,      {
+        name: "Ivan Petrov",
+        image: "https://tinyurl.com/44t28uud",
+    },      {
+        name: "Ivan Petrov",
+        image: "https://tinyurl.com/44t28uud",
+    }
+    ,      {
+        name: "IvanIvanPetrovPetrov Ivan Petrov Ivan Petrov",
+        image: "https://tinyurl.com/44t28uud",
+    }
+    ,      {
+        name: "Ivan Petrov",
+        image: "https://tinyurl.com/44t28uud",
+    }
+    ,      {
+        name: "Ivan Petrov",
+        image: "https://tinyurl.com/44t28uud",
+    }
+    ,      {
+        name: "Ivan Petrov",
+        image: "https://tinyurl.com/44t28uud",
+    }
+    ,      {
+        name: "Ivan Petrov",
+        image: "https://tinyurl.com/44t28uud",
+    }
+    ,      {
+        name: "Ivan Petrov",
+        image: "https://tinyurl.com/44t28uud",
+    }
+]
+
 const Profile = () =>(
     <div className="profile-top">
         <div className="profile-container">
@@ -83,7 +121,7 @@ const Profile = () =>(
             <p className="user-name">Andon Gorchov</p>
             <main className="profile-main">
             <div className="profile-sidebar">
-                <div className="user-information">
+                <div className="user-information rounded-side">
                     <h2>Info</h2>
                         <div className="user-details">
                             <p>Founder and CEO at <a href="">SomeBusiness</a></p>
@@ -93,7 +131,7 @@ const Profile = () =>(
                             <p><a href="">LinkedInName</a></p>
                         </div>
                 </div>
-                <div className="user-photos">
+                <div className="user-photos rounded-side">
                     <header className="headline">
                         <h2>Photos</h2>
                         <p className="see-all-photos"><a href="">See All Photos</a></p>
@@ -127,8 +165,20 @@ const Profile = () =>(
                         <img src="https://scontent-sof1-1.xx.fbcdn.net/v/t1.6435-9/194957949_4334439429940720_5542816028295677772_n.jpg?_nc_cat=108&ccb=1-5&_nc_sid=09cbfe&_nc_ohc=V3_ba1SZUj0AX8zYiPW&_nc_ht=scontent-sof1-1.xx&oh=f5dcc1bbf0701abef7059bb4e060a129&oe=615B9954" alt="" />
                     </div>
                 </div></div>
-                <div className="friend-list">
-
+                <div className="friend-list rounded-side">
+                    <header className="friends-header">
+                        <h2>Friends</h2> 
+                        <span>123 friends</span>
+                    </header>
+                    <section className="friends-section">
+                        {friends.map(friend => 
+                        <div className="friend">
+                            <div className="friend-image">
+                                <img src={friend.image} alt="" />
+                            </div>
+                            <p className="friend-name">{friend.name}</p>
+                        </div>)}
+                    </section>
                 </div>
                 <div className="user-friends">
                     {/* Pass user name, photo and ID and display them on the left side */}

@@ -3,6 +3,7 @@ import FriendSuggestion from '../FriendSuggestion/FriendSuggestion';
 import LeftNavigationEvents from '../LeftNavigationEvents/LeftNavigationEvents';
 import TermsOfService from '../TermsOfService/TermsOfService';
 import './LeftNavigationButtons.css';
+import { useLocation } from 'react-router';
 
 const events = [
     {
@@ -218,8 +219,12 @@ const friends =
         }
     ]
 
-const LeftNavigationButtons = () => (
-    <div className="left-navigation">
+const LeftNavigationButtons = () => {
+    let location = useLocation();
+    if (location.pathname.match("/profile")) {
+        return null;
+    }
+    return (<div className="left-navigation">
         <LeftNavigationEvents events={events} />
         <div className="people-you-may-know">
             <div className="friend-suggestions">
@@ -229,7 +234,7 @@ const LeftNavigationButtons = () => (
         <div className="tos">
             <TermsOfService/>
         </div>
-    </div>
-)
+    </div>)
+}
 
 export default LeftNavigationButtons;

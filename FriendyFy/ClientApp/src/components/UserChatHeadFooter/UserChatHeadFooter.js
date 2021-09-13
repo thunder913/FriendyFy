@@ -2,6 +2,9 @@ import React from 'react';
 import './UserChatHeadFooter.css';
 
 function UserChatHeadFooter({person}){
+    const [showChat, setShowChat] = React.useState(false);
+    const onClick = () => setShowChat(!showChat);
+
     let userOnline;
     let unreadMessages;
     if (person.isOnline) {
@@ -16,7 +19,8 @@ function UserChatHeadFooter({person}){
     }
 
     return (
-        <div className="user-chat-head">
+        <div className="user-chat-head" onClick={onClick}>
+            {showChat ? <div>TEST</div> : ""}
             <div className="footer-user-image">
                 <img src={person.image} alt="UserImage" />
             </div>
