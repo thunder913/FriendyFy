@@ -1,8 +1,80 @@
 .right-navigation{
-    background-color: red;
-    width: 25%;
+    background-color: #2f2c2c0c;
+    width: 20%;
     height: 1000px;
     position: fixed;
     right: 0px;
     flex-basis: 30%;
+    display: flex;
+    flex-direction: column;
+    text-align: right;
+    padding-right: 10px;
+    color: white;
+}
+
+.right-nav-button{
+    margin-bottom: 0px;
+}
+
+.right-user, .right-nav-button{
+    padding: 10px;
+    transition: 0.3s;
+    font-size: 18px;
+    border-radius: 10px;
+    margin-bottom: 10px;
+}
+
+.right-nav-button:hover, .right-user:hover{
+    background-color: #686868fd;
+    cursor: pointer;
+    padding-right: 30px;
+    font-weight: 600;
+}
+
+.right-navigation-list{
+    list-style-type: none;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    height: 100%;
+    padding-top: 10px;
+    width: 100%;
+}
+
+.top-half{
+    justify-content: right;
+    display: flex;
+    border-bottom: 2px solid white;
+    flex-basis: 50%;
+    width: 90%;
+    align-self: flex-end;
+}
+
+.right-user-photo{
+    width: 40px;
+    margin-right: 15px;
+}
+
+.right-user-photo > img{
+    width: 100%;
+    border-radius: 20px;
+}
+
+.right-user{
+    display: flex;
+    justify-content: right;
+    align-items: center;
+}
+
+.right-user-name{
+    margin-bottom: 0px;
+}
+
+.people-you-met-title{
+    font-size: 26px;
+    margin-bottom: 20px;
+}
+
+.bottom-half{
+    padding-top: 10px;
 }

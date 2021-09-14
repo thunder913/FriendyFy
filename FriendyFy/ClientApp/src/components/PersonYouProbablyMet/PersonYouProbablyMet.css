@@ -1,0 +1,65 @@
+.person-you-met .person-image{
+    width: 60px;
+}
+
+.person-you-met .person-image > img{
+    width: 100%;
+    border-radius: 100px;
+}
+
+.person-you-met{
+    display: flex;
+    justify-content: left;
+}
+
+.person-you-met .right-side{
+    flex-grow: 1;
+}
+
+.person-you-met .right-side{
+    display: flex;
+    align-items: flex-start;
+}
+
+.person-you-met .main-suggestion-body{
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+}
+
+.person-you-met .common-stuff{
+    font-size: 14px;
+    align-self: flex-start;
+    text-align: left;
+    padding-left: 5px;
+}
+
+.person-you-met .person-name{
+    font-size: 18px;
+    padding-left: 10px;
+}
+
+.person-you-met .add-friend, .person-you-met .remove-suggestion{
+    padding: 0px;
+    font-size: 14px;
+    flex-grow: 1;
+}
+
+.person-you-met{
+    margin: 5px 0px;
+    border-bottom: 2px solid rgba(128, 128, 128, 0.541);
+}
+
+.person-you-met .friend-buttons .remove-suggestion{
+    margin-top: 0px;
+}
+
+.person-you-met .friend-buttons{
+    display: flex;
+    justify-content: space-evenly;
+    padding: 5px 20px
+}
+
+.person-you-met .add-friend{
+    margin-right: 20px;
+}

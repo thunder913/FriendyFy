@@ -1,5 +1,6 @@
-.main-content{
+.main-content, .right-navigation{
     padding-top: 52px;
+    padding-bottom: 65px;
     display: flex;
 }
 

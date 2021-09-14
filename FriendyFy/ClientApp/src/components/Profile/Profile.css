@@ -225,7 +225,7 @@ header.friends-header{
     align-items: center;
 }
 
-.friend-name{
+.friends-section .friend .friend-name{
     max-width: 100px;
     display: inline-block;
     word-break: break-all;
