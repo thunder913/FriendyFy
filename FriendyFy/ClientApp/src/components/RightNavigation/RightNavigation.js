@@ -62,9 +62,9 @@ const RightNavigation = () =>(
             </ul>
         </div>
         <div className="bottom-half">
-            <h2 class="people-you-met-title">People You Probably Met</h2>
+            <h2 className="people-you-met-title">People You Probably Met</h2>
             {people.map(person => <PersonYouProbablyMet person={person} />)}
-            <h3>See more..</h3>
+            <h3 className="see-more-text">See more...</h3>
         </div>
     </aside>
     )

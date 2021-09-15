@@ -1,9 +1,20 @@
 import React from 'react';
+import UserChatHeadBox from '../UserChatHeadBox/UserChatHeadBox';
 import './UserChatHeadFooter.css';
 
 function UserChatHeadFooter({person}){
     const [showChat, setShowChat] = React.useState(false);
-    const onClick = () => setShowChat(!showChat);
+    const onClick = (e) => 
+        {
+            console.log(e.target);
+            let text = e.target.closest('.user-chat-head');
+            setShowChat(!showChat)
+            if (!showChat) {
+                text.style.paddingRight = '200px';   
+            }else{
+                text.style.paddingRight = '10px';
+            }
+        };
 
     let userOnline;
     let unreadMessages;
@@ -19,14 +30,16 @@ function UserChatHeadFooter({person}){
     }
 
     return (
-        <div className="user-chat-head" onClick={onClick}>
-            {showChat ? <div>TEST</div> : ""}
+        <div className="user-chat-head">
+            {showChat ? <UserChatHeadBox/> : ""}
+            <div className="user-footer" onClick={onClick}>
             <div className="footer-user-image">
                 <img src={person.image} alt="UserImage" />
             </div>
             {userOnline}
             {unreadMessages}
             <span className="footer-chat-username">{person.name}</span>
+            </div>
         </div>
         )
 }
