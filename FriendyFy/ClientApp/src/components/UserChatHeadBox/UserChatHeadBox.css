@@ -5,7 +5,7 @@
 	color: #9a9a9a;
 	font: 100%/1.5em "Droid Sans", sans-serif;
 	margin: 0;
-    bottom: -16px;
+    bottom: 0px;
 	font-size: 12px;
     position:absolute;
     margin-left: 2px;
@@ -56,11 +56,7 @@ fieldset {
 #live-chat, p { margin: 0; }
 
 .clearfix { *zoom: 1; } /* For IE 6/7 */
-.clearfix:before, .clearfix:after {
-    content: "";
-    display: table;
-}
-.clearfix:after { clear: both; }
+
 
 /* ---------- LIVE-CHAT ---------- */
 
@@ -71,36 +67,37 @@ fieldset {
 	color: #fff;
 	cursor: pointer;
 	padding: 16px 24px;
-}
-
-#live-chat h4:before {
-	background: #1a8a34;
-	border-radius: 50%;
-	content: "";
-	display: inline-block;
-	height: 8px;
-	margin: 0 8px 0 0;
-	width: 8px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between
 }
 
 #live-chat h4 {
 	font-size: 12px;
+    margin-left: 10px;
 }
 
 #live-chat h5 {
 	font-size: 10px;
 }
 
-#live-chat form {
-	padding: 24px;
+#live-chat form.send-message-container {
+	height: 57px;
+    padding: 10px 0px 10px 10px;
+    background: #293239;
 }
 
 #live-chat input[type="text"] {
-	border: 1px solid #ccc;
+	border: 1px solid rgb(77, 76, 76);
 	border-radius: 3px;
 	padding: 8px;
 	outline: none;
 	width: 234px;
+    border-radius: 30px;
+}
+
+#live-chat input[type="text"]::placeholder{
+    color: rgb(136, 135, 135);
 }
 
 .chat-message-counter {
@@ -126,12 +123,18 @@ fieldset {
 	color: #fff;
 	display: block;
 	float: right;
-	font-size: 10px;
-	height: 16px;
-	line-height: 16px;
-	margin: 2px 0 0 0;
+	font-size: 20px;
+	height: 30px;
+	line-height: 24px;
 	text-align: center;
-	width: 16px;
+	width: 30px;
+    transition: 0.3s;
+}
+
+.chat-close:hover{
+    text-decoration: none;
+    color: rgb(0, 0, 0);
+    background: #7a8085;
 }
 
 .chat {
@@ -140,23 +143,24 @@ fieldset {
 
 .chat-history {
 	height: 252px;
-	padding: 8px 24px;
+	padding: 0px 24px 8px 24px;
     overflow-x: hidden;
     overflow-y: auto;
     height: 300px;
 }
 
 .chat-message {
-	margin: 16px 0;
+	margin: 8px 0;
 }
 
 .chat-message img {
 	border-radius: 50%;
 	float: left;
+    margin-right: 10px;
 }
 
 .chat-message-content {
-	margin-left: 56px;
+	margin-left: 0px;
 }
 
 .chat-time {
@@ -175,6 +179,43 @@ fieldset {
     border: 0px solid transparent;
 }
 
-.send-message-container{
-    background: #293239;
+
+.paper-plane{
+    background: transparent;
+    font-size: 22px;
+}
+
+.send-message-button{
+    background: transparent;
+    color: white;
+    border: 0px solid transparent;
+    border-radius: 5px;
+    padding: 5px;
+    margin-left: 10px;
+}
+
+.chat-message.your-message{
+    margin-left: 30px !important;
+}
+
+.other-user-message{
+    margin-right: 0px;
+}
+
+.other-user-chat-image{
+    width: 30px;
+}
+
+.other-user-chat-image > img{
+    width: 100%;
+    border-radius: 50%;
+}
+
+header > .other-user-chat-image{
+    width: 40px;
+}
+
+.user-header{
+    display: flex;
+    align-items: center;
 }

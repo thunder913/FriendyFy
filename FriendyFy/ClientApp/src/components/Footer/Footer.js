@@ -13,8 +13,8 @@ function Footer(props){
 
     return (
         <div className="site-footer">
-            <FriendSearchBar />
-            {props.people.map(person => <UserChatHeadFooter person={person}/>)}
+                <FriendSearchBar />
+                {props.people.map(person => <UserChatHeadFooter person={person}/>)}
         </div>
         )
 }
