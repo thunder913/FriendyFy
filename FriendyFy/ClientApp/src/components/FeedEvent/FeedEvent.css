@@ -10,7 +10,7 @@
 
 .event-images{
     display: flex;
-    padding: 15px 15px 0px 15px;
+    padding: 0px 5px 0px 5px;
 }
 
 .feed-event{
@@ -18,9 +18,10 @@
     background-color: rgba(36, 37, 38, 0.8);
     color: white;
     border-radius: 5px;
-    padding: 5px 5px 15px 5px;
     -webkit-box-shadow: 29px 16px 27px -5px rgba(0,0,0,0.1); 
     box-shadow: 29px 16px 27px -5px rgba(0,0,0,0.1);
+    display: flex;
+    flex-direction: column;
 }
 
  .feed-event .event{
@@ -83,4 +84,109 @@
  .feed .interest:hover{
     cursor: pointer;
     background-color: #666262;
+}
+
+.post-creator-image{
+    width: 50px;
+}
+
+.post-creator-image > img{
+    width: 100%;
+    border-radius: 50%;
+}
+
+header.feed-header{
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    justify-content: space-between;
+    padding: 15px;
+    margin-bottom: 5px;
+    border-radius: 5px 5px 0px 0px;
+    background-color: rgba(32, 33, 34, 1);
+}
+
+.header-left{
+    display: flex;
+    align-items: center;
+}
+
+.post-creator-image{
+    margin-right: 10px;
+}
+
+.header-elipsis{
+    margin-right: 20px;
+    color: rgb(126, 122, 122);
+    transition: 0.4s;
+    font-size: 40px;
+    padding:10px;
+    border-radius: 10px;
+}
+
+.header-elipsis:hover{
+    cursor: pointer;
+    background-color: #5d5c5c;
+}
+
+.header-user-data > h3{
+    margin-bottom: 0px;
+    font-size: 24px;
+}
+
+.header-user-data > span{
+    font-size: 12px;
+    font-style: italic;
+}
+
+footer.feed-footer{
+    display: flex;
+    flex-direction: column;
+    background-color: rgba(32, 33, 34, 1);
+    margin-top: 15px;
+    border-radius: 0px 0px 5px 5px;
+}
+
+.top-footer{
+    display: flex;
+    justify-content: space-between;
+    padding: 5px 10px 5px 10px;
+    border-top: 1px solid rgb(58, 58, 58);
+    border-bottom: 1px solid rgb(58, 58, 58);
+}
+
+.comments-reposts > span{
+    margin-left: 10px;
+
+}
+
+.feed .bottom-footer{
+    display: flex;
+    justify-content: space-between;
+    margin: 0.3% 4%;
+}
+
+.feed .bottom-footer > div{
+    padding: 1% 9%;
+    transition: 0.3s;
+    border-radius: 10px;
+}
+
+.feed .bottom-footer > div:hover{
+    background-color: #5d5c5c;
+    cursor: pointer;
+}
+
+.likes a, .comments-reposts a{
+    color: rgb(184, 179, 179);
+    transition: 0.3s;
+}
+
+.likes a:hover, .comments-reposts a:hover{
+    text-decoration: none;
+    text-decoration: underline;
+}
+
+.post-button{
+    margin-right: 5px;
 }

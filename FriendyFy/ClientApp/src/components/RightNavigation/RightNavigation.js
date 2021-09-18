@@ -1,7 +1,7 @@
 import React from 'react';
 import PersonYouProbablyMet from '../PersonYouProbablyMet/PersonYouProbablyMet';
 import './RightNavigation.css';
-
+import { useLocation } from 'react-router';
 const people = [
     {
         name: "Ivan Petrov",
@@ -29,7 +29,13 @@ const people = [
     },
 ]
 
-const RightNavigation = () =>(
+const RightNavigation = () =>{
+    let location = useLocation();
+    if (location.pathname.match("/profile")) {
+        return null;
+    }
+
+    return(
     <aside className="right-navigation">
         <div className="top-half">
             <ul className="right-navigation-list">
@@ -66,7 +72,7 @@ const RightNavigation = () =>(
             {people.map(person => <PersonYouProbablyMet person={person} />)}
             <h3 className="see-more-text">See more...</h3>
         </div>
-    </aside>
-    )
+    </aside>)
+}
 
 export default RightNavigation;

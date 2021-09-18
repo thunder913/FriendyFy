@@ -235,3 +235,30 @@ header.friends-header{
     text-decoration: underline;
     cursor: pointer;
 }
+
+.profile-navigation{
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+    width: 100%;
+    padding: 9px 20px;
+    background-color: rgba(32, 33, 34, 1);
+    border-radius: 5px;
+}
+
+.profile-navigation > div a{
+    text-decoration: none;
+    color: #FFF;
+    padding: 6.5px 70px;
+    border-radius: 10px;
+    transition: 0.3s;
+}
+
+.profile-navigation > div a:hover{
+    background-color: rgb(104, 104, 104, 0.8);
+    cursor: pointer;
+}
+
+.profile-navigation .selected{
+    background-color: rgb(83, 80, 80, 0.8);
+}
