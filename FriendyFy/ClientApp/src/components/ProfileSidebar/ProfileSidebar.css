@@ -1,0 +1,131 @@
+
+.pictures{
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+    width: 100%;
+}
+
+.small-profile-photo{
+    width: 100px;
+    margin: 1px;
+}
+
+.small-profile-photo > img{
+    width: 100%;
+}
+
+.profile-sidebar{
+    overflow-y: scroll;
+    -ms-overflow-style: none; /* for Internet Explorer, Edge */
+    scrollbar-width: none;
+    display: flex;
+    flex-direction: column;
+    margin-right: 15px;
+    margin-top: 12px;
+    flex-basis: 50%;
+}
+
+.profile-sidebar::-webkit-scrollbar {
+    display: none;
+}
+
+.user-information{
+      display: flex;
+      flex-direction: column;   
+      padding: 10px 0px;
+}
+
+.user-information > h2{
+    padding-left: 10px;
+}
+
+.user-details{
+    display: flex;
+    flex-direction: column;
+    margin-left: 20px;
+}
+
+
+.user-details > p{
+    margin-bottom: 0px;
+}
+
+.user-photos{
+    margin: 15px 0px;
+    padding: 20px 5px;
+}
+
+.user-photos > header.headline{
+    display: flex;
+    justify-content: space-between;
+    padding: 0px 15px 10px 15px;
+    align-items: center;
+    vertical-align: middle;
+}
+
+header.headline > h2, header.headline > p{
+    margin-bottom: 0px;
+}
+
+.see-all-photos a{
+    color: white;
+    text-decoration: none;
+    padding: 5px;
+    border-radius: 3px;
+    transition: 0.5s;
+}
+
+.see-all-photos a:hover{
+    background-color: #5d5c5c;
+}
+
+.rounded-side{
+    background-color: #2A2A2A;
+    border-radius: 10px;
+}
+
+.friends-section .friend-image{
+    width: 100px;
+    margin: 3px
+}
+
+.friends-section .friend-image > img{
+    width: 100%;
+}
+
+.friends-section{
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+}
+
+.friend-list{
+    padding-bottom: 5px;
+    display: flex;
+    flex-direction: column;
+}
+
+header.friends-header{
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 10px 15px;
+}
+
+.friends-section > .friend{
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+
+.friends-section .friend .friend-name{
+    max-width: 100px;
+    display: inline-block;
+    word-break: break-all;
+}
+
+.friends-header > h2:hover, .friends-header > span:hover{
+    text-decoration: underline;
+    cursor: pointer;
+}

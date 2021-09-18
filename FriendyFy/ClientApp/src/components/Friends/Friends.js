@@ -1,20 +1,10 @@
 import React from 'react';
+import Friend from '../../Friend/Friend';
 import './Friends.css';
-import { useHistory } from 'react-router';
 
-const Friends = () =>(
+const Friends = ({friends}) =>(
     <div className="profile-friends">
-        <div className="profile-friend">
-            <div className="friend-image">
-                <img src="" alt="" />
-            </div>
-            <span className="friend-name">
-                Andon Gorchov
-            </span>
-            <span className="mutual-friends">
-                3 mutual friends
-            </span>
-        </div>
+    {friends.map(friend => <Friend friend={friend}/>)}
     </div>
 )
 
