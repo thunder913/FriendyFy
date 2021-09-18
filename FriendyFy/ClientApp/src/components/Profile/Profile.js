@@ -99,21 +99,17 @@ const friends = [
 const Profile = () => (
     <div className="profile-top">
         <div className="profile-container">
-           <ProfileHeader/>
+           <ProfileHeader selected="timeline"/>
              <main className="profile-main">
-                 <ProfileSidebar friends={friends}/>
+                <ProfileSidebar friends={friends}/>
                 <div className="profile-feed">
                     <div className="feed">
                         {events.map(event => <FeedEvent event={event} />)}
-                    </div>
-                    <div className="friends">
-                        <Friends friends={friends}/>
                     </div>
                 </div>
             </main>
         </div>
     </div>
-
 )
 
 export default Profile;

@@ -106,7 +106,7 @@ header.headline > h2, header.headline > p{
     flex-direction: column;
 }
 
-header.friends-header{
+.friend-list > header.friends-header{
     display: flex;
     justify-content: space-between;
     align-items: center;
@@ -125,7 +125,7 @@ header.friends-header{
     word-break: break-all;
 }
 
-.friends-header > h2:hover, .friends-header > span:hover{
+.friend-list > .friends-header > h2:hover, .friends-header > span:hover{
     text-decoration: underline;
     cursor: pointer;
 }

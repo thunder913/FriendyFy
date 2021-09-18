@@ -1,7 +1,7 @@
 import React from 'react';
 import './ProfileHeader.css';
-
-const ProfileHeader = () =>(
+import { Link } from 'react-router-dom';
+const ProfileHeader = ({selected}) =>(
     <header className="profile-header">
     <div className="cover-photo">
         <img src="http://1.bp.blogspot.com/-wqfx3ZlkHyw/T4jx7odkbQI/AAAAAAAABLE/1UF1OveYMl4/s1600/colorful%2Bmoon.png" alt="" />
@@ -31,25 +31,27 @@ const ProfileHeader = () =>(
     </div>
     <p className="user-name">Andon Gorchov</p>
     <div className="profile-navigation">
-    <div className="timeline-nav">
-        <a className="timeline selected" href="">
-            Timeline
-        </a>
+        <div className="timeline-nav">
+            <Link className={"timeline " + (selected.match("timeline") ? "selected" : "")} to="profile">
+                Timeline
+            </Link>
+        </div>
+        <div className="photos-nav">
+            <a className={"photos " + (selected.match("photos-nav") ? "selected" : "")} href="">
+                Photos
+            </a>
+        </div>
+        <div className="friends-nav">
+            <Link className={"friends " + (selected.match("friends") ? "selected" : "")} to="friends">
+                Friends
+            </Link>
+        </div>
+        <div className="add-friend-nav">
+            <a className="add-friend " href="">
+                Add Friend
+            </a>
+        </div>
     </div>
-    <div className="photos-nav">
-        <a className="photos" href="">
-            Photos
-        </a>
-    </div>
-    <div className="friends-nav">
-        <a className="friends" href="">Friends</a>
-    </div>
-    <div className="add-friend-nav">
-        <a className="add-friend" href="">
-            Add Friend
-        </a>
-    </div>
-</div>
 </header>
 )
 

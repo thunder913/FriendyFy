@@ -1,0 +1,34 @@
+.profile-friend{
+    flex-basis: 50%;
+    display: flex;
+    margin-bottom: 20px;
+    padding: 10px;
+    border-radius: 10px;
+}
+
+.friends-main .friends-header{
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.friend-info{
+    display: flex;
+    flex-direction: column;
+    margin-left: 10px;
+    flex-basis: 80%;
+}
+
+.profile-friend .friend-image{
+    width: 50px;
+}
+
+.profile-friend .friend-image > img{
+    width: 100%;
+    border-radius: 10px;
+}
+
+.profile-friend:hover{
+    cursor: pointer;
+    background-color: #5d5c5c;
+}

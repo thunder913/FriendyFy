@@ -221,7 +221,7 @@ const friends =
 
 const LeftNavigationButtons = () => {
     let location = useLocation();
-    if (location.pathname.match("/profile")) {
+    if (location.pathname.match("/profile")  || location.pathname.match("/friends")) {
         return null;
     }
     return (<div className="left-navigation">

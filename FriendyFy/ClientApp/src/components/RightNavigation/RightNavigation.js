@@ -31,7 +31,7 @@ const people = [
 
 const RightNavigation = () =>{
     let location = useLocation();
-    if (location.pathname.match("/profile")) {
+    if (location.pathname.match("/profile") || location.pathname.match("/friends")) {
         return null;
     }
 
