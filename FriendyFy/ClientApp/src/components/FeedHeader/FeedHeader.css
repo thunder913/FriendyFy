@@ -5,7 +5,6 @@ header.feed-header{
     align-items: center;
     justify-content: space-between;
     padding: 5px 15px;
-    margin-bottom: 5px;
     border-radius: 5px 5px 0px 0px;
     background-color: rgba(32, 33, 34, 1);
 }

@@ -42,7 +42,6 @@
     display: flex;
     flex-direction: column;
     background-color: rgba(32, 33, 34, 1);
-    margin-top: 15px;
     border-radius: 0px 0px 5px 5px;
 }
 
