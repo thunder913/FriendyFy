@@ -1,0 +1,42 @@
+footer.feed-footer .bottom-footer{
+    display: flex;
+    justify-content: space-between;
+    margin: 0.3% 4%;
+}
+
+footer.feed-footer .bottom-footer > div{
+    padding: 1% 9%;
+    transition: 0.3s;
+    border-radius: 10px;
+}
+
+footer.feed-footer .bottom-footer > div:hover{
+    background-color: #5d5c5c;
+    cursor: pointer;
+}
+
+footer.feed-footer .bottom-footer > div.feed-like:hover{
+    color:rgb(12, 54, 109);
+}
+
+footer.feed-footer .bottom-footer > div.feed-comment:hover{
+    color:rgb(204, 127, 40);
+}
+
+footer.feed-footer .bottom-footer > div.feed-repost:hover{
+    color:rgb(74, 198, 255);
+}
+
+.likes a, .comments-reposts a{
+    color: rgb(184, 179, 179);
+    transition: 0.3s;
+}
+
+.likes a:hover, .comments-reposts a:hover{
+    text-decoration: none;
+    text-decoration: underline;
+}
+
+.post-button{
+    margin-right: 5px;
+}

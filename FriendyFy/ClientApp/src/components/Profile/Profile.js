@@ -4,6 +4,7 @@ import FeedEvent from '../FeedEvent/FeedEvent';
 import Friends from '../Friends/Friends'
 import ProfileHeader from '../ProfileHeader/ProfileHeader';
 import ProfileSidebar from '../ProfileSidebar/ProfileSidebar';
+import FeedPhoto from '../FeedPhoto/FeedPhoto';
 const events = [
     {
         name: "Event_Name1",

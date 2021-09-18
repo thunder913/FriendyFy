@@ -1,8 +1,7 @@
 import React from 'react';
 import './FeedEvent.css';
-import { faComments, faEllipsisH, faShare, faThumbsUp } from '@fortawesome/free-solid-svg-icons';
-import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import FeedHeader from '../FeedHeader/FeedHeader';
+import FeedFooter from '../FeedFooter/FeedFooter';
 
 const FeedEvent = ({ event }) => (
     <div className="feed feed-event" >
@@ -23,43 +22,7 @@ const FeedEvent = ({ event }) => (
             <span>Location: {event.location}</span>
             <span>{event.time}</span>
         </div>
-        <footer className="feed-footer">
-            <div className="top-footer">
-                <div className="likes">
-                    <span>
-                        <a href="">
-                            49 likes
-                        </a>
-                    </span>
-                </div>
-                <div className="comments-reposts">
-                    <span>
-                        <a href="">
-                            33 comments
-                        </a>
-                    </span>
-                    <span>
-                        <a href="">
-                            12 reposts
-                        </a>
-                    </span>
-                </div>
-            </div>
-            <div className="bottom-footer">
-                <div className="feed-like">
-                <FontAwesomeIcon className="post-button like-button" icon={faThumbsUp} />
-                    <span>Like</span>
-                </div>
-                <div className="feed-comment">
-                    <FontAwesomeIcon className="post-button like-button" icon={faComments} />
-                    <span>Comment</span>
-                </div>
-                <div className="feed-repost">
-                    <FontAwesomeIcon className="post-button like-button" icon={faShare} />
-                    <span>Repost</span>
-                </div>
-            </div>
-        </footer>
+        <FeedFooter likes="5" comments="10" reposts="20"/>
     </div>
 )
 

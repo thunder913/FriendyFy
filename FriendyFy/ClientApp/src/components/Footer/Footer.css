@@ -37,3 +37,23 @@
   .site-footer:hover::-webkit-scrollbar-thumb{
     background: #888;
   }
+
+  footer.feed-footer{
+    display: flex;
+    flex-direction: column;
+    background-color: rgba(32, 33, 34, 1);
+    margin-top: 15px;
+    border-radius: 0px 0px 5px 5px;
+}
+
+.top-footer{
+    display: flex;
+    justify-content: space-between;
+    padding: 5px 10px 5px 10px;
+    border-top: 1px solid rgb(58, 58, 58);
+    border-bottom: 1px solid rgb(58, 58, 58);
+}
+
+.comments-reposts > span{
+    margin-left: 10px;
+}

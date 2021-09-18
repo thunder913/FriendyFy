@@ -1,6 +1,7 @@
 import React, { Component } from 'react';
 import FeedEvent from '../FeedEvent/FeedEvent';
 import './Home.css';
+import FeedPhoto from '../FeedPhoto/FeedPhoto';
 export class Home extends Component {
   static displayName = Home.name;
 
@@ -60,6 +61,7 @@ export class Home extends Component {
         <div className="feed">
           {events.map(event => <FeedEvent event={event}/>)}
         </div>
+        <FeedPhoto></FeedPhoto>
         <h1>Hello, world!</h1>
         <p>Welcome to your new single-page application, built with:</p>
         <ul>
