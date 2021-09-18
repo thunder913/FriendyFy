@@ -2,23 +2,11 @@ import React from 'react';
 import './FeedEvent.css';
 import { faComments, faEllipsisH, faShare, faThumbsUp } from '@fortawesome/free-solid-svg-icons';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import FeedHeader from '../FeedHeader/FeedHeader';
 
 const FeedEvent = ({ event }) => (
     <div className="feed feed-event" >
-        <header className="feed-header">
-            <div className="header-left">
-                <div className="post-creator-image">
-                    <img src="https://tinyurl.com/44t28uud" alt="" />
-                </div>
-                <div className="header-user-data">
-                    <h3>Andon Gorchov</h3>
-                    <span>37m</span>
-                </div>
-            </div>
-            <div className="header-right">
-                <FontAwesomeIcon className="header-elipsis" icon={faEllipsisH} />
-            </div>
-        </header>
+        <FeedHeader photo="https://tinyurl.com/44t28uud" name="Andon Gorchov" time="37m"/>
         <div className="event-images">
             {event.attending.map((user) => <div className="user-photo">
                 <img src={user.photo} alt="" />

@@ -1,0 +1,44 @@
+
+header.feed-header{
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    justify-content: space-between;
+    padding: 5px 15px;
+    margin-bottom: 5px;
+    border-radius: 5px 5px 0px 0px;
+    background-color: rgba(32, 33, 34, 1);
+}
+
+.header-left{
+    display: flex;
+    align-items: center;
+}
+
+.post-creator-image{
+    margin-right: 10px;
+}
+
+.header-elipsis{
+    margin-right: 20px;
+    color: rgb(126, 122, 122);
+    transition: 0.4s;
+    font-size: 40px;
+    padding:10px;
+    border-radius: 10px;
+}
+
+.header-elipsis:hover{
+    cursor: pointer;
+    background-color: #5d5c5c;
+}
+
+.header-user-data > h3{
+    margin-bottom: 0px;
+    font-size: 24px;
+}
+
+.header-user-data > span{
+    font-size: 12px;
+    font-style: italic;
+}
