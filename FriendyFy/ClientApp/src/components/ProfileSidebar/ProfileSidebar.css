@@ -16,14 +16,14 @@
 }
 
 .profile-sidebar{
-    overflow-y: scroll;
-    -ms-overflow-style: none; /* for Internet Explorer, Edge */
-    scrollbar-width: none;
     display: flex;
     flex-direction: column;
     margin-right: 15px;
     margin-top: 12px;
     flex-basis: 50%;
+    position: sticky;
+    top: -270px;
+    height: 1100px;
 }
 
 .profile-sidebar::-webkit-scrollbar {

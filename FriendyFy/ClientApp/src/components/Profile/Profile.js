@@ -1,7 +1,6 @@
 import React from 'react';
 import './Profile.css';
 import FeedEvent from '../FeedEvent/FeedEvent';
-import Friends from '../Friends/Friends'
 import ProfileHeader from '../ProfileHeader/ProfileHeader';
 import ProfileSidebar from '../ProfileSidebar/ProfileSidebar';
 import FeedPhoto from '../FeedPhoto/FeedPhoto';
@@ -102,10 +101,13 @@ const Profile = () => (
         <div className="profile-container">
            <ProfileHeader selected="timeline"/>
              <main className="profile-main">
-                <ProfileSidebar friends={friends}/>
+             <ProfileSidebar friends={friends}/>
                 <div className="profile-feed">
                     <div className="feed">
-                        {events.map(event => <FeedEvent event={event} />)}
+                    {events.map(event => <FeedEvent event={event} />)}
+                        <FeedPhoto image="https://tinyurl.com/44t28uud"></FeedPhoto>
+                        <FeedPhoto image="http://www.orneveien.org/nikon-d800/panoramas/huge/2015-02-06-wellville-mountains-gleaming-new-snow-panorama-halfsize.jpg"></FeedPhoto>
+                        <FeedPhoto image="https://jillsbooks.files.wordpress.com/2011/02/abraham-lincoln-was-very-tall.jpg"></FeedPhoto>
                     </div>
                 </div>
             </main>

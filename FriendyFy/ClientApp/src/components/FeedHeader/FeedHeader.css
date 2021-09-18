@@ -41,3 +41,8 @@ header.feed-header{
     font-size: 12px;
     font-style: italic;
 }
+
+.post-creator-image:hover, .header-user-data > h3:hover{
+    cursor: pointer;
+    text-decoration: underline;
+}
