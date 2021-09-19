@@ -7,13 +7,12 @@
     flex-wrap: wrap;
     width: 100%;
     justify-content: space-between;
-
 }
 
 .friends-main{
     background-color: rgba(36, 37, 38, 0.8);
     padding: 10px 20px;
-    margin-top: 20px;
+    margin-top: 12px;
     border-radius: 10px;
 }
 

@@ -8,6 +8,7 @@ import { ApplicationPaths } from './components/api-authorization/ApiAuthorizatio
 import Profile from './components/Profile/Profile';
 import './custom.css'
 import Friends from './components/Friends/Friends';
+import ProfilePhotos from './components/ProfilePhotos/ProfilePhotos';
 
 export default class App extends Component {
   static displayName = App.name;
@@ -17,8 +18,8 @@ export default class App extends Component {
       <Layout>
         <Route exact path='/' component={Home} />
         <Route path="/profile" component={Profile}></Route>
-        <Route path="/photos" component={Profile}></Route>
         <Route path="/friends" component={Friends}></Route>
+        <Route path="/photos" component={ProfilePhotos}></Route>
         <Route path={ApplicationPaths.ApiAuthorizationPrefix} component={ApiAuthorizationRoutes} />
       </Layout>
     );

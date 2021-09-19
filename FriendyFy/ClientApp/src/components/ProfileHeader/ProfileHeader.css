@@ -42,7 +42,7 @@ header.profile-header{
     -webkit-box-orient: vertical;
     overflow: hidden;
     text-overflow: ellipsis;
-    height: 60px;
+    height: 62px;
 }
 
 .below-cover-photo{

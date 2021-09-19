@@ -37,9 +37,9 @@ const ProfileHeader = ({selected}) =>(
             </Link>
         </div>
         <div className="photos-nav">
-            <a className={"photos " + (selected.match("photos-nav") ? "selected" : "")} href="">
+            <Link className={"photos " + (selected.match("photos-nav") ? "selected" : "")} to="photos">
                 Photos
-            </a>
+            </Link>
         </div>
         <div className="friends-nav">
             <Link className={"friends " + (selected.match("friends") ? "selected" : "")} to="friends">

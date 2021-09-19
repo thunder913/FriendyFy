@@ -3,7 +3,6 @@ import Friend from '../Friend/Friend';
 import './Friends.css';
 import "../Profile/Profile.css"
 import ProfileHeader from '../ProfileHeader/ProfileHeader';
-import ProfileSidebar from '../ProfileSidebar/ProfileSidebar';
 import ProfileFriendSearch from '../ProfileFriendSearch/ProfileFriendSearch';
 const friends = [
     {
