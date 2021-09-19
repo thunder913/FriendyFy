@@ -1,0 +1,10 @@
+.user-photo{
+    flex-basis: 19%;
+    margin: 0px 1.001% 1% 0px;
+}
+
+.user-photo > img{
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+}
