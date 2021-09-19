@@ -86,6 +86,7 @@ header.profile-header{
     padding: 9px 20px;
     background-color: rgba(32, 33, 34, 1);
     border-radius: 5px;
+    margin-top: 2px;
 }
 
 .profile-navigation > div a{
@@ -113,3 +114,10 @@ header.profile-header{
     overflow-y: hidden;
 }
 
+.add-friend{
+    background-color: rgb(35, 87, 155);
+}
+
+.add-friend-nav > .add-friend:hover{
+    background-color: rgb(73, 113, 165);
+}
