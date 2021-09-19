@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
 import FeedEvent from '../FeedEvent/FeedEvent';
 import './Home.css';
-import FeedPhoto from '../FeedPhoto/FeedPhoto';
+import FeedPost from '../FeedPost/FeedPost';
 export class Home extends Component {
   static displayName = Home.name;
 
@@ -63,9 +63,10 @@ export class Home extends Component {
     return (
         <div className="feed">
           {events.map(event => <FeedEvent event={event} />)}
-          <FeedPhoto image="https://tinyurl.com/44t28uud"></FeedPhoto>
-          <FeedPhoto image="http://www.orneveien.org/nikon-d800/panoramas/huge/2015-02-06-wellville-mountains-gleaming-new-snow-panorama-halfsize.jpg"></FeedPhoto>
-          <FeedPhoto image="https://jillsbooks.files.wordpress.com/2011/02/abraham-lincoln-was-very-tall.jpg"></FeedPhoto>
+          <FeedPost image="https://tinyurl.com/44t28uud"></FeedPost>
+          <FeedPost text = "This is a very special post................. ......... This is a very special post................. ......... This is a very special post................. ......... This is a very special post................. ......... This is a very special post................. ......... This is a very special post................. ........."></FeedPost>
+          <FeedPost image="http://www.orneveien.org/nikon-d800/panoramas/huge/2015-02-06-wellville-mountains-gleaming-new-snow-panorama-halfsize.jpg"></FeedPost>
+          <FeedPost image="https://jillsbooks.files.wordpress.com/2011/02/abraham-lincoln-was-very-tall.jpg" text="This is my first post!"></FeedPost>
         </div>
     );
   }

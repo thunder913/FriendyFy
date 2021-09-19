@@ -14,3 +14,8 @@
     max-width: 636.05px;
     max-height: 750px;
 }
+
+.post-text{
+    padding: 5px 10px;
+    text-align: justify;
+}

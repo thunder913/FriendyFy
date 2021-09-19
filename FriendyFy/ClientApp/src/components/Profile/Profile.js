@@ -3,7 +3,7 @@ import './Profile.css';
 import FeedEvent from '../FeedEvent/FeedEvent';
 import ProfileHeader from '../ProfileHeader/ProfileHeader';
 import ProfileSidebar from '../ProfileSidebar/ProfileSidebar';
-import FeedPhoto from '../FeedPhoto/FeedPhoto';
+import FeedPost from '../FeedPost/FeedPost';
 const events = [
     {
         name: "Event_Name1",
@@ -105,9 +105,9 @@ const Profile = () => (
                 <div className="profile-feed">
                     <div className="feed">
                     {events.map(event => <FeedEvent event={event} />)}
-                        <FeedPhoto image="https://tinyurl.com/44t28uud"></FeedPhoto>
-                        <FeedPhoto image="http://www.orneveien.org/nikon-d800/panoramas/huge/2015-02-06-wellville-mountains-gleaming-new-snow-panorama-halfsize.jpg"></FeedPhoto>
-                        <FeedPhoto image="https://jillsbooks.files.wordpress.com/2011/02/abraham-lincoln-was-very-tall.jpg"></FeedPhoto>
+                        <FeedPost image="https://tinyurl.com/44t28uud"></FeedPost>
+                        <FeedPost image="http://www.orneveien.org/nikon-d800/panoramas/huge/2015-02-06-wellville-mountains-gleaming-new-snow-panorama-halfsize.jpg"></FeedPost>
+                        <FeedPost image="https://jillsbooks.files.wordpress.com/2011/02/abraham-lincoln-was-very-tall.jpg"></FeedPost>
                     </div>
                 </div>
             </main>
