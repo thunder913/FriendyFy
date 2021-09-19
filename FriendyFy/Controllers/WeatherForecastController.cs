@@ -8,7 +8,6 @@ using System.Threading.Tasks;
 
 namespace FriendyFy.Controllers
 {
-    [Authorize]
     [ApiController]
     [Route("[controller]")]
     public class WeatherForecastController : ControllerBase

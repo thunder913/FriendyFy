@@ -5,6 +5,14 @@ import FeedPost from '../FeedPost/FeedPost';
 export class Home extends Component {
   static displayName = Home.name;
 
+  componentDidMount(){
+    fetch("https://localhost:44323/Test/")
+      .then(res => res.json())
+      .then(res => {
+          // Do something with the result
+      })
+  }
+
   render() {
     const events = [
       {
