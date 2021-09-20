@@ -9,6 +9,7 @@ import Profile from './components/Profile/Profile';
 import './custom.css'
 import Friends from './components/Friends/Friends';
 import ProfilePhotos from './components/ProfilePhotos/ProfilePhotos';
+import Register from './components/Register/Register';
 
 export default class App extends Component {
   static displayName = App.name;
@@ -20,6 +21,7 @@ export default class App extends Component {
         <Route path="/profile" component={Profile}></Route>
         <Route path="/friends" component={Friends}></Route>
         <Route path="/photos" component={ProfilePhotos}></Route>
+        <Route path="/register" component={Register}></Route>
         <Route path={ApplicationPaths.ApiAuthorizationPrefix} component={ApiAuthorizationRoutes} />
       </Layout>
     );

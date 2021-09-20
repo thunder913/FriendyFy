@@ -22,7 +22,7 @@ function LeftNavigationEvents() {
     //         }
 
     //         //TODO make it show when scrolling top jut a little
-    //         var st = window.pageYOffset || document.documentElement.scrollTop; // Credits: "https://github.com/qeremy/so/blob/master/so.dom.js#L426"
+    //         var st = window.pageYOffset || .documentElement.scrollTop; // Credits: "https://github.com/qeremy/so/blob/master/so.dom.js#L426"
     //         if (st > lastScrollTop) {
     //             // downscroll code
     //         } else {

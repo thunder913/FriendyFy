@@ -4,14 +4,16 @@ using FriendyFy.Data;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 namespace FriendyFy.Data.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    partial class ApplicationDbContextModelSnapshot : ModelSnapshot
+    [Migration("20210920114903_AddedUserProperties")]
+    partial class AddedUserProperties
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -145,9 +147,6 @@ namespace FriendyFy.Data.Migrations
                     b.Property<bool>("PhoneNumberConfirmed")
                         .HasColumnType("bit");
 
-                    b.Property<string>("PostId")
-                        .HasColumnType("nvarchar(450)");
-
                     b.Property<string>("Quote")
                         .HasColumnType("nvarchar(max)");
 
@@ -174,8 +173,6 @@ namespace FriendyFy.Data.Migrations
                         .IsUnique()
                         .HasDatabaseName("UserNameIndex")
                         .HasFilter("[NormalizedUserName] IS NOT NULL");
-
-                    b.HasIndex("PostId");
 
                     b.ToTable("AspNetUsers");
                 });
@@ -356,95 +353,11 @@ namespace FriendyFy.Data.Migrations
                     b.Property<DateTime?>("ModifiedOn")
                         .HasColumnType("datetime2");
 
-                    b.Property<string>("Text")
-                        .HasColumnType("nvarchar(max)");
-
                     b.HasKey("Id");
 
                     b.HasIndex("CreatorId");
 
                     b.ToTable("Posts");
-                });
-
-            modelBuilder.Entity("FriendyFy.Models.PostComment", b =>
-                {
-                    b.Property<string>("Id")
-                        .HasColumnType("nvarchar(450)");
-
-                    b.Property<string>("CommentedById")
-                        .HasColumnType("nvarchar(450)");
-
-                    b.Property<DateTime>("CreatedOn")
-                        .HasColumnType("datetime2");
-
-                    b.Property<DateTime?>("ModifiedOn")
-                        .HasColumnType("datetime2");
-
-                    b.Property<string>("PostId")
-                        .HasColumnType("nvarchar(450)");
-
-                    b.Property<string>("Text")
-                        .HasColumnType("nvarchar(max)");
-
-                    b.HasKey("Id");
-
-                    b.HasIndex("CommentedById");
-
-                    b.HasIndex("PostId");
-
-                    b.ToTable("PostComment");
-                });
-
-            modelBuilder.Entity("FriendyFy.Models.PostLike", b =>
-                {
-                    b.Property<string>("Id")
-                        .HasColumnType("nvarchar(450)");
-
-                    b.Property<DateTime>("CreatedOn")
-                        .HasColumnType("datetime2");
-
-                    b.Property<string>("LikedById")
-                        .HasColumnType("nvarchar(450)");
-
-                    b.Property<DateTime?>("ModifiedOn")
-                        .HasColumnType("datetime2");
-
-                    b.Property<string>("PostId")
-                        .HasColumnType("nvarchar(450)");
-
-                    b.HasKey("Id");
-
-                    b.HasIndex("LikedById");
-
-                    b.HasIndex("PostId");
-
-                    b.ToTable("PostLike");
-                });
-
-            modelBuilder.Entity("FriendyFy.Models.PostRepost", b =>
-                {
-                    b.Property<string>("Id")
-                        .HasColumnType("nvarchar(450)");
-
-                    b.Property<DateTime>("CreatedOn")
-                        .HasColumnType("datetime2");
-
-                    b.Property<DateTime?>("ModifiedOn")
-                        .HasColumnType("datetime2");
-
-                    b.Property<string>("PostId")
-                        .HasColumnType("nvarchar(450)");
-
-                    b.Property<string>("UserId")
-                        .HasColumnType("nvarchar(450)");
-
-                    b.HasKey("Id");
-
-                    b.HasIndex("PostId");
-
-                    b.HasIndex("UserId");
-
-                    b.ToTable("PostRepost");
                 });
 
             modelBuilder.Entity("FriendyFy.Models.UserFriend", b =>
@@ -455,12 +368,17 @@ namespace FriendyFy.Data.Migrations
                     b.Property<DateTime>("CreatedOn")
                         .HasColumnType("datetime2");
 
-                    b.Property<string>("FriendId")
+                    b.Property<string>("UserOneId")
+                        .HasColumnType("nvarchar(450)");
+
+                    b.Property<string>("UserTwoId")
                         .HasColumnType("nvarchar(450)");
 
                     b.HasKey("Id");
 
-                    b.HasIndex("FriendId");
+                    b.HasIndex("UserOneId");
+
+                    b.HasIndex("UserTwoId");
 
                     b.ToTable("UserFriends");
                 });
@@ -787,10 +705,6 @@ namespace FriendyFy.Data.Migrations
                     b.HasOne("FriendyFy.Models.Message", null)
                         .WithMany("SeenBy")
                         .HasForeignKey("MessageId");
-
-                    b.HasOne("FriendyFy.Models.Post", null)
-                        .WithMany("Reposts")
-                        .HasForeignKey("PostId");
                 });
 
             modelBuilder.Entity("FriendyFy.Models.Event", b =>
@@ -835,58 +749,19 @@ namespace FriendyFy.Data.Migrations
                     b.Navigation("Creator");
                 });
 
-            modelBuilder.Entity("FriendyFy.Models.PostComment", b =>
-                {
-                    b.HasOne("FriendyFy.Models.ApplicationUser", "CommentedBy")
-                        .WithMany("Comments")
-                        .HasForeignKey("CommentedById");
-
-                    b.HasOne("FriendyFy.Models.Post", "Post")
-                        .WithMany("Comments")
-                        .HasForeignKey("PostId");
-
-                    b.Navigation("CommentedBy");
-
-                    b.Navigation("Post");
-                });
-
-            modelBuilder.Entity("FriendyFy.Models.PostLike", b =>
-                {
-                    b.HasOne("FriendyFy.Models.ApplicationUser", "LikedBy")
-                        .WithMany("Likes")
-                        .HasForeignKey("LikedById");
-
-                    b.HasOne("FriendyFy.Models.Post", "Post")
-                        .WithMany("Likes")
-                        .HasForeignKey("PostId");
-
-                    b.Navigation("LikedBy");
-
-                    b.Navigation("Post");
-                });
-
-            modelBuilder.Entity("FriendyFy.Models.PostRepost", b =>
-                {
-                    b.HasOne("FriendyFy.Models.Post", "Post")
-                        .WithMany()
-                        .HasForeignKey("PostId");
-
-                    b.HasOne("FriendyFy.Models.ApplicationUser", "User")
-                        .WithMany("Reposts")
-                        .HasForeignKey("UserId");
-
-                    b.Navigation("Post");
-
-                    b.Navigation("User");
-                });
-
             modelBuilder.Entity("FriendyFy.Models.UserFriend", b =>
                 {
-                    b.HasOne("FriendyFy.Models.ApplicationUser", "Friend")
+                    b.HasOne("FriendyFy.Models.ApplicationUser", "UserOne")
                         .WithMany("Friends")
-                        .HasForeignKey("FriendId");
+                        .HasForeignKey("UserOneId");
 
-                    b.Navigation("Friend");
+                    b.HasOne("FriendyFy.Models.ApplicationUser", "UserTwo")
+                        .WithMany()
+                        .HasForeignKey("UserTwoId");
+
+                    b.Navigation("UserOne");
+
+                    b.Navigation("UserTwo");
                 });
 
             modelBuilder.Entity("GroupInterest", b =>
@@ -957,15 +832,9 @@ namespace FriendyFy.Data.Migrations
 
             modelBuilder.Entity("FriendyFy.Models.ApplicationUser", b =>
                 {
-                    b.Navigation("Comments");
-
                     b.Navigation("Friends");
 
-                    b.Navigation("Likes");
-
                     b.Navigation("Posts");
-
-                    b.Navigation("Reposts");
                 });
 
             modelBuilder.Entity("FriendyFy.Models.Chat", b =>
@@ -978,15 +847,6 @@ namespace FriendyFy.Data.Migrations
             modelBuilder.Entity("FriendyFy.Models.Message", b =>
                 {
                     b.Navigation("SeenBy");
-                });
-
-            modelBuilder.Entity("FriendyFy.Models.Post", b =>
-                {
-                    b.Navigation("Comments");
-
-                    b.Navigation("Likes");
-
-                    b.Navigation("Reposts");
                 });
 #pragma warning restore 612, 618
         }
