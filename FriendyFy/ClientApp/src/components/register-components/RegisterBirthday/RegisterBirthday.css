@@ -1,0 +1,30 @@
+.rdt > .rdtPicker > div {
+    background-color: rgba(143, 143, 143, 0.678);
+    color: black;
+}
+
+.rdtPicker{
+    border: 0px;
+    padding: 0px !important;
+}
+
+.rdtPicker td, .rdtPicker th{
+    transition: 0.2s;
+}
+
+.birthday-error{
+    color: red;
+}
+
+.rdt{
+    color: rgb(255, 255, 255);
+    margin-bottom: 0px;
+}
+
+.rdt > input{
+    text-align: center;
+    margin-bottom: 0px;
+    border: 0px;
+    border-radius: 5px;
+    background-color: rgba(143, 143, 143, 0.678);
+}

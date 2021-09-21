@@ -1,0 +1,17 @@
+.names{
+    display: flex;
+    flex-direction: row;
+}
+
+.names input{
+    width: 50%;
+    margin-top: 10px;
+}
+
+#first-name{
+    margin-right: 5px;
+}
+
+#last-name{
+    margin-left: 5px;
+}
