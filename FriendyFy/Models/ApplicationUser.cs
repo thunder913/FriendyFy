@@ -1,4 +1,5 @@
 ﻿using FriendyFy.Models.Common;
+using FriendyFy.Models.Enums;
 using Microsoft.AspNetCore.Identity;
 using System;
 using System.Collections.Generic;
@@ -22,5 +23,7 @@ namespace FriendyFy.Models
         public ICollection<PostLike> Likes { get; set; } = new HashSet<PostLike>();
         public ICollection<PostRepost> Reposts { get; set; } = new HashSet<PostRepost>();
         public ICollection<PostComment> Comments { get; set; } = new HashSet<PostComment>();
+        public DateTime BirthDate { get; set; }
+        public Gender Gender { get; set; }
     }
 }

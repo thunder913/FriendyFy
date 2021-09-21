@@ -9,7 +9,7 @@ import Profile from './components/Profile/Profile';
 import './custom.css'
 import Friends from './components/Friends/Friends';
 import ProfilePhotos from './components/ProfilePhotos/ProfilePhotos';
-import Register from './components/Register/Register';
+import Register from './components/register-components/Register/Register.js';
 
 export default class App extends Component {
   static displayName = App.name;
