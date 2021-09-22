@@ -31,6 +31,7 @@ const Register = () => {
                <RegisterGender/>
             </div>
             <RegisterPasswords/>
+        <p className="tos">By clicking <strong>Register</strong>, you agree to our Terms. Learn how we collect, use and share your data in our Data Policy and how we use cookies and similar technology in our Cookies Policy. You may receive Emails from us and can opt out any time.</p>
             <input id="register-button" type="submit" value="Register" />
         </form>
     )

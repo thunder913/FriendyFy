@@ -5,10 +5,14 @@ const HomePageNotSignedIn = () =>{
 
     const [showRegister, setShowRegister] = useState('');
     
-    return (<div className="home-page" style={{ filter: showRegister ? 'blur(10px)' : '' }}>
-        <h1>NOT SIGNED IN</h1>
-        <input type="submit" onClick={() => setShowRegister(!showRegister)}/>
-        {showRegister ? <RegisterPopUp /> : ''}
+    return (
+    <div className="home-page" >
+        <div className="page" style={{ filter: showRegister ? 'blur(5px)' : '' }}>
+            <h1>NOT SIGNED IN</h1>
+            <input type="submit" onClick={() => setShowRegister(!showRegister)}/>
+        </div>
+
+        {showRegister ? <RegisterPopUp setShowRegister={setShowRegister}/> : ''}
     </div>);
 }
 

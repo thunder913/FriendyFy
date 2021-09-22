@@ -1,6 +1,7 @@
 .register input{
     color: rgb(0, 0, 0);
     padding: 10px;
+    border: 1px solid transparent;
 }
 
 .register input, .gender, .gender-buttons{
@@ -24,6 +25,15 @@
 #register-button{
     width: 30%;
     align-self: flex-end;
+    margin-top: 10px;
+    background-color: rgb(22, 38, 110);
+    color: white;
+    transition: 0.3s;
+}
+
+#register-button:hover{
+    background-color: rgb(51, 66, 134);
+    color: rgb(255, 255, 255);
 }
 
 .bottom-row{
@@ -34,4 +44,8 @@
     display: flex;
     flex-direction: column;
     margin-top: 10px;
+}
+
+.tos{
+    font-size: 12px;
 }

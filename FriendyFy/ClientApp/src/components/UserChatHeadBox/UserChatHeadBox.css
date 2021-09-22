@@ -44,7 +44,7 @@ fieldset {
     max-width: 100%;
 }
 
-#live-chat, input {
+#live-chat input {
 	border: 0;
 	color: rgb(238, 238, 238);
     font-family: inherit;
