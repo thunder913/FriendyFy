@@ -1,0 +1,12 @@
+.register-popup{
+    background-color: #3F3B3B;
+    position: absolute;
+    left: 0;
+    right: 0;
+    margin: auto;
+    width: 540px;
+    padding: 20px; 
+    box-shadow: 5px 5px 27px 3px rgba(0,0,0,0.78);
+    top: 50%;
+    transform: translateY(-50%);
+}
