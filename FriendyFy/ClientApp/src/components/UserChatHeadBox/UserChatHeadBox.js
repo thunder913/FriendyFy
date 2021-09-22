@@ -20,7 +20,7 @@ function UserChatHeadBox(props) {
     return (
     <div id="live-chat">
         <FadeIn>
-        <header class="" onClick={closeChatPopup}>
+        <header className="" onClick={closeChatPopup}>
             <div className="user-header">
             <div className="other-user-chat-image">
                         <img src="http://gravatar.com/avatar/2c0ad52fc5943b78d6abe069cc08f320?s=32" alt="" width="32" height="32" />
@@ -28,34 +28,34 @@ function UserChatHeadBox(props) {
             <h4> Mehmet Mert</h4>
             </div>
 
-            <a href="#" class="chat-close">x</a>
-            <span class="chat-message-counter">3</span>
+            <a href="#" className="chat-close">x</a>
+            <span className="chat-message-counter">3</span>
         </header>
-        <div class="chat">
-            <div class="chat-history">
-                <div class="chat-message clearfix your-message">
-                    <div class="chat-message-content clearfix">
-                        <span class="chat-time">13: 35</span>
+        <div className="chat">
+            <div className="chat-history">
+                <div className="chat-message clearfix your-message">
+                    <div className="chat-message-content clearfix">
+                        <span className="chat-time">13: 35</span>
                         <h5>You</h5>
                         <p>Lorem ipsum dolor sit amet, consectetur adipisicing elit.Error, explicabo quasi ratione odio dolorum harum.</p>
                     </div>
                 </div>
                 <hr />
-                <div class="chat-message clearfix other-user-message">
+                <div className="chat-message clearfix other-user-message">
                     <div className="other-user-chat-image">
                         <img src="http://gravatar.com/avatar/2c0ad52fc5943b78d6abe069cc08f320?s=32" alt="" width="32" height="32" />
                     </div>
-                    <div class="chat-message-content clearfix">
-                        <span class="chat-time">13: 37</span>
+                    <div className="chat-message-content clearfix">
+                        <span className="chat-time">13: 37</span>
                         <h5>Marco Biedermann</h5>
                         <p>Lorem ipsum dolor sit amet, consectetur adipisicing elit.Blanditiis, nulla accusamus magni vel debitis numquam qui tempora rem voluptatem delectus!</p>
                     </div>
                 </div>
                 <hr />
 
-                <div class="chat-message clearfix your-message">
-                    <div class="chat-message-content clearfix">
-                        <span class="chat-time">13: 38</span>
+                <div className="chat-message clearfix your-message">
+                    <div className="chat-message-content clearfix">
+                        <span className="chat-time">13: 38</span>
                         <h5>You</h5>
                         <p>Lorem ipsum dolor sit amet, consectetur adipisicing.</p>
                     </div>

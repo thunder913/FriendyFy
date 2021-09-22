@@ -10,8 +10,8 @@ const PersonYouProbablyMet = ({person}) =>(
                         <span className="friend-friends">You were together at {person.events.length} event{person.events.length > 1 ? "s" : ""}.</span>
                     </div>
                     <div className="friend-buttons">
-                        <button class="add-friend">Add</button>
-                        <button class="remove-suggestion">Remove</button>
+                        <button className="add-friend">Add</button>
+                        <button className="remove-suggestion">Remove</button>
                     </div>
                 </div>
             </div>

@@ -1,0 +1,88 @@
+.page, .register-top, .login-container{
+    display: flex;
+    flex-direction: column;
+    flex-basis: 60%;
+    width: 100%;
+}
+
+.register-top{
+    padding-bottom: 30px;
+}
+
+.home-quote{
+    margin-bottom: 0px;
+}
+
+.register-bottom{
+    display: flex;
+    flex-direction: row;
+    flex-basis: 40%;
+    padding-top: 30px;
+}
+
+.register-top{
+    margin-top: 10%;
+}
+
+.login-container input{
+    margin-bottom: 5px;
+    padding: 10px;
+    border-radius: 5px;
+}
+
+.login-buttons >  .login-button{
+    width: 50%;
+    align-self: flex-end;
+    margin-bottom: 0px;
+}
+
+.login-buttons{
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+}
+
+.forgotten-password{
+    padding: 0px;
+    background-color: white;
+    height: 48px;
+    border-radius: 5px;
+    text-align: center;
+    line-height: 42px;
+}
+
+.login-container{
+    padding-left: 10px;
+    padding-right: 20px;
+    border-right: 2px solid white;
+}
+
+.create-account{
+    padding-left: 20px;
+    padding-right: 10px;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+}
+
+.join-our-community{
+    margin-bottom: 0px;
+    font-size: 28px;
+}
+
+.create-account .register{
+    padding: 10px;
+    text-align: center;
+    display: flex;
+    align-items: center;
+    font-size: 20px;
+    border-radius: 10px;
+    background-color: rgb(22, 38, 110);
+    color: white;
+    border: 0px;
+}
+
+.create-account .register:hover{
+    background-color: rgb(51, 66, 134);
+    color: rgb(255, 255, 255);
+}

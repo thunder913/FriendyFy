@@ -30,7 +30,7 @@ export const Layout = (props) => {
   const loggedIn = useContext(LoggedInContext);
 
     return (
-      <div class="site">
+      <div className="site">
         {loggedIn ? <NavMenu /> : ''}
         {loggedIn ? <LeftNavigation/> : ''}
         <div className="main-content">

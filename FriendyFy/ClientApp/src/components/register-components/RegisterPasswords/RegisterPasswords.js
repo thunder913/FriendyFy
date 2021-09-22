@@ -75,10 +75,10 @@ const RegisterPasswords = () => {
                 errorBubble = {passwordErrorBubble}
             />
                         <InputWithValidation
-                id="password"
+                id="confirm-password"
                 type="password"
                 error = {confirmPasswordError}
-                placeholder = 'Password'
+                placeholder = 'Confirm Password'
                 value = {confirmPassword}
                 changeHandler = {onConfirmPasswordChange}
                 setErrorBubble = {setConfirmPasswordErrorBubble}

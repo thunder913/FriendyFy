@@ -22,10 +22,6 @@
     background-color: rgba(172, 107, 107, 0.979) !important;
 }
 
-#first-name, #last-name{
-    margin-bottom: 0px;
-}
-
 .names > div:nth-child(2n){
     margin-left: 5px;
 }

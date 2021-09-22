@@ -72,6 +72,7 @@ const RegisterNameInput = () => {
     return(
     <div className="names">
         <InputWithValidation
+            id='first-name'
             error = {firstNameError}
             placeholder = 'First Name'
             value = {firstName}
@@ -80,6 +81,7 @@ const RegisterNameInput = () => {
             errorBubble = {firstNameErrorBubble}
         />
         <InputWithValidation
+            id='last-name'
             error = {lastNameError}
             placeholder = 'Last Name'
             value = {lastName}

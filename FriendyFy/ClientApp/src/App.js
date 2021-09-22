@@ -17,7 +17,7 @@ export default class App extends Component {
 
   render () {
     return (
-      <LoggedInContext.Provider value={true}>
+      <LoggedInContext.Provider value={false}>
       <Layout>
         <Route exact path='/' component={Home} />
         <Route path="/profile" component={Profile}></Route>

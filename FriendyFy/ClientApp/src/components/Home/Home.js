@@ -1,8 +1,7 @@
 import React, {useContext, useEffect} from 'react';
 import { useState } from 'react';
 import './Home.css';
-import RegisterPopUp from '../register-components/RegisterPopUp/RegisterPopUp';
-import HomePageNotSignedIn from '../api-authorization/HomePageNotSignedIn/HomePageNotSignedIn';
+import HomePageNotSignedIn from '../HomePageNotSignedIn/HomePageNotSignedIn'
 import HomePageSignedIn from '../HomePageSignedIn/HomePageSignedIn';
 import { LoggedInContext } from '../../contexts/LoggedInContext.js'
 const Home = () => {
