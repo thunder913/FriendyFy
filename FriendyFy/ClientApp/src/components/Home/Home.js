@@ -1,12 +1,13 @@
-import React, {useEffect} from 'react';
+import React, {useContext, useEffect} from 'react';
 import { useState } from 'react';
 import './Home.css';
 import RegisterPopUp from '../register-components/RegisterPopUp/RegisterPopUp';
 import HomePageNotSignedIn from '../api-authorization/HomePageNotSignedIn/HomePageNotSignedIn';
 import HomePageSignedIn from '../HomePageSignedIn/HomePageSignedIn';
+import { LoggedInContext } from '../../contexts/LoggedInContext.js'
 const Home = () => {
 
-  const loggedIn = LoggedInContext;
+  const loggedIn = useContext(LoggedInContext);
 
   useEffect(() => 
     fetch("https://localhost:44323/Test/")
