@@ -4,19 +4,40 @@
 }
 
 .names input{
-    width: 50%;
+    width: 100%;
     margin-top: 10px;
 }
 
-#first-name{
+.first-name-input{
     margin-right: 5px;
 }
 
-#last-name{
+.last-name-input{
     margin-left: 5px;
 }
 
 .error{
-    border: 1px solid rgba(155, 18, 18, 0.8);
+    border: 1px solid rgba(155, 18, 18, 0.8) !important;
     background-color: rgba(172, 107, 107, 0.979) !important;
 }
+
+.input{
+    width: 50%;
+}
+
+.input-error{
+    width: 100%;
+    text-align: center;
+    border-radius: 10px;
+    font-size: 12px;
+    margin-bottom: 10px;
+    color: rgb(255, 87, 87);
+    transition: 0.3s;
+    overflow: visible;
+    white-space: nowrap;
+}
+
+#first-name, #last-name{
+    margin-bottom: 0px;
+}
+

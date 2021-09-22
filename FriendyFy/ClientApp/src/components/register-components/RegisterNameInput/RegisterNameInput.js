@@ -2,14 +2,14 @@ import './RegisterNameInput.css'
 import React, {useState} from 'react';
 import { useEffect } from 'react/cjs/react.development';
 
-
-
 const RegisterNameInput = () => {
     const [firstName, setFirstName] = useState('');
     const [lastName, setLastName] = useState('');
     const [firstNameError, setFirstNameError] = useState(null);
     const [lastNameError, setLastNameError] = useState(null);
     const [firstLoad, setFirstLoad] = useState(true);
+    const [firstNameErrorBubble, setFirstNameErrorBubble] = useState(false);
+    const [lasttNameErrorBubble, setLastNameErrorBubble] = useState(false);
 
     const letterRegex = /^[A-Za-z\u00C0-\u1FFF\u2800-\uFFFD ]+$/;
 
@@ -70,8 +70,34 @@ const RegisterNameInput = () => {
 
     return(
     <div className="names">
-    <input id="first-name" className={firstNameError != null ? 'error' : ''} type="text" placeholder="First Name" value={firstName} onChange={onFirstNameChangeHandler} />
-    <input id="last-name" className={lastNameError != null ? 'error' : ''} type="text" placeholder="Last Name" value={lastName} onChange={onLastNameChangeHandler} />
+        <div className="input first-name-input">
+            <input 
+                id="first-name" 
+                className={firstNameError != null ? 'error' : ''} 
+                type="text" 
+                placeholder="First Name" 
+                value={firstName} onChange={onFirstNameChangeHandler} 
+                onFocus={(e) => setFirstNameErrorBubble(true)}
+                onBlur={(e) => setFirstNameErrorBubble(false)}
+                autocomplete="new-password"
+                />
+            <div className="input-error">{firstNameErrorBubble ? firstNameError : ''}</div>
+        </div>
+        <div className="input last-name-input">
+            <input 
+            id="last-name" 
+            className={lastNameError != null ? 'error' : ''} 
+            type="text" 
+            placeholder="Last Name" 
+            value={lastName} 
+            onChange={onLastNameChangeHandler} 
+            onFocus={(e) => setLastNameErrorBubble(true)}
+            onBlur={(e) => setLastNameErrorBubble(false)}
+            autocomplete="new-password"
+            />
+            <div className="input-error">{lasttNameErrorBubble ? lastNameError : ''}</div>
+        </div>
+
     </div>)
 }
 
