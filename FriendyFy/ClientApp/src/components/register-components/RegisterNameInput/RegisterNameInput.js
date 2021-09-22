@@ -1,6 +1,7 @@
 import './RegisterNameInput.css'
 import React, {useState} from 'react';
 import { useEffect } from 'react/cjs/react.development';
+import InputWithValidation from '../../InputWithValidation/InputWithValidation';
 
 const RegisterNameInput = () => {
     const [firstName, setFirstName] = useState('');
@@ -70,33 +71,22 @@ const RegisterNameInput = () => {
 
     return(
     <div className="names">
-        <div className="input first-name-input">
-            <input 
-                id="first-name" 
-                className={firstNameError != null ? 'error' : ''} 
-                type="text" 
-                placeholder="First Name" 
-                value={firstName} onChange={onFirstNameChangeHandler} 
-                onFocus={(e) => setFirstNameErrorBubble(true)}
-                onBlur={(e) => setFirstNameErrorBubble(false)}
-                autocomplete="new-password"
-                />
-            <div className="input-error">{firstNameErrorBubble ? firstNameError : ''}</div>
-        </div>
-        <div className="input last-name-input">
-            <input 
-            id="last-name" 
-            className={lastNameError != null ? 'error' : ''} 
-            type="text" 
-            placeholder="Last Name" 
-            value={lastName} 
-            onChange={onLastNameChangeHandler} 
-            onFocus={(e) => setLastNameErrorBubble(true)}
-            onBlur={(e) => setLastNameErrorBubble(false)}
-            autocomplete="new-password"
-            />
-            <div className="input-error">{lasttNameErrorBubble ? lastNameError : ''}</div>
-        </div>
+        <InputWithValidation
+            error = {firstNameError}
+            placeholder = 'First Name'
+            value = {firstName}
+            changeHandler = {onFirstNameChangeHandler}
+            setErrorBubble = {setFirstNameErrorBubble}
+            errorBubble = {firstNameErrorBubble}
+        />
+        <InputWithValidation
+            error = {lastNameError}
+            placeholder = 'Last Name'
+            value = {lastName}
+            changeHandler = {onLastNameChangeHandler}
+            setErrorBubble = {setLastNameErrorBubble}
+            errorBubble = {lasttNameErrorBubble}
+        />
 
     </div>)
 }

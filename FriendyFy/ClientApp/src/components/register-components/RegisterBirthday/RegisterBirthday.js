@@ -26,18 +26,17 @@ const RegisterBirthday = () => {
     }
     return (
         <div className="birthday">
+            {birthdayError ? <p className="birthday-error">Invalid birthday date!</p> : ''}
             <Datetime
                 input={true}
                 initialViewMode='years'
                 locale={getCurrentLocalization()}
                 timeFormat={false}
                 dateFormat={moment.localeData().longDateFormat('LL')}
-                inputProps={{ placeholder: "Birthday" }}
                 onChange={onBirthdayChangeHandler}
                 className='birthday'
-                inputProps={{id: 'birthday', placeholder: 'Birthday'}}
+                inputProps={{id: 'birthday', placeholder: 'Birthday', autoComplete: "off" }}
             />
-            {birthdayError ? <span className="birthday-error">Invalid birthday date!</span> : ''}
         </div>
 );
 }

@@ -43,9 +43,24 @@
 .passwords{
     display: flex;
     flex-direction: column;
-    margin-top: 10px;
 }
 
 .tos{
     font-size: 12px;
+}
+
+.input-error{
+    width: 100%;
+    text-align: center;
+    border-radius: 10px;
+    font-size: 12px;
+    color: rgb(255, 87, 87);
+    transition: 0.3s;
+    overflow: visible;
+    white-space: nowrap;
+}
+
+.bottom-row{
+    margin-top: 10px;
+    margin-bottom: 10px;
 }
