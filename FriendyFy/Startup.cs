@@ -1,5 +1,8 @@
 using FriendyFy.Data;
+using FriendyFy.Data.Common.QueryRunner;
 using FriendyFy.Models;
+using FriendyFy.Services;
+using FriendyFy.Services.Contracts;
 using Microsoft.AspNetCore.Authentication;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
@@ -40,6 +43,13 @@ namespace FriendyFy
 
             services.AddAuthentication()
                 .AddIdentityServerJwt();
+
+            // Date repos
+            services.AddScoped(typeof(IDeletableEntityRepository<>), typeof(EfDeletableEntityRepository<>));
+            services.AddScoped(typeof(IRepository<>), typeof(EfRepository<>));
+            services.AddScoped<IDbQueryRunner, DbQueryRunner>();
+
+            services.AddTransient<IUserService, UserService>();
 
             services.AddControllersWithViews();
             services.AddRazorPages();

@@ -1,5 +1,8 @@
+using FriendyFy.Data;
+using FriendyFy.Data.Common.QueryRunner;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.Extensions.Configuration;
+using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using Microsoft.Extensions.Logging;
 using System;
@@ -22,5 +25,12 @@ namespace FriendyFy
                 {
                     webBuilder.UseStartup<Startup>();
                 });
+
+        public static void ConfigureServices(ServiceCollection services)
+        {
+            services.AddScoped(typeof(IDeletableEntityRepository<>), typeof(EfDeletableEntityRepository<>));
+            services.AddScoped(typeof(IRepository<>), typeof(EfRepository<>));
+            services.AddScoped<IDbQueryRunner, DbQueryRunner>();
+        }
     }
 }

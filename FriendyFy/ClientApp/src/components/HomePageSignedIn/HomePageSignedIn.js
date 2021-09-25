@@ -1,6 +1,7 @@
 import React from "react";
 import FeedPost from '../FeedPost/FeedPost';
 import FeedEvent from '../FeedEvent/FeedEvent';
+import './HomePageSignedIn.css'
 const events = [
     {
       name: "Event_Name1",
@@ -56,7 +57,7 @@ const events = [
     }
   ]
 const HomePageSignedIn = () => (
-        <div className="feed">
+        <div className="feed home-feed">
           {events.map(event => <FeedEvent event={event} />)}
           <FeedPost image="https://tinyurl.com/44t28uud"></FeedPost>
           <FeedPost text = "This is a very special post................. ......... This is a very special post................. ......... This is a very special post................. ......... This is a very special post................. ......... This is a very special post................. ......... This is a very special post................. ........."></FeedPost>
