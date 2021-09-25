@@ -12,14 +12,21 @@ import moment from 'moment';
 const Register = () => {
     function onSubmitHandler(e) {
         e.preventDefault();
-        let date = moment(e.target['birthday'].value, '\'' + moment.localeData().longDateFormat('LL') + '\'');
-        console.log(date._d);
-        console.log(e.target['first-name'].value);
-        console.log(e.target['last-name'].value);
-        console.log(e.target['birthday'].value);
-        console.log(e.target['gender'].value);
-        console.log(e.target['password'].value);
-        console.log(e.target['confirm-password'].value);
+
+        fetch('/api/register', {
+            method: 'POST',
+            headers: {'Content-Type': 'application/json'},
+            body: JSON.stringify(
+                {
+                    firstName: e.target['first-name'].value,
+                    lastName: e.target['last-name'].value,
+                    birthday: '27/02/2019',
+                    gender: e.target['gender'].value,
+                    password: e.target['password'].value,
+                    confirmPassword: e.target['confirm-password'].value,
+                    email: e.target['email-input'].value
+                })
+        });
     }
 
     return (

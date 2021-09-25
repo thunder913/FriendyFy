@@ -6,6 +6,21 @@ const HomePageNotSignedIn = () =>{
 
     const [showRegister, setShowRegister] = useState('');
     
+    function onSubmitHandler(e){
+        e.preventDefault();
+
+        
+        fetch('/api/login', {
+            method: 'POST',
+            headers: {'Content-Type': 'application/json'},
+            body: JSON.stringify(
+                {
+                    email: e.target['email'].value,
+                    password: e.target['password'].value
+                })
+        });
+    }
+
     return (
     <div className="home-page" >
         <div className="page" style={{ filter: showRegister ? 'blur(5px)' : '' }}>
@@ -15,12 +30,14 @@ const HomePageNotSignedIn = () =>{
             </div>
             <div className="register-bottom">
                 <div className="login-container">
-                    <input type="text" placeholder="Email"/>
-                    <input type="text" placeholder="Password"/>
+                    <form onSubmit={onSubmitHandler}>
+                    <input id="email" type="text" placeholder="Email"/>
+                    <input id="password" type="text" placeholder="Password"/>
                     <div className="login-buttons">
                         <Link className="forgotten-password" to="#">Forgot Password?</Link>
                         <input className="login-button" type="submit" value="Login"/>
                     </div>
+                    </form>
                 </div>
                 <div className="create-account">
                     <h3 className="join-our-community">Join our comunity now ↓↓</h3>

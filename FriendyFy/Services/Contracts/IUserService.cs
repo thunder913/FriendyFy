@@ -11,5 +11,7 @@ namespace FriendyFy.Services.Contracts
         Task<ApplicationUser> CreateAsync(ApplicationUser user);
 
         ApplicationUser GetByEmail(string email);
+
+        ApplicationUser GetById(string id);
     }
 }

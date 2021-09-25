@@ -19,19 +19,7 @@ namespace FriendyFy.Services
         public async Task<ApplicationUser> CreateAsync(ApplicationUser user)
         {
             await userRepository.AddAsync(user);
-            try
-            {
-                var added = await userRepository.SaveChangesAsync();
-                Console.WriteLine(added);
-            }
-            catch (Exception ex)
-            {
-
-            }
-            finally
-            {
-                Console.WriteLine("tet");
-            }
+            await userRepository.SaveChangesAsync();
 
 
             return user;
@@ -40,6 +28,11 @@ namespace FriendyFy.Services
         public ApplicationUser GetByEmail(string email)
         {
             return this.userRepository.All().FirstOrDefault(x => x.Email == email);
+        }
+
+        public ApplicationUser GetById(string id)
+        {
+            return this.userRepository.All().FirstOrDefault(x => x.Id == id);
         }
     }
 }
