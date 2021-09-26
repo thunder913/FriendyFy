@@ -1,4 +1,4 @@
-import React, { useContext } from "react";
+import React from "react";
 import {getLoggedInUser} from '../services/userService.js'
 const LoggedInContext = React.createContext({})
 

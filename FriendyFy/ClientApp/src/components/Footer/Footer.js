@@ -1,4 +1,4 @@
-import React, { componentDidMount, useEffect } from 'react';
+import React, { useEffect } from 'react';
 import './Footer.css';
 import UserChatHeadFooter from '../UserChatHeadFooter/UserChatHeadFooter'
 import FriendSearchBar from '../FriendSearchBar/FriendSearchBar';

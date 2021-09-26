@@ -1,9 +1,7 @@
 import React from 'react';
-import Friend from '../Friend/Friend';
 import './ProfilePhotos.css';
 import "../Profile/Profile.css"
 import ProfileHeader from '../ProfileHeader/ProfileHeader';
-import ProfileFriendSearch from '../ProfileFriendSearch/ProfileFriendSearch';
 import ProfilePhoto from '../ProfilePhoto/ProfilePhoto';
 
 const photos = [

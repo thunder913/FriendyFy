@@ -1,9 +1,6 @@
-import React, {useContext, useEffect} from 'react';
-import { useState } from 'react';
+import React, {useEffect} from 'react';
 import './Home.css';
-import HomePageNotSignedIn from '../HomePageNotSignedIn/HomePageNotSignedIn'
 import HomePageSignedIn from '../HomePageSignedIn/HomePageSignedIn';
-import { useLoggedIn } from '../../contexts/LoggedInContext.js'
 const Home = () => {
 
   useEffect(() => 

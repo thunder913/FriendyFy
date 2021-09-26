@@ -1,4 +1,4 @@
-import React, { useEffect } from "react";
+import React from "react";
 import { useState } from "react";
 import "./Register.css"
 import "react-datetime/css/react-datetime.css";
@@ -7,7 +7,6 @@ import RegisterEmailField from "../RegisterEmailField/RegisterEmailField";
 import RegisterBirthday from "../RegisterBirthday/RegisterBirthday";
 import RegisterGender from "../RegisterGender/RegisterGender";
 import RegisterPasswords from "../RegisterPasswords/RegisterPasswords";
-import moment from 'moment';
 
 const Register = () => {
 

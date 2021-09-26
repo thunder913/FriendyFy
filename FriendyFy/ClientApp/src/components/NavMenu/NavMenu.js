@@ -1,4 +1,4 @@
-import React, { Component, useState } from 'react';
+import React from 'react';
 import { Navbar, NavbarBrand } from 'reactstrap';
 import { Link } from 'react-router-dom';
 import './NavMenu.css';
@@ -11,12 +11,7 @@ import { useLoggedIn } from '../../contexts/LoggedInContext';
 
 function NavMenu(props) {
 
-  const [collapsed, setCollapsed] = useState(true)
-  const {loggedIn, setLoggedIn} = useLoggedIn();
-
-  const toggleNavbar = () => {
-    setCollapsed(!collapsed);
-  };
+  const {setLoggedIn} = useLoggedIn();
 
   const logoutUser = () => {
     logout()

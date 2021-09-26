@@ -1,4 +1,4 @@
-import React, { Component, useContext } from 'react';
+import React from 'react';
 import { Container } from 'reactstrap';
 import { useLoggedIn } from '../../contexts/LoggedInContext.js'
 import Footer from '../Footer/Footer';
