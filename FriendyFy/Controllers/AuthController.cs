@@ -123,7 +123,7 @@ namespace FriendyFy.Controllers
         }
 
         [HttpGet("user")]
-        public IActionResult User()
+        public IActionResult GetUser()
         {
             try
             {

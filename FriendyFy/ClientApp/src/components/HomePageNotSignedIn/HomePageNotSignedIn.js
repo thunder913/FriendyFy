@@ -24,9 +24,8 @@ const HomePageNotSignedIn = () =>{
         .then(res => {
             if(res.ok){
                 getLoggedInUser().then(async res => {
-                    if(res.status === '200'){
-                        let user = await res.json();
-                        setLoggedIn(user.id);
+                    if(res.ok){
+                        setLoggedIn((await res.json()).id);
                     }
                 });
             }

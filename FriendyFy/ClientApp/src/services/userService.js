@@ -5,6 +5,14 @@ function getLoggedInUser(){
     })
 }
 
+function logout(){
+    return fetch('api/logout', {
+        method: 'POST',
+        headers: {'Content-Type': 'application/json'},
+    });
+}
+
 export {
-    getLoggedInUser
+    getLoggedInUser,
+    logout
 }

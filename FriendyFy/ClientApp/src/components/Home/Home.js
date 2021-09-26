@@ -6,8 +6,6 @@ import HomePageSignedIn from '../HomePageSignedIn/HomePageSignedIn';
 import { useLoggedIn } from '../../contexts/LoggedInContext.js'
 const Home = () => {
 
-  const {loggedIn} = useLoggedIn();
-
   useEffect(() => 
     fetch("https://localhost:44323/Test/")
       .then(res => res.json())
@@ -18,11 +16,7 @@ const Home = () => {
 
     return (
       <div className="home-page">
-        {loggedIn ? 
         <HomePageSignedIn/>
-        :
-        <HomePageNotSignedIn/>
-        }
       </div>
 
     );

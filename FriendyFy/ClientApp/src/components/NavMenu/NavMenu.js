@@ -1,4 +1,4 @@
-import React, { Component } from 'react';
+import React, { Component, useState } from 'react';
 import { Navbar, NavbarBrand } from 'reactstrap';
 import { Link } from 'react-router-dom';
 import './NavMenu.css';
@@ -6,38 +6,38 @@ import SearchBar from '../SearchBar/SearchBar';
 import UserOptions from '../UserOptions/UserOptions';
 import Notifications from '../Notifications/Notifications';
 import UserHeader from '../UserHeader/UserHeader';
+import { logout } from '../../services/userService'
+import { useLoggedIn } from '../../contexts/LoggedInContext';
 
-export class NavMenu extends Component {
-  static displayName = NavMenu.name;
+function NavMenu(props) {
 
-  constructor(props) {
-    super(props);
+  const [collapsed, setCollapsed] = useState(true)
+  const {loggedIn, setLoggedIn} = useLoggedIn();
 
-    this.toggleNavbar = this.toggleNavbar.bind(this);
-    this.state = {
-      collapsed: true
-    };
+  const toggleNavbar = () => {
+    setCollapsed(!collapsed);
+  };
+
+  const logoutUser = () => {
+    console.log('logout')
+    logout()
+      .then(res => {
+          setLoggedIn(false);
+      });
   }
+  return (
+    <header className="site-header">
+      <Navbar className="navbar-expand-sm navbar-toggleable-sm ng-white bottom-border box-shadow" light>
+        <NavbarBrand tag={Link} to="/">FriendyFy</NavbarBrand>
+        <SearchBar />
+        <div className="nav-right">
+          <UserHeader />
+          <Notifications />
+          <UserOptions />
+          <button onClick={logoutUser}>Logout</button>
+        </div>
 
-  toggleNavbar() {
-    this.setState({
-      collapsed: !this.state.collapsed
-    });
-  }
-
-  render() {
-    return (
-      <header className="site-header">
-        <Navbar className="navbar-expand-sm navbar-toggleable-sm ng-white bottom-border box-shadow" light>
-          <NavbarBrand tag={Link} to="/">FriendyFy</NavbarBrand>
-          <SearchBar />
-          <div className="nav-right">
-            <UserHeader />
-            <Notifications />
-            <UserOptions />
-          </div>
-
-          {/* <NavbarToggler onClick={this.toggleNavbar} className="mr-2" />
+        {/* <NavbarToggler onClick={this.toggleNavbar} className="mr-2" />
             <Collapse className="d-sm-inline-flex flex-sm-row-reverse" isOpen={!this.state.collapsed} navbar>
               <ul className="navbar-nav flex-grow">
                 <NavItem>
@@ -53,8 +53,9 @@ export class NavMenu extends Component {
                 </LoginMenu>
               </ul>
             </Collapse> */}
-        </Navbar>
-      </header>
-    );
-  }
+      </Navbar>
+    </header>
+  );
 }
+
+export default NavMenu;

@@ -90,3 +90,7 @@
 #email{
     width: 100%;
 }
+
+.container .feed{
+    margin: 12px auto;
+}

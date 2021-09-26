@@ -11,22 +11,28 @@ import Friends from './components/Friends/Friends';
 import ProfilePhotos from './components/ProfilePhotos/ProfilePhotos';
 import Register from './components/register-components/Register/Register.js';
 import { LoggedInProvider } from './contexts/LoggedInContext.js'
+import HomePageNotSignedIn from './components/HomePageNotSignedIn/HomePageNotSignedIn';
+import {useLoggedIn} from './contexts/LoggedInContext.js'
+import { useEffect } from 'react/cjs/react.development';
 
-export default class App extends Component {
-  static displayName = App.name;
+function App(){
+  const {loggedIn} = useLoggedIn();
 
-  render () {
     return (
-      <LoggedInProvider>
-      <Layout>
-        <Route exact path='/' component={Home} />
-        <Route path="/profile" component={Profile}></Route>
-        <Route path="/friends" component={Friends}></Route>
-        <Route path="/photos" component={ProfilePhotos}></Route>
-        <Route path="/register" component={Register}></Route>
-        <Route path={ApplicationPaths.ApiAuthorizationPrefix} component={ApiAuthorizationRoutes} />
-      </Layout>
-      </LoggedInProvider>
+              <Layout>
+              {!loggedIn ? (<HomePageNotSignedIn></HomePageNotSignedIn>) : (
+                <div className="app">
+                  <Route exact path='/' component={Home} />
+                  <Route path="/profile" component={Profile}></Route>
+                  <Route path="/friends" component={Friends}></Route>
+                  <Route path="/photos" component={ProfilePhotos}></Route>
+                  <Route path="/register" component={Register}></Route>
+                  <Route path={ApplicationPaths.ApiAuthorizationPrefix} component={ApiAuthorizationRoutes} />
+                </div>
+              )}
+
+            </Layout>
     );
   }
-}
+
+  export default App;
