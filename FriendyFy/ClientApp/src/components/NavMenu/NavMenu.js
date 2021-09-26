@@ -19,7 +19,6 @@ function NavMenu(props) {
   };
 
   const logoutUser = () => {
-    console.log('logout')
     logout()
       .then(res => {
           setLoggedIn(false);

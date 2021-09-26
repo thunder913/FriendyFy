@@ -10,6 +10,9 @@ import RegisterPasswords from "../RegisterPasswords/RegisterPasswords";
 import moment from 'moment';
 
 const Register = () => {
+
+    const [registerError, setRegisterError] = useState(null);
+
     function onSubmitHandler(e) {
         e.preventDefault();
 
@@ -26,11 +29,13 @@ const Register = () => {
                     confirmPassword: e.target['confirm-password'].value,
                     email: e.target['email-input'].value
                 })
-        });
+        })
+        .then(async res => setRegisterError(await res.text()))
     }
 
     return (
         <form className="register" onSubmit={onSubmitHandler}>
+            {registerError ? <span className='register-error'>{registerError}</span>: ''}
             <RegisterNameInput/>
             <RegisterEmailField/>
             <div className="bottom-row">

@@ -33,5 +33,6 @@ const useLoggedIn = () => {
 export{
     LoggedInProvider,
     LoggedInConsumer,
-    useLoggedIn
+    useLoggedIn,
+    LoggedInContext
 }
