@@ -40,7 +40,6 @@ namespace FriendyFy.Controllers
         [HttpPost("register")]
         public async Task<IActionResult> Register(RegisterUserDto userDto)
         {
-            var mapper = AutoMapperConfig.MapperInstance;
             TextInfo textInfo = new CultureInfo("en-US", false).TextInfo;
 
             if (!DateTime.TryParseExact(userDto.Birthday, "dd/MM/yyyy",
@@ -55,7 +54,7 @@ namespace FriendyFy.Controllers
             {
                 return BadRequest("The email is invalid!");
             }
-            Regex nameValidator = new Regex(@"[A-Za-z\u00C0-\u1FFF\u2800-\uFFFD ]+$");
+            Regex nameValidator = new Regex(@"^[A-Za-z\u00C0-\u1FFF\u2800-\uFFFD 0-9-]+$");
             if (userDto.FirstName.Length > 50 || userDto.FirstName.Length < 2 || !nameValidator.IsMatch(userDto.FirstName))
             {
                 return BadRequest("The first name is invalid!");
@@ -91,6 +90,7 @@ namespace FriendyFy.Controllers
                 PasswordHash = BCrypt.Net.BCrypt.HashPassword(userDto.Password),
                 Gender = (Gender)Enum.Parse(typeof(Gender), textInfo.ToTitleCase(userDto.Gender)),
                 BirthDate = DateTime.ParseExact(userDto.Birthday, "dd/MM/yyyy", CultureInfo.InvariantCulture),
+                UserName = this.userService.GenerateUsername(userDto.FirstName, userDto.LastName),
             };
             await this.userService.CreateAsync(user);
             return Created("registered", user);

@@ -13,5 +13,9 @@ namespace FriendyFy.Services.Contracts
         ApplicationUser GetByEmail(string email);
 
         ApplicationUser GetById(string id);
+
+        string GenerateUsername(string firstName, string lastName);
+
+        ApplicationUser GetByUsername(string username);
     }
 }

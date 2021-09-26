@@ -3,7 +3,7 @@ import Datetime from 'react-datetime';
 import moment from 'moment';
 import "moment/min/locales";
 import './RegisterBirthday.css'
-const RegisterBirthday = () => {
+const RegisterBirthday = ({setSelectedDate}) => {
     const [birthDay, setBirthDay] = useState('');
     const [birthdayError, setBirthdayError] = useState(false);
 
@@ -21,6 +21,7 @@ const RegisterBirthday = () => {
             setBirthdayError(true);
         } else {
             setBirthDay(e._d);
+            setSelectedDate(moment(e._d).format("DD/MM/YYYY"));
             setBirthdayError(false);
         }
     }

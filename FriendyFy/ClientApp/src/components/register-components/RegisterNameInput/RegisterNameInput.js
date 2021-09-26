@@ -12,7 +12,7 @@ const RegisterNameInput = () => {
     const [firstNameErrorBubble, setFirstNameErrorBubble] = useState(false);
     const [lasttNameErrorBubble, setLastNameErrorBubble] = useState(false);
 
-    const letterRegex = /^[A-Za-z\u00C0-\u1FFF\u2800-\uFFFD ]+$/;
+    const letterRegex = /^[A-Za-z\u00C0-\u1FFF\u2800-\uFFFD 0-9-]+$/;
 
     function onFirstNameChangeHandler(e) {
         setFirstName(e.target.value);
