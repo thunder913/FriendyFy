@@ -1,15 +1,17 @@
 import React, { useState } from "react";
 import { Link } from "react-router-dom";
+import { useLoggedIn } from "../../contexts/LoggedInContext";
 import RegisterPopUp from "../register-components/RegisterPopUp/RegisterPopUp";
+import {getLoggedInUser} from '../../services/userService.js'
 import './HomePageNotSignedIn.css'
+
 const HomePageNotSignedIn = () =>{
 
     const [showRegister, setShowRegister] = useState('');
-    
+    const {loggedIn, setLoggedIn} = useLoggedIn();
+
     function onSubmitHandler(e){
         e.preventDefault();
-
-        
         fetch('/api/login', {
             method: 'POST',
             headers: {'Content-Type': 'application/json'},
@@ -18,6 +20,16 @@ const HomePageNotSignedIn = () =>{
                     email: e.target['email'].value,
                     password: e.target['password'].value
                 })
+        })
+        .then(res => {
+            if(res.ok){
+                getLoggedInUser().then(async res => {
+                    if(res.status === '200'){
+                        let user = await res.json();
+                        setLoggedIn(user.id);
+                    }
+                });
+            }
         });
     }
 

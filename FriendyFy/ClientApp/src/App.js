@@ -10,14 +10,14 @@ import './custom.css'
 import Friends from './components/Friends/Friends';
 import ProfilePhotos from './components/ProfilePhotos/ProfilePhotos';
 import Register from './components/register-components/Register/Register.js';
-import { LoggedInContext } from './contexts/LoggedInContext.js'
+import { LoggedInProvider } from './contexts/LoggedInContext.js'
 
 export default class App extends Component {
   static displayName = App.name;
 
   render () {
     return (
-      <LoggedInContext.Provider value={false}>
+      <LoggedInProvider>
       <Layout>
         <Route exact path='/' component={Home} />
         <Route path="/profile" component={Profile}></Route>
@@ -26,7 +26,7 @@ export default class App extends Component {
         <Route path="/register" component={Register}></Route>
         <Route path={ApplicationPaths.ApiAuthorizationPrefix} component={ApiAuthorizationRoutes} />
       </Layout>
-      </LoggedInContext.Provider>
+      </LoggedInProvider>
     );
   }
 }

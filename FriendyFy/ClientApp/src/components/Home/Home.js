@@ -3,10 +3,10 @@ import { useState } from 'react';
 import './Home.css';
 import HomePageNotSignedIn from '../HomePageNotSignedIn/HomePageNotSignedIn'
 import HomePageSignedIn from '../HomePageSignedIn/HomePageSignedIn';
-import { LoggedInContext } from '../../contexts/LoggedInContext.js'
+import { useLoggedIn } from '../../contexts/LoggedInContext.js'
 const Home = () => {
 
-  const loggedIn = useContext(LoggedInContext);
+  const {loggedIn} = useLoggedIn();
 
   useEffect(() => 
     fetch("https://localhost:44323/Test/")

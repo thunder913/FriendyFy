@@ -15,7 +15,6 @@ const RegisterBirthday = () => {
 
     function onBirthdayChangeHandler(e) {
         var date = moment(e._d);
-        console.log(date);
         let today = moment();
         let startDate = moment("01/01/1900", "DD/MM/YYYY");
         if (!date.isBetween(startDate, today)) {

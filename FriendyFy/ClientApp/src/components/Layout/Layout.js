@@ -1,6 +1,6 @@
 import React, { Component, useContext } from 'react';
 import { Container } from 'reactstrap';
-import { LoggedInContext } from '../../contexts/LoggedInContext.js'
+import { useLoggedIn } from '../../contexts/LoggedInContext.js'
 import Footer from '../Footer/Footer';
 import LeftNavigation from '../LeftNavigation/LeftNavigation';
 import { NavMenu } from '../NavMenu/NavMenu';
@@ -27,7 +27,7 @@ const users = [{name: "Georgi",image: "https://scontent-sof1-1.xx.fbcdn.net/v/t1
 ];
 
 export const Layout = (props) => {
-  const loggedIn = useContext(LoggedInContext);
+  const {loggedIn} = useLoggedIn();
 
     return (
       <div className="site">
