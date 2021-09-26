@@ -2,7 +2,7 @@ import React, { useEffect } from 'react';
 import './UserChatHeadBox.css';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import $ from 'jquery';
-import { faPaperPlane, faPlane } from '@fortawesome/free-solid-svg-icons';
+import { faPaperPlane } from '@fortawesome/free-solid-svg-icons';
 import FadeIn from 'react-fade-in'
 
 function UserChatHeadBox(props) {

@@ -8,7 +8,7 @@ import './HomePageNotSignedIn.css'
 const HomePageNotSignedIn = () =>{
 
     const [showRegister, setShowRegister] = useState(false);
-    const {loggedIn, setLoggedIn} = useLoggedIn();
+    const {setLoggedIn} = useLoggedIn();
 
     function onSubmitHandler(e){
         e.preventDefault();

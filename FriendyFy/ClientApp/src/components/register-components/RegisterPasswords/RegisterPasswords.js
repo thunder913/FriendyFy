@@ -43,7 +43,7 @@ const RegisterPasswords = () => {
         return () => clearTimeout(timeoutId);
         }
         setFirstLoad(false);
-    }, [password]);
+    }, [password, firstLoad, passwordValidation]);
 
     useEffect(() => {
         if(!firstLoad){
@@ -52,7 +52,7 @@ const RegisterPasswords = () => {
                 , 500);
             return () => clearTimeout(timeoutId);
             }
-    },[confirmPassword])
+    },[confirmPassword, firstLoad, confirmPasswordValidation])
 
     function onPasswordChange(e){
         setPassword(e.target.value);

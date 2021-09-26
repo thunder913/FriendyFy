@@ -36,9 +36,9 @@ const LeftNavigationEvent = ({data}) =>(
     )
 
 function getImageWidthClassName(count){
-    if (count==1) {
+    if (count===1) {
         return "w-1";
-    }else if (count==2) {
+    }else if (count===2) {
         return "w-2";
     }
     else if (count <= 4) {

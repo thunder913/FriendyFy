@@ -13,17 +13,16 @@ const RegisterEmailField = () => {
     function onEmailChangeHandler(e) {
         setEmail(e.target.value);
     }
-
-    function emailValidation(){
-        if(!Isemail.validate(email)){
-            setEmailError('The email is invalid!');
-        }
-        else{
-            setEmailError(null)
-        }
-    }
-
     useEffect(() => {
+        function emailValidation(){
+            if(!Isemail.validate(email)){
+                setEmailError('The email is invalid!');
+            }
+            else{
+                setEmailError(null)
+            }
+        }
+
         if(!firstLoad){
         const timeoutId = setTimeout(() =>{ 
             emailValidation()}
@@ -31,7 +30,7 @@ const RegisterEmailField = () => {
         return () => clearTimeout(timeoutId);
         }
         setFirstLoad(false);
-    }, [email]);
+    }, [email, firstLoad]);
 
     return (
     <InputWithValidation

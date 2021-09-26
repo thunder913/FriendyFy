@@ -1,19 +1,12 @@
 import React from 'react';
 import UserChatHeadBox from '../UserChatHeadBox/UserChatHeadBox';
 import './UserChatHeadFooter.css';
-import $ from 'jquery';
 function UserChatHeadFooter({person}){
     const [showChat, setShowChat] = React.useState(false);
     const [bigChatBox, setBigChatBox] = React.useState(false);
     
     const onClick = (e) => 
-        {
-            let text;     
-            if(e.target.classList.contains('user-chat-head')){
-                text = e.target.querySelector('.user-footer');
-            }else{
-                text = e.target.closest('.user-footer');
-            }       
+        {  
             if (!showChat) {
             }
             setBigChatBox(!bigChatBox);

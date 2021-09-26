@@ -75,7 +75,7 @@
  .feed .interests{
     display: flex;
     flex-wrap: wrap;
-    justify-content:start;
+    justify-content: flex-start;
     overflow-y: hidden;
     width: 90%;
     overflow-x: hidden;

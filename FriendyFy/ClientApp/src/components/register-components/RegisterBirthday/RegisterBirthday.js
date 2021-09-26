@@ -4,7 +4,7 @@ import moment from 'moment';
 import "moment/min/locales";
 import './RegisterBirthday.css'
 const RegisterBirthday = ({setSelectedDate}) => {
-    const [birthDay, setBirthDay] = useState('');
+    const [setBirthDay] = useState('');
     const [birthdayError, setBirthdayError] = useState(false);
 
     function getCurrentLocalization() {
