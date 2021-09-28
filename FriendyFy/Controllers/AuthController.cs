@@ -111,7 +111,7 @@ namespace FriendyFy.Controllers
             code = WebEncoders.Base64UrlEncode(Encoding.UTF8.GetBytes(code));
 
             var callbackUrl = Url.Page(
-            "/Auth/ConfirmEmail",
+            "",
             pageHandler: null,
             values: new { userId = user.Id, code = code},
             protocol: Request.Scheme);
@@ -140,8 +140,6 @@ namespace FriendyFy.Controllers
             {
                 HttpOnly = true
             });
-
-            var test = Url.Page("/Auth/ConfirmEmail");
 
             return Ok(new
             {
@@ -182,21 +180,25 @@ namespace FriendyFy.Controllers
             });
         }
 
-        [HttpGet("ConfirmEmail")]
-        public async Task<IActionResult> ConfirmEmail(string userId, string code)
+        [HttpPost("ConfirmEmail")]
+        public async Task<IActionResult> ConfirmEmail(ConfirmEmailDto confirmDto)
         {
-            if (userId == null || code == null)
+            if (confirmDto.UserId == null || confirmDto.Code == null)
             {
                 return BadRequest("Invalid userId or code!");
             }
 
-            var user = await userManager.FindByIdAsync(userId);
+            var user = await userManager.FindByIdAsync(confirmDto.UserId);
+            if (user.EmailConfirmed)
+            {
+                return BadRequest("The email is already activated!");
+            }
             if (user == null)
             {
-                return NotFound($"Unable to load user with ID '{userId}'.");
+                return NotFound($"Unable to load user with ID '{confirmDto.UserId}'.");
             }
 
-            code = Encoding.UTF8.GetString(WebEncoders.Base64UrlDecode(code));
+            var code = Encoding.UTF8.GetString(WebEncoders.Base64UrlDecode(confirmDto.Code));
             var result = await userManager.ConfirmEmailAsync(user, code);
             return result.Succeeded ? Ok() : BadRequest("Could not confirm the email!");
         }

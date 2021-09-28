@@ -1,14 +1,31 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { Link } from "react-router-dom";
 import { useLoggedIn } from "../../contexts/LoggedInContext";
 import RegisterPopUp from "../register-components/RegisterPopUp/RegisterPopUp";
-import {getLoggedInUser} from '../../services/userService.js'
+import {getLoggedInUser} from '../../services/userService.js';
+import { useLocation } from "react-router";
+import { confirmEmail } from "../../services/userService.js";
 import './HomePageNotSignedIn.css'
 
 const HomePageNotSignedIn = () =>{
 
     const [showRegister, setShowRegister] = useState(false);
+    const [showEmailConfirmed, setShowEmailConfirmed] = useState(true);
     const {setLoggedIn} = useLoggedIn();
+    const params = useLocation().search;
+    const userId = new URLSearchParams(params).get("userId");
+    const code = new URLSearchParams(params).get("code");
+
+    useEffect(() => {
+      if(userId && code){
+          confirmEmail(userId, code)
+            .then(res => {
+                if(res.ok)
+                {
+                    setShowEmailConfirmed(true);
+                }
+            })}
+    },[]);
 
     function onSubmitHandler(e){
         e.preventDefault();
@@ -41,6 +58,7 @@ const HomePageNotSignedIn = () =>{
             </div>
             <div className="register-bottom">
                 <div className="login-container">
+                    <h3>{showEmailConfirmed ? 'Your account was activated successfully.' : ''}</h3>
                     <form onSubmit={onSubmitHandler}>
                     <input id="email" type="text" placeholder="Email"/>
                     <input id="password" type="text" placeholder="Password"/>

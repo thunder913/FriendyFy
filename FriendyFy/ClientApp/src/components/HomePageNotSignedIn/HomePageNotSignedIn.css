@@ -94,3 +94,9 @@
 .container .feed{
     margin: 12px auto;
 }
+
+.activation-message{
+    font-size: 18px;
+    color: #1cef36;
+    text-align: center;
+}
