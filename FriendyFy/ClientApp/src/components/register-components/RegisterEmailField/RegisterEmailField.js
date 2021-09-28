@@ -8,7 +8,6 @@ const RegisterEmailField = () => {
     const [emailError, setEmailError] = useState(null);
     const [emailErrorBubble, setEmailErrorBubble] = useState(false);
     const [firstLoad, setFirstLoad] = useState(true);
-
     
     function onEmailChangeHandler(e) {
         setEmail(e.target.value);
@@ -30,7 +29,7 @@ const RegisterEmailField = () => {
         return () => clearTimeout(timeoutId);
         }
         setFirstLoad(false);
-    }, [email, firstLoad]);
+    }, [email]);
 
     return (
     <InputWithValidation

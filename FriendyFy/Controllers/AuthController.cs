@@ -1,18 +1,23 @@
 ﻿using BCrypt.Net;
-using DataAnnotationsExtensions;
+using FriendyFy.Common;
 using FriendyFy.Data;
 using FriendyFy.Helpers.Contracts;
 using FriendyFy.Mapping;
+using FriendyFy.Messaging;
 using FriendyFy.Models;
 using FriendyFy.Models.Enums;
 using FriendyFy.Services.Contracts;
 using Microsoft.AspNetCore.Http;
+using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.WebUtilities;
 using System;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 using System.Globalization;
 using System.Linq;
+using System.Text;
+using System.Text.Encodings.Web;
 using System.Text.RegularExpressions;
 using System.Threading.Tasks;
 
@@ -24,13 +29,19 @@ namespace FriendyFy.Controllers
     {
         private readonly IUserService userService;
         private readonly IJwtService jwtService;
+        private readonly IEmailSender emailSender;
+        private readonly UserManager<ApplicationUser> userManager;
 
         public AuthController(
             IUserService userService,
-            IJwtService jwtService)
+            IJwtService jwtService,
+            IEmailSender emailSender,
+            UserManager<ApplicationUser> userManager)
         {
             this.userService = userService;
             this.jwtService = jwtService;
+            this.emailSender = emailSender;
+            this.userManager = userManager;
         }
         public IActionResult Index()
         {
@@ -92,7 +103,22 @@ namespace FriendyFy.Controllers
                 BirthDate = DateTime.ParseExact(userDto.Birthday, "dd/MM/yyyy", CultureInfo.InvariantCulture),
                 UserName = this.userService.GenerateUsername(userDto.FirstName, userDto.LastName),
             };
+
+
             await this.userService.CreateAsync(user);
+
+            var code = await userManager.GenerateEmailConfirmationTokenAsync(user);
+            code = WebEncoders.Base64UrlEncode(Encoding.UTF8.GetBytes(code));
+
+            var callbackUrl = Url.Page(
+            "/Auth/ConfirmEmail",
+            pageHandler: null,
+            values: new { userId = user.Id, code = code},
+            protocol: Request.Scheme);
+
+            await emailSender.SendEmailAsync(GlobalConstants.Email, "FriendyFy", user.Email, "Confirm your email",
+            $"Please confirm your account by <a href='{HtmlEncoder.Default.Encode(callbackUrl)}'>clicking here</a>.");
+
             return Created("registered", user);
 
         }
@@ -114,6 +140,8 @@ namespace FriendyFy.Controllers
             {
                 HttpOnly = true
             });
+
+            var test = Url.Page("/Auth/ConfirmEmail");
 
             return Ok(new
             {
@@ -137,7 +165,7 @@ namespace FriendyFy.Controllers
 
                 return Ok(user);
             }
-            catch (Exception e)
+            catch (Exception)
             {
                 return Unauthorized();
             }
@@ -152,6 +180,25 @@ namespace FriendyFy.Controllers
             {
                 message = "success"
             });
+        }
+
+        [HttpGet("ConfirmEmail")]
+        public async Task<IActionResult> ConfirmEmail(string userId, string code)
+        {
+            if (userId == null || code == null)
+            {
+                return BadRequest("Invalid userId or code!");
+            }
+
+            var user = await userManager.FindByIdAsync(userId);
+            if (user == null)
+            {
+                return NotFound($"Unable to load user with ID '{userId}'.");
+            }
+
+            code = Encoding.UTF8.GetString(WebEncoders.Base64UrlDecode(code));
+            var result = await userManager.ConfirmEmailAsync(user, code);
+            return result.Succeeded ? Ok() : BadRequest("Could not confirm the email!");
         }
     }
 }

@@ -5,7 +5,11 @@ VisualStudioVersion = 16.0.31613.86
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "FriendyFy", "FriendyFy\FriendyFy.csproj", "{6A41A69C-E532-47E0-A9CA-704C845FCD78}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "FriendyFy.Mapping", "FriendyFy.Mapping\FriendyFy.Mapping.csproj", "{CE23C5D2-4FD0-40DD-A184-C3ADC9BEDD6F}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "FriendyFy.Mapping", "FriendyFy.Mapping\FriendyFy.Mapping.csproj", "{CE23C5D2-4FD0-40DD-A184-C3ADC9BEDD6F}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "FriendyFy.Messaging", "FriendyFy.Messaging\FriendyFy.Messaging.csproj", "{1E959B75-3FB0-42FD-A090-1BCFB975AAF2}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "FriendyFy.Common", "FriendyFy.Common\FriendyFy.Common.csproj", "{F7008F15-474A-46C8-9916-E6C9DD7D2A33}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -21,6 +25,14 @@ Global
 		{CE23C5D2-4FD0-40DD-A184-C3ADC9BEDD6F}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{CE23C5D2-4FD0-40DD-A184-C3ADC9BEDD6F}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{CE23C5D2-4FD0-40DD-A184-C3ADC9BEDD6F}.Release|Any CPU.Build.0 = Release|Any CPU
+		{1E959B75-3FB0-42FD-A090-1BCFB975AAF2}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{1E959B75-3FB0-42FD-A090-1BCFB975AAF2}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{1E959B75-3FB0-42FD-A090-1BCFB975AAF2}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{1E959B75-3FB0-42FD-A090-1BCFB975AAF2}.Release|Any CPU.Build.0 = Release|Any CPU
+		{F7008F15-474A-46C8-9916-E6C9DD7D2A33}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{F7008F15-474A-46C8-9916-E6C9DD7D2A33}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{F7008F15-474A-46C8-9916-E6C9DD7D2A33}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{F7008F15-474A-46C8-9916-E6C9DD7D2A33}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

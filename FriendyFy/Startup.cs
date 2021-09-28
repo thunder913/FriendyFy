@@ -2,6 +2,7 @@ using FriendyFy.Data;
 using FriendyFy.Data.Common.QueryRunner;
 using FriendyFy.Helpers;
 using FriendyFy.Helpers.Contracts;
+using FriendyFy.Messaging;
 using FriendyFy.Models;
 using FriendyFy.Services;
 using FriendyFy.Services.Contracts;
@@ -53,6 +54,7 @@ namespace FriendyFy
             services.AddScoped(typeof(IRepository<>), typeof(EfRepository<>));
             services.AddScoped<IDbQueryRunner, DbQueryRunner>();
 
+            services.AddTransient<IEmailSender>(serviceProvider => new SendGridEmailSender(this.Configuration["SendGrid-ApiKey"]));
             services.AddTransient<IUserService, UserService>();
             services.AddTransient<IJwtService, JwtService>();
 

@@ -1,14 +1,14 @@
 using FriendyFy.Data;
 using FriendyFy.Data.Common.QueryRunner;
+using Azure.Extensions.AspNetCore.Configuration.Secrets;
+using Azure.Identity;
+using Azure.Security.KeyVault.Secrets;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.Extensions.Configuration;
-using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
-using Microsoft.Extensions.Logging;
 using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
+using Microsoft.Extensions.DependencyInjection;
+using FriendyFy.Messaging;
 
 namespace FriendyFy
 {
@@ -24,13 +24,28 @@ namespace FriendyFy
                 .ConfigureWebHostDefaults(webBuilder =>
                 {
                     webBuilder.UseStartup<Startup>();
-                });
+                })
+            .ConfigureAppConfiguration((context, config) =>
+            {
+                var buildConfiguration = config.Build();
+
+                string kvURL = buildConfiguration["KeyVaultConfig:KVUrl"];
+                string tenantId = buildConfiguration["KeyVaultConfig:TenantId"];
+                string clientId = buildConfiguration["KeyVaultConfig:ClientId"];
+                string clientSecret = buildConfiguration["KeyVaultConfig:ClientSecretId"];
+
+                var credential = new ClientSecretCredential(tenantId, clientId, clientSecret);
+                var client = new SecretClient(new Uri(kvURL), credential);
+                config.AddAzureKeyVault(client, new AzureKeyVaultConfigurationOptions());
+            });
 
         public static void ConfigureServices(ServiceCollection services)
         {
             services.AddScoped(typeof(IDeletableEntityRepository<>), typeof(EfDeletableEntityRepository<>));
             services.AddScoped(typeof(IRepository<>), typeof(EfRepository<>));
             services.AddScoped<IDbQueryRunner, DbQueryRunner>();
+
+            services.AddTransient<IEmailSender, SendGridEmailSender>();
         }
     }
 }
