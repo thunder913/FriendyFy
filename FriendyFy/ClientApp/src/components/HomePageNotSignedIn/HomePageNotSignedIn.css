@@ -11,6 +11,8 @@
 
 .home-quote{
     margin-bottom: 0px;
+    color: rgb(38, 175, 185);
+    font-size: 22px;
 }
 
 .register-bottom{
@@ -28,27 +30,48 @@
     margin-bottom: 5px;
     padding: 10px;
     border-radius: 5px;
+    border-radius: 5px;
+    background-color: rgba(143, 143, 143, 0.678);
+    border: 0px solid transparent;
 }
 
 .login-buttons >  .login-button{
     width: 50%;
     align-self: flex-end;
     margin-bottom: 0px;
+    background-color: rgb(12, 123, 131);
+    color: white;
+    transition: 0.3s;
+}
+
+.login-buttons > .login-button:hover{
+    background-color: rgb(38, 175, 185);
 }
 
 .login-buttons{
     display: flex;
     flex-direction: row;
     justify-content: space-between;
+    color: white;
+    margin-top: 5px;
 }
 
 .forgotten-password{
-    padding: 0px;
-    background-color: white;
-    height: 48px;
+    padding: 0px 10px;
+    background-color: rgb(22, 38, 110);
+    height: 44px;
     border-radius: 5px;
     text-align: center;
     line-height: 42px;
+    color: white;
+    text-decoration: none;
+    transition: 0.3s;
+}
+
+.forgotten-password:hover{
+    text-decoration: none;
+    color: white;
+    background-color: rgb(51, 66, 134);
 }
 
 .login-container{
@@ -98,5 +121,19 @@
 .activation-message{
     font-size: 18px;
     color: #1cef36;
+    text-align: center;
+}
+
+.login-container > form input::placeholder{
+    color: rgb(0, 0, 0);
+}
+
+.title{
+    color: rgb(8, 32, 141);
+}
+
+.login-error{
+    font-size: 18px;
+    color: red;
     text-align: center;
 }

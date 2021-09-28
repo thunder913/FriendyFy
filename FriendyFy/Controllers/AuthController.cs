@@ -51,21 +51,8 @@ namespace FriendyFy.Controllers
         [HttpPost("register")]
         public async Task<IActionResult> Register(RegisterUserDto userDto)
         {
-            TextInfo textInfo = new CultureInfo("en-US", false).TextInfo;
-
-            if (!DateTime.TryParseExact(userDto.Birthday, "dd/MM/yyyy",
-                    CultureInfo.InvariantCulture, DateTimeStyles.AdjustToUniversal, out var birthday) ||
-                    birthday > DateTime.Now ||
-                    birthday < new DateTime(1900, 1, 1))
-            {
-                return BadRequest("The birthday is invalid!");
-            };
-
-            if (!(new EmailAddressAttribute().IsValid(userDto.Email)))
-            {
-                return BadRequest("The email is invalid!");
-            }
             Regex nameValidator = new Regex(@"^[A-Za-z\u00C0-\u1FFF\u2800-\uFFFD 0-9-]+$");
+            TextInfo textInfo = new CultureInfo("en-US", false).TextInfo;
             if (userDto.FirstName.Length > 50 || userDto.FirstName.Length < 2 || !nameValidator.IsMatch(userDto.FirstName))
             {
                 return BadRequest("The first name is invalid!");
@@ -74,6 +61,17 @@ namespace FriendyFy.Controllers
             {
                 return BadRequest("The last name is invalid!");
             }
+            if (!(new EmailAddressAttribute().IsValid(userDto.Email)))
+            {
+                return BadRequest("The email is invalid!");
+            }
+            if (!DateTime.TryParseExact(userDto.Birthday, "dd/MM/yyyy",
+                CultureInfo.InvariantCulture, DateTimeStyles.AdjustToUniversal, out var birthday) ||
+                birthday > DateTime.Now ||
+                birthday < new DateTime(1900, 1, 1))
+            {
+                return BadRequest("The birthday is invalid!");
+            };
             if (!Enum.TryParse(typeof(Gender), textInfo.ToTitleCase(userDto.Gender), out var gender))
             {
                 return BadRequest("You must select a gender!");
@@ -111,7 +109,7 @@ namespace FriendyFy.Controllers
             code = WebEncoders.Base64UrlEncode(Encoding.UTF8.GetBytes(code));
 
             var callbackUrl = Url.Page(
-            "",
+            "/Auth/ConfirmEmail",
             pageHandler: null,
             values: new { userId = user.Id, code = code},
             protocol: Request.Scheme);

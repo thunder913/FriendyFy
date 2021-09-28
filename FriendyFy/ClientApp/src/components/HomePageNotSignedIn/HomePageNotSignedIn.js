@@ -10,8 +10,9 @@ import './HomePageNotSignedIn.css'
 const HomePageNotSignedIn = () =>{
 
     const [showRegister, setShowRegister] = useState(false);
-    const [showEmailConfirmed, setShowEmailConfirmed] = useState(true);
+    const [showEmailConfirmed, setShowEmailConfirmed] = useState(false);
     const {setLoggedIn} = useLoggedIn();
+    const [loginError, setLoginError] = useState(null);
     const params = useLocation().search;
     const userId = new URLSearchParams(params).get("userId");
     const code = new URLSearchParams(params).get("code");
@@ -25,6 +26,7 @@ const HomePageNotSignedIn = () =>{
                     setShowEmailConfirmed(true);
                 }
             })}
+            window.history.replaceState(null, '', '');
     },[]);
 
     function onSubmitHandler(e){
@@ -43,8 +45,12 @@ const HomePageNotSignedIn = () =>{
                 getLoggedInUser().then(async res => {
                     if(res.ok){
                         setLoggedIn((await res.json()).id);
+                        setLoginError(null);
+                        setShowEmailConfirmed(false);
                     }
                 });
+            }else{
+                setLoginError('You have entered an invalid email or password, try again');
             }
         });
     }
@@ -53,15 +59,16 @@ const HomePageNotSignedIn = () =>{
     <div className="home-page" >
         <div className="page" style={{ filter: showRegister ? 'blur(5px)' : '' }}>
             <div className="register-top">
-                <h1>FRIENDYFY</h1>
+                <h1 className="title">FRIENDYFY</h1>
                 <h2 className="home-quote">Connect with people on FriendFy. Meet new people and have the best time of your life!</h2>
             </div>
             <div className="register-bottom">
                 <div className="login-container">
-                    <h3>{showEmailConfirmed ? 'Your account was activated successfully.' : ''}</h3>
+                    <h3 className="activation-message">{showEmailConfirmed ? 'Your account was activated successfully.' : ''}</h3>
+                    <h3 className="login-error">{loginError ?? ''}</h3>
                     <form onSubmit={onSubmitHandler}>
                     <input id="email" type="text" placeholder="Email"/>
-                    <input id="password" type="text" placeholder="Password"/>
+                    <input id="password" type="password" placeholder="Password"/>
                     <div className="login-buttons">
                         <Link className="forgotten-password" to="#">Forgot Password?</Link>
                         <input className="login-button" type="submit" value="Login"/>
