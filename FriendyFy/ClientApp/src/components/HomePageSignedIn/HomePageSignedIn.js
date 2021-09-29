@@ -58,7 +58,9 @@ const events = [
   ]
 const HomePageSignedIn = () => {
 
-
+        useEffect(() => {
+          
+        })
 
         return(<div className="feed home-feed">
           {events.map(event => <FeedEvent event={event} />)}

@@ -44,7 +44,7 @@ const HomePageNotSignedIn = () =>{
             if(res.ok){
                 getLoggedInUser().then(async res => {
                     if(res.ok){
-                        setLoggedIn((await res.json()).id);
+                        setLoggedIn((await res.json()));
                         setLoginError(null);
                         setShowEmailConfirmed(false);
                     }

@@ -18,13 +18,15 @@ function App(){
   const {loggedIn, setLoggedIn} = useLoggedIn();
 
   const getUser = useCallback(async () => {
-    let response = await getLoggedInUser().then(async res => (await res.json()).id);
-    setLoggedIn(response);
+    let response = await getLoggedInUser();
+    if(response.ok){
+      setLoggedIn(await response.json())
+    }
   })
 
   useEffect(async () => {
     getUser();
-  }, [getUser])
+  }, [])
 
   return (
               <Layout>
