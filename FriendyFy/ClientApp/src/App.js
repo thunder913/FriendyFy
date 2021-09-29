@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useEffect } from 'react';
 import { Route } from 'react-router';
 import { Layout } from './components/Layout/Layout';
 import Home from './components/Home/Home';
@@ -11,11 +11,23 @@ import ProfilePhotos from './components/ProfilePhotos/ProfilePhotos';
 import Register from './components/register-components/Register/Register.js';
 import HomePageNotSignedIn from './components/HomePageNotSignedIn/HomePageNotSignedIn';
 import {useLoggedIn} from './contexts/LoggedInContext.js'
+import {getLoggedInUser} from './services/userService.js'
+import { useCallback } from 'react';
 
 function App(){
-  const {loggedIn} = useLoggedIn();
+  const {loggedIn, setLoggedIn} = useLoggedIn();
 
-    return (
+  const getUser = useCallback(async () => {
+    let response = await getLoggedInUser().then(async res => (await res.json()).id);
+    console.log(response)
+    setLoggedIn(response);
+  })
+
+  useEffect(async () => {
+    getUser();
+  }, [getUser])
+
+  return (
               <Layout>
               {!loggedIn ? (<HomePageNotSignedIn></HomePageNotSignedIn>) : (
                 <div className="app">
