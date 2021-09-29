@@ -31,9 +31,24 @@ namespace FriendyFy.Controllers
             return Ok(await this.blobService.ListBlobAsync());
         }
 
+        [HttpPost("uploadfile")]
         public async Task<IActionResult> UploadFile([FromBody] UploadFileRequest request)
         {
             await this.blobService.UploadFileBlobAsync(request.FilePath, request.FileName);
+            return Ok();
+        }
+
+        [HttpPost("uploadcontent")]
+        public async Task<IActionResult> UploadContent([FromBody] UploadContentRequest request)
+        {
+            await this.blobService.UploadContentBlobAsync(request.Content, request.FileName);
+            return Ok();
+        }
+
+        [HttpDelete("{blobName}")]
+        public async Task<IActionResult> DeleteFile(string blobName)
+        {
+            await this.blobService.DeleteBlobAsync(blobName);
             return Ok();
         }
     }

@@ -23,7 +23,11 @@ namespace FriendyFy.Models
         public ICollection<PostLike> Likes { get; set; } = new HashSet<PostLike>();
         public ICollection<PostRepost> Reposts { get; set; } = new HashSet<PostRepost>();
         public ICollection<PostComment> Comments { get; set; } = new HashSet<PostComment>();
+        public ICollection<Image> Photos { get; set; } = new HashSet<Image>();
         public DateTime BirthDate { get; set; }
         public Gender Gender { get; set; }
+        public Image ProfilePhoto { get; set; }
+        public Image CoverPhoto { get; set; }
+        public bool FinishedFirstTimeLogin { get; set; }
     }
 }
