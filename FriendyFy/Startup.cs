@@ -1,3 +1,5 @@
+using Azure.Storage.Blobs;
+using FriendyFy.BlobStorage;
 using FriendyFy.Data;
 using FriendyFy.Data.Common.QueryRunner;
 using FriendyFy.Helpers;
@@ -38,6 +40,9 @@ namespace FriendyFy
                 options.UseSqlServer(
                     Configuration.GetConnectionString("DefaultConnection")));
 
+            services.AddSingleton(x =>
+                new BlobServiceClient(this.Configuration.GetValue<string>("AzureBlobStorage:ConnectionString")));
+
             services.AddDatabaseDeveloperPageExceptionFilter();
 
             services.AddDefaultIdentity<ApplicationUser>(options => options.SignIn.RequireConfirmedAccount = true)
@@ -48,6 +53,8 @@ namespace FriendyFy
 
             services.AddAuthentication()
                 .AddIdentityServerJwt();
+
+            services.AddSingleton<IBlobService, BlobService>();
 
             // Date repos
             services.AddScoped(typeof(IDeletableEntityRepository<>), typeof(EfDeletableEntityRepository<>));

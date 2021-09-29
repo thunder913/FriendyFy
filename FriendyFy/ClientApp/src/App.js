@@ -19,7 +19,6 @@ function App(){
 
   const getUser = useCallback(async () => {
     let response = await getLoggedInUser().then(async res => (await res.json()).id);
-    console.log(response)
     setLoggedIn(response);
   })
 
