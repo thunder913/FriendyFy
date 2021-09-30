@@ -1,11 +1,11 @@
-import React from 'react';
+import React, { useState } from 'react';
 import MyGoogleMap from '../GoogleMap/MyGoogleMap';
 
 import './FirstTimePopUp..css';
 
 
 const RegisterPopUp = (props) => {
-
+    const [location, setLocation] = useState([]);
 
 
     return(
@@ -20,8 +20,10 @@ const RegisterPopUp = (props) => {
                     <option value="">And</option>
                     <option value="">Drive</option>
                 </select>
+                <div className="find-location">
+                    <MyGoogleMap location={location} setLocation={setLocation}></MyGoogleMap>
+                </div>
             </form>
-            <MyGoogleMap></MyGoogleMap>
         </div>
     </div>)
 }
