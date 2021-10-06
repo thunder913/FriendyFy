@@ -1,162 +1,162 @@
 import React, { useState } from 'react';
 import "./MyGoogleMap.css";
 import {
-    GoogleMap,
-    useLoadScript,
-    Marker,
-    InfoWindow
+  GoogleMap,
+  useLoadScript,
+  Marker,
+  InfoWindow
 } from "@react-google-maps/api";
 import usePlacesAutocomplete,
 {
-    getGeocode,
-    getLatLng
+  getGeocode,
+  getLatLng
 }
-    from 'use-places-autocomplete';
+  from 'use-places-autocomplete';
 import {
-    Combobox,
-    ComboboxInput,
-    ComboboxPopover,
-    ComboboxList,
-    ComboboxOption
+  Combobox,
+  ComboboxInput,
+  ComboboxPopover,
+  ComboboxList,
+  ComboboxOption
 }
-    from "@reach/combobox"
+  from "@reach/combobox"
 import "@reach/combobox/styles.css";
 import mapDarkStyles from './mapDarkStyles.js';
 
 const libraries = ["places"]
 const mapContainerStyle = {
-    width: '100%',
-    height: '300px'
+  width: '100%',
+  height: '300px'
 }
 
 const center = {
-    lat: 43.653225,
-    lng: -79.383186
+  lat: 43.653225,
+  lng: -79.383186
 }
 
 const options = {
-    styles: mapDarkStyles,
-    disableDefaultUI: true,
-    zoomControl: true
+  styles: mapDarkStyles,
+  disableDefaultUI: true,
+  zoomControl: true
 }
 
-const MyGoogleMap = ({location, setLocation}) => {
+const MyGoogleMap = ({ location, setLocation }) => {
 
-    const onMapClick = React.useCallback((e) => {
-        setLocation({
-            lat: e.latLng.lat(),
-            lng: e.latLng.lng(),
-            time: new Date(),
-        })
-    }, [])
+  const onMapClick = React.useCallback((e) => {
+    setLocation({
+      lat: e.latLng.lat(),
+      lng: e.latLng.lng(),
+      time: new Date(),
+    })
+  }, [])
 
-    const mapRef = React.useRef();
-    const onMapLoad = React.useCallback((map) => {
-      mapRef.current = map;
-    }, []);
+  const mapRef = React.useRef();
+  const onMapLoad = React.useCallback((map) => {
+    mapRef.current = map;
+  }, []);
 
-    const panTo = React.useCallback(({ lat, lng }) => {
-        mapRef.current.panTo({ lat, lng });
-        mapRef.current.setZoom(14);
-      }, []);
+  const panTo = React.useCallback(({ lat, lng }) => {
+    mapRef.current.panTo({ lat, lng });
+    mapRef.current.setZoom(18);
+  }, []);
 
-    const { isLoaded, loadError } = useLoadScript({
-        googleMapsApiKey: "API_KEY",
-        libraries: libraries,
-    });
-    if (loadError) return "Erorr loading maps;";
-    if (!isLoaded) return "Loading maps";
+  const { isLoaded, loadError } = useLoadScript({
+    googleMapsApiKey: "AIzaSyDLirs90iNaGO2vhv2XfgLRSn-fIvwi8QA",
+    libraries: libraries,
+  });
+  if (loadError) return "Erorr loading maps;";
+  if (!isLoaded) return "Loading maps";
 
-    return (<div>
-        <div className="map-user-search">
-        <Search panTo={panTo}/>
-        <Locate panTo={panTo}/>
-        </div>
+  return (<div>
+    <div className="map-user-search">
+      <Search panTo={panTo} />
+      <Locate panTo={panTo} />
+    </div>
 
-        <GoogleMap
-            mapContainerStyle={mapContainerStyle}
-            zoom={8}
-            center={center}
-            options={options}
-            onClick={onMapClick}
-            onLoad={onMapLoad}
-            className="map">
-            <Marker
-                key={location.time}
-                position={{ lat: location.lat, lng: location.lng }} />)
-        </GoogleMap>
-    </div>)
+    <GoogleMap
+      mapContainerStyle={mapContainerStyle}
+      zoom={8}
+      center={center}
+      options={options}
+      onClick={onMapClick}
+      onLoad={onMapLoad}
+      className="map">
+      <Marker
+        key={location.time}
+        position={{ lat: location.lat, lng: location.lng }} />)
+    </GoogleMap>
+  </div>)
 }
 
 function Locate({ panTo }) {
-    return (
-      <button
-        className="locate"
-        onClick={(e) => {
+  return (
+    <button
+      className="locate"
+      onClick={(e) => {
         e.preventDefault();
-          navigator.geolocation.getCurrentPosition(
-            (position) => {
-                console.log(position);
-              panTo({
-                lat: position.coords.latitude,
-                lng: position.coords.longitude,
-              });
-            },
-            () => null
-          );
-        }}
-      >
-        <img src={require("./compass.svg")} alt="compass" />
-      </button>
-    );
-  }
+        navigator.geolocation.getCurrentPosition(
+          (position) => {
+            console.log(position);
+            panTo({
+              lat: position.coords.latitude,
+              lng: position.coords.longitude,
+            });
+          },
+          () => null
+        );
+      }}
+    >
+      <img src={require("./compass.svg")} alt="compass" />
+    </button>
+  );
+}
 
-function Search({panTo}) {
-    const {
-        ready,
-        value,
-        suggestions: { status, data },
-        setValue,
-        clearSuggestions,
-      } = usePlacesAutocomplete({
-        requestOptions: {
-          location: { lat: () => 43.6532, lng: () => -79.3832 },
-          radius: 100 * 1000,
-        },
-      });
+function Search({ panTo }) {
+  const {
+    ready,
+    value,
+    suggestions: { status, data },
+    setValue,
+    clearSuggestions,
+  } = usePlacesAutocomplete({
+    requestOptions: {
+      location: { lat: () => 43.6532, lng: () => -79.3832 },
+      radius: 100 * 1000,
+    },
+  });
 
-    const handleInput = (e) => {
-        setValue(e.target.value);
-      };
+  const handleInput = (e) => {
+    setValue(e.target.value);
+  };
 
-    const handleSelect = async (address) => {
-        setValue(address, false);
-        clearSuggestions();
-    
-        try {
-          const results = await getGeocode({ address });
-          const { lat, lng } = await getLatLng(results[0]);
-          panTo({ lat, lng });
-        } catch (error) {
-          console.log("😱 Error: ", error);
-        }
-      };
+  const handleSelect = async (address) => {
+    setValue(address, false);
+    clearSuggestions();
 
-    return (
+    try {
+      const results = await getGeocode({ address });
+      const { lat, lng } = await getLatLng(results[0]);
+      panTo({ lat, lng });
+    } catch (error) {
+      console.log("😱 Error: ", error);
+    }
+  };
+
+  return (
     <div className="search">
-    <Combobox onSelect={handleSelect}>
+      <Combobox onSelect={handleSelect}>
         <ComboboxInput
-        autoComplete="text"
-            value={value}
-            onChange={handleInput}
-            disabled={!ready}
-            placeholder="Enter an address" />
-            <ComboboxPopover className="search-suggestion">
-                <ComboboxList>
-                {status === "OK" && data.map(({id, description}) => <ComboboxOption  key={id} value={description}>{description}</ComboboxOption >)}
-                </ComboboxList>
-            </ComboboxPopover>
-    </Combobox>
+          autoComplete="text"
+          value={value}
+          onChange={handleInput}
+          disabled={!ready}
+          placeholder="Enter an address" />
+        <ComboboxPopover className="search-suggestion css-p8sdl4-control">
+          <ComboboxList>
+            {status === "OK" && data.map(({ id, description }) => <ComboboxOption key={id} value={description}>{description}</ComboboxOption >)}
+          </ComboboxList>
+        </ComboboxPopover>
+      </Combobox>
     </div>)
 }
 

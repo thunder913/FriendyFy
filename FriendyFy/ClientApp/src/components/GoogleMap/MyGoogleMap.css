@@ -59,3 +59,11 @@ code {
   .find-location div{
     border-radius: 10px;
   }
+
+  .map-search{
+    color: white;
+  }
+
+  .map-user-search input {
+    color: white;
+  }
