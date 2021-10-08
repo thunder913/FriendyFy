@@ -74,9 +74,20 @@ function ImgDropAndCrop() {
 
     const handleOnCropComplete = (crop, pixelCrop) => {
         //console.log(crop, pixelCrop)
-        console.log(crop, pixelCrop);
+        let image = document.querySelector('.ReactCrop__image');
+        let offsetX = image.naturalWidth/image.offsetWidth;
+        let offsetY = image.naturalHeight/image.offsetHeight;
+
         const canvasRef = imagePreviewCanvasRef.current;
-        image64toCanvasRef(canvasRef, imgSrc, crop)
+        var newCrop = {
+            x: crop.x*offsetX,
+            y: crop.y*offsetY,
+            width: crop.width*offsetX,
+            height: crop.height*offsetY,
+            unit: crop.unit,
+            aspect: crop.aspect
+        }
+        image64toCanvasRef(canvasRef, imgSrc, newCrop)
     }
 
     const handleDownloadClick = (event) => {

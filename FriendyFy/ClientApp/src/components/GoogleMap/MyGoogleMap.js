@@ -61,7 +61,7 @@ const MyGoogleMap = ({ location, setLocation }) => {
   }, []);
 
   const { isLoaded, loadError } = useLoadScript({
-    googleMapsApiKey: "AIzaSyDLirs90iNaGO2vhv2XfgLRSn-fIvwi8QA",
+    googleMapsApiKey: "AIzaSyAW0sl6m4y17JzkWaamloCpJuY0bccg1Tw",
     libraries: libraries,
   });
   if (loadError) return "Erorr loading maps;";
@@ -144,14 +144,14 @@ function Search({ panTo }) {
 
   return (
     <div className="search">
-      <Combobox onSelect={handleSelect}>
+      <Combobox onSelect={handleSelect} >
         <ComboboxInput
           autoComplete="text"
           value={value}
           onChange={handleInput}
           disabled={!ready}
           placeholder="Enter an address" />
-        <ComboboxPopover className="search-suggestion css-p8sdl4-control">
+        <ComboboxPopover className="search-suggestion">
           <ComboboxList>
             {status === "OK" && data.map(({ id, description }) => <ComboboxOption key={id} value={description}>{description}</ComboboxOption >)}
           </ComboboxList>
