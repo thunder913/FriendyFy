@@ -19,7 +19,8 @@ export default class InterestsDropdown extends Component {
     this.state = {
       dropDownOpt : [],
       id: "",
-      email: ''
+      email: '',
+      setInterests: props.setInterests
     }
   }
 
@@ -52,12 +53,7 @@ export default class InterestsDropdown extends Component {
   }
 
   onChange(event){
-   this.setState(
-     {
-       id: event.value, 
-       email: event.label
-      }
-    )
+    this.state.setInterests(event);
   }
 
   componentDidMount(){

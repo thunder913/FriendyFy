@@ -8,7 +8,9 @@ const FirstTimePopUp = (props) => {
     const [location, setLocation] = useState([]);
     const [profileImg, setProfileImg] = useState(null)
     const [coverImg, setCoverImg] = useState(null)
-    
+    const [interests, setInterests] = useState([]);
+    const [quote, setQuote] = useState('');
+
     const doSomething = () => {
         console.log(profileImg);
     }
@@ -30,7 +32,7 @@ const FirstTimePopUp = (props) => {
                         <MyGoogleMap location={location} setLocation={setLocation}></MyGoogleMap>
                     </div>
                 </form>
-                <InterestsDropdown></InterestsDropdown>
+                <InterestsDropdown setInterests={setInterests}></InterestsDropdown>
 
                 <ImgDropAndCrop 
                     placeholder="Choose a cover photo." 
@@ -39,7 +41,7 @@ const FirstTimePopUp = (props) => {
                     setImgSrc={setCoverImg}
                     imageClass="cover-user-image"/>
 
-                <textarea name="" id="quote" rows="2" className="css-p8sdl4-control" placeholder="Enter a quote/description that will show in your profile"></textarea>
+                <textarea onChange={(e) => setQuote(e.target.value)} name="" id="quote" rows="2" className="css-p8sdl4-control" placeholder="Enter a quote/description that will show in your profile"></textarea>
                 <input type="submit" value="Click me" onClick={doSomething}/>
             </div>
         </div>)
