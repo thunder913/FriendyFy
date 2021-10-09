@@ -42,7 +42,7 @@ const FirstTimePopUp = (props) => {
                     imageClass="cover-user-image"/>
 
                 <textarea onChange={(e) => setQuote(e.target.value)} name="" id="quote" rows="2" className="css-p8sdl4-control" placeholder="Enter a quote/description that will show in your profile"></textarea>
-                <input type="submit" value="Click me" onClick={doSomething}/>
+                <input type="submit" className="create-account-button" value="Create my account" onClick={doSomething}/>
             </div>
         </div>)
 }

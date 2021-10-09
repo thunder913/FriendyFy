@@ -31,6 +31,33 @@
     box-shadow: 5px 4px 23px 9px rgba(0,0,0,0.89);
 }
 
+.first-time-popup .popup-text::-webkit-scrollbar {
+  width: 5px;
+}
+
+/* Track */
+.first-time-popup .popup-text::-webkit-scrollbar-track {
+  background: transparent;
+}
+
+/* Handle */
+.first-time-popup .popup-text::-webkit-scrollbar-thumb {
+  background: transparent;
+  border-radius: 24px;
+}
+
+/* Handle on hover */
+.first-time-popup .popup-text::-webkit-scrollbar-thumb:hover {
+  background: rgb(61, 61, 61);
+  transition: 1s;
+}
+
+.first-time-popup .popup-text:hover::-webkit-scrollbar-thumb{
+  background: rgb(168, 161, 161);
+  transition: 1s;
+}
+
+
 .close {
     position: absolute;
     right: 32px;
@@ -81,4 +108,21 @@
 
 .upload-picture{
   margin-top: 20px;
+}
+
+.create-account-button{
+    background: rgb(35, 87, 155);
+    border-radius: 10px;
+    border: 0px;
+    margin-top: 15px;
+    font-size: 24px;
+    width: 50%;
+    align-self: center;
+    color: white;
+    border: 2px solid rgba(19, 60, 114, 0.2);
+}
+
+.create-account-button:hover{
+    background-color: rgb(58, 108, 173);
+    border: 2px solid rgba(54, 101, 163, 0.2);
 }
