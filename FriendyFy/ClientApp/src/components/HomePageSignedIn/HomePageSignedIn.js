@@ -5,6 +5,7 @@ import { useLoggedIn } from "../../contexts/LoggedInContext";
 import './HomePageSignedIn.css'
 import FirstTimePopUp from '../FirstTimePopUp/FirstTimePopUp.js'
 import { useState } from "react/cjs/react.development";
+import useScrollBlock from "../../hooks/useScrollBlock";
 const events = [
   {
     name: "Event_Name1",
@@ -60,12 +61,19 @@ const events = [
   }
 ]
 const HomePageSignedIn = () => {
+  const [blockScroll, allowScroll] = useScrollBlock();
   const [userFirstTime, setUserFirstTime] = useState(false);
 
   const { loggedIn } = useLoggedIn();
   useEffect(() => {
     setUserFirstTime(loggedIn.finishedFirstTimeLogin);
-  }, [])
+    if(!userFirstTime){
+      console.log("Not logged in")
+      blockScroll();
+    }else{
+      allowScroll();
+    }
+  }, [userFirstTime])
 
   return (<div className="feed home-feed">
     {!userFirstTime ? <FirstTimePopUp></FirstTimePopUp> : ''}

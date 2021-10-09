@@ -12,10 +12,11 @@ import ReactCrop from 'react-image-crop';
 const imageMaxSize = 1000000000 // bytes
 const acceptedFileTypes = 'image/x-png, image/png, image/jpg, image/jpeg, image/gif'
 const acceptedFileTypesArray = acceptedFileTypes.split(",").map((item) => { return item.trim() })
-function ImgDropAndCrop() {
-    const [imgSrc, setImgSrc] = useState(null)
+function ImgDropAndCrop({placeholder, aspectRatio, imgSrc, setImgSrc, imageClass}) {
+const defaultCrop = {aspect: aspectRatio, x: 0, y: 0, width: aspectRatio == 1 ? 200 : 355, height: 200, unit:"px"}
+
     const [imgSrcExt, setImgSrcExt] = useState(null)
-    const [crop, setCrop] = useState({ aspect: 1 / 1 })
+    const [crop, setCrop] = useState(defaultCrop)
 
     const imagePreviewCanvasRef = useRef();
     const {
@@ -74,7 +75,10 @@ function ImgDropAndCrop() {
 
     const handleOnCropComplete = (crop, pixelCrop) => {
         //console.log(crop, pixelCrop)
-        let image = document.querySelector('.ReactCrop__image');
+        const canvasRef1 = imagePreviewCanvasRef.current
+        const imageData64 = canvasRef1.toDataURL('image/' + imgSrcExt)
+        console.log(imageData64);
+        let image = document.querySelector(`.${imageClass}>div>img`);
         let offsetX = image.naturalWidth/image.offsetWidth;
         let offsetY = image.naturalHeight/image.offsetHeight;
 
@@ -88,6 +92,8 @@ function ImgDropAndCrop() {
             aspect: crop.aspect
         }
         image64toCanvasRef(canvasRef, imgSrc, newCrop)
+
+
     }
 
     const handleDownloadClick = (event) => {
@@ -95,7 +101,6 @@ function ImgDropAndCrop() {
         if (imgSrc) {
             const canvasRef = imagePreviewCanvasRef.current
             const imageData64 = canvasRef.toDataURL('image/' + imgSrcExt)
-
             const myFilename = "previewFile." + imgSrcExt
 
             // file to be uploaded
@@ -103,9 +108,7 @@ function ImgDropAndCrop() {
             const myNewCroppedFile = base64StringtoFile(imageData64, myFilename)
             // download file
             downloadBase64File(imageData64, myFilename)
-            console.log("before handle clear to default")
             handleClearToDefault()
-            console.log("after handle clear to default")
         }
     }
 
@@ -117,7 +120,7 @@ function ImgDropAndCrop() {
 
         setImgSrc(null);
         setImgSrcExt(null);
-        setCrop({aspect: 1/1});
+        setCrop(defaultCrop);
     }
 
     const handleFileSelect = event => {
@@ -143,26 +146,22 @@ function ImgDropAndCrop() {
     }
 
     return (
-        <section className="container">
+        <section className="container image-input">
             {imgSrc !== null ?
-                <div>
+                <div className="image-crop">
+                <button class="remove-image" onClick={handleClearToDefault}>X</button>
                 <ReactCrop 
                     src={imgSrc} 
                     crop={crop} 
                     onComplete = {handleOnCropComplete}
-                    onChange={handleOnCropChange}/>
-
-                <br/>
-                <p>Preview Canvas Crop </p>
-                <canvas ref={imagePreviewCanvasRef}></canvas>
-                <button onClick={handleDownloadClick}>Download</button>
-                <button onClick={handleClearToDefault}>Clear</button>
+                    onChange={handleOnCropChange}
+                    className={imageClass}/>
+                <canvas style={{display: "none"}} ref={imagePreviewCanvasRef}></canvas>
             </div>  
             :  
             <div {...getRootProps({ className: 'dropzone' })}>
             <input {...getInputProps()} />
-            <p>Drag 'n' drop some files here, or click to select files</p>
-            <em>(Only *.jpeg and *.png images will be accepted)</em>
+            <p>{placeholder}</p>
         </div>
         }
 

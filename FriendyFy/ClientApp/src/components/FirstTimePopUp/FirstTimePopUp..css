@@ -26,6 +26,9 @@
     padding: 20px;
     display: flex;
     flex-direction: column;
+    overflow:auto;
+    max-height: 800px;
+    box-shadow: 5px 4px 23px 9px rgba(0,0,0,0.89);
 }
 
 .close {
@@ -61,6 +64,7 @@
   .first-time-undertitle{
       font-size: 16px;
       text-align: left;
+      margin-bottom: 0px;
   }
 
   #quote{
@@ -68,6 +72,7 @@
     border-radius: 10px;
     color: white;
     margin-top: 20px;
+    padding-left: 10px;
   }
 
   #quote::placeholder{
