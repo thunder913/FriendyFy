@@ -38,27 +38,20 @@ const FirstTimePopUp = (props) => {
         if(errorMessage){
             return;
         }
-        let profilePhoto = new FormData();
-        profilePhoto.append("formfile", profilePhoto);
-
-        let coverPhoto = new FormData();
-        coverPhoto.append("formfile", coverPhoto);
-
-        console.log(interests);
         let formInterests = interests.map(x => ({label: x.label, id: Number.isInteger(x.value) ? x.value : 0, isNew: x.__isNew__}));
-        let data = {
-            profilePhoto: profilePhoto,
-            coverPhoto: coverPhoto,
-            quote: quote,
-            latitude: location.lat,
-            longitude: location.lng,
-            interests: formInterests
-        };
+        
+        let formdata = new FormData();
+        console.log(profileImg);
+        console.log(coverImg)
+        formdata.append("profilePhoto", profileImg);
+        formdata.append("coverPhoto", coverImg);
+        formdata.append("quote", quote);
+        formdata.append("interests", formInterests);
+        formdata.append("latitude", location.lat);
+        formdata.append("longitude", location.lng);
 
-        console.log(data);
-
-        const res = await finishFirstTimeSetup(data);
-        console.log(res);
+        axios.post("/api/FinishFirstTimeSetup", formdata);
+        const res = await finishFirstTimeSetup(formdata);
     }
 
     return (
@@ -70,8 +63,7 @@ const FirstTimePopUp = (props) => {
                 <ImgDropAndCrop 
                     placeholder="Choose a profile photo." 
                     aspectRatio={1/1}
-                    imgSrc={profileImg}
-                    setImgSrc={setProfileImg}
+                    setCroppedImg={setProfileImg}
                     imageClass="user-profile-photo"/>
 
                     <div className="find-location">
@@ -83,8 +75,7 @@ const FirstTimePopUp = (props) => {
                 <ImgDropAndCrop 
                     placeholder="Choose a cover photo." 
                     aspectRatio={16/9}
-                    imgSrc={coverImg}
-                    setImgSrc={setCoverImg}
+                    setCroppedImg={setCoverImg}
                     imageClass="cover-user-image"/>
 
                 <textarea onChange={(e) => setQuote(e.target.value)} name="" id="quote" rows="2" className="css-p8sdl4-control" placeholder="Enter a quote/description that will show in your profile"></textarea>

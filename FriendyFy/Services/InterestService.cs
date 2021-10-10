@@ -16,14 +16,12 @@ namespace FriendyFy.Services
             this.interestRepository = interestRepository;
         }
 
-        public async Task<bool> AddInterestToDbAsync(InterestDto interest)
+        public async Task<Interest> AddInterestToDbAsync(InterestDto interest)
         {
-            await this.interestRepository.AddAsync(new Interest()
-            {
-                Name = interest.Label,
-            });
+            var interestToAdd = new Interest(){ Name = interest.Label};
+            await this.interestRepository.AddAsync(interestToAdd);
 
-            return await this.interestRepository.SaveChangesAsync()>0;
+            return interestToAdd;
         }
 
         public Interest CheckInterestSimillarWord(InterestDto interest)

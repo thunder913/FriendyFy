@@ -205,7 +205,7 @@ namespace FriendyFy.Controllers
         }
 
         [HttpPost("FinishFirstTimeSetup")]
-        public async Task<IActionResult> FinishFirstTimeSetup(FinishFirstTimeSetupDto dto)
+        public async Task<IActionResult> FinishFirstTimeSetup([FromForm] FinishFirstTimeSetupDto dto, IFormFile formFile)
         {
             var existingInterests = dto.Interests.Where(x => !x.IsNew).ToList();
             var newInterests = dto.Interests.Where(x => x.IsNew);

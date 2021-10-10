@@ -12,9 +12,10 @@ import ReactCrop from 'react-image-crop';
 const imageMaxSize = 1000000000 // bytes
 const acceptedFileTypes = 'image/x-png, image/png, image/jpg, image/jpeg, image/gif'
 const acceptedFileTypesArray = acceptedFileTypes.split(",").map((item) => { return item.trim() })
-function ImgDropAndCrop({placeholder, aspectRatio, imgSrc, setImgSrc, imageClass}) {
+function ImgDropAndCrop({placeholder, setCroppedImg, aspectRatio, imageClass}) {
 const defaultCrop = {aspect: aspectRatio, x: 0, y: 0, width: aspectRatio == 1 ? 200 : 355, height: 200, unit:"px"}
 
+    const [imgSrc, setImgSrc] = useState(null);
     const [imgSrcExt, setImgSrcExt] = useState(null)
     const [crop, setCrop] = useState(defaultCrop)
 
@@ -64,6 +65,7 @@ const defaultCrop = {aspect: aspectRatio, x: 0, y: 0, width: aspectRatio == 1 ? 
                 }, false)
 
                 myFileItemReader.readAsDataURL(currentFile)
+                
             }
         }
     }
@@ -74,7 +76,8 @@ const defaultCrop = {aspect: aspectRatio, x: 0, y: 0, width: aspectRatio == 1 ? 
 
     const handleOnCropComplete = (crop, pixelCrop) => {
         const canvasRef1 = imagePreviewCanvasRef.current
-        const imageData64 = canvasRef1.toDataURL('image/' + imgSrcExt)
+        const imageData64 = canvasRef1.toDataURL('image/' + imgSrcExt);
+        setCroppedImg(imageData64);
         let image = document.querySelector(`.${imageClass}>div>img`);
         let offsetX = image.naturalWidth/image.offsetWidth;
         let offsetY = image.naturalHeight/image.offsetHeight;
@@ -89,7 +92,6 @@ const defaultCrop = {aspect: aspectRatio, x: 0, y: 0, width: aspectRatio == 1 ? 
             aspect: crop.aspect
         }
         image64toCanvasRef(canvasRef, imgSrc, newCrop)
-
 
     }
 
