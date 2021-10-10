@@ -1,8 +1,7 @@
 import React, { Component } from 'react'
 import './InterestsDropdown.css'
-import Select from 'react-select'
 import CreatableSelect from 'react-select/creatable';
-import { placeholder } from '@babel/types';
+import {getAllInterests} from '../../services/interestService.js'
 
 const customStyles = {
   singleValue: (provided, state) => {
@@ -18,8 +17,6 @@ export default class InterestsDropdown extends Component {
     super(props)
     this.state = {
       dropDownOpt : [],
-      id: "",
-      email: '',
       setInterests: props.setInterests
     }
   }
@@ -31,25 +28,15 @@ export default class InterestsDropdown extends Component {
     // const dropDownValue = serverResponse.map((response) => ({
     //   "value" : response.id,
     //   "label" : response.email
-    // }))
+
+    let interests = await getAllInterests().then(async res => await res.json());
+    let stateInterests = interests.map(x => ({label: x.label, value: x.id}));
 
     this.setState(
       {
-        dropDownOpt: [{
-            value: "test",
-            label: "test"
-        },
-    {
-        value: "test1",
-        label: "test1"
-    },
-    {
-        value: "drink",
-        label:"drink"
-    }]
+        dropDownOpt: stateInterests
       }
     )
-
   }
 
   onChange(event){
@@ -67,7 +54,7 @@ export default class InterestsDropdown extends Component {
            options={this.state.dropDownOpt} 
            onChange={this.onChange.bind(this)}
            isMulti
-           placeholder={'Choose interests'}
+           placeholder={'Choose at least 3 interests'}
            theme={(theme) => ({
              ...theme,
              colors: {

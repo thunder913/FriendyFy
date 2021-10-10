@@ -58,7 +58,6 @@ const defaultCrop = {aspect: aspectRatio, x: 0, y: 0, width: aspectRatio == 1 ? 
                 const currentFile = files[0]
                 const myFileItemReader = new FileReader()
                 myFileItemReader.addEventListener("load", () => {
-                    // console.log(myFileItemReader.result)
                     const myResult = myFileItemReader.result
                     setImgSrc(myResult);
                     setImgSrcExt(extractImageFileExtensionFromBase64(myResult));
@@ -74,10 +73,8 @@ const defaultCrop = {aspect: aspectRatio, x: 0, y: 0, width: aspectRatio == 1 ? 
     }
 
     const handleOnCropComplete = (crop, pixelCrop) => {
-        //console.log(crop, pixelCrop)
         const canvasRef1 = imagePreviewCanvasRef.current
         const imageData64 = canvasRef1.toDataURL('image/' + imgSrcExt)
-        console.log(imageData64);
         let image = document.querySelector(`.${imageClass}>div>img`);
         let offsetX = image.naturalWidth/image.offsetWidth;
         let offsetY = image.naturalHeight/image.offsetHeight;
@@ -124,7 +121,6 @@ const defaultCrop = {aspect: aspectRatio, x: 0, y: 0, width: aspectRatio == 1 ? 
     }
 
     const handleFileSelect = event => {
-        // console.log(event)
         const files = event.target.files
         if (files && files.length > 0) {
             const isVerified = verifyFile(files)
@@ -133,7 +129,6 @@ const defaultCrop = {aspect: aspectRatio, x: 0, y: 0, width: aspectRatio == 1 ? 
                 const currentFile = files[0]
                 const myFileItemReader = new FileReader()
                 myFileItemReader.addEventListener("load", () => {
-                    // console.log(myFileItemReader.result)
                     const myResult = myFileItemReader.result
                     setImgSrc(myResult);
                     setImgSrcExt(extractImageFileExtensionFromBase64(myResult));

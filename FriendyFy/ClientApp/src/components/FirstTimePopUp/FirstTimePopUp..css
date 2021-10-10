@@ -100,6 +100,7 @@
     color: white;
     margin-top: 20px;
     padding-left: 10px;
+    margin-bottom: 20px;
   }
 
   #quote::placeholder{
@@ -114,7 +115,6 @@
     background: rgb(35, 87, 155);
     border-radius: 10px;
     border: 0px;
-    margin-top: 15px;
     font-size: 24px;
     width: 50%;
     align-self: center;
@@ -125,4 +125,15 @@
 .create-account-button:hover{
     background-color: rgb(58, 108, 173);
     border: 2px solid rgba(54, 101, 163, 0.2);
+}
+
+.first-time-popup .error-message{
+  color: white;
+  font-size: 20px;
+  padding: 10px;
+  border-radius: 20px;
+  background: #7e0303;
+  font-weight: 800;
+  margin-bottom: 20px;
+  border: 2px solid rgb(204, 204, 204);
 }

@@ -2,9 +2,8 @@ import React, { useState, useEffect } from "react";
 import { Link } from "react-router-dom";
 import { useLoggedIn } from "../../contexts/LoggedInContext";
 import RegisterPopUp from "../register-components/RegisterPopUp/RegisterPopUp";
-import {getLoggedInUser} from '../../services/userService.js';
+import {getLoggedInUser, confirmEmail} from '../../services/userService.js';
 import { useLocation } from "react-router";
-import { confirmEmail } from "../../services/userService.js";
 import './HomePageNotSignedIn.css'
 
 const HomePageNotSignedIn = () =>{

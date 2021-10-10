@@ -31,17 +31,20 @@ namespace FriendyFy.Controllers
         private readonly IJwtService jwtService;
         private readonly IEmailSender emailSender;
         private readonly UserManager<ApplicationUser> userManager;
+        private readonly IInterestService interestService;
 
         public AuthController(
             IUserService userService,
             IJwtService jwtService,
             IEmailSender emailSender,
-            UserManager<ApplicationUser> userManager)
+            UserManager<ApplicationUser> userManager,
+            IInterestService interestService)
         {
             this.userService = userService;
             this.jwtService = jwtService;
             this.emailSender = emailSender;
             this.userManager = userManager;
+            this.interestService = interestService;
         }
         public IActionResult Index()
         {
@@ -111,7 +114,7 @@ namespace FriendyFy.Controllers
             var callbackUrl = Url.Page(
             "/Auth/ConfirmEmail",
             pageHandler: null,
-            values: new { userId = user.Id, code = code},
+            values: new { userId = user.Id, code = code },
             protocol: Request.Scheme);
 
             await emailSender.SendEmailAsync(GlobalConstants.Email, "FriendyFy", user.Email, "Confirm your email",
@@ -199,6 +202,25 @@ namespace FriendyFy.Controllers
             var code = Encoding.UTF8.GetString(WebEncoders.Base64UrlDecode(confirmDto.Code));
             var result = await userManager.ConfirmEmailAsync(user, code);
             return result.Succeeded ? Ok() : BadRequest("Could not confirm the email!");
+        }
+
+        [HttpPost("FinishFirstTimeSetup")]
+        public async Task<IActionResult> FinishFirstTimeSetup(FinishFirstTimeSetupDto dto)
+        {
+            var existingInterests = dto.Interests.Where(x => !x.IsNew).ToList();
+            var newInterests = dto.Interests.Where(x => x.IsNew);
+            var interests = new List<Interest>();
+            //foreach (var interest in newInterests)
+            //{
+            //    // Check if there is something simillar in the DB and if not add it
+            //}
+            foreach (var item in newInterests)
+            {
+                interests.Add(await this.interestService.AddInterestToDbAsync(item));
+            }
+
+            var asd = "a";
+            return new JsonResult("");
         }
     }
 }

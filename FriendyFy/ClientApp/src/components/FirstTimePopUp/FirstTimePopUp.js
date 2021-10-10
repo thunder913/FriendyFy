@@ -3,16 +3,62 @@ import MyGoogleMap from '../GoogleMap/MyGoogleMap';
 import InterestsDropdown from '../InterestsDropdown/InterestsDropdown';
 import './FirstTimePopUp..css';
 import ImgDropAndCrop from '../ImgDropAndCrop/ImgDropAndCrop.js';
+import axios from 'axios';
+import { finishFirstTimeSetup } from '../../services/userService';
 
 const FirstTimePopUp = (props) => {
-    const [location, setLocation] = useState([]);
+    const [location, setLocation] = useState('');
     const [profileImg, setProfileImg] = useState(null)
     const [coverImg, setCoverImg] = useState(null)
     const [interests, setInterests] = useState([]);
     const [quote, setQuote] = useState('');
+    const [errorMessage, setErrorMessage] = useState(null);
 
-    const doSomething = () => {
+    const submitForm = async () => {
+        console.log(location);
         console.log(profileImg);
+        console.log(coverImg);
+        console.log(interests);
+        console.log(quote);
+
+        if(location === ''){
+            setErrorMessage("You haven't chosen a location.")
+        }else if(profileImg === null){
+            setErrorMessage("You must choose a profile image.")
+        }else if(coverImg === null){
+            setErrorMessage("You  must choose a cover image for your profile.");
+        }else if(interests.length < 3){
+            setErrorMessage("You must choose at least 3 interests.")
+        }else if(quote.length<1){
+            setErrorMessage("You must add a description/quote to display in your profile.")
+        }else{
+            setErrorMessage(null);
+        }
+
+        if(errorMessage){
+            return;
+        }
+        let profilePhoto = new FormData();
+        profilePhoto.append("formfile", profilePhoto);
+
+        let coverPhoto = new FormData();
+        coverPhoto.append("formfile", coverPhoto);
+
+        console.log(interests);
+        let formInterests = interests.map(x => ({label: x.label, id: Number.isInteger(x.value) ? x.value : 0, isNew: x.__isNew__}));
+        let data = {
+            profilePhoto: profilePhoto,
+            coverPhoto: coverPhoto,
+            quote: quote,
+            latitude: location.lat,
+            longitude: location.lng,
+            interests: formInterests
+        };
+
+        console.log(data);
+
+        const res = await finishFirstTimeSetup(data);
+        console.log(res);
     }
 
     return (
@@ -42,7 +88,8 @@ const FirstTimePopUp = (props) => {
                     imageClass="cover-user-image"/>
 
                 <textarea onChange={(e) => setQuote(e.target.value)} name="" id="quote" rows="2" className="css-p8sdl4-control" placeholder="Enter a quote/description that will show in your profile"></textarea>
-                <input type="submit" className="create-account-button" value="Create my account" onClick={doSomething}/>
+                {errorMessage ? <span className="error-message">{errorMessage}</span> : ''}
+                <input type="submit" className="create-account-button" value="Finish My Account" onClick={submitForm}/>
             </div>
         </div>)
 }

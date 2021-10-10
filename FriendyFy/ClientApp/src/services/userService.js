@@ -23,8 +23,17 @@ function confirmEmail(userId, code){
     });
 }
 
+function finishFirstTimeSetup(data){
+    return fetch('/api/FinishFirstTimeSetup', {
+        method: 'POST',
+        headers: {'Content-Type': 'application/x-www-form-urlencoded'},
+        body: JSON.stringify(data)
+    });
+}
+
 export {
     getLoggedInUser,
     logout,
-    confirmEmail
+    confirmEmail,
+    finishFirstTimeSetup
 }

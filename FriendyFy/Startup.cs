@@ -63,6 +63,7 @@ namespace FriendyFy
 
             services.AddTransient<IEmailSender>(serviceProvider => new SendGridEmailSender(this.Configuration["SendGrid-ApiKey"]));
             services.AddTransient<IUserService, UserService>();
+            services.AddTransient<IInterestService, InterestService>();
             services.AddTransient<IJwtService, JwtService>();
 
             services.AddControllersWithViews();
