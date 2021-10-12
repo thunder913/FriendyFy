@@ -8,7 +8,7 @@ namespace FriendyFy.Data
         public string ProfilePhoto { get; set; }
         public string CoverPhoto { get; set; }
         public string Quote { get; set; }
-        public ICollection<InterestDto> Interests { get; set; } = new List<InterestDto>();
+        public string Interests { get; set; }
         public decimal Latitude { get; set; }
         public decimal Longitude { get; set; }
     }

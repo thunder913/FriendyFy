@@ -65,7 +65,6 @@ const defaultCrop = {aspect: aspectRatio, x: 0, y: 0, width: aspectRatio == 1 ? 
                 }, false)
 
                 myFileItemReader.readAsDataURL(currentFile)
-                
             }
         }
     }
@@ -75,9 +74,6 @@ const defaultCrop = {aspect: aspectRatio, x: 0, y: 0, width: aspectRatio == 1 ? 
     }
 
     const handleOnCropComplete = (crop, pixelCrop) => {
-        const canvasRef1 = imagePreviewCanvasRef.current
-        const imageData64 = canvasRef1.toDataURL('image/' + imgSrcExt);
-        setCroppedImg(imageData64);
         let image = document.querySelector(`.${imageClass}>div>img`);
         let offsetX = image.naturalWidth/image.offsetWidth;
         let offsetY = image.naturalHeight/image.offsetHeight;
@@ -91,8 +87,7 @@ const defaultCrop = {aspect: aspectRatio, x: 0, y: 0, width: aspectRatio == 1 ? 
             unit: crop.unit,
             aspect: crop.aspect
         }
-        image64toCanvasRef(canvasRef, imgSrc, newCrop)
-
+        image64toCanvasRef(canvasRef, imgSrc, newCrop, setCroppedImg)
     }
 
     const handleDownloadClick = (event) => {
@@ -146,14 +141,13 @@ const defaultCrop = {aspect: aspectRatio, x: 0, y: 0, width: aspectRatio == 1 ? 
         <section className="container image-input">
             {imgSrc !== null ?
                 <div className="image-crop">
-                <button class="remove-image" onClick={handleClearToDefault}>X</button>
+                <button className="remove-image" onClick={handleClearToDefault}>X</button>
                 <ReactCrop 
                     src={imgSrc} 
                     crop={crop} 
                     onComplete = {handleOnCropComplete}
                     onChange={handleOnCropChange}
                     className={imageClass}/>
-                <canvas style={{display: "none"}} ref={imagePreviewCanvasRef}></canvas>
             </div>  
             :  
             <div {...getRootProps({ className: 'dropzone' })}>
@@ -161,6 +155,7 @@ const defaultCrop = {aspect: aspectRatio, x: 0, y: 0, width: aspectRatio == 1 ? 
             <p>{placeholder}</p>
         </div>
         }
+        <canvas style={{display: "none"}} ref={imagePreviewCanvasRef}></canvas>
 
         </section>
     );

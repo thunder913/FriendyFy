@@ -38,7 +38,7 @@ const FirstTimePopUp = (props) => {
         if(errorMessage){
             return;
         }
-        let formInterests = interests.map(x => ({label: x.label, id: Number.isInteger(x.value) ? x.value : 0, isNew: x.__isNew__}));
+        let formInterests = interests.map(x => ({label: x.label, id: Number.isInteger(x.value) ? x.value : 0, isNew: x.__isNew__ ?? false}));
         
         let formdata = new FormData();
         console.log(profileImg);
@@ -46,10 +46,11 @@ const FirstTimePopUp = (props) => {
         formdata.append("profilePhoto", profileImg);
         formdata.append("coverPhoto", coverImg);
         formdata.append("quote", quote);
-        formdata.append("interests", formInterests);
+        formdata.append("interests", JSON.stringify(formInterests));
         formdata.append("latitude", location.lat);
         formdata.append("longitude", location.lng);
 
+        console.log(formInterests);
         axios.post("/api/FinishFirstTimeSetup", formdata);
         const res = await finishFirstTimeSetup(formdata);
     }

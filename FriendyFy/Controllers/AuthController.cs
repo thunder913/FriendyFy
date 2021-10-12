@@ -1,4 +1,5 @@
 ﻿using BCrypt.Net;
+using FriendyFy.BlobStorage;
 using FriendyFy.Common;
 using FriendyFy.Data;
 using FriendyFy.Helpers.Contracts;
@@ -11,6 +12,7 @@ using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.WebUtilities;
+using Newtonsoft.Json;
 using System;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
@@ -32,19 +34,22 @@ namespace FriendyFy.Controllers
         private readonly IEmailSender emailSender;
         private readonly UserManager<ApplicationUser> userManager;
         private readonly IInterestService interestService;
+        private readonly IBlobService blobService;
 
         public AuthController(
             IUserService userService,
             IJwtService jwtService,
             IEmailSender emailSender,
             UserManager<ApplicationUser> userManager,
-            IInterestService interestService)
+            IInterestService interestService,
+            IBlobService blobService)
         {
             this.userService = userService;
             this.jwtService = jwtService;
             this.emailSender = emailSender;
             this.userManager = userManager;
             this.interestService = interestService;
+            this.blobService = blobService;
         }
         public IActionResult Index()
         {
@@ -154,13 +159,7 @@ namespace FriendyFy.Controllers
         {
             try
             {
-                var jwt = Request.Cookies["jwt"];
-
-                var token = this.jwtService.Verify(jwt);
-
-                var userId = token.Issuer;
-
-                var user = this.userService.GetById(userId);
+                var user = this.GetUserByToken();
 
                 return Ok(user);
             }
@@ -207,20 +206,43 @@ namespace FriendyFy.Controllers
         [HttpPost("FinishFirstTimeSetup")]
         public async Task<IActionResult> FinishFirstTimeSetup([FromForm] FinishFirstTimeSetupDto dto, IFormFile formFile)
         {
-            var existingInterests = dto.Interests.Where(x => !x.IsNew).ToList();
-            var newInterests = dto.Interests.Where(x => x.IsNew);
-            var interests = new List<Interest>();
+            var user = GetUserByToken();
+            if (user == null)
+            {
+                return Unauthorized("You are not logged in!");
+            }
+
+            var interests = JsonConvert.DeserializeObject<List<InterestDto>>(dto.Interests);
+            var existingInterests = interests.Where(x => !x.IsNew).ToList();
+            var newInterests = interests.Where(x => x.IsNew);
+            
+            var allInterests = new List<Interest>();
             //foreach (var interest in newInterests)
             //{
             //    // Check if there is something simillar in the DB and if not add it
             //}
             foreach (var item in newInterests)
             {
-                interests.Add(await this.interestService.AddInterestToDbAsync(item));
+                allInterests.Add(await this.interestService.AddInterestToDbAsync(item));
             }
 
-            var asd = "a";
+            var imageName = user.Id + ".jpeg";
+
+            await blobService.UploadBase64StringAsync(dto.ProfilePhoto, imageName, GlobalConstants.BlobProfilePictures);
+            await blobService.UploadBase64StringAsync(dto.ProfilePhoto, imageName, GlobalConstants.BlobCoverPictures);
+
+            var image = await this.blobService.GetBlobAsync(imageName, GlobalConstants.BlobProfilePictures);
             return new JsonResult("");
+        }
+
+        private ApplicationUser GetUserByToken() { 
+            var jwt = Request.Cookies["jwt"];
+
+            var token = this.jwtService.Verify(jwt);
+
+            var userId = token.Issuer;
+
+            return this.userService.GetById(userId);
         }
     }
 }
