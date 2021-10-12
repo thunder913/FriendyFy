@@ -1,12 +1,14 @@
 import React from 'react';
 import './UserHeader.css';
 import { useHistory } from 'react-router';
+import {useLoggedIn} from '../../contexts/LoggedInContext.js'
 
 const UserHeader = () =>{
-
+    const {loggedIn, setLoggedIn} = useLoggedIn();
     const history = useHistory();
     const goToProfile = () => {
-        history.push('profile');
+        console.log(loggedIn);
+        history.push('profile/' + loggedIn.userName);
     }
 
     return (<div className="user-info" onClick={goToProfile}>

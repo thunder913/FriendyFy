@@ -6,12 +6,12 @@
     right: 0;
     margin-left: auto;
     margin-right: auto;
-    width: 250px;
+    width: 260px;
 }
 
 .search-form > form > input{
     background-color: rgb(104, 102, 102);
-    padding: 1px 20px 2px 10px;
+    padding: 0px 20px 0px 10px;
     border: 3px solid rgb(92, 91, 90, 0.4);
     border-radius: 20px;
     color: rgb(221, 221, 221);
