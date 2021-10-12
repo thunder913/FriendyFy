@@ -35,6 +35,7 @@ namespace FriendyFy.Controllers
         private readonly UserManager<ApplicationUser> userManager;
         private readonly IInterestService interestService;
         private readonly IBlobService blobService;
+        private readonly IImageService imageService;
 
         public AuthController(
             IUserService userService,
@@ -42,7 +43,8 @@ namespace FriendyFy.Controllers
             IEmailSender emailSender,
             UserManager<ApplicationUser> userManager,
             IInterestService interestService,
-            IBlobService blobService)
+            IBlobService blobService,
+            IImageService imageService)
         {
             this.userService = userService;
             this.jwtService = jwtService;
@@ -50,6 +52,7 @@ namespace FriendyFy.Controllers
             this.userManager = userManager;
             this.interestService = interestService;
             this.blobService = blobService;
+            this.imageService = imageService;
         }
         public IActionResult Index()
         {
@@ -207,12 +210,23 @@ namespace FriendyFy.Controllers
         public async Task<IActionResult> FinishFirstTimeSetup([FromForm] FinishFirstTimeSetupDto dto, IFormFile formFile)
         {
             var user = GetUserByToken();
+            var interests = JsonConvert.DeserializeObject<List<InterestDto>>(dto.Interests);
+            
             if (user == null)
             {
                 return Unauthorized("You are not logged in!");
+            }else if (interests.Count < 3)
+            {
+                return BadRequest("You must choose at least 3 interests!");
+            }
+            else if (string.IsNullOrWhiteSpace(dto.Quote))
+            {
+                return BadRequest("You must enter a description/quote!");
+            }else if(dto.Latitude == null || dto.Longitude == null)
+            {
+                return BadRequest("You must choose a location!");
             }
 
-            var interests = JsonConvert.DeserializeObject<List<InterestDto>>(dto.Interests);
             var existingInterests = interests.Where(x => !x.IsNew).ToList();
             var newInterests = interests.Where(x => x.IsNew);
             
@@ -221,18 +235,29 @@ namespace FriendyFy.Controllers
             //{
             //    // Check if there is something simillar in the DB and if not add it
             //}
-            foreach (var item in newInterests)
+            foreach (var item in interests)
             {
-                allInterests.Add(await this.interestService.AddInterestToDbAsync(item));
+                if (item.IsNew)
+                {
+                    allInterests.Add(await this.interestService.AddInterestToDbAsync(item));
+                }
+                else
+                {
+                    allInterests.Add(this.interestService.GetInterest(item.Id));
+                }
             }
 
-            var imageName = user.Id + ".jpeg";
+            var imageName = user.UserName + ".jpeg";
 
             await blobService.UploadBase64StringAsync(dto.ProfilePhoto, imageName, GlobalConstants.BlobProfilePictures);
             await blobService.UploadBase64StringAsync(dto.ProfilePhoto, imageName, GlobalConstants.BlobCoverPictures);
 
-            var image = await this.blobService.GetBlobAsync(imageName, GlobalConstants.BlobProfilePictures);
-            return new JsonResult("");
+            var profileImage = await imageService.AddImageAsync(ImageType.ProfileImage, imageName);
+            var coverImage = await imageService.AddImageAsync(ImageType.ProfileImage, imageName);
+
+            await this.userService.SetUserFirstTimeLoginAsync(user, profileImage, coverImage, dto.Quote, allInterests, dto.Longitude, dto.Latitude);
+            
+            return Ok();
         }
 
         private ApplicationUser GetUserByToken() { 

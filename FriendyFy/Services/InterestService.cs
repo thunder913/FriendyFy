@@ -44,5 +44,13 @@ namespace FriendyFy.Services
                 Label = x.Name
             }).ToList();
         }
+
+        public Interest GetInterest(int id)
+        {
+            return this.interestRepository
+                .AllAsNoTracking()
+                .Where(x => x.Id == id)
+                .FirstOrDefault();
+        }
     }
 }

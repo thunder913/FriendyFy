@@ -10,5 +10,6 @@ namespace FriendyFy.Services.Contracts
         public ICollection<InterestDto> GetAllInterests();
         public Interest CheckInterestSimillarWord(InterestDto interest);
         public Task<Interest> AddInterestToDbAsync(InterestDto interest);
+        public Interest GetInterest(int id);
     }
 }

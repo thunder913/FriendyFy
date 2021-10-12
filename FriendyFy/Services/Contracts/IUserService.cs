@@ -17,5 +17,6 @@ namespace FriendyFy.Services.Contracts
         string GenerateUsername(string firstName, string lastName);
 
         ApplicationUser GetByUsername(string username);
+        Task SetUserFirstTimeLoginAsync(ApplicationUser user, Image profileImage, Image coverImage, string quote, List<Interest> interests, decimal? longitude, decimal? latitude);
     }
 }

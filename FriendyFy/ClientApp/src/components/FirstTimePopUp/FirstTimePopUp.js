@@ -15,12 +15,6 @@ const FirstTimePopUp = (props) => {
     const [errorMessage, setErrorMessage] = useState(null);
 
     const submitForm = async () => {
-        console.log(location);
-        console.log(profileImg);
-        console.log(coverImg);
-        console.log(interests);
-        console.log(quote);
-
         if(location === ''){
             setErrorMessage("You haven't chosen a location.")
         }else if(profileImg === null){
@@ -50,9 +44,7 @@ const FirstTimePopUp = (props) => {
         formdata.append("latitude", location.lat);
         formdata.append("longitude", location.lng);
 
-        console.log(formInterests);
         axios.post("/api/FinishFirstTimeSetup", formdata);
-        const res = await finishFirstTimeSetup(formdata);
     }
 
     return (

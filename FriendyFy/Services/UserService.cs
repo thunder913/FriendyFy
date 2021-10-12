@@ -72,5 +72,17 @@ namespace FriendyFy.Services
         {
             return this.userRepository.All().FirstOrDefault(x => x.UserName == username);
         }
+
+        public async Task SetUserFirstTimeLoginAsync(ApplicationUser user, Image profileImage, Image coverImage, string quote, List<Interest> interests, decimal? longitude, decimal? latitude)
+        {
+            user.Photos.Add(profileImage);
+            user.Photos.Add(coverImage);
+            user.Quote = quote;
+            user.Interests = interests;
+            user.Longitude = longitude;
+            user.Latitude = latitude;
+            user.FinishedFirstTimeLogin = true;
+            await userRepository.SaveChangesAsync();
+        }
     }
 }

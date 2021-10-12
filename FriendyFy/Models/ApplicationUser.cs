@@ -26,8 +26,8 @@ namespace FriendyFy.Models
         public ICollection<Image> Photos { get; set; } = new HashSet<Image>();
         public DateTime BirthDate { get; set; }
         public Gender Gender { get; set; }
-        public Image ProfilePhoto { get; set; }
-        public Image CoverPhoto { get; set; }
         public bool FinishedFirstTimeLogin { get; set; }
+        public decimal? Latitude { get; set; }
+        public decimal? Longitude { get; set; }
     }
 }
