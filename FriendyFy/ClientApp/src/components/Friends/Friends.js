@@ -7,38 +7,38 @@ import ProfileFriendSearch from '../ProfileFriendSearch/ProfileFriendSearch';
 const friends = [
     {
         name: "Ivan Petrov",
-        image: "https://tinyurl.com/44t28uud"
+        image: "/static/media/testPhoto.c8119cb6.jpg"
     }
     , {
         name: "Ivan Petrov",
-        image: "https://tinyurl.com/44t28uud",
+        image: "/static/media/testPhoto.c8119cb6.jpg",
     }, {
         name: "Ivan Petrov",
-        image: "https://tinyurl.com/44t28uud",
+        image: "/static/media/testPhoto.c8119cb6.jpg",
     }
     , {
         name: "IvanIvanPetrovPetrov Ivan Petrov Ivan Petrov",
-        image: "https://tinyurl.com/44t28uud",
+        image: "/static/media/testPhoto.c8119cb6.jpg",
     }
     , {
         name: "Ivan Petrov",
-        image: "https://tinyurl.com/44t28uud",
+        image: "/static/media/testPhoto.c8119cb6.jpg",
     }
     , {
         name: "Ivan Petrov",
-        image: "https://tinyurl.com/44t28uud",
+        image: "/static/media/testPhoto.c8119cb6.jpg",
     }
     , {
         name: "Ivan Petrov",
-        image: "https://tinyurl.com/44t28uud",
+        image: "/static/media/testPhoto.c8119cb6.jpg",
     }
     , {
         name: "Ivan Petrov",
-        image: "https://tinyurl.com/44t28uud",
+        image: "/static/media/testPhoto.c8119cb6.jpg",
     }
     , {
         name: "Ivan Petrov",
-        image: "https://tinyurl.com/44t28uud",
+        image: "/static/media/testPhoto.c8119cb6.jpg",
     }
 ]
 

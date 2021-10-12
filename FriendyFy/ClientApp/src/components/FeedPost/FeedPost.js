@@ -6,7 +6,7 @@ import './FeedPost.css';
 const FeedPost = ({image, text}) => {
     return(
     <div className="feed-photo">
-        <FeedHeader photo="https://tinyurl.com/44t28uud" name="Andon Gorchov" time="37m"/>
+        <FeedHeader photo="/static/media/testPhoto.c8119cb6.jpg" name="Andon Gorchov" time="37m"/>
         {text ? <div className="post-text">
             <p>{text}</p>
         </div> : ""}

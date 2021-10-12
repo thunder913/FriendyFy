@@ -6,56 +6,56 @@ import ProfilePhoto from '../ProfilePhoto/ProfilePhoto';
 
 const photos = [
     {
-        image: "https://tinyurl.com/44t28uud"
+        image: "/static/media/testPhoto.c8119cb6.jpg"
     }
     , {
-        image: "https://tinyurl.com/44t28uud",
+        image: "/static/media/testPhoto.c8119cb6.jpg",
     }, {
-        image: "https://tinyurl.com/44t28uud",
+        image: "/static/media/testPhoto.c8119cb6.jpg",
     }
     , {
-        image: "https://tinyurl.com/44t28uud",
+        image: "/static/media/testPhoto.c8119cb6.jpg",
     }
     , {
-        image: "https://tinyurl.com/44t28uud",
+        image: "/static/media/testPhoto.c8119cb6.jpg",
     }
     , {
-        image: "https://tinyurl.com/44t28uud",
+        image: "/static/media/testPhoto.c8119cb6.jpg",
     }
     , {
-        image: "https://tinyurl.com/44t28uud",
+        image: "/static/media/testPhoto.c8119cb6.jpg",
     }
     , {
-        image: "https://tinyurl.com/44t28uud",
+        image: "/static/media/testPhoto.c8119cb6.jpg",
     }
     , {
-        image: "https://tinyurl.com/44t28uud",
+        image: "/static/media/testPhoto.c8119cb6.jpg",
     },
     {
-        image: "https://tinyurl.com/44t28uud"
+        image: "/static/media/testPhoto.c8119cb6.jpg"
     }
     , {
-        image: "https://tinyurl.com/44t28uud",
+        image: "/static/media/testPhoto.c8119cb6.jpg",
     }, {
-        image: "https://tinyurl.com/44t28uud",
+        image: "/static/media/testPhoto.c8119cb6.jpg",
     }
     , {
         image: "http://www.orneveien.org/nikon-d800/panoramas/huge/2015-02-06-wellville-mountains-gleaming-new-snow-panorama-halfsize.jpg",
     }
     , {
-        image: "https://tinyurl.com/44t28uud",
+        image: "/static/media/testPhoto.c8119cb6.jpg",
     }
     , {
-        image: "https://tinyurl.com/44t28uud",
+        image: "/static/media/testPhoto.c8119cb6.jpg",
     }
     , {
-        image: "https://tinyurl.com/44t28uud",
+        image: "/static/media/testPhoto.c8119cb6.jpg",
     }
     , {
-        image: "https://tinyurl.com/44t28uud",
+        image: "/static/media/testPhoto.c8119cb6.jpg",
     }
     , {
-        image: "https://tinyurl.com/44t28uud",
+        image: "/static/media/testPhoto.c8119cb6.jpg",
     }
 ]
 

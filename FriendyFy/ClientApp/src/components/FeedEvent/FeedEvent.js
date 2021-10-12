@@ -5,7 +5,7 @@ import FeedFooter from '../FeedFooter/FeedFooter';
 
 const FeedEvent = ({ event }) => (
     <div className="feed feed-event" >
-        <FeedHeader photo="https://tinyurl.com/44t28uud" name="Andon Gorchov" time="37m"/>
+        <FeedHeader photo="/static/media/testPhoto.c8119cb6.jpg" name="Andon Gorchov" time="37m"/>
         <div className="event-images">
             {event.attending.map((user) => <div className="user-photo">
                 <img src={user.photo} alt="" />

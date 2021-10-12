@@ -13,10 +13,10 @@ const events = [
                 {
                     name: "Disko",
                     attending: [
-                        { name: "Gosho", photo: "https://tinyurl.com/44t28uud" },
-                        { name: "Pesho", photo: "https://tinyurl.com/44t28uud" },
-                        { name: "Bai Ivan", photo: "https://tinyurl.com/44t28uud" },
-                        { name: "Petran", photo: "https://tinyurl.com/44t28uud" }],
+                        { name: "Gosho", photo: "/static/media/testPhoto.c8119cb6.jpg" },
+                        { name: "Pesho", photo: "/static/media/testPhoto.c8119cb6.jpg" },
+                        { name: "Bai Ivan", photo: "/static/media/testPhoto.c8119cb6.jpg" },
+                        { name: "Petran", photo: "/static/media/testPhoto.c8119cb6.jpg" }],
                     interests: ["Drinking", "Fun", "Dance"],
                     location: "Plaza Disco",
                     time: "22:10, 5th April 2021",
@@ -25,14 +25,14 @@ const events = [
                 {
                     name: "Disko",
                     attending: [
-                        { name: "Gosho", photo: "https://tinyurl.com/44t28uud" },
+                        { name: "Gosho", photo: "/static/media/testPhoto.c8119cb6.jpg" },
                         { name: "Pesho", photo: "https://media.istockphoto.com/vectors/default-profile-picture-avatar-photo-placeholder-vector-illustration-vector-id1223671392?k=20&m=1223671392&s=612x612&w=0&h=lGpj2vWAI3WUT1JeJWm1PRoHT3V15_1pdcTn2szdwQ0=" },
-                        { name: "Bai Ivan", photo: "https://tinyurl.com/44t28uud" },
-                        { name: "Petran", photo: "https://tinyurl.com/44t28uud" },
+                        { name: "Bai Ivan", photo: "/static/media/testPhoto.c8119cb6.jpg" },
+                        { name: "Petran", photo: "/static/media/testPhoto.c8119cb6.jpg" },
                         { name: "Gosho", photo: "https://media.istockphoto.com/vectors/default-profile-picture-avatar-photo-placeholder-vector-illustration-vector-id1223671392?k=20&m=1223671392&s=612x612&w=0&h=lGpj2vWAI3WUT1JeJWm1PRoHT3V15_1pdcTn2szdwQ0=" },
-                        { name: "Pesho", photo: "https://tinyurl.com/44t28uud" },
+                        { name: "Pesho", photo: "/static/media/testPhoto.c8119cb6.jpg" },
                         { name: "Bai Ivan", photo: "https://media.istockphoto.com/vectors/default-profile-picture-avatar-photo-placeholder-vector-illustration-vector-id1223671392?k=20&m=1223671392&s=612x612&w=0&h=lGpj2vWAI3WUT1JeJWm1PRoHT3V15_1pdcTn2szdwQ0=" },
-                        { name: "Petran", photo: "https://tinyurl.com/44t28uud" }],
+                        { name: "Petran", photo: "/static/media/testPhoto.c8119cb6.jpg" }],
                     interests: ["Drinking", "Interest", "Dance", "Interest", "Interest", "Interest", "Interest"],
                     location: "Plaza Disco",
                     time: "22:10, 5th April 2021"
@@ -46,8 +46,8 @@ const events = [
                 {
                     name: "Disko",
                     attending: [
-                        { name: "Gosho", photo: "https://tinyurl.com/44t28uud" },
-                        { name: "Petran", photo: "https://tinyurl.com/44t28uud" }],
+                        { name: "Gosho", photo: "/static/media/testPhoto.c8119cb6.jpg" },
+                        { name: "Petran", photo: "/static/media/testPhoto.c8119cb6.jpg" }],
                     interests: ["Drinking", "Fun", "Dance", "Interest", "Interest", "Interest", "InterestInterest"],
                     location: "Plaza DiscoPl",
                     time: "22:10, 5th April 2021"
@@ -55,10 +55,10 @@ const events = [
                 {
                     name: "Disko",
                     attending: [
-                        { name: "Gosho", photo: "https://tinyurl.com/44t28uud" },
-                        { name: "Pesho", photo: "https://tinyurl.com/44t28uud" },
-                        { name: "Bai Ivan", photo: "https://tinyurl.com/44t28uud" },
-                        { name: "Petran", photo: "https://tinyurl.com/44t28uud" }],
+                        { name: "Gosho", photo: "/static/media/testPhoto.c8119cb6.jpg" },
+                        { name: "Pesho", photo: "/static/media/testPhoto.c8119cb6.jpg" },
+                        { name: "Bai Ivan", photo: "/static/media/testPhoto.c8119cb6.jpg" },
+                        { name: "Petran", photo: "/static/media/testPhoto.c8119cb6.jpg" }],
                     interests: ["Drinking", "Fun", "Dance", "Interest", "Interest", "Interest", "Interest"],
                     location: "Plaza Disco",
                     time: "22:10, 5th April 2021"
@@ -72,7 +72,7 @@ const events = [
                 {
                     name: "Disko",
                     attending: [
-                        { name: "Petran", photo: "https://tinyurl.com/44t28uud" }],
+                        { name: "Petran", photo: "/static/media/testPhoto.c8119cb6.jpg" }],
                     interests: ["Drinking", "Fun", "Dance", "Interest", "Interest", "Interest", "Interest"],
                     location: "Plaza Disco",
                     time: "22:10, 5th April 2021"
@@ -80,7 +80,7 @@ const events = [
                 {
                     name: "Disko",
                     attending: [
-                        { name: "Petran", photo: "https://tinyurl.com/44t28uud" }],
+                        { name: "Petran", photo: "/static/media/testPhoto.c8119cb6.jpg" }],
                     interests: ["Drinking", "Fun", "Dance", "Interest", "Interest", "Interest", "Interest"],
                     location: "Plaza Disco",
                     time: "22:10, 5th April 2021"
@@ -93,20 +93,20 @@ const friends =
     [
         {
             name: "Gosho GoshovGosho",
-            image: "https://tinyurl.com/44t28uud",
+            image: "/static/media/testPhoto.c8119cb6.jpg",
             mutualFriends:
                 [
                     {
                         name: "Ivan",
-                        image: "https://tinyurl.com/44t28uud",
+                        image: "/static/media/testPhoto.c8119cb6.jpg",
                     },
                     {
                         name: "Ivan",
-                        image: "https://tinyurl.com/44t28uud",
+                        image: "/static/media/testPhoto.c8119cb6.jpg",
                     },
                     {
                         name: "Ivan",
-                        image: "https://tinyurl.com/44t28uud",
+                        image: "/static/media/testPhoto.c8119cb6.jpg",
                     }
                 ],
             commonInterests: [
@@ -120,12 +120,12 @@ const friends =
         },
         {
             name: "Petur Peturov",
-            image: "https://tinyurl.com/44t28uud",
+            image: "/static/media/testPhoto.c8119cb6.jpg",
             mutualFriends:
                 [
                     {
                         name: "Ivan",
-                        image: "https://tinyurl.com/44t28uud",
+                        image: "/static/media/testPhoto.c8119cb6.jpg",
                     }
                 ],
                 commonInterests: [
@@ -139,16 +139,16 @@ const friends =
         },
         {
             name: "Andon Andonov",
-            image: "https://tinyurl.com/44t28uud",
+            image: "/static/media/testPhoto.c8119cb6.jpg",
             mutualFriends:
                 [
                     {
                         name: "Ivan",
-                        image: "https://tinyurl.com/44t28uud",
+                        image: "/static/media/testPhoto.c8119cb6.jpg",
                     },
                     {
                         name: "Ivan",
-                        image: "https://tinyurl.com/44t28uud",
+                        image: "/static/media/testPhoto.c8119cb6.jpg",
                     }
                 ],
                 commonInterests: [
@@ -156,20 +156,20 @@ const friends =
         },
         {
             name: "Gosho Goshov",
-            image: "https://tinyurl.com/44t28uud",
+            image: "/static/media/testPhoto.c8119cb6.jpg",
             mutualFriends:
                 [
                     {
                         name: "Ivan",
-                        image: "https://tinyurl.com/44t28uud",
+                        image: "/static/media/testPhoto.c8119cb6.jpg",
                     },
                     {
                         name: "Ivan",
-                        image: "https://tinyurl.com/44t28uud",
+                        image: "/static/media/testPhoto.c8119cb6.jpg",
                     },
                     {
                         name: "Ivan",
-                        image: "https://tinyurl.com/44t28uud",
+                        image: "/static/media/testPhoto.c8119cb6.jpg",
                     }
                 ],
             commonInterests: [
@@ -183,12 +183,12 @@ const friends =
         },
         {
             name: "Petur Peturov",
-            image: "https://tinyurl.com/44t28uud",
+            image: "/static/media/testPhoto.c8119cb6.jpg",
             mutualFriends:
                 [
                     {
                         name: "Ivan",
-                        image: "https://tinyurl.com/44t28uud",
+                        image: "/static/media/testPhoto.c8119cb6.jpg",
                     }
                 ],
                 commonInterests: [
@@ -202,16 +202,16 @@ const friends =
         },
         {
             name: "Andon Andonov",
-            image: "https://tinyurl.com/44t28uud",
+            image: "/static/media/testPhoto.c8119cb6.jpg",
             mutualFriends:
                 [
                     {
                         name: "Ivan",
-                        image: "https://tinyurl.com/44t28uud",
+                        image: "/static/media/testPhoto.c8119cb6.jpg",
                     },
                     {
                         name: "Ivan",
-                        image: "https://tinyurl.com/44t28uud",
+                        image: "/static/media/testPhoto.c8119cb6.jpg",
                     }
                 ],
                 commonInterests: [
