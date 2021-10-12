@@ -1,15 +1,29 @@
-import React from 'react';
+import React, { useState } from 'react';
 import './ProfileHeader.css';
 import { Link } from 'react-router-dom';
-const ProfileHeader = ({selected}) =>(
+import { useLoggedIn } from '../../contexts/LoggedInContext';
+import axios from 'axios';
+
+const ProfileHeader = ({selected}) =>{
+    const {loggedIn} = useLoggedIn();
+    const [profilePicture, setProfilePicture] = useState(''); 
+    const [coverPicture, setCoverPicture] = useState(''); 
+
+    axios.get("api/profilePicture/" + loggedIn.userName)
+        .then(async (res) => setProfilePicture(await res.data));
+
+    axios.get("api/coverPicture/" + loggedIn.userName)
+        .then(async (res) => setCoverPicture(await res.data));
+
+    return (
     <header className="profile-header">
     <div className="cover-photo">
-        <img src="http://1.bp.blogspot.com/-wqfx3ZlkHyw/T4jx7odkbQI/AAAAAAAABLE/1UF1OveYMl4/s1600/colorful%2Bmoon.png" alt="" />
+        <img src={coverPicture} alt="" />
     </div>
     <div className="below-cover-photo">
         <span className="quote">If you look at what you have in life, you'll always have more. If you look at what you don't have in life, you'll never have enough.</span>
         <div className="profile-picture">
-            <img src="/static/media/testPhoto.c8119cb6.jpg" alt="" />
+            <img src={profilePicture} alt="" />
         </div>
         <div className="user-interests">
             <span className="user-interest">Interest</span>
@@ -53,7 +67,7 @@ const ProfileHeader = ({selected}) =>(
         </div>
     </div>
 </header>
-)
+)}
 
 export default ProfileHeader;
 

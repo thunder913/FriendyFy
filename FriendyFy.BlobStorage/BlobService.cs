@@ -78,5 +78,11 @@ namespace FriendyFy.BlobStorage
 
             await blobClient.UploadAsync(filePath, new BlobHttpHeaders { ContentType = filePath.GetContentType() });
         }
+        public async Task<string> GetBlobUrlAsync(string name, string blob)
+        {
+            var containerClient = this.blobServiceClient.GetBlobContainerClient(blob);
+            var blobClient = containerClient.GetBlobClient(name);
+            return blobClient.Uri.AbsoluteUri;
+        }
     }
 }

@@ -206,6 +206,18 @@ namespace FriendyFy.Controllers
             return result.Succeeded ? Ok() : BadRequest("Could not confirm the email!");
         }
 
+        [HttpGet("profilePicture/{userId}")]
+        public async Task<string> GetProfilePicture(string userId)
+        {
+            return await this.blobService.GetBlobUrlAsync(userId + ".jpeg", GlobalConstants.BlobProfilePictures);
+        }
+
+        [HttpGet("coverPicture/{userId}")]
+        public async Task<string> GetCoverPicture(string userId)
+        {
+            return await this.blobService.GetBlobUrlAsync(userId + ".jpeg", GlobalConstants.BlobCoverPictures);
+        }
+
         [HttpPost("FinishFirstTimeSetup")]
         public async Task<IActionResult> FinishFirstTimeSetup([FromForm] FinishFirstTimeSetupDto dto, IFormFile formFile)
         {
@@ -231,10 +243,6 @@ namespace FriendyFy.Controllers
             var newInterests = interests.Where(x => x.IsNew);
             
             var allInterests = new List<Interest>();
-            //foreach (var interest in newInterests)
-            //{
-            //    // Check if there is something simillar in the DB and if not add it
-            //}
             foreach (var item in interests)
             {
                 if (item.IsNew)
