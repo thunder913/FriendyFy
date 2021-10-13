@@ -4,9 +4,9 @@ import InterestsDropdown from '../InterestsDropdown/InterestsDropdown';
 import './FirstTimePopUp..css';
 import ImgDropAndCrop from '../ImgDropAndCrop/ImgDropAndCrop.js';
 import axios from 'axios';
-import { finishFirstTimeSetup } from '../../services/userService';
+import { useLoggedIn } from '../../contexts/LoggedInContext';
 
-const FirstTimePopUp = (props) => {
+const FirstTimePopUp = ({checkFirstTimePopUp}) => {
     const [location, setLocation] = useState('');
     const [profileImg, setProfileImg] = useState(null)
     const [coverImg, setCoverImg] = useState(null)
@@ -35,8 +35,6 @@ const FirstTimePopUp = (props) => {
         let formInterests = interests.map(x => ({label: x.label, id: Number.isInteger(x.value) ? x.value : 0, isNew: x.__isNew__ ?? false}));
         
         let formdata = new FormData();
-        console.log(profileImg);
-        console.log(coverImg)
         formdata.append("profilePhoto", profileImg);
         formdata.append("coverPhoto", coverImg);
         formdata.append("quote", quote);
@@ -44,7 +42,13 @@ const FirstTimePopUp = (props) => {
         formdata.append("latitude", location.lat);
         formdata.append("longitude", location.lng);
 
-        axios.post("/api/FinishFirstTimeSetup", formdata);
+        let response = await axios.post("/api/FinishFirstTimeSetup", formdata);
+        if(response.status == 200){
+            checkFirstTimePopUp();
+            console.log("resetted")
+        }else{
+            setErrorMessage(response.data);
+        }
     }
 
     return (
@@ -67,7 +71,7 @@ const FirstTimePopUp = (props) => {
 
                 <ImgDropAndCrop 
                     placeholder="Choose a cover photo." 
-                    aspectRatio={16/9}
+                    aspectRatio={837/310}
                     setCroppedImg={setCoverImg}
                     imageClass="cover-user-image"/>
 

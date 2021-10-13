@@ -15,8 +15,8 @@ function NavMenu(props) {
 
   const logoutUser = () => {
     logout()
-      .then(res => {
-          setLoggedIn(false);
+      .then(async () => {
+          await setLoggedIn(false);
       });
   }
   return (

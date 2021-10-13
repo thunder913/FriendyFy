@@ -11,22 +11,14 @@ import ProfilePhotos from './components/ProfilePhotos/ProfilePhotos';
 import Register from './components/register-components/Register/Register.js';
 import HomePageNotSignedIn from './components/HomePageNotSignedIn/HomePageNotSignedIn';
 import {useLoggedIn} from './contexts/LoggedInContext.js'
-import {getLoggedInUser} from './services/userService.js'
 import { useCallback } from 'react';
 
 
 function App(){
-  const {loggedIn, setLoggedIn} = useLoggedIn();
-
-  const getUser = useCallback(async () => {
-    let response = await getLoggedInUser();
-    if(response.ok){
-      setLoggedIn(await response.json())
-    }
-  })
+  const {loggedIn, setLoggedIn, resetUser} = useLoggedIn();
 
   useEffect(async () => {
-    getUser();
+    await resetUser();
   }, [])
 
   return (

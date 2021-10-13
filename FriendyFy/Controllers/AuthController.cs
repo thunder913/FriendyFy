@@ -258,14 +258,14 @@ namespace FriendyFy.Controllers
             var imageName = user.UserName + ".jpeg";
 
             await blobService.UploadBase64StringAsync(dto.ProfilePhoto, imageName, GlobalConstants.BlobProfilePictures);
-            await blobService.UploadBase64StringAsync(dto.ProfilePhoto, imageName, GlobalConstants.BlobCoverPictures);
+            await blobService.UploadBase64StringAsync(dto.CoverPhoto, imageName, GlobalConstants.BlobCoverPictures);
 
             var profileImage = await imageService.AddImageAsync(ImageType.ProfileImage, imageName);
             var coverImage = await imageService.AddImageAsync(ImageType.ProfileImage, imageName);
 
             await this.userService.SetUserFirstTimeLoginAsync(user, profileImage, coverImage, dto.Quote, allInterests, dto.Longitude, dto.Latitude);
-            
-            return Ok();
+
+            return Ok("success");
         }
 
         private ApplicationUser GetUserByToken() { 

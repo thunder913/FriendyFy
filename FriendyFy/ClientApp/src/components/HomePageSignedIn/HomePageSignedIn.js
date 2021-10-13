@@ -64,19 +64,23 @@ const HomePageSignedIn = () => {
   const [blockScroll, allowScroll] = useScrollBlock();
   const [userFirstTime, setUserFirstTime] = useState(false);
 
-  const { loggedIn } = useLoggedIn();
-  useEffect(() => {
-    setUserFirstTime(loggedIn.finishedFirstTimeLogin);
+  const { loggedIn, resetUser } = useLoggedIn();
+  const checkFirstTimePopUp = async () => {
+    await resetUser();
+    await setUserFirstTime(loggedIn.finishedFirstTimeLogin);
     if(!userFirstTime){
-      console.log("Not logged in")
       blockScroll();
     }else{
       allowScroll();
     }
-  }, [userFirstTime])
+  }
+  
+  useEffect(() => {
+    checkFirstTimePopUp();
+  },[])
 
   return (<div className="feed home-feed">
-    {!userFirstTime ? <FirstTimePopUp></FirstTimePopUp> : ''}
+    {!userFirstTime ? <FirstTimePopUp checkFirstTimePopUp={checkFirstTimePopUp}></FirstTimePopUp> : ''}
     {events.map(event => <FeedEvent event={event} />)}
     <FeedPost image="/static/media/testPhoto.c8119cb6.jpg"></FeedPost>
     <FeedPost text="This is a very special post................. ......... This is a very special post................. ......... This is a very special post................. ......... This is a very special post................. ......... This is a very special post................. ......... This is a very special post................. ........."></FeedPost>

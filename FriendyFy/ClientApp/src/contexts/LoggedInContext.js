@@ -1,12 +1,26 @@
 import React from "react";
+import { getLoggedInUser } from "../services/userService";
+
 const LoggedInContext = React.createContext({})
 
 const LoggedInProvider = ({children}) => {
     const [loggedIn, setLoggedIn] = React.useState(false);
+
+    const resetUser = async () => {
+        let response = await getLoggedInUser();
+        if(response.ok){
+            setLoggedIn(await response.json())
+        }
+    }
+
     const value = {
         loggedIn,
-        setLoggedIn
+        setLoggedIn,
+        resetUser
     };
+
+
+
     return (<LoggedInContext.Provider value={value}>{children}</LoggedInContext.Provider>)
 }
 
