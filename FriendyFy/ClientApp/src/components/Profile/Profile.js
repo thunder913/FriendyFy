@@ -4,6 +4,8 @@ import FeedEvent from '../FeedEvent/FeedEvent';
 import ProfileHeader from '../ProfileHeader/ProfileHeader';
 import ProfileSidebar from '../ProfileSidebar/ProfileSidebar';
 import FeedPost from '../FeedPost/FeedPost';
+import { useLocation } from 'react-router';
+
 const events = [
     {
         name: "Event_Name1",
@@ -96,8 +98,10 @@ const friends = [
     }
 ]
 
-const Profile = () => (
-    <div className="profile-top">
+const Profile = () => {
+    const location = useLocation();
+    console.log(location);
+    return(<div className="profile-top">
         <div className="profile-container">
            <ProfileHeader selected="timeline"/>
              <main className="profile-main">
@@ -112,7 +116,7 @@ const Profile = () => (
                 </div>
             </main>
         </div>
-    </div>
-)
+    </div>)
+}
 
 export default Profile;

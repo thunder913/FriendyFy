@@ -25,12 +25,12 @@ function App(){
               <Layout>
               {!loggedIn ? (<HomePageNotSignedIn></HomePageNotSignedIn>) : (
                 <div className="app">
-                  <Route exact path='/' component={Home} />
                   <Route path="/profile" component={Profile}></Route>
                   <Route path="/friends" component={Friends}></Route>
                   <Route path="/photos" component={ProfilePhotos}></Route>
                   <Route path="/register" component={Register}></Route>
                   <Route path={ApplicationPaths.ApiAuthorizationPrefix} component={ApiAuthorizationRoutes} />
+                  <Route exact path='/' component={Home} />
                 </div>
               )}
 

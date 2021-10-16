@@ -7,12 +7,12 @@ export default () => {
   const { body } = safeDocument;
 
   const blockScroll = () => {
-     body.style.overflow = 'hidden';
+     body.style.overflowY = 'hidden';
     scrollBlocked.current = true;
   };
 
   const allowScroll = () => {
-    body.style.overflow = 'scroll'; 
+    body.style.overflowY = 'scroll'; 
     scrollBlocked.current = false;
   };
 

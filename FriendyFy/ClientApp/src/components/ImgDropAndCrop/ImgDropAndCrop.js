@@ -13,11 +13,12 @@ const imageMaxSize = 1000000000 // bytes
 const acceptedFileTypes = 'image/x-png, image/png, image/jpg, image/jpeg, image/gif'
 const acceptedFileTypesArray = acceptedFileTypes.split(",").map((item) => { return item.trim() })
 function ImgDropAndCrop({placeholder, setCroppedImg, aspectRatio, imageClass}) {
-const defaultCrop = {aspect: aspectRatio, x: 0, y: 0, width: aspectRatio * 200, height: 200, unit:"px"}
+const defaultCrop = {aspect: aspectRatio, x: 0, y: 0, width: aspectRatio * 0, height: 0, unit:"px"}
 
     const [imgSrc, setImgSrc] = useState(null);
     const [imgSrcExt, setImgSrcExt] = useState(null)
     const [crop, setCrop] = useState(defaultCrop)
+    const [firstTime, setFirstTime] = useState(true);
 
     const imagePreviewCanvasRef = useRef();
     const {
@@ -70,7 +71,11 @@ const defaultCrop = {aspect: aspectRatio, x: 0, y: 0, width: aspectRatio * 200, 
     }
 
     const handleOnCropChange = (newCrop) => {
-        setCrop(newCrop);
+        if(firstTime){
+            setFirstTime(false);
+        }else{
+            setCrop(newCrop);
+        }
     }
 
     const handleOnCropComplete = (crop, pixelCrop) => {
@@ -115,6 +120,7 @@ const defaultCrop = {aspect: aspectRatio, x: 0, y: 0, width: aspectRatio * 200, 
         setImgSrc(null);
         setImgSrcExt(null);
         setCrop(defaultCrop);
+        setFirstTime(true);
     }
 
     const handleFileSelect = event => {
@@ -137,6 +143,27 @@ const defaultCrop = {aspect: aspectRatio, x: 0, y: 0, width: aspectRatio * 200, 
         }
     }
 
+    const onImageLoaded = image => {
+        let height = image.offsetHeight;
+        let width = image.offsetWidth;
+
+        if(height > width){
+            height = width / aspectRatio;
+        }else{
+            height = width / aspectRatio;
+        }
+
+        if(height > image.offsetHeight){
+            height = image.offsetHeight;
+            width = height * aspectRatio;
+        }
+        
+        defaultCrop.height = height;
+        defaultCrop.width = width;
+        console.log(defaultCrop);
+        setCrop(defaultCrop);
+    }
+
     return (
         <section className="container image-input">
             {imgSrc !== null ?
@@ -147,7 +174,8 @@ const defaultCrop = {aspect: aspectRatio, x: 0, y: 0, width: aspectRatio * 200, 
                     crop={crop} 
                     onComplete = {handleOnCropComplete}
                     onChange={handleOnCropChange}
-                    className={imageClass}/>
+                    className={imageClass}
+                    onImageLoaded={onImageLoaded}/>
             </div>  
             :  
             <div {...getRootProps({ className: 'dropzone' })}>

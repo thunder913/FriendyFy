@@ -44,7 +44,7 @@ const FirstTimePopUp = ({checkFirstTimePopUp}) => {
 
         let response = await axios.post("/api/FinishFirstTimeSetup", formdata);
         if(response.status == 200){
-            checkFirstTimePopUp();
+            await checkFirstTimePopUp();
             console.log("resetted")
         }else{
             setErrorMessage(response.data);
