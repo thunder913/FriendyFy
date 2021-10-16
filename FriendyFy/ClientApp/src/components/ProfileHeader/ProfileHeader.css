@@ -39,9 +39,9 @@ header.profile-header{
     font-style: italic;
     display: -webkit-box;
     -webkit-line-clamp: 3;
-    -webkit-box-orient: vertical;
     overflow: hidden;
-    text-overflow: ellipsis;
+    word-break: break-word;
+    hyphens: auto;
     height: 62px;
 }
 

@@ -8,12 +8,24 @@ const ProfileHeader = ({selected}) =>{
     const {loggedIn} = useLoggedIn();
     const [profilePicture, setProfilePicture] = useState(''); 
     const [coverPicture, setCoverPicture] = useState(''); 
+    const [name, setName] = useState(''); 
+    const [interests, setInterests] = useState([]); 
+    const [quote, setQuote] = useState(''); 
+    const userId = window.location.href.substring(window.location.href.lastIndexOf('/')+1);
 
-    axios.get("api/profilePicture/" + loggedIn.userName)
-        .then(async (res) => setProfilePicture(await res.data));
+    useState(() => {
+        axios.get("api/getUserInformation/" + userId)
+        .then(async (res) => {
+            let user = res.data;
+            console.log(user);
+            await setProfilePicture(user.profileImage);
+            await setCoverPicture(user.coverImage);
+            await setName(user.firstName + ' ' + user.lastName);
+            await setInterests(user.interests);
+            await setQuote(user.quote);
+        })
+    }, [])
 
-    axios.get("api/coverPicture/" + loggedIn.userName)
-        .then(async (res) => setCoverPicture(await res.data));
 
     return (
     <header className="profile-header">
@@ -21,29 +33,15 @@ const ProfileHeader = ({selected}) =>{
         <img src={coverPicture} alt="" />
     </div>
     <div className="below-cover-photo">
-        <span className="quote">If you look at what you have in life, you'll always have more. If you look at what you don't have in life, you'll never have enough.</span>
+        <span className="quote">{quote}</span>
         <div className="profile-picture">
             <img src={profilePicture} alt="" />
         </div>
         <div className="user-interests">
-            <span className="user-interest">Interest</span>
-            <span className="user-interest">Driving</span>
-            <span className="user-interest">Drinking</span>
-            <span className="user-interest">Walk</span>
-            <span className="user-interest">Comp</span>
-            <span className="user-interest">Programming</span>
-            <span className="user-interest">Interest</span>
-            <span className="user-interest">Interest</span>
-            <span className="user-interest">Interest</span>
-            <span className="user-interest">Interest</span>
-            <span className="user-interest">Interest</span>
-            <span className="user-interest">Interest</span>
-            <span className="user-interest">Interest</span>
-            <span className="user-interest">Interest</span>
-            <span className="user-interest">Interest</span>
+            {interests.map(interest => <span className="user-interest" data-id={interest.id}>{interest.label}</span>)}
         </div>
     </div>
-    <p className="user-name">Andon Gorchov</p>
+    <p className="user-name">{name}</p>
     <div className="profile-navigation">
         <div className="timeline-nav">
             <Link className={"timeline " + (selected.match("timeline") ? "selected" : "")} to="profile">

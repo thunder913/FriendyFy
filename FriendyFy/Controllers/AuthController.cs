@@ -22,6 +22,7 @@ using System.Text;
 using System.Text.Encodings.Web;
 using System.Text.RegularExpressions;
 using System.Threading.Tasks;
+using ViewModels;
 
 namespace FriendyFy.Controllers
 {
@@ -216,6 +217,26 @@ namespace FriendyFy.Controllers
         public async Task<string> GetCoverPicture(string userId)
         {
             return await this.blobService.GetBlobUrlAsync(userId + ".jpeg", GlobalConstants.BlobCoverPictures);
+        }
+
+        [HttpGet("getUserInformation/{username}")]
+        public async Task<UserInformationViewModel> GetUserInformation(string username)
+        {
+            var user = this.userService.GetByUsername(username);
+            var coverPicture = await this.blobService.GetBlobUrlAsync(username + ".jpeg", GlobalConstants.BlobCoverPictures);
+            var profilePicture = await this.blobService.GetBlobUrlAsync(username + ".jpeg", GlobalConstants.BlobProfilePictures);
+
+            var viewModel = new UserInformationViewModel()
+            {
+                CoverImage = coverPicture,
+                ProfileImage = profilePicture,
+                FirstName = user.FirstName,
+                LastName = user.LastName,
+                Interests = user.Interests.Select(x => new InterestViewModel() { Id = x.Id, Label = x.Name }).ToList(),
+                Quote = user.Quote,
+            };
+
+            return viewModel;
         }
 
         [HttpPost("FinishFirstTimeSetup")]

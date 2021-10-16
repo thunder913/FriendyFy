@@ -1,6 +1,7 @@
 ﻿using FriendyFy.Data;
 using FriendyFy.Models;
 using FriendyFy.Services.Contracts;
+using Microsoft.EntityFrameworkCore;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -70,7 +71,7 @@ namespace FriendyFy.Services
 
         public ApplicationUser GetByUsername(string username)
         {
-            return this.userRepository.All().FirstOrDefault(x => x.UserName == username);
+            return this.userRepository.All().Include(x => x.Interests).FirstOrDefault(x => x.UserName == username);
         }
 
         public async Task SetUserFirstTimeLoginAsync(ApplicationUser user, Image profileImage, Image coverImage, string quote, List<Interest> interests, decimal? longitude, decimal? latitude)

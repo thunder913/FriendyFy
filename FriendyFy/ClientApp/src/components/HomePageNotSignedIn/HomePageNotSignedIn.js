@@ -25,7 +25,6 @@ const HomePageNotSignedIn = () =>{
                     setShowEmailConfirmed(true);
                 }
             })}
-            window.history.replaceState(null, '', '');
     },[]);
 
     function onSubmitHandler(e){
