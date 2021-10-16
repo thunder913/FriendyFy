@@ -99,8 +99,6 @@ const friends = [
 ]
 
 const Profile = () => {
-    const location = useLocation();
-    console.log(location);
     return(<div className="profile-top">
         <div className="profile-container">
            <ProfileHeader selected="timeline"/>

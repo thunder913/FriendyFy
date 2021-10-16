@@ -17,7 +17,6 @@ const ProfileHeader = ({selected}) =>{
         axios.get("api/getUserInformation/" + userId)
         .then(async (res) => {
             let user = res.data;
-            console.log(user);
             await setProfilePicture(user.profileImage);
             await setCoverPicture(user.coverImage);
             await setName(user.firstName + ' ' + user.lastName);
@@ -58,11 +57,12 @@ const ProfileHeader = ({selected}) =>{
                 Friends
             </Link>
         </div>
+        {userId === loggedIn.userName ? '' :
         <div className="add-friend-nav">
             <a className="add-friend " href="">
                 Add Friend
             </a>
-        </div>
+        </div>}
     </div>
 </header>
 )}
