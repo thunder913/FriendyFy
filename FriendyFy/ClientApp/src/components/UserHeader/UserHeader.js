@@ -17,10 +17,10 @@ const UserHeader = () =>{
 
     return (<div className="user-info" onClick={goToProfile}>
         <div className="user-image">
-            <img src={require("../../testPhoto.jpg")} alt="" />
+            <img src={loggedIn.profilePhoto} alt="" />
         </div>
         <span className="user-name">
-                Andon
+            {loggedIn.firstName}
         </span>
     </div>)
 }

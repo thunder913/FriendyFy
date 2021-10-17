@@ -3,6 +3,8 @@ import './ProfileHeader.css';
 import { Link } from 'react-router-dom';
 import { useLoggedIn } from '../../contexts/LoggedInContext';
 import axios from 'axios';
+import { useLocation } from 'react-router';
+import { useHistory } from 'react-router';
 
 const ProfileHeader = ({selected}) =>{
     const {loggedIn} = useLoggedIn();
@@ -12,6 +14,26 @@ const ProfileHeader = ({selected}) =>{
     const [interests, setInterests] = useState([]); 
     const [quote, setQuote] = useState(''); 
     const userId = window.location.href.substring(window.location.href.lastIndexOf('/')+1);
+    const location = useLocation().pathname;
+    const history = useHistory();
+
+    const goToPhotos = () => {
+        if(!location.includes("photos")){
+            history.push('/photos/' + loggedIn.userName);
+        }
+    }
+
+    const goToTimeline = () => {
+        if(!location.includes("profile")){
+            history.push('/profile/' + loggedIn.userName);
+        }
+    }
+    
+    const goToFriends = () => {
+        if(!location.includes("friends")){
+            history.push('/friends/' + loggedIn.userName);
+        }
+    }
 
     useState(() => {
         axios.get("api/getUserInformation/" + userId)
@@ -43,19 +65,19 @@ const ProfileHeader = ({selected}) =>{
     <p className="user-name">{name}</p>
     <div className="profile-navigation">
         <div className="timeline-nav">
-            <Link className={"timeline " + (selected.match("timeline") ? "selected" : "")} to="profile">
+            <a className={"timeline " + (selected.match("timeline") ? "selected" : "")} onClick={goToTimeline}>
                 Timeline
-            </Link>
+            </a>
         </div>
         <div className="photos-nav">
-            <Link className={"photos " + (selected.match("photos-nav") ? "selected" : "")} to="photos">
+            <a className={"photos " + (selected.match("photos-nav") ? "selected" : "")} onClick={goToPhotos}>
                 Photos
-            </Link>
+            </a>
         </div>
         <div className="friends-nav">
-            <Link className={"friends " + (selected.match("friends") ? "selected" : "")} to="friends">
+            <a className={"friends " + (selected.match("friends") ? "selected" : "")} onClick={goToFriends}>
                 Friends
-            </Link>
+            </a>
         </div>
         {userId === loggedIn.userName ? '' :
         <div className="add-friend-nav">

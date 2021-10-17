@@ -1,12 +1,14 @@
-﻿using FriendyFy.Models.Common;
+﻿using FriendyFy.Mapping;
+using FriendyFy.Models.Common;
 using FriendyFy.Models.Enums;
 using Microsoft.AspNetCore.Identity;
 using System;
 using System.Collections.Generic;
+using ViewModels;
 
 namespace FriendyFy.Models
 {
-    public class ApplicationUser : IdentityUser, IAuditInfo, IDeletableEntity
+    public class ApplicationUser : IdentityUser, IAuditInfo, IDeletableEntity, IMapTo<UserViewModel>
     {
         public DateTime CreatedOn { get; set; }
         public DateTime? ModifiedOn { get; set; }

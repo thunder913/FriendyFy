@@ -159,13 +159,24 @@ namespace FriendyFy.Controllers
         }
 
         [HttpGet("user")]
-        public IActionResult GetUser()
+        public async Task<IActionResult> GetUser()
         {
+            var mapper = AutoMapperConfig.MapperInstance;
             try
             {
                 var user = this.GetUserByToken();
+                var viewModel = new UserViewModel()
+                {
+                    Id = user.Id,
+                    FinishedFirstTimeLogin = user.FinishedFirstTimeLogin,
+                    FirstName = user.FirstName,
+                    LastName = user.LastName,
+                    UserName = user.UserName,
+                    CoverPhoto = await this.blobService.GetBlobUrlAsync(user.UserName + ".jpeg", GlobalConstants.BlobCoverPictures),
+                    ProfilePhoto = await this.blobService.GetBlobUrlAsync(user.UserName + ".jpeg", GlobalConstants.BlobProfilePictures)
+                };
 
-                return Ok(user);
+                return Ok(viewModel);
             }
             catch (Exception)
             {
@@ -221,6 +232,26 @@ namespace FriendyFy.Controllers
 
         [HttpGet("getUserInformation/{username}")]
         public async Task<UserInformationViewModel> GetUserInformation(string username)
+        {
+            var user = this.userService.GetByUsername(username);
+            var coverPicture = await this.blobService.GetBlobUrlAsync(username + ".jpeg", GlobalConstants.BlobCoverPictures);
+            var profilePicture = await this.blobService.GetBlobUrlAsync(username + ".jpeg", GlobalConstants.BlobProfilePictures);
+
+            var viewModel = new UserInformationViewModel()
+            {
+                CoverImage = coverPicture,
+                ProfileImage = profilePicture,
+                FirstName = user.FirstName,
+                LastName = user.LastName,
+                Interests = user.Interests.Select(x => new InterestViewModel() { Id = x.Id, Label = x.Name }).ToList(),
+                Quote = user.Quote,
+            };
+
+            return viewModel;
+        }
+
+        [HttpGet("getUserSideInformation/{username}")]
+        public async Task<UserInformationViewModel> GetUserSideInformation(string username)
         {
             var user = this.userService.GetByUsername(username);
             var coverPicture = await this.blobService.GetBlobUrlAsync(username + ".jpeg", GlobalConstants.BlobCoverPictures);
