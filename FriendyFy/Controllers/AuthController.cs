@@ -27,7 +27,7 @@ namespace FriendyFy.Controllers
 {
     [Route("api")]
     [ApiController]
-    public class AuthController : Controller
+    public class AuthController : BaseController
     {
         private readonly IUserService userService;
         private readonly IJwtService jwtService;
@@ -272,24 +272,6 @@ namespace FriendyFy.Controllers
             return viewModel;
         }
 
-        [HttpPost("addFriend")]
-        public async Task<IActionResult> AddFriend(AddFriendDto dto)
-        {
-            var user = this.GetUserByToken();
-            if (user == null || dto.UserId == null)
-            {
-                return BadRequest("The user cannot be added as a friend!");
-            }
-
-            var result = await this.friendService.AddFriendToUserAsync(user.Id, dto.UserId);
-            if (!result)
-            {
-                return BadRequest("Cannot add friend!");
-            }
-
-            return Ok();
-        }
-
         [HttpPost("FinishFirstTimeSetup")]
         public async Task<IActionResult> FinishFirstTimeSetup([FromForm] FinishFirstTimeSetupDto dto, IFormFile formFile)
         {
@@ -338,16 +320,6 @@ namespace FriendyFy.Controllers
             await this.userService.SetUserFirstTimeLoginAsync(user, profileImage, coverImage, dto.Quote, allInterests, dto.Longitude, dto.Latitude);
 
             return Ok("success");
-        }
-
-        private ApplicationUser GetUserByToken() { 
-            var jwt = Request.Cookies["jwt"];
-
-            var token = this.jwtService.Verify(jwt);
-
-            var userId = token.Issuer;
-
-            return this.userService.GetById(userId);
         }
     }
 }

@@ -2,7 +2,6 @@
 using FriendyFy.Models;
 using FriendyFy.Services.Contracts;
 using Microsoft.EntityFrameworkCore;
-using System;
 using System.Linq;
 using System.Threading.Tasks;
 
@@ -28,12 +27,42 @@ namespace FriendyFy.Services
                 return false;
             }
 
-            userOne.Friends.Add(new UserFriend() { IsFriend = false, FriendId = userTwo.Id });
-            userTwo.Friends.Add(new UserFriend() { IsFriend = false, FriendId = userOne.Id });
+            userOne.Friends.Add(new UserFriend() { IsFriend = false, FriendId = userTwo.Id, RequestSenderId = senderId });
+            userTwo.Friends.Add(new UserFriend() { IsFriend = false, FriendId = userOne.Id, RequestSenderId = senderId });
 
             await userRepository.SaveChangesAsync();
 
             return true;
+        }
+
+        public string GetUserFriendStatus(string userId, string friendUsername)
+        {
+            var user = this.userRepository.All().Include(x => x.Friends).FirstOrDefault(x => x.Id == userId);
+            var friend = this.userRepository.All().FirstOrDefault(x => x.UserName == friendUsername);
+            if (user == null)
+            {
+                return "invalid";
+            }
+
+            if(user.Id == friend.Id)
+            {
+                return "same-user";
+            }
+
+            var userFriend = user.Friends.FirstOrDefault(x => x.FriendId == friend.Id);
+            if (userFriend != null)
+            {
+                if (userFriend.IsFriend)
+                {
+                    return "friends";
+                }else if (!userFriend.IsFriend && userFriend.RequestSenderId == userId)
+                {
+                    return "requested";
+                }
+                return "received";
+            }
+
+            return "no-friends";
         }
     }
 }

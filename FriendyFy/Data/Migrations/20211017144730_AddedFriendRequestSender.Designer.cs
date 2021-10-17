@@ -4,14 +4,16 @@ using FriendyFy.Data;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 namespace FriendyFy.Data.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    partial class ApplicationDbContextModelSnapshot : ModelSnapshot
+    [Migration("20211017144730_AddedFriendRequestSender")]
+    partial class AddedFriendRequestSender
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -503,9 +505,6 @@ namespace FriendyFy.Data.Migrations
                     b.Property<DateTime>("CreatedOn")
                         .HasColumnType("datetime2");
 
-                    b.Property<string>("CurrentUserId")
-                        .HasColumnType("nvarchar(450)");
-
                     b.Property<string>("FriendId")
                         .HasColumnType("nvarchar(450)");
 
@@ -519,8 +518,6 @@ namespace FriendyFy.Data.Migrations
                         .HasColumnType("nvarchar(max)");
 
                     b.HasKey("Id");
-
-                    b.HasIndex("CurrentUserId");
 
                     b.HasIndex("FriendId");
 
@@ -955,15 +952,9 @@ namespace FriendyFy.Data.Migrations
 
             modelBuilder.Entity("FriendyFy.Models.UserFriend", b =>
                 {
-                    b.HasOne("FriendyFy.Models.ApplicationUser", "CurrentUser")
-                        .WithMany("Friends")
-                        .HasForeignKey("CurrentUserId");
-
                     b.HasOne("FriendyFy.Models.ApplicationUser", "Friend")
-                        .WithMany()
+                        .WithMany("Friends")
                         .HasForeignKey("FriendId");
-
-                    b.Navigation("CurrentUser");
 
                     b.Navigation("Friend");
                 });

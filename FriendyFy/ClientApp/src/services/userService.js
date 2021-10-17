@@ -32,7 +32,15 @@ function finishFirstTimeSetup(data){
 }
 
 function addFriend(data){
-    return fetch('/api/addFriend', {
+    return fetch('/friend/add', {
+        method: 'POST',
+        headers: {'Content-Type': 'application/json'},
+        body: JSON.stringify(data)
+    });
+}
+
+function checkFriendStatus(data){
+    return fetch('/friend/checkFriendStatus', {
         method: 'POST',
         headers: {'Content-Type': 'application/json'},
         body: JSON.stringify(data)
@@ -44,5 +52,6 @@ export {
     logout,
     confirmEmail,
     finishFirstTimeSetup,
-    addFriend
+    addFriend,
+    checkFriendStatus
 }

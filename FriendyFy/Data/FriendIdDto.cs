@@ -1,6 +1,6 @@
 ﻿namespace FriendyFy.Data
 {
-    public class AddFriendDto
+    public class FriendIdDto
     {
         public string UserId { get; set; }
     }

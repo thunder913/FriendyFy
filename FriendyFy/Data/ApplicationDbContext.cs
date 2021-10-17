@@ -42,7 +42,7 @@ namespace FriendyFy.Data
 
             builder.Entity<ApplicationUser>()
                 .HasMany(x => x.Friends)
-                .WithOne(x => x.Friend);
+                .WithOne(x => x.CurrentUser);
         }
     }
 }

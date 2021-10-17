@@ -5,7 +5,7 @@ import { useLoggedIn } from '../../contexts/LoggedInContext';
 import axios from 'axios';
 import { useLocation } from 'react-router';
 import { useHistory } from 'react-router';
-import { addFriend } from '../../services/userService';
+import UserFriendButton from '../UserFriendButton/UserFriendButton';
 const ProfileHeader = ({selected}) =>{
     const {loggedIn} = useLoggedIn();
     const [profilePicture, setProfilePicture] = useState(''); 
@@ -35,10 +35,7 @@ const ProfileHeader = ({selected}) =>{
         }
     }
 
-    const addFriendEvent = () => {
-        let response = addFriend({userId: userId});
-        console.log(response);
-    }
+
 
     useState(() => {
         axios.get("api/getUserInformation/" + userId)
@@ -50,8 +47,8 @@ const ProfileHeader = ({selected}) =>{
             await setInterests(user.interests);
             await setQuote(user.quote);
         })
-    }, [])
 
+    }, [])
 
     return (
     <header className="profile-header">
@@ -84,12 +81,7 @@ const ProfileHeader = ({selected}) =>{
                 Friends
             </a>
         </div>
-        {userId === loggedIn.userName ? '' :
-        <div className="add-friend-nav">
-            <a className="add-friend " onClick={addFriendEvent}>
-                Add Friend
-            </a>
-        </div>}
+        <UserFriendButton userId={userId}/>
     </div>
 </header>
 )}
