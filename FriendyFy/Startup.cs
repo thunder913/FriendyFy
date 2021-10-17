@@ -66,6 +66,7 @@ namespace FriendyFy
             services.AddTransient<IInterestService, InterestService>();
             services.AddTransient<IJwtService, JwtService>();
             services.AddTransient<IImageService, ImageService>();
+            services.AddTransient<IFriendService, FriendService>();
 
             services.AddControllersWithViews();
             services.AddRazorPages();

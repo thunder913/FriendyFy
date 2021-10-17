@@ -35,6 +35,10 @@ const ProfileHeader = ({selected}) =>{
         }
     }
 
+    const addFriend = () => {
+        
+    }
+
     useState(() => {
         axios.get("api/getUserInformation/" + userId)
         .then(async (res) => {
