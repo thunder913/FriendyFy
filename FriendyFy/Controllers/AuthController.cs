@@ -1,5 +1,4 @@
-﻿using BCrypt.Net;
-using FriendyFy.BlobStorage;
+﻿using FriendyFy.BlobStorage;
 using FriendyFy.Common;
 using FriendyFy.Data;
 using FriendyFy.Helpers.Contracts;
@@ -37,6 +36,7 @@ namespace FriendyFy.Controllers
         private readonly IInterestService interestService;
         private readonly IBlobService blobService;
         private readonly IImageService imageService;
+        private readonly IFriendService friendService;
 
         public AuthController(
             IUserService userService,
@@ -45,7 +45,8 @@ namespace FriendyFy.Controllers
             UserManager<ApplicationUser> userManager,
             IInterestService interestService,
             IBlobService blobService,
-            IImageService imageService)
+            IImageService imageService,
+            IFriendService friendService)
         {
             this.userService = userService;
             this.jwtService = jwtService;
@@ -54,6 +55,7 @@ namespace FriendyFy.Controllers
             this.interestService = interestService;
             this.blobService = blobService;
             this.imageService = imageService;
+            this.friendService = friendService;
         }
         public IActionResult Index()
         {
@@ -268,6 +270,24 @@ namespace FriendyFy.Controllers
             };
 
             return viewModel;
+        }
+
+        [HttpPost("addFriend")]
+        public async Task<IActionResult> AddFriend(string userId)
+        {
+            var user = this.GetUserByToken();
+            if (user == null || userId == null)
+            {
+                return BadRequest("The user cannot be added as a friend!");
+            }
+
+            var result = await this.friendService.AddFriendToUserAsync(user.Id, userId);
+            if (!result)
+            {
+                return BadRequest("Cannot add friend!");
+            }
+
+            return Ok();
         }
 
         [HttpPost("FinishFirstTimeSetup")]

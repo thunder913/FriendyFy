@@ -19,19 +19,19 @@ const ProfileHeader = ({selected}) =>{
 
     const goToPhotos = () => {
         if(!location.includes("photos")){
-            history.push('/photos/' + loggedIn.userName);
+            history.push('/photos/' + userId);
         }
     }
 
     const goToTimeline = () => {
         if(!location.includes("profile")){
-            history.push('/profile/' + loggedIn.userName);
+            history.push('/profile/' + userId);
         }
     }
     
     const goToFriends = () => {
         if(!location.includes("friends")){
-            history.push('/friends/' + loggedIn.userName);
+            history.push('/friends/' + userId);
         }
     }
 
@@ -81,7 +81,7 @@ const ProfileHeader = ({selected}) =>{
         </div>
         {userId === loggedIn.userName ? '' :
         <div className="add-friend-nav">
-            <a className="add-friend " href="">
+            <a className="add-friend " onClick={addFriend}>
                 Add Friend
             </a>
         </div>}

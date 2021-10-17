@@ -12,6 +12,7 @@ namespace FriendyFy.Models
         [Key]
         public new string Id { get; set; } = new Guid().ToString();
         public ApplicationUser Friend { get; set; }
+        public string FriendId { get; set; }
         public bool IsFriend { get; set; }
     }
 }
