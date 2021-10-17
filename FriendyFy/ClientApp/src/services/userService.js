@@ -31,9 +31,18 @@ function finishFirstTimeSetup(data){
     });
 }
 
+function addFriend(data){
+    return fetch('/api/addFriend', {
+        method: 'POST',
+        headers: {'Content-Type': 'application/json'},
+        body: JSON.stringify(data)
+    });
+}
+
 export {
     getLoggedInUser,
     logout,
     confirmEmail,
-    finishFirstTimeSetup
+    finishFirstTimeSetup,
+    addFriend
 }

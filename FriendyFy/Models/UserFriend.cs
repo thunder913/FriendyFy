@@ -10,7 +10,7 @@ namespace FriendyFy.Models
     public class UserFriend : BaseModel<string>
     {
         [Key]
-        public new string Id { get; set; } = new Guid().ToString();
+        public new string Id { get; set; } = Guid.NewGuid().ToString();
         public ApplicationUser Friend { get; set; }
         public string FriendId { get; set; }
         public bool IsFriend { get; set; }

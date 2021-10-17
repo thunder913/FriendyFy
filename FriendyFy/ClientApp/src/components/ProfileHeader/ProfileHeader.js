@@ -5,7 +5,7 @@ import { useLoggedIn } from '../../contexts/LoggedInContext';
 import axios from 'axios';
 import { useLocation } from 'react-router';
 import { useHistory } from 'react-router';
-
+import { addFriend } from '../../services/userService';
 const ProfileHeader = ({selected}) =>{
     const {loggedIn} = useLoggedIn();
     const [profilePicture, setProfilePicture] = useState(''); 
@@ -35,8 +35,9 @@ const ProfileHeader = ({selected}) =>{
         }
     }
 
-    const addFriend = () => {
-        
+    const addFriendEvent = () => {
+        let response = addFriend({userId: userId});
+        console.log(response);
     }
 
     useState(() => {
@@ -85,7 +86,7 @@ const ProfileHeader = ({selected}) =>{
         </div>
         {userId === loggedIn.userName ? '' :
         <div className="add-friend-nav">
-            <a className="add-friend " onClick={addFriend}>
+            <a className="add-friend " onClick={addFriendEvent}>
                 Add Friend
             </a>
         </div>}

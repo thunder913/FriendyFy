@@ -1,6 +1,7 @@
 ﻿using FriendyFy.Data;
 using FriendyFy.Models;
 using FriendyFy.Services.Contracts;
+using Microsoft.EntityFrameworkCore;
 using System;
 using System.Linq;
 using System.Threading.Tasks;
@@ -18,11 +19,11 @@ namespace FriendyFy.Services
             this.userRepository = userRepository;
         }
 
-        public async Task<bool> AddFriendToUserAsync(string senderId, string receiverId)
+        public async Task<bool> AddFriendToUserAsync(string senderId, string receiverUsername)
         {
-            var userOne = this.userRepository.All().FirstOrDefault(x => x.Id == senderId);
-            var userTwo = this.userRepository.All().FirstOrDefault(x => x.Id == receiverId);
-            if (userOne == null || userTwo == null)
+            var userOne = this.userRepository.All().Include(x => x.Friends).FirstOrDefault(x => x.Id == senderId);
+            var userTwo = this.userRepository.All().Include(x => x.Friends).FirstOrDefault(x => x.UserName == receiverUsername);
+            if (userOne == null || userTwo == null || userOne.Friends.Any(x => x.FriendId == userTwo.Id) || userTwo.Friends.Any(x => x.FriendId == userOne.Id))
             {
                 return false;
             }

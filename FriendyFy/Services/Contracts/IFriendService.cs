@@ -4,6 +4,6 @@ namespace FriendyFy.Services.Contracts
 {
     public interface IFriendService
     {
-        public Task<bool> AddFriendToUserAsync(string senderId, string receiverId);
+        public Task<bool> AddFriendToUserAsync(string senderId, string receiverUsername);
     }
 }

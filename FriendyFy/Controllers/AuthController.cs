@@ -273,15 +273,15 @@ namespace FriendyFy.Controllers
         }
 
         [HttpPost("addFriend")]
-        public async Task<IActionResult> AddFriend(string userId)
+        public async Task<IActionResult> AddFriend(AddFriendDto dto)
         {
             var user = this.GetUserByToken();
-            if (user == null || userId == null)
+            if (user == null || dto.UserId == null)
             {
                 return BadRequest("The user cannot be added as a friend!");
             }
 
-            var result = await this.friendService.AddFriendToUserAsync(user.Id, userId);
+            var result = await this.friendService.AddFriendToUserAsync(user.Id, dto.UserId);
             if (!result)
             {
                 return BadRequest("Cannot add friend!");
