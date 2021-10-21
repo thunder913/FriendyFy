@@ -39,6 +39,30 @@ function addFriend(data){
     });
 }
 
+function cancelFriendRequest(data){
+    return fetch('/friend/cancel', {
+        method: 'POST',
+        headers: {'Content-Type': 'application/json'},
+        body: JSON.stringify(data)
+    });
+}
+
+function acceptFriendRequest(data){
+    return fetch('/friend/accept', {
+        method: 'POST',
+        headers: {'Content-Type': 'application/json'},
+        body: JSON.stringify(data)
+    });
+}
+
+function removeFriend(data){
+    return fetch('/friend/remove', {
+        method: 'POST',
+        headers: {'Content-Type': 'application/json'},
+        body: JSON.stringify(data)
+    });
+}
+
 function checkFriendStatus(data){
     return fetch('/friend/checkFriendStatus', {
         method: 'POST',
@@ -53,5 +77,8 @@ export {
     confirmEmail,
     finishFirstTimeSetup,
     addFriend,
-    checkFriendStatus
+    checkFriendStatus,
+    cancelFriendRequest,
+    acceptFriendRequest,
+    removeFriend
 }

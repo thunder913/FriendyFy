@@ -87,6 +87,7 @@ header.profile-header{
     background-color: rgba(32, 33, 34, 1);
     border-radius: 5px;
     margin-top: 2px;
+    transition: 0.3s;
 }
 
 .profile-navigation > div a{

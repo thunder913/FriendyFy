@@ -1,0 +1,35 @@
+.add-friend-nav .accept,.add-friend-nav .decline, .add-friend-nav > .request-cancel{
+    padding: 6.5px 20px;
+}
+
+.add-friend-nav > .request-cancel{
+    background-color: rgb(133, 33, 33);
+}
+
+.add-friend-nav > .request-cancel:hover{
+    background-color: rgb(175, 26, 26);
+}
+
+.accept{
+    background-color: rgb(23, 153, 23, 0.8);
+}
+
+.decline{
+    background-color: rgb(133, 33, 33);
+}
+
+.add-friend-nav .accept,.add-friend-nav .decline{
+    border-radius: 0px;
+}
+
+.add-friend-nav .accept:hover{
+    background-color: rgba(17, 192, 17, 0.8);
+}
+
+.add-friend-nav .decline:hover{
+    background-color: rgb(184, 35, 35);
+}
+
+.remove-friend.add-friend:hover{
+    background-color: rgb(184, 35, 35);
+}

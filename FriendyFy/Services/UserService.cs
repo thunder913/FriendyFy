@@ -66,12 +66,12 @@ namespace FriendyFy.Services
 
         public ApplicationUser GetById(string id)
         {
-            return this.userRepository.All().FirstOrDefault(x => x.Id == id);
+            return this.userRepository.All().Include(x => x.Friends).FirstOrDefault(x => x.Id == id);
         }
 
         public ApplicationUser GetByUsername(string username)
         {
-            return this.userRepository.All().Include(x => x.Interests).FirstOrDefault(x => x.UserName == username);
+            return this.userRepository.All().Include(x => x.Interests).Include(x => x.Friends).FirstOrDefault(x => x.UserName == username);
         }
 
         public async Task SetUserFirstTimeLoginAsync(ApplicationUser user, Image profileImage, Image coverImage, string quote, List<Interest> interests, decimal? longitude, decimal? latitude)
