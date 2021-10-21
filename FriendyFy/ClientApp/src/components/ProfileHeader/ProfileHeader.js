@@ -35,8 +35,6 @@ const ProfileHeader = ({selected}) =>{
         }
     }
 
-
-
     useState(() => {
         axios.get("api/getUserInformation/" + userId)
         .then(async (res) => {

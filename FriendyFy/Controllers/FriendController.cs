@@ -70,6 +70,24 @@ namespace FriendyFy.Controllers
             return Ok();
         }
 
+        [HttpPost("getFriendsToShow")]
+        public async Task<IActionResult> GetFriendsToShow(GetFriendsDto dto)
+        {
+            var user = this.GetUserByToken();
+            if (user == null || dto.UserId == null)
+            {
+                return BadRequest("The friend request cannot be cancelled!");
+            }
+
+            var result = await this.friendService.CancelFriendRequestAsync(user.Id, dto.UserId);
+            if (!result)
+            {
+                return BadRequest("Cannot cancel friend request!");
+            }
+
+            return Ok();
+        }
+
         [HttpPost("remove")]
         public async Task<IActionResult> RemoveFriend(FriendIdDto dto)
         {
