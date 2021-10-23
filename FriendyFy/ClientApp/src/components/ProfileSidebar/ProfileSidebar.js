@@ -1,7 +1,18 @@
-import React from 'react';
+import React, { useState, useEffect } from 'react';
 import './ProfileSidebar.css';
+import { getFriends  } from '../../services/userService';
 
-const ProfileSidebar = ({friends}) =>(
+const ProfileSidebar = () =>{
+const [sidebarFriends, setSidebarFriends] = useState({});
+const userId = decodeURI(window.location.href.substring(window.location.href.lastIndexOf('/')+1));
+
+useEffect(() => {
+    getFriends(userId, 9)
+        .then(async res => { await setSidebarFriends(await res.json())});
+    console.log(sidebarFriends);
+    }, [])
+
+return(
 <div className="profile-sidebar">
 <div className="user-information rounded-side">
     <h2>Info</h2>
@@ -51,23 +62,23 @@ const ProfileSidebar = ({friends}) =>(
 <div className="friend-list rounded-side">
     <header className="friends-header">
         <h2>Friends</h2>
-        <span>123 friends</span>
+        <span>{sidebarFriends.friendsCount} friends</span>
     </header>
     <section className="friends-section">
-        {friends.map(friend =>
+        {sidebarFriends.friends ? sidebarFriends.friends.map(friend =>
             <div className="friend">
                 <div className="friend-image">
-                    <img src={friend.image} alt="" />
+                    <img src={friend.profileImage} alt="" />
                 </div>
-                <p className="friend-name">{friend.name}</p>
-            </div>)}
+                <p className="friend-name">{friend.fullName}</p>
+            </div>) : ''}
     </section>
 </div>
 <div className="user-friends">
     {/* Pass user name, photo and ID and display them on the left side */}
 </div>
 </div>
-)
+)}
 
 export default ProfileSidebar;
 

@@ -72,7 +72,7 @@ function checkFriendStatus(data){
 }
 
 function getFriends(userId, count){
-    return fetch('/friend/getFriendsToShow', {
+    return fetch('/friend/getFriends', {
         method: 'POST',
         headers: {'Content-Type': 'application/json'},
         body: JSON.stringify({userId, count})
@@ -89,5 +89,6 @@ export {
     checkFriendStatus,
     cancelFriendRequest,
     acceptFriendRequest,
-    removeFriend
+    removeFriend,
+    getFriends
 }

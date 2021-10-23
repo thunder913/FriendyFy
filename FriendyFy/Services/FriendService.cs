@@ -1,10 +1,17 @@
-﻿using FriendyFy.Data;
+﻿using FriendyFy.BlobStorage;
+using FriendyFy.Common;
+using FriendyFy.Data;
 using FriendyFy.Models;
 using FriendyFy.Services.Contracts;
 using Microsoft.EntityFrameworkCore;
 using System;
+using System.Collections.Generic;
 using System.Linq;
+using System.Net;
+using System.Text;
+using System.Text.RegularExpressions;
 using System.Threading.Tasks;
+using ViewModels;
 
 namespace FriendyFy.Services
 {
@@ -13,11 +20,13 @@ namespace FriendyFy.Services
         private IRepository<UserFriend> userFriendRepository { get; set; }
         private readonly IDeletableEntityRepository<ApplicationUser> userRepository;
         private IUserService userService { get; set; }
-        public FriendService(IRepository<UserFriend> userFriendRepository, IDeletableEntityRepository<ApplicationUser> userRepository, IUserService userService = null)
+        private IBlobService blobService { get; set; }
+        public FriendService(IRepository<UserFriend> userFriendRepository, IDeletableEntityRepository<ApplicationUser> userRepository, IUserService userService = null, IBlobService blobService = null)
         {
             this.userFriendRepository = userFriendRepository;
             this.userRepository = userRepository;
             this.userService = userService;
+            this.blobService = blobService;
         }
 
         public async Task<bool> AddFriendToUserAsync(string senderId, string receiverUsername)
@@ -158,6 +167,32 @@ namespace FriendyFy.Services
             }
 
             return "no-friends";
+        }
+
+        public List<ProfileFriendViewModel> GetUserFriends(string userId, int count)
+        {
+            return this.userFriendRepository
+                .All()
+                .Include(x => x.Friend)
+                .Include(x => x.CurrentUser)
+                .Where(x => x.CurrentUser.UserName==userId && x.IsFriend)
+                .Take(count)
+                .Select(x => new ProfileFriendViewModel()
+                {
+                    FullName = x.Friend.FirstName + " " + x.Friend.LastName,
+                    ProfileImage = this.blobService.GetBlobUrlAsync(x.Friend.UserName + ".jpeg", GlobalConstants.BlobProfilePictures).GetAwaiter().GetResult(),
+                    Username = x.Friend.UserName,
+                })
+                .ToList();
+        }
+
+        public int GetUserFriendsCount(string userId)
+        {
+            return this.userFriendRepository
+                .All()
+                .Include(x => x.CurrentUser)
+                .Where(x => x.CurrentUser.UserName == userId && x.IsFriend)
+                .Count();
         }
 
         private bool AreUsersValid(ApplicationUser userOne, ApplicationUser userTwo)

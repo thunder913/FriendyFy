@@ -2,6 +2,7 @@
 using FriendyFy.Services.Contracts;
 using Microsoft.AspNetCore.Mvc;
 using System.Threading.Tasks;
+using ViewModels;
 
 namespace FriendyFy.Controllers
 {
@@ -70,22 +71,22 @@ namespace FriendyFy.Controllers
             return Ok();
         }
 
-        [HttpPost("getFriendsToShow")]
-        public async Task<IActionResult> GetFriendsToShow(GetFriendsDto dto)
+        [HttpPost("getFriends")]
+        public IActionResult GetFriendsToShow(GetFriendsDto dto)
         {
-            var user = this.GetUserByToken();
-            if (user == null || dto.UserId == null)
+            if (dto == null || dto.UserId == null)
             {
-                return BadRequest("The friend request cannot be cancelled!");
+                return BadRequest("Invalid user!");
             }
 
-            var result = await this.friendService.CancelFriendRequestAsync(user.Id, dto.UserId);
-            if (!result)
-            {
-                return BadRequest("Cannot cancel friend request!");
-            }
+            var friends = this.friendService.GetUserFriends(dto.UserId, dto.Count);
+            var friendsCount = this.friendService.GetUserFriendsCount(dto.UserId);
 
-            return Ok();
+            return Ok(new ProfileSidebarFriendsViewModel() 
+            {
+                Friends = friends,
+                FriendsCount = friendsCount
+            });
         }
 
         [HttpPost("remove")]

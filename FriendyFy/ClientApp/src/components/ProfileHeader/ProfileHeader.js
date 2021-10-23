@@ -13,7 +13,7 @@ const ProfileHeader = ({selected}) =>{
     const [name, setName] = useState(''); 
     const [interests, setInterests] = useState([]); 
     const [quote, setQuote] = useState(''); 
-    const userId = window.location.href.substring(window.location.href.lastIndexOf('/')+1);
+    const userId = decodeURI(window.location.href.substring(window.location.href.lastIndexOf('/')+1));
     const location = useLocation().pathname;
     const history = useHistory();
 
