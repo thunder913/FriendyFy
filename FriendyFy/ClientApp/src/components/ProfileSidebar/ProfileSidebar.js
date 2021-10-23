@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import './ProfileSidebar.css';
-import { getFriends  } from '../../services/userService';
+import { getFriends, getUserLocation  } from '../../services/userService';
 
 const ProfileSidebar = () =>{
 const [sidebarFriends, setSidebarFriends] = useState({});
@@ -10,6 +10,8 @@ useEffect(() => {
     getFriends(userId, 9)
         .then(async res => { await setSidebarFriends(await res.json())});
     console.log(sidebarFriends);
+    getUserLocation(userId)
+        .then(async res => {console.log(await res.json(), "location")});
     }, [])
 
 return(

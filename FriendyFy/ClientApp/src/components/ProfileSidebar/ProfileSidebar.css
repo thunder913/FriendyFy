@@ -98,6 +98,7 @@ header.headline > h2, header.headline > p{
     display: flex;
     flex-wrap: wrap;
     justify-content: center;
+    height: 380.5px;
 }
 
 .friend-list{

@@ -79,6 +79,14 @@ function getFriends(userId, count){
     });
 }
 
+function getUserLocation(userId){
+    return fetch('/user/getLocation', {
+        method: 'POST',
+        headers: {'Content-Type': 'application/json'},
+        body: JSON.stringify(userId)
+    });
+}
+
 
 export {
     getLoggedInUser,
@@ -90,5 +98,6 @@ export {
     cancelFriendRequest,
     acceptFriendRequest,
     removeFriend,
-    getFriends
+    getFriends,
+    getUserLocation
 }
