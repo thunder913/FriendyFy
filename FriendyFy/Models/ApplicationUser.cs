@@ -4,6 +4,7 @@ using FriendyFy.Models.Enums;
 using Microsoft.AspNetCore.Identity;
 using System;
 using System.Collections.Generic;
+using System.ComponentModel.DataAnnotations.Schema;
 using ViewModels;
 
 namespace FriendyFy.Models
@@ -29,7 +30,9 @@ namespace FriendyFy.Models
         public DateTime BirthDate { get; set; }
         public Gender Gender { get; set; }
         public bool FinishedFirstTimeLogin { get; set; }
+        [Column(TypeName = "decimal(11, 8)")]
         public decimal? Latitude { get; set; }
+        [Column(TypeName = "decimal(11, 8)")]
         public decimal? Longitude { get; set; }
     }
 }

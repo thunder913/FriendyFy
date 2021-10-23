@@ -3,6 +3,7 @@ import './ProfileSidebar.css';
 import { getFriends, getUserLocation  } from '../../services/userService';
 
 const ProfileSidebar = () =>{
+const [location, setLocation] = useState('');
 const [sidebarFriends, setSidebarFriends] = useState({});
 const userId = decodeURI(window.location.href.substring(window.location.href.lastIndexOf('/')+1));
 
@@ -11,7 +12,7 @@ useEffect(() => {
         .then(async res => { await setSidebarFriends(await res.json())});
     console.log(sidebarFriends);
     getUserLocation(userId)
-        .then(async res => {console.log(await res.json(), "location")});
+        .then(async res => {setLocation((await res.json()).location)});
     }, [])
 
 return(
@@ -19,6 +20,7 @@ return(
 <div className="user-information rounded-side">
     <h2>Info</h2>
     <div className="user-details">
+        <p>Lives in {location}</p>
         <p>Founder and CEO at <a href="">SomeBusiness</a></p>
         <p>Former programmer at <a href="">SomeWhere</a></p>
         <p>Studies <a href="">Компютърно и софтуерно инженерство</a> at <a href="">Технически Университет - София</a></p>
