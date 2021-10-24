@@ -101,6 +101,10 @@ const friends = [
 const Profile = () => {
     const history = useHistory();
 
+    useEffect(() => {
+            window.scrollTo(0, 0);
+    })
+
     return(<div className="profile-top">
         <div className="profile-container">
            <ProfileHeader selected="timeline"/>

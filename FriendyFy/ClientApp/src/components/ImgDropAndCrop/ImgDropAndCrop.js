@@ -95,7 +95,6 @@ const defaultCrop = {aspect: aspectRatio, x: 0, y: 0, width: aspectRatio * 0, he
         }
 
         if(firstTime){
-            console.log(crop);
             image64toCanvasRef(canvasRef, imgSrc, crop, setCroppedImg)
         }else{
             image64toCanvasRef(canvasRef, imgSrc, newCrop, setCroppedImg)

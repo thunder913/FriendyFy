@@ -53,6 +53,5 @@ export function base64StringtoFile (base64String, filename) {
     // It works with setTimeout, do not touch
     setTimeout(function(){
       setCroppedImage(canvas.toDataURL('image/jpeg')); 
-      console.log(canvas.toDataURL('image/jpeg'));
     })
   }

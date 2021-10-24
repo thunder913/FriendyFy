@@ -14,7 +14,6 @@ const siteLocation = useLocation().pathname;
 useEffect(() => {
     getFriends(userId, 9)
         .then(async res => { await setSidebarFriends(await res.json())});
-    console.log(sidebarFriends);
     getUserLocation(userId)
         .then(async res => {setLocation((await res.json()).location)});
     getUserEventsCount(userId)

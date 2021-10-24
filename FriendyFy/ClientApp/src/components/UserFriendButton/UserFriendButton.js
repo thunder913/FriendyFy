@@ -60,7 +60,6 @@ function UserFriendButton({userId}){
         await checkFriendStatus({userId: userId})
             .then(async res => {
                 let text = await res.text();
-                console.log(text);
                 switch(text){
                     case 'friends':
                         setFriendText("Friends")
