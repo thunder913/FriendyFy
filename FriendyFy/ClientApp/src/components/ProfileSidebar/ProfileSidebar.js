@@ -2,6 +2,7 @@ import React, { useState, useEffect } from 'react';
 import './ProfileSidebar.css';
 import { getFriends, getUserLocation, getUserEventsCount } from '../../services/userService';
 import { useLocation } from 'react-router';
+import {Link} from "react-router-dom";
 
 const ProfileSidebar = () =>{
 const [location, setLocation] = useState('');
@@ -72,10 +73,12 @@ return(
     <section className="friends-section">
         {sidebarFriends.friends ? sidebarFriends.friends.map(friend =>
             <div className="friend">
+                <Link to={`/profile/${friend.username}`}>
                 <div className="friend-image">
                     <img src={friend.profileImage} alt="" />
                 </div>
                 <p className="friend-name">{friend.fullName}</p>
+                </Link>
             </div>) : ''}
     </section>
 </div>

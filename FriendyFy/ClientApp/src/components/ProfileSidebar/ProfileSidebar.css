@@ -123,7 +123,8 @@ header.headline > h2, header.headline > p{
 .friends-section .friend .friend-name{
     max-width: 100px;
     display: inline-block;
-    word-break: break-all;
+    overflow-wrap: break-word;
+    color: white;
 }
 
 .friend-list > .friends-header > h2:hover, .friends-header > span:hover{
