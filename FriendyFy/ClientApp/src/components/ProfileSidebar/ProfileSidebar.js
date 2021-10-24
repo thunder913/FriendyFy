@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import './ProfileSidebar.css';
-import { getFriends, getUserLocation, getUserEventsCount } from '../../services/userService';
+import { getFriends, getUserLocation, getUserEventsCount, getRecommendedFriends } from '../../services/userService';
 import { useLocation } from 'react-router';
 import {Link} from "react-router-dom";
 
@@ -18,6 +18,8 @@ useEffect(() => {
         .then(async res => {setLocation((await res.json()).location)});
     getUserEventsCount(userId)
         .then(async res => {setEventsCount((await res.json()).count)});
+    getRecommendedFriends()
+        .then(res => console.log(res));
     }, [siteLocation])
 
 return(

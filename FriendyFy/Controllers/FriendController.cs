@@ -118,5 +118,17 @@ namespace FriendyFy.Controllers
 
             return Content(this.friendService.GetUserFriendStatus(user.Id, dto.UserId));
         }
+
+        [HttpPost("getRecommendations")]
+        public IActionResult GetFriendRecommendations()
+        {
+            var user = this.GetUserByToken();
+            if (user == null)
+            {
+                return BadRequest("You are not current logged in!");
+            }
+
+            return Ok(this.friendService.GetFriendRecommendations(user.Id));
+        }
     }
 }

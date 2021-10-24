@@ -95,6 +95,12 @@ function getUserEventsCount(userId){
     });
 }
 
+function getRecommendedFriends(){
+    return fetch('/friend/getRecommendations', {
+        method: 'POST',
+    });
+}
+
 
 export {
     getLoggedInUser,
@@ -108,5 +114,6 @@ export {
     removeFriend,
     getFriends,
     getUserLocation,
-    getUserEventsCount
+    getUserEventsCount,
+    getRecommendedFriends
 }

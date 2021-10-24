@@ -13,5 +13,6 @@ namespace FriendyFy.Services.Contracts
         Task<bool> RemoveFriendAsync(string senderId, string receiverUsername);
         List<ProfileFriendViewModel> GetUserFriends(string userId, int count);
         int GetUserFriendsCount(string userId);
+        List<SidebarFriendRecommendationViewModel> GetFriendRecommendations(string userId);
     }
 }
