@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import './ProfileHeader.css';
 import { Link } from 'react-router-dom';
 import { useLoggedIn } from '../../contexts/LoggedInContext';
@@ -35,7 +35,7 @@ const ProfileHeader = ({selected}) =>{
         }
     }
 
-    useState(() => {
+    useEffect(() => {
         axios.get("api/getUserInformation/" + userId)
         .then(async (res) => {
             let user = res.data;
@@ -46,7 +46,7 @@ const ProfileHeader = ({selected}) =>{
             await setQuote(user.quote);
         })
 
-    }, [])
+    }, [location])
 
     return (
     <header className="profile-header">

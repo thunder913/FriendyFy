@@ -34,5 +34,13 @@ namespace FriendyFy.Controllers
 
             return Ok(new { Location = this.geolocationService.GetUserLocation(Decimal.ToDouble((decimal)user.Latitude), Decimal.ToDouble((decimal)user.Longitude)) });
         }
+
+        [HttpPost("getEventsCount")]
+        public IActionResult GetEventsCount([FromBody] string userId)
+        {
+            var count = this.UserService.GetUserEventsCount(userId);
+
+            return Ok(new { count });
+        }
     }
 }

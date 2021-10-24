@@ -74,6 +74,11 @@ namespace FriendyFy.Services
             return this.userRepository.All().Include(x => x.Interests).Include(x => x.Friends).FirstOrDefault(x => x.UserName == username && username != null);
         }
 
+        public int GetUserEventsCount(string username)
+        {
+            return this.userRepository.All().Include(x => x.Events).FirstOrDefault(x => x.UserName == username && username != null).Events.Count();
+        }
+
         public async Task SetUserFirstTimeLoginAsync(ApplicationUser user, Image profileImage, Image coverImage, string quote, List<Interest> interests, decimal? longitude, decimal? latitude)
         {
             user.Photos.Add(profileImage);

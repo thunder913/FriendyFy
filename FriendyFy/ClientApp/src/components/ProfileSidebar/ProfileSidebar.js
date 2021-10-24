@@ -1,11 +1,14 @@
 import React, { useState, useEffect } from 'react';
 import './ProfileSidebar.css';
-import { getFriends, getUserLocation  } from '../../services/userService';
+import { getFriends, getUserLocation, getUserEventsCount } from '../../services/userService';
+import { useLocation } from 'react-router';
 
 const ProfileSidebar = () =>{
 const [location, setLocation] = useState('');
 const [sidebarFriends, setSidebarFriends] = useState({});
 const userId = decodeURI(window.location.href.substring(window.location.href.lastIndexOf('/')+1));
+const [eventsCount, setEventsCount] = useState('');
+const siteLocation = useLocation().pathname;
 
 useEffect(() => {
     getFriends(userId, 9)
@@ -13,7 +16,9 @@ useEffect(() => {
     console.log(sidebarFriends);
     getUserLocation(userId)
         .then(async res => {setLocation((await res.json()).location)});
-    }, [])
+    getUserEventsCount(userId)
+        .then(async res => {setEventsCount((await res.json()).count)});
+    }, [siteLocation])
 
 return(
 <div className="profile-sidebar">
@@ -21,11 +26,7 @@ return(
     <h2>Info</h2>
     <div className="user-details">
         <p>Lives in {location}</p>
-        <p>Founder and CEO at <a href="">SomeBusiness</a></p>
-        <p>Former programmer at <a href="">SomeWhere</a></p>
-        <p>Studies <a href="">Компютърно и софтуерно инженерство</a> at <a href="">Технически Университет - София</a></p>
-        <p>Lives in Sandanski</p>
-        <p><a href="">LinkedInName</a></p>
+        <p>Attended {eventsCount} events!</p>
     </div>
 </div>
 <div className="user-photos rounded-side">

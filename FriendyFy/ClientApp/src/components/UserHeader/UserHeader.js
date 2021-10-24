@@ -10,9 +10,7 @@ const UserHeader = () =>{
     const history = useHistory();
 
     const goToProfile = () => {
-        if(!location.includes("profile")){
-            history.push('profile/' + loggedIn.userName);
-        }
+            history.push('/profile/' + loggedIn.userName);
     }
 
     return (<div className="user-info" onClick={goToProfile}>

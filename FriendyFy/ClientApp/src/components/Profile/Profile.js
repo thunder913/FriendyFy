@@ -1,10 +1,10 @@
-import React from 'react';
+import React, { useEffect } from 'react';
 import './Profile.css';
 import FeedEvent from '../FeedEvent/FeedEvent';
 import ProfileHeader from '../ProfileHeader/ProfileHeader';
 import ProfileSidebar from '../ProfileSidebar/ProfileSidebar';
 import FeedPost from '../FeedPost/FeedPost';
-import { useLocation } from 'react-router';
+import { useLocation, useHistory } from 'react-router';
 
 const events = [
     {
@@ -99,6 +99,8 @@ const friends = [
 ]
 
 const Profile = () => {
+    const history = useHistory();
+
     return(<div className="profile-top">
         <div className="profile-container">
            <ProfileHeader selected="timeline"/>
