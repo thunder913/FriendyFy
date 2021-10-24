@@ -31,8 +31,8 @@ return(
 </div>
 <div className="user-photos rounded-side">
     <header className="headline">
-        <h2>Photos</h2>
-        <p className="see-all-photos"><a href="">See All Photos</a></p>
+        <h2><Link className="tab-title" to={`/photos/${userId}`}>Photos</Link></h2>
+        <p className="see-all-photos"><Link to={`/photos/${userId}`}>See All Photos</Link></p>
     </header>
     <div className="pictures">
         <div className="small-profile-photo">
@@ -66,7 +66,7 @@ return(
     </div>
 <div className="friend-list rounded-side">
     <header className="friends-header">
-        <h2>Friends</h2>
+    <h2><Link className="tab-title" to={`/friends/${userId}`}>Friends</Link></h2>
         <span>{sidebarFriends.friendsCount} friends</span>
     </header>
     <section className="friends-section">

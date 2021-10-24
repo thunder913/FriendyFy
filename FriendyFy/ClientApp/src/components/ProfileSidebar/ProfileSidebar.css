@@ -131,3 +131,15 @@ header.headline > h2, header.headline > p{
     text-decoration: underline;
     cursor: pointer;
 }
+
+.friends-section > .friend:hover p{
+    text-decoration: underline;
+}
+
+.tab-title{
+    color: white;
+}
+
+.tab-title:hover{
+    color: white;
+}
