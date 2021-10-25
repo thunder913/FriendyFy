@@ -27,6 +27,7 @@ namespace FriendyFy.Models
         public ICollection<PostRepost> Reposts { get; set; } = new HashSet<PostRepost>();
         public ICollection<PostComment> Comments { get; set; } = new HashSet<PostComment>();
         public ICollection<Image> Photos { get; set; } = new HashSet<Image>();
+        public ICollection<RemoveSuggestionFriend> RemoveSuggestionFriends { get; set; } = new HashSet<RemoveSuggestionFriend>();
         public DateTime BirthDate { get; set; }
         public Gender Gender { get; set; }
         public bool FinishedFirstTimeLogin { get; set; }

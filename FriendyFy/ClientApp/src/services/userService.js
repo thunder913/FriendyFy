@@ -46,7 +46,6 @@ function getUserEventsCount(userId){
         body: JSON.stringify(userId)
     });
 }
-
 export {
     getLoggedInUser,
     logout,

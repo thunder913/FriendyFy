@@ -52,6 +52,14 @@ function getRecommendedFriends(){
     });
 }
 
+function removeFriendSuggestion(data){
+    return fetch('/friend/removeSuggestion', {
+        method: 'POST',
+        headers: {'Content-Type': 'application/json'},
+        body: JSON.stringify(data)
+    });
+}
+
 
 export {
     addFriend,
@@ -60,5 +68,6 @@ export {
     acceptFriendRequest,
     removeFriend,
     getFriends,
-    getRecommendedFriends
+    getRecommendedFriends,
+    removeFriendSuggestion
 }

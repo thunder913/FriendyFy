@@ -1,21 +1,29 @@
 import React, { useState } from 'react';
 import './FriendSuggestion.css';
 import { Link } from 'react-router-dom';
-import { addFriend } from '../../services/userService';
-import {useLoggedIn} from '../../contexts/LoggedInContext.js';
+import { addFriend, removeFriendSuggestion } from '../../services/friendService.js';
+import { useLoggedIn } from '../../contexts/LoggedInContext.js';
 
 const FriendSuggestion = ({friend}) =>{
     const {loggedIn, setLoggedIn} = useLoggedIn();
     const [show, setShow] = useState(true)
 
     const addFriendEvent = () => {
-        // addFriend({userId: loggedIn.userName})
-        //     .then(async res => {
-        //         if(res.ok){
-        //             setShow(false);
-        //         }
-        // });
-        setShow(false);
+        addFriend({userId: friend.username})
+            .then(async res => {
+                if(res.ok){
+                    setShow(false);
+                }
+        });
+    }
+
+    const removeFriendEvent = () => {
+        removeFriendSuggestion({userId: friend.username})
+            .then(async res => {
+                if(res.ok){
+                    setShow(false);
+                }
+            })
     }
     
     if(!show){
@@ -42,7 +50,7 @@ const FriendSuggestion = ({friend}) =>{
                     </div>
                     <div className="friend-buttons">
                         <button className="add-friend" onClick={addFriendEvent}>Add</button>
-                        <button className="remove-suggestion">Remove</button>
+                        <button className="remove-suggestion" onClick={removeFriendEvent}>Remove</button>
                     </div>
                 </div>
 

@@ -130,5 +130,18 @@ namespace FriendyFy.Controllers
 
             return Ok(this.friendService.GetFriendRecommendations(user.Id));
         }
+
+        [HttpPost("removeSuggestion")]
+        public async Task<IActionResult> GetFriendRecommendations(FriendIdDto dto)
+        {
+            var user = this.GetUserByToken();
+            if (user == null)
+            {
+                return BadRequest("You are not current logged in!");
+            }
+
+            await this.friendService.RemovePersonFromSuggestionsAsync(user.Id, dto.UserId);
+            return Ok();
+        }
     }
 }

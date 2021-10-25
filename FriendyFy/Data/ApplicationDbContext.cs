@@ -43,6 +43,10 @@ namespace FriendyFy.Data
             builder.Entity<ApplicationUser>()
                 .HasMany(x => x.Friends)
                 .WithOne(x => x.CurrentUser);
+
+            builder.Entity<ApplicationUser>()
+                .HasMany(x => x.RemoveSuggestionFriends)
+                .WithOne(x => x.User);
         }
     }
 }

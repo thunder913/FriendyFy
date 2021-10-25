@@ -98,7 +98,7 @@ const LeftNavigationButtons = () => {
     useEffect(() => {
         getRecommendedFriends()
         .then(async res => setFriends(await res.json()));   
-    })
+    }, [])
 
     let location = useLocation();
     if (location.pathname.match("/profile")  || location.pathname.match("/friends") || location.pathname.match("/photos")) {
