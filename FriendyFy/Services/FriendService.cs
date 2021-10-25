@@ -199,6 +199,7 @@ namespace FriendyFy.Services
         {
             var user = this.userService.GetById(userId);
 
+            // TODO optimize the request
             var recommendations = this.userRepository
                 .All()
                 .Include(x => x.Friends)
@@ -206,7 +207,8 @@ namespace FriendyFy.Services
                 .ToList()
                 .Where(x => (x.Latitude + 5 > user.Latitude || x.Latitude - 5 < user.Latitude)
                 && (x.Longitude + 5 > user.Longitude || x.Longitude - 5 < user.Longitude)
-                && !user.Friends.Any(y => y.FriendId == x.Id)
+                && !user.Friends.Any(y => y.FriendId == x.Id
+                && x.Id != user.Id)
                 )
                 .OrderByDescending(x => x.Interests.Count(y => user.Interests.Any(z => z.Id == y.Id)) * 0.5 + x.Friends.Count(y => user.Friends.Any(z => z.FriendId == y.Id)) * 0.1 + "add random number so that they differ")
                 .Select(x => new SidebarFriendRecommendationViewModel()
@@ -215,6 +217,7 @@ namespace FriendyFy.Services
                     Username = x.UserName,
                     CommonInterests = x.Interests.Count(y => user.Interests.Any(z => z.Id == y.Id)),
                     MutualFriends = x.Friends.Count(y => user.Friends.Any(z => z.FriendId == y.Id)),
+                    ProfilePhoto = this.blobService.GetBlobUrlAsync(x.UserName + ".jpeg", GlobalConstants.BlobProfilePictures).GetAwaiter().GetResult()
                 })
                 .Take(6)
                 .ToList();

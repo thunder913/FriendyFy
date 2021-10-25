@@ -4,6 +4,8 @@ import LeftNavigationEvents from '../LeftNavigationEvents/LeftNavigationEvents';
 import TermsOfService from '../TermsOfService/TermsOfService';
 import './LeftNavigationButtons.css';
 import { useLocation } from 'react-router';
+import { useEffect, useState } from 'react/cjs/react.development';
+import { getRecommendedFriends } from '../../services/userService';
 
 const events = [
     {
@@ -89,137 +91,15 @@ const events = [
     }
 ];
 
-const friends =
-    [
-        {
-            name: "Gosho GoshovGosho",
-            image: "https://scontent.fsof8-1.fna.fbcdn.net/v/t1.6435-9/194957949_4334439429940720_5542816028295677772_n.jpg?_nc_cat=108&ccb=1-5&_nc_sid=09cbfe&_nc_ohc=YeTxne8hWKoAX9bbJvR&_nc_ht=scontent.fsof8-1.fna&oh=51a6dbebf71ee668c34d7292be94abf0&oe=6192F854",
-            mutualFriends:
-                [
-                    {
-                        name: "Ivan",
-                        image: "https://scontent.fsof8-1.fna.fbcdn.net/v/t1.6435-9/194957949_4334439429940720_5542816028295677772_n.jpg?_nc_cat=108&ccb=1-5&_nc_sid=09cbfe&_nc_ohc=YeTxne8hWKoAX9bbJvR&_nc_ht=scontent.fsof8-1.fna&oh=51a6dbebf71ee668c34d7292be94abf0&oe=6192F854",
-                    },
-                    {
-                        name: "Ivan",
-                        image: "https://scontent.fsof8-1.fna.fbcdn.net/v/t1.6435-9/194957949_4334439429940720_5542816028295677772_n.jpg?_nc_cat=108&ccb=1-5&_nc_sid=09cbfe&_nc_ohc=YeTxne8hWKoAX9bbJvR&_nc_ht=scontent.fsof8-1.fna&oh=51a6dbebf71ee668c34d7292be94abf0&oe=6192F854",
-                    },
-                    {
-                        name: "Ivan",
-                        image: "https://scontent.fsof8-1.fna.fbcdn.net/v/t1.6435-9/194957949_4334439429940720_5542816028295677772_n.jpg?_nc_cat=108&ccb=1-5&_nc_sid=09cbfe&_nc_ohc=YeTxne8hWKoAX9bbJvR&_nc_ht=scontent.fsof8-1.fna&oh=51a6dbebf71ee668c34d7292be94abf0&oe=6192F854",
-                    }
-                ],
-            commonInterests: [
-                {
-                    name: "Swiming",
-                },
-                {
-                    name: "Drinking"
-                }
-            ]
-        },
-        {
-            name: "Petur Peturov",
-            image: "https://scontent.fsof8-1.fna.fbcdn.net/v/t1.6435-9/194957949_4334439429940720_5542816028295677772_n.jpg?_nc_cat=108&ccb=1-5&_nc_sid=09cbfe&_nc_ohc=YeTxne8hWKoAX9bbJvR&_nc_ht=scontent.fsof8-1.fna&oh=51a6dbebf71ee668c34d7292be94abf0&oe=6192F854",
-            mutualFriends:
-                [
-                    {
-                        name: "Ivan",
-                        image: "https://scontent.fsof8-1.fna.fbcdn.net/v/t1.6435-9/194957949_4334439429940720_5542816028295677772_n.jpg?_nc_cat=108&ccb=1-5&_nc_sid=09cbfe&_nc_ohc=YeTxne8hWKoAX9bbJvR&_nc_ht=scontent.fsof8-1.fna&oh=51a6dbebf71ee668c34d7292be94abf0&oe=6192F854",
-                    }
-                ],
-                commonInterests: [
-                    {
-                        name: "Swiming",
-                    },
-                    {
-                        name: "Drinking"
-                    }
-                ]
-        },
-        {
-            name: "Andon Andonov",
-            image: "https://scontent.fsof8-1.fna.fbcdn.net/v/t1.6435-9/194957949_4334439429940720_5542816028295677772_n.jpg?_nc_cat=108&ccb=1-5&_nc_sid=09cbfe&_nc_ohc=YeTxne8hWKoAX9bbJvR&_nc_ht=scontent.fsof8-1.fna&oh=51a6dbebf71ee668c34d7292be94abf0&oe=6192F854",
-            mutualFriends:
-                [
-                    {
-                        name: "Ivan",
-                        image: "https://scontent.fsof8-1.fna.fbcdn.net/v/t1.6435-9/194957949_4334439429940720_5542816028295677772_n.jpg?_nc_cat=108&ccb=1-5&_nc_sid=09cbfe&_nc_ohc=YeTxne8hWKoAX9bbJvR&_nc_ht=scontent.fsof8-1.fna&oh=51a6dbebf71ee668c34d7292be94abf0&oe=6192F854",
-                    },
-                    {
-                        name: "Ivan",
-                        image: "https://scontent.fsof8-1.fna.fbcdn.net/v/t1.6435-9/194957949_4334439429940720_5542816028295677772_n.jpg?_nc_cat=108&ccb=1-5&_nc_sid=09cbfe&_nc_ohc=YeTxne8hWKoAX9bbJvR&_nc_ht=scontent.fsof8-1.fna&oh=51a6dbebf71ee668c34d7292be94abf0&oe=6192F854",
-                    }
-                ],
-                commonInterests: [
-                ]
-        },
-        {
-            name: "Gosho Goshov",
-            image: "https://scontent.fsof8-1.fna.fbcdn.net/v/t1.6435-9/194957949_4334439429940720_5542816028295677772_n.jpg?_nc_cat=108&ccb=1-5&_nc_sid=09cbfe&_nc_ohc=YeTxne8hWKoAX9bbJvR&_nc_ht=scontent.fsof8-1.fna&oh=51a6dbebf71ee668c34d7292be94abf0&oe=6192F854",
-            mutualFriends:
-                [
-                    {
-                        name: "Ivan",
-                        image: "https://scontent.fsof8-1.fna.fbcdn.net/v/t1.6435-9/194957949_4334439429940720_5542816028295677772_n.jpg?_nc_cat=108&ccb=1-5&_nc_sid=09cbfe&_nc_ohc=YeTxne8hWKoAX9bbJvR&_nc_ht=scontent.fsof8-1.fna&oh=51a6dbebf71ee668c34d7292be94abf0&oe=6192F854",
-                    },
-                    {
-                        name: "Ivan",
-                        image: "https://scontent.fsof8-1.fna.fbcdn.net/v/t1.6435-9/194957949_4334439429940720_5542816028295677772_n.jpg?_nc_cat=108&ccb=1-5&_nc_sid=09cbfe&_nc_ohc=YeTxne8hWKoAX9bbJvR&_nc_ht=scontent.fsof8-1.fna&oh=51a6dbebf71ee668c34d7292be94abf0&oe=6192F854",
-                    },
-                    {
-                        name: "Ivan",
-                        image: "https://scontent.fsof8-1.fna.fbcdn.net/v/t1.6435-9/194957949_4334439429940720_5542816028295677772_n.jpg?_nc_cat=108&ccb=1-5&_nc_sid=09cbfe&_nc_ohc=YeTxne8hWKoAX9bbJvR&_nc_ht=scontent.fsof8-1.fna&oh=51a6dbebf71ee668c34d7292be94abf0&oe=6192F854",
-                    }
-                ],
-            commonInterests: [
-                {
-                    name: "Swiming",
-                },
-                {
-                    name: "Drinking"
-                }
-            ]
-        },
-        {
-            name: "Petur Peturov",
-            image: "https://scontent.fsof8-1.fna.fbcdn.net/v/t1.6435-9/194957949_4334439429940720_5542816028295677772_n.jpg?_nc_cat=108&ccb=1-5&_nc_sid=09cbfe&_nc_ohc=YeTxne8hWKoAX9bbJvR&_nc_ht=scontent.fsof8-1.fna&oh=51a6dbebf71ee668c34d7292be94abf0&oe=6192F854",
-            mutualFriends:
-                [
-                    {
-                        name: "Ivan",
-                        image: "https://scontent.fsof8-1.fna.fbcdn.net/v/t1.6435-9/194957949_4334439429940720_5542816028295677772_n.jpg?_nc_cat=108&ccb=1-5&_nc_sid=09cbfe&_nc_ohc=YeTxne8hWKoAX9bbJvR&_nc_ht=scontent.fsof8-1.fna&oh=51a6dbebf71ee668c34d7292be94abf0&oe=6192F854",
-                    }
-                ],
-                commonInterests: [
-                    {
-                        name: "Swiming",
-                    },
-                    {
-                        name: "Drinking"
-                    }
-                ]
-        },
-        {
-            name: "Andon Andonov",
-            image: "https://scontent.fsof8-1.fna.fbcdn.net/v/t1.6435-9/194957949_4334439429940720_5542816028295677772_n.jpg?_nc_cat=108&ccb=1-5&_nc_sid=09cbfe&_nc_ohc=YeTxne8hWKoAX9bbJvR&_nc_ht=scontent.fsof8-1.fna&oh=51a6dbebf71ee668c34d7292be94abf0&oe=6192F854",
-            mutualFriends:
-                [
-                    {
-                        name: "Ivan",
-                        image: "https://scontent.fsof8-1.fna.fbcdn.net/v/t1.6435-9/194957949_4334439429940720_5542816028295677772_n.jpg?_nc_cat=108&ccb=1-5&_nc_sid=09cbfe&_nc_ohc=YeTxne8hWKoAX9bbJvR&_nc_ht=scontent.fsof8-1.fna&oh=51a6dbebf71ee668c34d7292be94abf0&oe=6192F854",
-                    },
-                    {
-                        name: "Ivan",
-                        image: "https://scontent.fsof8-1.fna.fbcdn.net/v/t1.6435-9/194957949_4334439429940720_5542816028295677772_n.jpg?_nc_cat=108&ccb=1-5&_nc_sid=09cbfe&_nc_ohc=YeTxne8hWKoAX9bbJvR&_nc_ht=scontent.fsof8-1.fna&oh=51a6dbebf71ee668c34d7292be94abf0&oe=6192F854",
-                    }
-                ],
-                commonInterests: [
-                ]
-        }
-    ]
-
 const LeftNavigationButtons = () => {
+
+    const [friends, setFriends] = useState([]);
+
+    useEffect(() => {
+        getRecommendedFriends()
+        .then(async res => setFriends(await res.json()));   
+    })
+
     let location = useLocation();
     if (location.pathname.match("/profile")  || location.pathname.match("/friends") || location.pathname.match("/photos")) {
         return null;
@@ -228,7 +108,7 @@ const LeftNavigationButtons = () => {
         <LeftNavigationEvents events={events} />
         <div className="people-you-may-know">
             <div className="friend-suggestions">
-                {friends.map(friend => <FriendSuggestion friend={friend} />)}
+                {friends.map(friend => <FriendSuggestion key={friend.username} friend={friend} />)}
             </div>
         </div>
         <div className="tos">

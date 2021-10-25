@@ -12,5 +12,6 @@ namespace ViewModels
         public int MutualFriends { get; set; }
         public int CommonInterests { get; set; }
         public string Username { get; set; }
+        public string ProfilePhoto { get; set; }
     }
 }
