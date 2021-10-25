@@ -31,54 +31,6 @@ function finishFirstTimeSetup(data){
     });
 }
 
-function addFriend(data){
-    return fetch('/friend/add', {
-        method: 'POST',
-        headers: {'Content-Type': 'application/json'},
-        body: JSON.stringify(data)
-    });
-}
-
-function cancelFriendRequest(data){
-    return fetch('/friend/cancel', {
-        method: 'POST',
-        headers: {'Content-Type': 'application/json'},
-        body: JSON.stringify(data)
-    });
-}
-
-function acceptFriendRequest(data){
-    return fetch('/friend/accept', {
-        method: 'POST',
-        headers: {'Content-Type': 'application/json'},
-        body: JSON.stringify(data)
-    });
-}
-
-function removeFriend(data){
-    return fetch('/friend/remove', {
-        method: 'POST',
-        headers: {'Content-Type': 'application/json'},
-        body: JSON.stringify(data)
-    });
-}
-
-function checkFriendStatus(data){
-    return fetch('/friend/checkFriendStatus', {
-        method: 'POST',
-        headers: {'Content-Type': 'application/json'},
-        body: JSON.stringify(data)
-    });
-}
-
-function getFriends(userId, count){
-    return fetch('/friend/getFriends', {
-        method: 'POST',
-        headers: {'Content-Type': 'application/json'},
-        body: JSON.stringify({userId, count})
-    });
-}
-
 function getUserLocation(userId){
     return fetch('/user/getLocation', {
         method: 'POST',
@@ -95,25 +47,11 @@ function getUserEventsCount(userId){
     });
 }
 
-function getRecommendedFriends(){
-    return fetch('/friend/getRecommendations', {
-        method: 'POST',
-    });
-}
-
-
 export {
     getLoggedInUser,
     logout,
     confirmEmail,
     finishFirstTimeSetup,
-    addFriend,
-    checkFriendStatus,
-    cancelFriendRequest,
-    acceptFriendRequest,
-    removeFriend,
-    getFriends,
     getUserLocation,
-    getUserEventsCount,
-    getRecommendedFriends
+    getUserEventsCount
 }

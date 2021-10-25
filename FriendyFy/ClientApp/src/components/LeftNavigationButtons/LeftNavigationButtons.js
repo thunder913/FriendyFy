@@ -5,7 +5,7 @@ import TermsOfService from '../TermsOfService/TermsOfService';
 import './LeftNavigationButtons.css';
 import { useLocation } from 'react-router';
 import { useEffect, useState } from 'react/cjs/react.development';
-import { getRecommendedFriends } from '../../services/userService';
+import { getRecommendedFriends } from '../../services/friendService';
 
 const events = [
     {

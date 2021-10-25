@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import './ProfileSidebar.css';
-import { getFriends, getUserLocation, getUserEventsCount, getRecommendedFriends } from '../../services/userService';
+import { getUserLocation, getUserEventsCount } from '../../services/userService';
+import { getFriends, getRecommendedFriends } from '../../services/friendService';
 import { useLocation } from 'react-router';
 import {Link} from "react-router-dom";
 

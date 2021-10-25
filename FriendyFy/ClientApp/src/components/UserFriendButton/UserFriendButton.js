@@ -1,5 +1,5 @@
 import React, {useState, useEffect} from 'react';
-import { addFriend, checkFriendStatus, cancelFriendRequest, acceptFriendRequest, removeFriend } from '../../services/userService';
+import { addFriend, checkFriendStatus, cancelFriendRequest, acceptFriendRequest, removeFriend } from '../../services/friendService';
 import "./UserFriendButton.css"
 function UserFriendButton({userId}){
     const [isHovering, setIsHovering] = useState(false)
