@@ -47,12 +47,24 @@ namespace FriendyFy.Services
             var chat = this.chatRepository
                 .AllAsNoTracking()
                 .Include(x => x.Messages)
+                .Include(x => x.Users)
                 .FirstOrDefault(x => x.Id == chatId);
+
+            string photo = chat.Image;
+            string chatName = chat.Name;
+
+            if (chat.ChatType == ChatType.Direct)
+            {
+                var otherUser = chat.Users.FirstOrDefault(x => x.Id != userId);
+
+                photo = this.blobService.GetBlobUrlAsync(otherUser.UserName + ".jpeg", GlobalConstants.BlobProfilePictures).GetAwaiter().GetResult();
+                chatName = otherUser.FirstName + " " + otherUser.LastName;
+            }
 
             var model = new ChatViewModel()
             {
-                Image = chat.Image,
-                Name = chat.Name,
+                Image = photo,
+                Name = chatName,
                 Messages = chat
                     .Messages
                     .OrderByDescending(x => x.CreatedOn)
@@ -63,10 +75,9 @@ namespace FriendyFy.Services
                         Date = x.CreatedOn,
                         Message = x.Text,
                         Name = x.User.FirstName + " " + x.User.LastName,
-                        Photo = chat.ChatType == ChatType.Direct
-                        ? this.blobService.GetBlobUrlAsync(chat.Users.FirstOrDefault(y => y.Id != userId).UserName + ".jpeg", GlobalConstants.BlobProfilePictures).GetAwaiter().GetResult()
-                        : chat.Image,
-                        IsYourMessage = x.User.Id == userId
+                        Photo = this.blobService.GetBlobUrlAsync(x.User.UserName + ".jpeg", GlobalConstants.BlobProfilePictures).GetAwaiter().GetResult(),
+                        IsYourMessage = x.User.Id == userId,
+                        MessageId = x.Id
                     })
                     .ToList()
             };

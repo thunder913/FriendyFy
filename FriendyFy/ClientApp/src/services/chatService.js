@@ -5,7 +5,7 @@ export function getChats(username) {
   }
 
   export function getChat(username, chatId, take, skip) {
-    return fetch('/chat/getChat/', {
+    return fetch('/chat/getChat', {
         method: 'POST',
         headers: {'Content-Type': 'application/json'},
         body: JSON.stringify({username, chatId, take, skip})

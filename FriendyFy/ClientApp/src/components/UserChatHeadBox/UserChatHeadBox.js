@@ -1,15 +1,17 @@
-import React, { useEffect } from 'react';
+import React, { useEffect, useState } from 'react';
 import './UserChatHeadBox.css';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import $ from 'jquery';
 import { faPaperPlane } from '@fortawesome/free-solid-svg-icons';
 import FadeIn from 'react-fade-in'
+import { getChat } from '../../services/chatService';
+import { useLoggedIn } from '../../contexts/LoggedInContext';
+import ChatMessage from '../ChatMessage/ChatMessage';
 
 function UserChatHeadBox({changeChatBox, chatId}) {
 
-    useEffect(() => {
-    })
-
+    const {loggedIn} = useLoggedIn();
+    const [chat, setChat] = useState({messages: []});
     const closeChatPopup = (e) => {
         $(e.target).closest('#live-chat').slideToggle(300, 'swing');
         e.preventDefault();
@@ -17,15 +19,21 @@ function UserChatHeadBox({changeChatBox, chatId}) {
         changeChatBox();
     }
 
+    useEffect(() => {
+        console.log('test')
+        getChat(loggedIn.userName, chatId, 20, 0)
+            .then(async res => setChat(await res.json()));
+    }, [])
+
     return (
     <div id="live-chat">
         <FadeIn>
         <header className="" onClick={closeChatPopup}>
             <div className="user-header">
             <div className="other-user-chat-image">
-                        <img src="http://gravatar.com/avatar/2c0ad52fc5943b78d6abe069cc08f320?s=32" alt="" width="32" height="32" />
+                        <img src={chat.image} alt="" width="32" height="32" />
             </div>
-            <h4> Mehmet Mert</h4>
+            <h4>{chat.name}</h4>
             </div>
 
             <a href="#" className="chat-close">x</a>
@@ -33,38 +41,11 @@ function UserChatHeadBox({changeChatBox, chatId}) {
         </header>
         <div className="chat">
             <div className="chat-history">
-                <div className="chat-message clearfix your-message">
-                    <div className="chat-message-content clearfix">
-                        <span className="chat-time">13: 35</span>
-                        <h5>You</h5>
-                        <p>Lorem ipsum dolor sit amet, consectetur adipisicing elit.Error, explicabo quasi ratione odio dolorum harum.</p>
-                    </div>
-                </div>
-                <hr />
-                <div className="chat-message clearfix other-user-message">
-                    <div className="other-user-chat-image">
-                        <img src="http://gravatar.com/avatar/2c0ad52fc5943b78d6abe069cc08f320?s=32" alt="" width="32" height="32" />
-                    </div>
-                    <div className="chat-message-content clearfix">
-                        <span className="chat-time">13: 37</span>
-                        <h5>Marco Biedermann</h5>
-                        <p>Lorem ipsum dolor sit amet, consectetur adipisicing elit.Blanditiis, nulla accusamus magni vel debitis numquam qui tempora rem voluptatem delectus!</p>
-                    </div>
-                </div>
-                <hr />
-
-                <div className="chat-message clearfix your-message">
-                    <div className="chat-message-content clearfix">
-                        <span className="chat-time">13: 38</span>
-                        <h5>You</h5>
-                        <p>Lorem ipsum dolor sit amet, consectetur adipisicing.</p>
-                    </div>
-                </div>
-                <hr />
+                {chat.messages.map(message => <ChatMessage key={message.messageId} message={message}></ChatMessage>)}
             </div>
             <form className="send-message-container" action="#" method="post">
                 <fieldset>
-                    <input className="send-message" type="text" placeholder="Message" autofocus />
+                    <input className="send-message" type="text" placeholder="Message" autoFocus />
                     <button className="send-message-button">
                         <FontAwesomeIcon className="paper-plane" icon={faPaperPlane} />
                     </button>

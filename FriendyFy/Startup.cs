@@ -117,7 +117,7 @@ namespace FriendyFy
                     name: "default",
                     pattern: "{controller}/{action=Index}/{id?}");
                 endpoints.MapRazorPages();
-                endpoints.MapHub<ChatHub>("/hubs/chat");
+                endpoints.MapHub<ChatHub>("/chat");
             });
 
             app.UseSpa(spa =>

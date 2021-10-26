@@ -19,8 +19,6 @@ const LoggedInProvider = ({children}) => {
         resetUser
     };
 
-
-
     return (<LoggedInContext.Provider value={value}>{children}</LoggedInContext.Provider>)
 }
 

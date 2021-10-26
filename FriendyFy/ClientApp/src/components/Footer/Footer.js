@@ -10,7 +10,7 @@ function Footer(){
 
     const [chats, setChats] = useState([]);
     const {loggedIn} = useLoggedIn();
-    const [connection, setConnection] = useState<null | HubConnection>(null);
+    const [connection, setConnection] = useState(null);
 
     useEffect(()=>{
         document.getElementsByClassName('site-footer')[0].addEventListener('mousewheel', function(e) {
@@ -21,14 +21,15 @@ function Footer(){
 
     useEffect(() => {
         const connect = new HubConnectionBuilder()
-          .withUrl("/hubs/chat")
+          .withUrl("/chat")
           .withAutomaticReconnect()
           .build();
-    });
+        setConnection(connect);
+    }, []);
 
     useEffect(() => {
         getChats(loggedIn.userName)
-            .then(async res => console.log(setChats(await res.json())));
+            .then(async res => setChats(await res.json()));
     }, [])
 
   useEffect(() => {
@@ -43,15 +44,14 @@ function Footer(){
     }
   }, [connection]);
 
-  useEffect(async () => {
-    await sendMessage();
-  })
   const sendMessage = async () => {
+      console.log(connection);
     if (connection) await connection.send("SendMessage", "test123");
   };
 
     return (
-        <div className="site-footer">
+        <div className="site-footer" >
+            <button onClick={sendMessage}>BUTTON</button>
                 <FriendSearchBar />
                 {chats.map(chat => <UserChatHeadFooter key={chat.chatId} chat={chat}/>)}
         </div>

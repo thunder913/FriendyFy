@@ -4,6 +4,7 @@ namespace ViewModels
 {
     public class ChatMessageViewModel
     {
+        public string MessageId { get; set; }
         public DateTime Date { get; set; }
         public bool IsYourMessage { get; set; }
         public string Message { get; set; }
