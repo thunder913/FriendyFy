@@ -19,16 +19,24 @@ namespace FriendyFy.Services
     {
         private IRepository<UserFriend> userFriendRepository { get; set; }
         private readonly IDeletableEntityRepository<ApplicationUser> userRepository;
+        private readonly IDeletableEntityRepository<Chat> chatRepository;
+
         private IUserService userService { get; set; }
         private IBlobService blobService { get; set; }
         private IRepository<RemoveSuggestionFriend> removeSuggestionRepository { get; set; }
-        public FriendService(IRepository<UserFriend> userFriendRepository, IDeletableEntityRepository<ApplicationUser> userRepository, IUserService userService = null, IBlobService blobService = null, IRepository<RemoveSuggestionFriend> removeSuggestionRepository = null)
+        public FriendService(IRepository<UserFriend> userFriendRepository, 
+            IDeletableEntityRepository<ApplicationUser> userRepository, 
+            IUserService userService,
+            IBlobService blobService, 
+            IRepository<RemoveSuggestionFriend> removeSuggestionRepository,
+            IDeletableEntityRepository<Chat> chatRepository)
         {
             this.userFriendRepository = userFriendRepository;
             this.userRepository = userRepository;
             this.userService = userService;
             this.blobService = blobService;
             this.removeSuggestionRepository = removeSuggestionRepository;
+            this.chatRepository = chatRepository;
         }
 
         public async Task<bool> AddFriendToUserAsync(string senderId, string receiverUsername)
@@ -50,7 +58,15 @@ namespace FriendyFy.Services
             userOne.Friends.Add(new UserFriend() { IsFriend = false, FriendId = userTwo.Id, RequestSenderId = senderId });
             userTwo.Friends.Add(new UserFriend() { IsFriend = false, FriendId = userOne.Id, RequestSenderId = senderId });
 
+            await this.chatRepository.AddAsync(new Chat()
+            {
+                ChatType = Models.Enums.ChatType.Direct,
+                CreatedOn = DateTime.Now,
+                Users = new HashSet<ApplicationUser>() { userOne, userTwo }
+            });
+
             await userRepository.SaveChangesAsync();
+            await this.chatRepository.SaveChangesAsync();
 
             return true;
         }

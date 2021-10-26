@@ -1,7 +1,7 @@
 import React from 'react';
 import './UserHeader.css';
 import { useHistory } from 'react-router';
-import {useLoggedIn} from '../../contexts/LoggedInContext.js'
+import {useLoggedIn} from '../../contexts/LoggedInContext.js';
 import { useLocation } from 'react-router';
 
 const UserHeader = () =>{

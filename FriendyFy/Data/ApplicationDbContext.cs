@@ -55,7 +55,7 @@ namespace FriendyFy.Data
             builder.Entity<Chat>()
                 .HasMany(x => x.Messages)
                 .WithOne(x => x.Chat);
-
+            
             builder.Entity<Message>()
                 .HasMany(x => x.SeenBy)
                 .WithMany(x => x.ReadMessages);

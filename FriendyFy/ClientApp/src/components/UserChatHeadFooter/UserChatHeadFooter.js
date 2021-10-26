@@ -1,7 +1,7 @@
 import React from 'react';
 import UserChatHeadBox from '../UserChatHeadBox/UserChatHeadBox';
 import './UserChatHeadFooter.css';
-function UserChatHeadFooter({person}){
+function UserChatHeadFooter({chat}){
     const [showChat, setShowChat] = React.useState(false);
     const [bigChatBox, setBigChatBox] = React.useState(false);
     
@@ -22,12 +22,12 @@ function UserChatHeadFooter({person}){
 
     let userOnline;
     let unreadMessages;
-    if (person.isOnline) {
+    if (chat.isActive) {
         userOnline = <div className="user-online"></div>;
     }else{
         userOnline = <div className="user-offline"></div>;
     }
-    if (person.hasUnreadMessages) {
+    if (chat.newMessages > 0) {
         unreadMessages = <div className="user-has-messages">
             <span>1</span>
         </div>;
@@ -40,11 +40,11 @@ function UserChatHeadFooter({person}){
                 onClick={onClick} 
                 style={{width: bigChatBox ? "310px" : "100%"}}>
             <div className="footer-user-image">
-                <img src={person.image} alt="UserImage" />
+                <img src={chat.picture} alt="UserImage" />
             </div>
             {userOnline}
             {unreadMessages}
-            <span className="footer-chat-username">{person.name}</span>
+            <span className="footer-chat-username">{chat.name}</span>
             </div>
         </div>
         )
