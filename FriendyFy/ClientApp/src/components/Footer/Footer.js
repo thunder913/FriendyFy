@@ -4,7 +4,7 @@ import UserChatHeadFooter from '../UserChatHeadFooter/UserChatHeadFooter'
 import FriendSearchBar from '../FriendSearchBar/FriendSearchBar';
 import { getChats } from '../../services/chatService';
 import { useLoggedIn } from '../../contexts/LoggedInContext';
-import { HubConnection, HubConnectionBuilder } from "@microsoft/signalr";
+import { HubConnectionBuilder } from "@microsoft/signalr";
 
 function Footer(){
 
@@ -38,22 +38,18 @@ function Footer(){
         .start()
         .then(() => {
           connection.on("ReceiveMessage", (message) => {
+              console.log(message);
           });
         })
         .catch((error) => console.log(error));
     }
   }, [connection]);
 
-  const sendMessage = async () => {
-      console.log(connection);
-    if (connection) await connection.send("SendMessage", "test123");
-  };
-
     return (
         <div className="site-footer" >
-            <button onClick={sendMessage}>BUTTON</button>
+            <button>BUTTON</button>
                 <FriendSearchBar />
-                {chats.map(chat => <UserChatHeadFooter key={chat.chatId} chat={chat}/>)}
+                {chats.map(chat => <UserChatHeadFooter key={chat.chatId} connection={connection} chat={chat}/>)}
         </div>
         )
 }

@@ -1,7 +1,7 @@
 import React from 'react';
 import UserChatHeadBox from '../UserChatHeadBox/UserChatHeadBox';
 import './UserChatHeadFooter.css';
-function UserChatHeadFooter({chat}){
+function UserChatHeadFooter({chat, connection}){
     const [showChat, setShowChat] = React.useState(false);
     const [bigChatBox, setBigChatBox] = React.useState(false);
     
@@ -35,7 +35,7 @@ function UserChatHeadFooter({chat}){
 
     return (
         <div className="user-chat-head" >
-            {showChat ? <UserChatHeadBox chatId={chat.chatId} changeChatBox={() => closeChatPopup()}/> : ""}
+            {showChat ? <UserChatHeadBox connection={connection} chatId={chat.chatId} changeChatBox={() => closeChatPopup()}/> : ""}
             <div className="user-footer" 
                 onClick={onClick} 
                 style={{width: bigChatBox ? "310px" : "100%"}}>

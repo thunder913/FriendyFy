@@ -1,11 +1,19 @@
-import React from "react";
+import React, { useState } from "react";
+import moment from "moment";
 
-function ChatMessage(message) {
+function ChatMessage({message}) {
+    function getTime(time){
+        let timeFormat = 'HH:mm ' + moment.localeData().longDateFormat('L');
+        let testDateUtc = moment.utc(time);
+        let localDate = testDateUtc.local();
+        return localDate.format(timeFormat);
+    }
+
     if (message.isYourMessage) {
-        return (<section><hr />
+        return (<section><hr/>
             <div className="chat-message clearfix your-message">
                 <div className="chat-message-content clearfix">
-                    <span className="chat-time">{message.date}</span>
+                    <span className="chat-time">{getTime(message.date)}</span>
                     <h5>You</h5>
                     <p>{message.message}</p>
                 </div>
@@ -13,7 +21,7 @@ function ChatMessage(message) {
         </section>)
     }
 
-    return (<div><hr /><div className="chat-message clearfix other-user-message">
+    return (<section><hr /><div className="chat-message clearfix other-user-message">
         <div className="other-user-chat-image">
             <img src={message.photo} alt="" width="32" height="32" />
         </div>
@@ -23,7 +31,7 @@ function ChatMessage(message) {
             <p>{message.message}</p>
         </div>
     </div>
-    </div>)
+    </section>)
 }
 
 export default ChatMessage;

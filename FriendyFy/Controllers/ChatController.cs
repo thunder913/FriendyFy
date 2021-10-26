@@ -1,6 +1,7 @@
 ﻿using FriendyFy.Data;
 using FriendyFy.Services.Contracts;
 using Microsoft.AspNetCore.Mvc;
+using System.Threading.Tasks;
 
 namespace FriendyFy.Controllers
 {
@@ -39,6 +40,21 @@ namespace FriendyFy.Controllers
             }
 
             return Ok(this.chatService.GetChatMessages(user.Id, dto.ChatId, dto.Take, dto.Skip));
+        }
+
+        [HttpPost("sendMessage")]
+        public async Task<IActionResult> SendMessage(SendMessageDto dto)
+        {
+            var user = this.GetUserByToken();
+
+            var response = await this.chatService.SendChatMessage(dto.ChatId, user.Id, dto.Message);
+
+            if (!response)
+            {
+                return BadRequest();
+            }
+
+            return Ok();
         }
     }
 }

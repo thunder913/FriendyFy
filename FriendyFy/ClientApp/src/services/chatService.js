@@ -11,3 +11,11 @@ export function getChats(username) {
         body: JSON.stringify({username, chatId, take, skip})
     });
   }
+
+  export function sendMessage(chatId, message){
+    return fetch('/chat/sendMessage', {
+        method: 'POST',
+        headers: {'Content-Type': 'application/json'},
+        body: JSON.stringify({chatId, message})
+    });
+  }

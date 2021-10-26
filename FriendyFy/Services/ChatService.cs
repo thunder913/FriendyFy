@@ -1,12 +1,16 @@
 ﻿using FriendyFy.BlobStorage;
 using FriendyFy.Common;
 using FriendyFy.Data;
+using FriendyFy.Hubs;
 using FriendyFy.Models;
 using FriendyFy.Models.Enums;
 using FriendyFy.Services.Contracts;
+using Microsoft.AspNetCore.SignalR;
 using Microsoft.EntityFrameworkCore;
+using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Threading.Tasks;
 using ViewModels;
 
 namespace FriendyFy.Services
@@ -15,12 +19,15 @@ namespace FriendyFy.Services
     {
         private readonly IDeletableEntityRepository<Chat> chatRepository;
         private readonly IBlobService blobService;
+        private readonly IHubContext<ChatHub> chatHub;
 
         public ChatService(IDeletableEntityRepository<Chat> chatRepository,
-            IBlobService blobService)
+            IBlobService blobService, 
+            IHubContext<ChatHub> chatHub)
         {
             this.chatRepository = chatRepository;
             this.blobService = blobService;
+            this.chatHub = chatHub;
         }
 
         public List<ChatFooterUserDto> GetUserChats(string username)
@@ -47,6 +54,7 @@ namespace FriendyFy.Services
             var chat = this.chatRepository
                 .AllAsNoTracking()
                 .Include(x => x.Messages)
+                .ThenInclude(x => x.User)
                 .Include(x => x.Users)
                 .FirstOrDefault(x => x.Id == chatId);
 
@@ -67,7 +75,7 @@ namespace FriendyFy.Services
                 Name = chatName,
                 Messages = chat
                     .Messages
-                    .OrderByDescending(x => x.CreatedOn)
+                    .OrderBy(x => x.CreatedOn)
                     .Skip(skip)
                     .Take(take)
                     .Select(x => new ChatMessageViewModel()
@@ -83,6 +91,31 @@ namespace FriendyFy.Services
             };
 
             return model;
+        }
+
+        public async Task<bool> SendChatMessage(string chatId, string userId, string message)
+        {
+            var chat = this.chatRepository.All().Include(x => x.Users).FirstOrDefault(x => x.Id == chatId);
+            if (chat == null)
+            {
+                return false;
+            }
+
+            if (!chat.Users.Any(x => x.Id == userId))
+            {
+                return false;
+            }
+
+            chat.Messages.Add(new Message()
+            {
+                Chat = chat,
+                CreatedOn = DateTime.UtcNow,
+                Text = message,
+                UserId = userId,
+            });
+            await chatRepository.SaveChangesAsync();
+
+            return true;
         }
     }
 }

@@ -4,14 +4,15 @@ import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import $ from 'jquery';
 import { faPaperPlane } from '@fortawesome/free-solid-svg-icons';
 import FadeIn from 'react-fade-in'
-import { getChat } from '../../services/chatService';
+import { getChat, sendMessage } from '../../services/chatService';
 import { useLoggedIn } from '../../contexts/LoggedInContext';
 import ChatMessage from '../ChatMessage/ChatMessage';
 
-function UserChatHeadBox({changeChatBox, chatId}) {
+function UserChatHeadBox({changeChatBox, chatId, connection}) {
 
     const {loggedIn} = useLoggedIn();
     const [chat, setChat] = useState({messages: []});
+    const [message, setMessage] = useState('');
     const closeChatPopup = (e) => {
         $(e.target).closest('#live-chat').slideToggle(300, 'swing');
         e.preventDefault();
@@ -20,10 +21,15 @@ function UserChatHeadBox({changeChatBox, chatId}) {
     }
 
     useEffect(() => {
-        console.log('test')
         getChat(loggedIn.userName, chatId, 20, 0)
             .then(async res => setChat(await res.json()));
     }, [])
+
+    const sendMessageEvent = (e) => {
+        e.preventDefault();
+        sendMessage(chatId, message)
+            .then(res => setMessage(''))
+    };
 
     return (
     <div id="live-chat">
@@ -41,12 +47,17 @@ function UserChatHeadBox({changeChatBox, chatId}) {
         </header>
         <div className="chat">
             <div className="chat-history">
-                {chat.messages.map(message => <ChatMessage key={message.messageId} message={message}></ChatMessage>)}
+                {chat.messages.map(message => <ChatMessage key={message.messageId} message={message}/>)}
             </div>
             <form className="send-message-container" action="#" method="post">
                 <fieldset>
-                    <input className="send-message" type="text" placeholder="Message" autoFocus />
-                    <button className="send-message-button">
+                    <input 
+                        className="send-message" 
+                        type="text" placeholder="Message" 
+                        value={message} 
+                        onChange={(e) => setMessage(e.target.value)} 
+                        autoFocus />
+                    <button className="send-message-button" onClick={sendMessageEvent}>
                         <FontAwesomeIcon className="paper-plane" icon={faPaperPlane} />
                     </button>
                 </fieldset>
