@@ -17,6 +17,7 @@ using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 using System.Globalization;
 using System.Linq;
+using System.Security.Claims;
 using System.Text;
 using System.Text.Encodings.Web;
 using System.Text.RegularExpressions;
@@ -116,8 +117,8 @@ namespace FriendyFy.Controllers
                 UserName = this.userService.GenerateUsername(userDto.FirstName, userDto.LastName),
             };
 
-
-            await this.userService.CreateAsync(user);
+            await this.userManager.CreateAsync(user);
+            await this.userManager.AddClaimAsync(user, new Claim(ClaimTypes.NameIdentifier, user.Id));
 
             var code = await userManager.GenerateEmailConfirmationTokenAsync(user);
             code = WebEncoders.Base64UrlEncode(Encoding.UTF8.GetBytes(code));

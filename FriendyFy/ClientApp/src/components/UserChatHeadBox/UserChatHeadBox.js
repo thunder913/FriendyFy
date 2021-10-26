@@ -27,8 +27,10 @@ function UserChatHeadBox({changeChatBox, chatId, connection}) {
 
     const sendMessageEvent = (e) => {
         e.preventDefault();
-        sendMessage(chatId, message)
-            .then(res => setMessage(''))
+        console.log(connection)
+        connection.send("SendMessage", {chatId, message});
+        // sendMessage(chatId, message)
+        //     .then(res => setMessage(''))
     };
 
     return (

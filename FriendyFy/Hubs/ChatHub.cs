@@ -3,6 +3,7 @@ using FriendyFy.Data;
 using FriendyFy.Helpers.Contracts;
 using FriendyFy.Models;
 using FriendyFy.Services.Contracts;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.SignalR;
 using System;
 using System.Collections.Generic;
@@ -13,17 +14,16 @@ namespace FriendyFy.Hubs
 {
     public class ChatHub : Hub
     {
-        private readonly IJwtService jwtService;
-        private readonly IUserService userService;
-
-        public ChatHub(IJwtService jwtService,
-            IUserService userService)
+        public override Task OnConnectedAsync()
         {
-            this.jwtService = jwtService;
-            this.userService = userService;
+            var name = Context.User.Identity.Name;
+            var user1 = Context.User.Identity.Name;
+            Clients.User(Context.User.Identity.Name);
+            return base.OnConnectedAsync();
         }
         public async Task SendMessage(SendMessageDto dto)
         {
+            var user = Context.User.Identity.Name;
             await Clients.All.SendAsync("ReceiveMessage", dto.Message);
         }
     }

@@ -70,7 +70,7 @@ namespace FriendyFy.Controllers
                 return BadRequest();
             }
 
-            await this.chatHub.Clients.All.SendAsync("ReceiveMessage", messageForOtherPeople);
+            await this.chatHub.Clients.Users(usersInChat).SendAsync("ReceiveMessage", messageForOtherPeople);
 
             return Ok();
         }
