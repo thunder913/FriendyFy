@@ -4,6 +4,7 @@ using FriendyFy.Data;
 using FriendyFy.Data.Common.QueryRunner;
 using FriendyFy.Helpers;
 using FriendyFy.Helpers.Contracts;
+using FriendyFy.Hubs;
 using FriendyFy.Messaging;
 using FriendyFy.Models;
 using FriendyFy.Services;
@@ -72,7 +73,7 @@ namespace FriendyFy
 
             services.AddControllersWithViews();
             services.AddRazorPages();
-
+            services.AddSignalR();
             // In production, the React files will be served from this directory
             services.AddSpaStaticFiles(configuration =>
             {
@@ -116,6 +117,7 @@ namespace FriendyFy
                     name: "default",
                     pattern: "{controller}/{action=Index}/{id?}");
                 endpoints.MapRazorPages();
+                endpoints.MapHub<ChatHub>("/hubs/chat");
             });
 
             app.UseSpa(spa =>

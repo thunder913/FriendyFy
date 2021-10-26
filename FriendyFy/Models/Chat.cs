@@ -12,5 +12,6 @@ namespace FriendyFy.Models
         public string Name { get; set; }
         public ICollection<Message> Messages { get; set; } = new HashSet<Message>();
         public ChatType ChatType { get; set; }
+        public string Image { get; set; }
     }
 }

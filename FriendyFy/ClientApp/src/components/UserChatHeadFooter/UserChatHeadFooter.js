@@ -35,7 +35,7 @@ function UserChatHeadFooter({chat}){
 
     return (
         <div className="user-chat-head" >
-            {showChat ? <UserChatHeadBox changeChatBox={() => closeChatPopup()}/> : ""}
+            {showChat ? <UserChatHeadBox chatId={chat.chatId} changeChatBox={() => closeChatPopup()}/> : ""}
             <div className="user-footer" 
                 onClick={onClick} 
                 style={{width: bigChatBox ? "310px" : "100%"}}>

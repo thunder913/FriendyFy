@@ -5,7 +5,7 @@ import $ from 'jquery';
 import { faPaperPlane } from '@fortawesome/free-solid-svg-icons';
 import FadeIn from 'react-fade-in'
 
-function UserChatHeadBox(props) {
+function UserChatHeadBox({changeChatBox, chatId}) {
 
     useEffect(() => {
     })
@@ -14,7 +14,7 @@ function UserChatHeadBox(props) {
         $(e.target).closest('#live-chat').slideToggle(300, 'swing');
         e.preventDefault();
 
-        props.changeChatBox();
+        changeChatBox();
     }
 
     return (
