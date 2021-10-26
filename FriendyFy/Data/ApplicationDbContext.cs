@@ -47,6 +47,22 @@ namespace FriendyFy.Data
             builder.Entity<ApplicationUser>()
                 .HasMany(x => x.RemoveSuggestionFriends)
                 .WithOne(x => x.User);
+
+            builder.Entity<Chat>()
+                .HasMany(x => x.Users)
+                .WithMany(x => x.Chats);
+
+            builder.Entity<Chat>()
+                .HasMany(x => x.Messages)
+                .WithOne(x => x.Chat);
+
+            builder.Entity<Message>()
+                .HasMany(x => x.SeenBy)
+                .WithMany(x => x.ReadMessages);
+
+            builder.Entity<Message>()
+                .HasOne(x => x.User)
+                .WithMany(x => x.Messages);
         }
     }
 }

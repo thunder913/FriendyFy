@@ -28,6 +28,9 @@ namespace FriendyFy.Models
         public ICollection<PostComment> Comments { get; set; } = new HashSet<PostComment>();
         public ICollection<Image> Photos { get; set; } = new HashSet<Image>();
         public ICollection<RemoveSuggestionFriend> RemoveSuggestionFriends { get; set; } = new HashSet<RemoveSuggestionFriend>();
+        public ICollection<Chat> Chats { get; set; } = new HashSet<Chat>();
+        public ICollection<Message> ReadMessages { get; set; } = new HashSet<Message>();
+        public ICollection<Message> Messages { get; set; } = new HashSet<Message>();
         public DateTime BirthDate { get; set; }
         public Gender Gender { get; set; }
         public bool FinishedFirstTimeLogin { get; set; }

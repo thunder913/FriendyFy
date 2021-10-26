@@ -4,14 +4,16 @@ using FriendyFy.Data;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 namespace FriendyFy.Data.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    partial class ApplicationDbContextModelSnapshot : ModelSnapshot
+    [Migration("20211026071626_AddedSomeChatVariables")]
+    partial class AddedSomeChatVariables
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -77,21 +79,6 @@ namespace FriendyFy.Data.Migrations
                     b.HasIndex("UsersId");
 
                     b.ToTable("ApplicationUserInterest");
-                });
-
-            modelBuilder.Entity("ApplicationUserMessage", b =>
-                {
-                    b.Property<string>("ReadMessagesId")
-                        .HasColumnType("nvarchar(450)");
-
-                    b.Property<string>("SeenById")
-                        .HasColumnType("nvarchar(450)");
-
-                    b.HasKey("ReadMessagesId", "SeenById");
-
-                    b.HasIndex("SeenById");
-
-                    b.ToTable("ApplicationUserMessage");
                 });
 
             modelBuilder.Entity("EventInterest", b =>
@@ -164,6 +151,9 @@ namespace FriendyFy.Data.Migrations
                     b.Property<decimal?>("Longitude")
                         .HasColumnType("decimal(11,8)");
 
+                    b.Property<string>("MessageId")
+                        .HasColumnType("nvarchar(450)");
+
                     b.Property<DateTime?>("ModifiedOn")
                         .HasColumnType("datetime2");
 
@@ -201,6 +191,8 @@ namespace FriendyFy.Data.Migrations
                         .HasColumnType("nvarchar(256)");
 
                     b.HasKey("Id");
+
+                    b.HasIndex("MessageId");
 
                     b.HasIndex("NormalizedEmail")
                         .HasDatabaseName("EmailIndex");
@@ -889,21 +881,6 @@ namespace FriendyFy.Data.Migrations
                         .IsRequired();
                 });
 
-            modelBuilder.Entity("ApplicationUserMessage", b =>
-                {
-                    b.HasOne("FriendyFy.Models.Message", null)
-                        .WithMany()
-                        .HasForeignKey("ReadMessagesId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.HasOne("FriendyFy.Models.ApplicationUser", null)
-                        .WithMany()
-                        .HasForeignKey("SeenById")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-                });
-
             modelBuilder.Entity("EventInterest", b =>
                 {
                     b.HasOne("FriendyFy.Models.Event", null)
@@ -921,6 +898,10 @@ namespace FriendyFy.Data.Migrations
 
             modelBuilder.Entity("FriendyFy.Models.ApplicationUser", b =>
                 {
+                    b.HasOne("FriendyFy.Models.Message", null)
+                        .WithMany("SeenBy")
+                        .HasForeignKey("MessageId");
+
                     b.HasOne("FriendyFy.Models.Post", null)
                         .WithMany("Reposts")
                         .HasForeignKey("PostId");
@@ -962,7 +943,7 @@ namespace FriendyFy.Data.Migrations
                         .HasForeignKey("ChatId");
 
                     b.HasOne("FriendyFy.Models.ApplicationUser", "User")
-                        .WithMany("Messages")
+                        .WithMany()
                         .HasForeignKey("UserId");
 
                     b.Navigation("Chat");
@@ -1128,8 +1109,6 @@ namespace FriendyFy.Data.Migrations
 
                     b.Navigation("Likes");
 
-                    b.Navigation("Messages");
-
                     b.Navigation("Photos");
 
                     b.Navigation("Posts");
@@ -1142,6 +1121,11 @@ namespace FriendyFy.Data.Migrations
             modelBuilder.Entity("FriendyFy.Models.Chat", b =>
                 {
                     b.Navigation("Messages");
+                });
+
+            modelBuilder.Entity("FriendyFy.Models.Message", b =>
+                {
+                    b.Navigation("SeenBy");
                 });
 
             modelBuilder.Entity("FriendyFy.Models.Post", b =>
