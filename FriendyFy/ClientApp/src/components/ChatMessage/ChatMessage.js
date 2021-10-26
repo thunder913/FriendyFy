@@ -26,7 +26,7 @@ function ChatMessage({message}) {
             <img src={message.photo} alt="" width="32" height="32" />
         </div>
         <div className="chat-message-content clearfix">
-            <span className="chat-time">{message.date}</span>
+            <span className="chat-time">{getTime(message.date)}</span>
             <h5>{message.name}</h5>
             <p>{message.message}</p>
         </div>

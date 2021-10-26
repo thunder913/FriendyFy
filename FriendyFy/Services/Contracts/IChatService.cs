@@ -9,6 +9,7 @@ namespace FriendyFy.Services.Contracts
     {
         List<ChatFooterUserDto> GetUserChats(string userId);
         ChatViewModel GetChatMessages(string userId, string chatId, int take, int skip);
-        Task<bool> SendChatMessage(string chatId, string userId, string message);
+        Task<string> SendChatMessage(string chatId, string userId, string message);
+        List<string> GetChatUserIds(string chatId);
     }
 }

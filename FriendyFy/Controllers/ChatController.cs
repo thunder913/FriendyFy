@@ -1,7 +1,11 @@
 ﻿using FriendyFy.Data;
+using FriendyFy.Hubs;
 using FriendyFy.Services.Contracts;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.SignalR;
+using System.Linq;
 using System.Threading.Tasks;
+using ViewModels;
 
 namespace FriendyFy.Controllers
 {
@@ -10,10 +14,14 @@ namespace FriendyFy.Controllers
     public class ChatController : BaseController
     {
         private readonly IChatService chatService;
-
-        public ChatController(IChatService chatService)
+        private readonly IHubContext<ChatHub> chatHub;
+        private readonly IMessageService messageService;
+        public ChatController(IChatService chatService,
+            IHubContext<ChatHub> chatHub, IMessageService messageService)
         {
             this.chatService = chatService;
+            this.chatHub = chatHub;
+            this.messageService = messageService;
         }
 
         [HttpGet("getChats/{username}")]
@@ -47,12 +55,22 @@ namespace FriendyFy.Controllers
         {
             var user = this.GetUserByToken();
 
-            var response = await this.chatService.SendChatMessage(dto.ChatId, user.Id, dto.Message);
+            var messageId = await this.chatService.SendChatMessage(dto.ChatId, user.Id, dto.Message);
 
-            if (!response)
+            if (messageId == null)
             {
                 return BadRequest();
             }
+
+            var usersInChat = this.chatService.GetChatUserIds(dto.ChatId).Where(x => x != user.Id).ToList();
+
+            var messageForOtherPeople = this.messageService.GetChatMessageForOtherPeople(messageId);
+            if (messageForOtherPeople == null)
+            {
+                return BadRequest();
+            }
+
+            await this.chatHub.Clients.All.SendAsync("ReceiveMessage", messageForOtherPeople);
 
             return Ok();
         }

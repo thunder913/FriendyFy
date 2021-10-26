@@ -70,6 +70,7 @@ namespace FriendyFy
             services.AddTransient<IFriendService, FriendService>();
             services.AddTransient<IGeolocationService, GeolocationService>();
             services.AddTransient<IChatService, ChatService>();
+            services.AddTransient<IMessageService, MessageService>();
 
             services.AddControllersWithViews();
             services.AddRazorPages();

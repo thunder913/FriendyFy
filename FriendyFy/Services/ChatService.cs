@@ -93,29 +93,42 @@ namespace FriendyFy.Services
             return model;
         }
 
-        public async Task<bool> SendChatMessage(string chatId, string userId, string message)
+        public async Task<string> SendChatMessage(string chatId, string userId, string message)
         {
             var chat = this.chatRepository.All().Include(x => x.Users).FirstOrDefault(x => x.Id == chatId);
             if (chat == null)
             {
-                return false;
+                return null;
             }
 
             if (!chat.Users.Any(x => x.Id == userId))
             {
-                return false;
+                return null;
             }
 
-            chat.Messages.Add(new Message()
+            var messageObj = new Message()
             {
                 Chat = chat,
                 CreatedOn = DateTime.UtcNow,
                 Text = message,
                 UserId = userId,
-            });
+            };
+
+            chat.Messages.Add(messageObj);
             await chatRepository.SaveChangesAsync();
 
-            return true;
+            return messageObj.Id;
+        }
+
+        public List<string> GetChatUserIds(string chatId)
+        {
+            return this.chatRepository
+                .AllAsNoTracking()
+                .Include(x => x.Users)
+                .FirstOrDefault(x => x.Id == chatId)
+                .Users
+                .Select(x => x.Id)
+                .ToList();
         }
     }
 }

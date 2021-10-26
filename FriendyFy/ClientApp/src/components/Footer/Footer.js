@@ -37,6 +37,7 @@ function Footer(){
       connection
         .start()
         .then(() => {
+            console.log("initialized signalR");
           connection.on("ReceiveMessage", (message) => {
               console.log(message);
           });
