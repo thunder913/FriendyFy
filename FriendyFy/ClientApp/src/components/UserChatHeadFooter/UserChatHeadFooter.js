@@ -44,6 +44,11 @@ function UserChatHeadFooter({chatDetails, connection}){
         setMessage('');
     };
 
+    const loadMoreMessages = () => {
+        getChat(loggedIn.userName, chatDetails.chatId, 20, chat.messages.length)
+            .then(async res => { let obj = await res.json(); setChat(prevState => ({image: prevState.image, name: prevState.name, messages: [...obj.messages, ...prevState.messages]}))});
+    }
+
     let userOnline;
     let unreadMessages;
     if (chatDetails.isActive) {
@@ -62,7 +67,8 @@ function UserChatHeadFooter({chatDetails, connection}){
             {showChat ? <UserChatHeadBox 
             changeChatBox={() => closeChatPopup()}
             sendMessageEvent={sendMessageEvent}
-            chat={chat}/> : ""}
+            chat={chat}
+            loadMoreMessages={loadMoreMessages}/> : ""}
             <div className="user-footer" 
                 onClick={onClick}
                 style={{width: bigChatBox ? "310px" : "100%"}}>

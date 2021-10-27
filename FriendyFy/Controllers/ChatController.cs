@@ -49,30 +49,5 @@ namespace FriendyFy.Controllers
 
             return Ok(this.chatService.GetChatMessages(user.Id, dto.ChatId, dto.Take, dto.Skip));
         }
-
-        [HttpPost("sendMessage")]
-        public async Task<IActionResult> SendMessage(SendMessageDto dto)
-        {
-            var user = this.GetUserByToken();
-
-            var messageId = await this.chatService.SendChatMessage(dto.ChatId, user.Id, dto.Message);
-
-            if (messageId == null)
-            {
-                return BadRequest();
-            }
-
-            var usersInChat = this.chatService.GetChatUserIds(dto.ChatId).Where(x => x != user.Id).ToList();
-
-            var messageForOtherPeople = this.messageService.GetChatMessageForOtherPeople(messageId);
-            if (messageForOtherPeople == null)
-            {
-                return BadRequest();
-            }
-
-            await this.chatHub.Clients.Users(usersInChat).SendAsync("ReceiveMessage", messageForOtherPeople);
-
-            return Ok();
-        }
     }
 }

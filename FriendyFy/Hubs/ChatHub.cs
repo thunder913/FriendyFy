@@ -26,15 +26,6 @@ namespace FriendyFy.Hubs
             this.chatService = chatService;
             this.messageService = messageService;
         }
-
-        //public override Task OnConnectedAsync()
-        //{
-        //    var jwtToken = Context.Features.Get<IHttpContextFeature>().HttpContext.Request.Cookies["jwt"];
-        //    var token = this.jwtService.Verify(jwtToken);
-        //    var userId = token.Issuer;
-        //    Groups.AddToGroupAsync(Context.ConnectionId, userId).GetAwaiter().GetResult();
-        //    return base.OnConnectedAsync();
-        //}
         public async Task<bool> SendMessage(SendMessageDto dto)
         {
             var userId = Context.UserIdentifier;
@@ -48,13 +39,16 @@ namespace FriendyFy.Hubs
 
             var usersInChat = this.chatService.GetChatUserIds(dto.ChatId).Where(x => x != userId).ToList();
 
-            var messageForOtherPeople = this.messageService.GetChatMessageForOtherPeople(messageId);
-            if (messageForOtherPeople == null)
+            var message = this.messageService.GetChatMessageForOtherPeople(messageId);
+            if (message == null)
             {
                 return false;
             }
 
-            await this.Clients.Users(usersInChat).SendAsync("ReceiveMessage", messageForOtherPeople);
+            await this.Clients.Users(usersInChat).SendAsync("ReceiveMessage", message);
+            message.IsYourMessage = true;
+            await this.Clients.User(userId).SendAsync("ReceiveMessage", message);
+            
 
             return true;
         }

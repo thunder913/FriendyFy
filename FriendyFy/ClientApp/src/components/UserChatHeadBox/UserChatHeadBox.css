@@ -142,12 +142,40 @@ fieldset {
 }
 
 .chat-history {
-	height: 252px;
-	padding: 0px 24px 8px 24px;
-    overflow-x: hidden;
-    overflow-y: auto;
+	padding: 0px 6px 8px 12px;
+    overflow-x: overlay;
+    overflow-y: overlay;
     height: 300px;
 }
+
+.chat-history::-webkit-scrollbar {
+    width: 5px;
+  }
+  
+  /* Track */
+  .chat-history::-webkit-scrollbar-track {
+    background: transparent;
+  }
+  
+  /* Handle */
+  .chat-history::-webkit-scrollbar-thumb {
+    background: transparent;
+    border-radius: 24px;
+  }
+  
+  /* Handle on hover */
+  .chat-history::-webkit-scrollbar-thumb:hover {
+    background: rgb(61, 61, 61);
+    transition: 1s;
+  }
+
+  .chat-history::-webkit-scrollbar-thumb{
+    background: rgb(168, 161, 161);
+    transition: 1s;
+  }
+
+
+
 
 .chat-message {
 	margin: 8px 0;

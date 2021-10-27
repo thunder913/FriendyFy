@@ -6,7 +6,7 @@ import { faPaperPlane } from '@fortawesome/free-solid-svg-icons';
 import FadeIn from 'react-fade-in'
 import ChatMessage from '../ChatMessage/ChatMessage';
 
-function UserChatHeadBox({changeChatBox, chat, sendMessageEvent}) {
+function UserChatHeadBox({changeChatBox, chat, sendMessageEvent, loadMoreMessages}) {
 
     const [message, setMessage] = useState('');
     const closeChatPopup = (e) => {
@@ -20,8 +20,6 @@ function UserChatHeadBox({changeChatBox, chat, sendMessageEvent}) {
         e.preventDefault();
         sendMessageEvent(message, setMessage);
     }
-
-    
 
     return (
     <div id="live-chat">
@@ -38,6 +36,9 @@ function UserChatHeadBox({changeChatBox, chat, sendMessageEvent}) {
             <span className="chat-message-counter">3</span>
         </header>
         <div className="chat">
+            <div className="load-messages">
+                <button onClick={loadMoreMessages}>Load More Messages</button>
+            </div>
             <div className="chat-history">
                 {chat.messages.map(message => <ChatMessage key={message.messageId} message={message}/>)}
             </div>
