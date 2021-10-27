@@ -75,9 +75,10 @@ namespace FriendyFy.Services
                 Name = chatName,
                 Messages = chat
                     .Messages
-                    .OrderBy(x => x.CreatedOn)
+                    .OrderByDescending(x => x.CreatedOn)
                     .Skip(skip)
                     .Take(take)
+                    .OrderBy(x => x.CreatedOn)
                     .Select(x => new ChatMessageViewModel()
                     {
                         Date = x.CreatedOn,
