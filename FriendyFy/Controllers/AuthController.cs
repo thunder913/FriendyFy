@@ -115,11 +115,12 @@ namespace FriendyFy.Controllers
                 Gender = (Gender)Enum.Parse(typeof(Gender), textInfo.ToTitleCase(userDto.Gender)),
                 BirthDate = DateTime.ParseExact(userDto.Birthday, "dd/MM/yyyy", CultureInfo.InvariantCulture),
                 UserName = this.userService.GenerateUsername(userDto.FirstName, userDto.LastName),
+                CreatedOn = DateTime.UtcNow,
             };
 
             await this.userManager.CreateAsync(user);
             await this.userManager.AddClaimAsync(user, new Claim(ClaimTypes.NameIdentifier, user.Id));
-
+            
             var code = await userManager.GenerateEmailConfirmationTokenAsync(user);
             code = WebEncoders.Base64UrlEncode(Encoding.UTF8.GetBytes(code));
 
@@ -147,7 +148,7 @@ namespace FriendyFy.Controllers
                 return BadRequest("Invalid credentials!");
             }
 
-            var jwt = this.jwtService.Generate(user.Id);
+            var jwt = this.jwtService.Generate(user.Id, user.Email);
 
             Response.Cookies.Append("jwt", jwt, new CookieOptions()
             {

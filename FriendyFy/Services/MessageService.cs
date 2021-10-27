@@ -22,6 +22,7 @@ namespace FriendyFy.Services
 
         public ChatMessageViewModel GetChatMessageForOtherPeople(string id)
         {
+            var messages = this.messageRepository.AllAsNoTracking().Where(x => x.Id == id);
             return this.messageRepository
                 .AllAsNoTracking()
                 .Include(x => x.User)
@@ -30,7 +31,7 @@ namespace FriendyFy.Services
                     Date = x.CreatedOn,
                     IsYourMessage = false,
                     Message = x.Text,
-                    MessageId = id,
+                    MessageId = x.Id,
                     Name = x.User.FirstName + " " + x.User.LastName,
                     Photo = this.blobService.GetBlobUrlAsync(x.User.UserName + ".jpeg", GlobalConstants.BlobProfilePictures).GetAwaiter().GetResult()
                 })

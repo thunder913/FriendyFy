@@ -18,7 +18,7 @@ namespace FriendyFy.Controllers
 
             var token = this.JwtService.Verify(jwt);
 
-            var userId = token.Issuer;
+            var userId = token.Id;
 
             return this.UserService.GetById(userId);
         }

@@ -107,7 +107,7 @@ namespace FriendyFy
             app.UseRouting();
 
             app.UseCors(options => options
-                .WithOrigins(new[] {"http://localhost:3000"})
+                .WithOrigins(new[] { "http://localhost:3000" })
                 .AllowAnyHeader()
                 .AllowAnyMethod()
                 .AllowCredentials());
@@ -123,7 +123,6 @@ namespace FriendyFy
                 endpoints.MapRazorPages();
                 endpoints.MapHub<ChatHub>("/chat");
             });
-
             app.UseSpa(spa =>
             {
                 spa.Options.SourcePath = "ClientApp";

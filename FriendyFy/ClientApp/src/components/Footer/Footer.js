@@ -4,7 +4,7 @@ import UserChatHeadFooter from '../UserChatHeadFooter/UserChatHeadFooter'
 import FriendSearchBar from '../FriendSearchBar/FriendSearchBar';
 import { getChats } from '../../services/chatService';
 import { useLoggedIn } from '../../contexts/LoggedInContext';
-import { HubConnectionBuilder } from "@microsoft/signalr";
+import { HttpTransportType, HubConnectionBuilder } from "@microsoft/signalr";
 
 function Footer(){
 
@@ -20,37 +20,29 @@ function Footer(){
     })
 
     useEffect(() => {
-        const connect = new HubConnectionBuilder()
+        setConnection(new HubConnectionBuilder()
           .withUrl("/chat")
           .withAutomaticReconnect()
-          .build();
-        setConnection(connect);
-    }, []);
+          .build());
+      }, []);
+
+    useEffect(() => {
+      if(connection){
+        console.log(connection, "before")
+        connection.start().then(() => console.log('started')).catch(err => console.log(err, 'error initializeing'));
+        console.log(connection, "after")
+      }
+    }, [connection])
 
     useEffect(() => {
         getChats(loggedIn.userName)
             .then(async res => setChats(await res.json()));
     }, [])
 
-  useEffect(() => {
-    if (connection) {
-      connection
-        .start()
-        .then(() => {
-            console.log("initialized signalR");
-          connection.on("ReceiveMessage", (message) => {
-              console.log(message);
-          });
-        })
-        .catch((error) => console.log(error));
-    }
-  }, [connection]);
-
     return (
         <div className="site-footer" >
-            <button>BUTTON</button>
                 <FriendSearchBar />
-                {chats.map(chat => <UserChatHeadFooter key={chat.chatId} connection={connection} chat={chat}/>)}
+                {chats.map(chat => <UserChatHeadFooter key={chat.chatId} connection={connection} chatDetails={chat}/>)}
         </div>
         )
 }

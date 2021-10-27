@@ -1,17 +1,13 @@
-import React, { useEffect, useState } from 'react';
+import React, { useState } from 'react';
 import './UserChatHeadBox.css';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import $ from 'jquery';
 import { faPaperPlane } from '@fortawesome/free-solid-svg-icons';
 import FadeIn from 'react-fade-in'
-import { getChat, sendMessage } from '../../services/chatService';
-import { useLoggedIn } from '../../contexts/LoggedInContext';
 import ChatMessage from '../ChatMessage/ChatMessage';
 
-function UserChatHeadBox({changeChatBox, chatId, connection}) {
+function UserChatHeadBox({changeChatBox, chat, sendMessageEvent}) {
 
-    const {loggedIn} = useLoggedIn();
-    const [chat, setChat] = useState({messages: []});
     const [message, setMessage] = useState('');
     const closeChatPopup = (e) => {
         $(e.target).closest('#live-chat').slideToggle(300, 'swing');
@@ -20,18 +16,12 @@ function UserChatHeadBox({changeChatBox, chatId, connection}) {
         changeChatBox();
     }
 
-    useEffect(() => {
-        getChat(loggedIn.userName, chatId, 20, 0)
-            .then(async res => setChat(await res.json()));
-    }, [])
-
-    const sendMessageEvent = (e) => {
+    const sendMessage = (e) => {
         e.preventDefault();
-        console.log(connection)
-        connection.send("SendMessage", {chatId, message});
-        // sendMessage(chatId, message)
-        //     .then(res => setMessage(''))
-    };
+        sendMessageEvent(message, setMessage);
+    }
+
+    
 
     return (
     <div id="live-chat">
@@ -59,7 +49,7 @@ function UserChatHeadBox({changeChatBox, chatId, connection}) {
                         value={message} 
                         onChange={(e) => setMessage(e.target.value)} 
                         autoFocus />
-                    <button className="send-message-button" onClick={sendMessageEvent}>
+                    <button className="send-message-button" onClick={sendMessage}>
                         <FontAwesomeIcon className="paper-plane" icon={faPaperPlane} />
                     </button>
                 </fieldset>

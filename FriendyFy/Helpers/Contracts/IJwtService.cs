@@ -8,7 +8,7 @@ namespace FriendyFy.Helpers.Contracts
 {
     public interface IJwtService
     {
-        string Generate(string id);
+        string Generate(string id, string email);
 
         JwtSecurityToken Verify(string jwt);
     }
