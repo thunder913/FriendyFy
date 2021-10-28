@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import './UserChatHeadBox.css';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import $ from 'jquery';
@@ -10,11 +10,18 @@ function UserChatHeadBox({changeChatBox, chat, sendMessageEvent, loadMoreMessage
 
     const [message, setMessage] = useState('');
     const closeChatPopup = (e) => {
-        $(e.target).closest('#live-chat').slideToggle(300, 'swing');
+        $(e.target).closest('.live-chat').slideToggle(300, 'swing');
         e.preventDefault();
 
         changeChatBox();
     }
+
+    useEffect(()=>{
+        document.getElementsByClassName('chat-history')[0].addEventListener('mousewheel', function(e) {
+            this.scrollTop -= (e.wheelDelta*2);
+            e.preventDefault();
+          }, false);
+    })
 
     const sendMessage = (e) => {
         e.preventDefault();
@@ -22,7 +29,7 @@ function UserChatHeadBox({changeChatBox, chat, sendMessageEvent, loadMoreMessage
     }
 
     return (
-    <div id="live-chat">
+    <div className="live-chat">
         <FadeIn>
         <header className="" onClick={closeChatPopup}>
             <div className="user-header">

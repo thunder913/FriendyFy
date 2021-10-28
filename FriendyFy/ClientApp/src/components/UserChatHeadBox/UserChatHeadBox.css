@@ -1,6 +1,6 @@
 @charset "utf-8";
 
-#live-chat {
+.live-chat {
 	background: #e9e9e9;
 	color: #9a9a9a;
 	font: 100%/1.5em "Droid Sans", sans-serif;
@@ -22,12 +22,12 @@ fieldset {
 	padding: 0;
 }
 
-#live-chat, h4, h5 {
+.live-chat, h4, h5 {
 	line-height: 1.5em;
 	margin: 0;
 }
 
-#live-chat, hr {
+.live-chat, hr {
 	background: #e9e9e9;
     border: 0;
     -moz-box-sizing: content-box;
@@ -37,14 +37,14 @@ fieldset {
     min-height: 1px;
 }
 
-#live-chat, img {
+.live-chat, img {
     border: 0;
     display: block;
     height: auto;
     max-width: 100%;
 }
 
-#live-chat input {
+.live-chat input {
 	border: 0;
 	color: rgb(238, 238, 238);
     font-family: inherit;
@@ -53,7 +53,7 @@ fieldset {
     margin: 0;
 }
 
-#live-chat, p { margin: 0; }
+.live-chat, p { margin: 0; }
 
 .clearfix { *zoom: 1; } /* For IE 6/7 */
 
@@ -61,7 +61,7 @@ fieldset {
 /* ---------- LIVE-CHAT ---------- */
 
 
-#live-chat header {
+.live-chat header {
 	background: #293239;
 	border-radius: 5px 5px 0 0;
 	color: #fff;
@@ -72,22 +72,22 @@ fieldset {
     justify-content: space-between
 }
 
-#live-chat h4 {
+.live-chat h4 {
 	font-size: 12px;
     margin-left: 10px;
 }
 
-#live-chat h5 {
+.live-chat h5 {
 	font-size: 10px;
 }
 
-#live-chat form.send-message-container {
+.live-chat form.send-message-container {
 	height: 57px;
     padding: 10px 0px 10px 10px;
     background: #293239;
 }
 
-#live-chat input[type="text"] {
+.live-chat input[type="text"] {
 	border: 1px solid rgb(77, 76, 76);
 	border-radius: 3px;
 	padding: 8px;
@@ -96,7 +96,7 @@ fieldset {
     border-radius: 30px;
 }
 
-#live-chat input[type="text"]::placeholder{
+.live-chat input[type="text"]::placeholder{
     color: rgb(136, 135, 135);
 }
 
@@ -146,6 +146,7 @@ fieldset {
     overflow-x: overlay;
     overflow-y: overlay;
     height: 300px;
+    scroll-behavior:smooth;
 }
 
 .chat-history::-webkit-scrollbar {

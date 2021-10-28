@@ -13,9 +13,12 @@ function Footer(){
     const [connection, setConnection] = useState(null);
 
     useEffect(()=>{
-        document.getElementsByClassName('site-footer')[0].addEventListener('mousewheel', function(e) {
+        document.getElementsByClassName('site-footer-wrapper')[0].addEventListener('mousewheel', function(e) {
+          console.log(e.target.closest('.live-chat'));  
+          if(e.target.closest('.live-chat') == null){
             this.scrollLeft -= (e.wheelDelta*5);
             e.preventDefault();
+          }
           }, false);
     })
 
@@ -41,8 +44,25 @@ function Footer(){
 
     return (
         <div className="site-footer" >
-                <FriendSearchBar />
+          <div className="site-footer-wrapper">
+            <FriendSearchBar />
                 {chats.map(chat => <UserChatHeadFooter key={chat.chatId} connection={connection} chatDetails={chat}/>)}
+                {chats.map(chat => <UserChatHeadFooter key={chat.chatId} connection={connection} chatDetails={chat}/>)}
+                {chats.map(chat => <UserChatHeadFooter key={chat.chatId} connection={connection} chatDetails={chat}/>)}
+                {chats.map(chat => <UserChatHeadFooter key={chat.chatId} connection={connection} chatDetails={chat}/>)}
+                {chats.map(chat => <UserChatHeadFooter key={chat.chatId} connection={connection} chatDetails={chat}/>)}
+                {chats.map(chat => <UserChatHeadFooter key={chat.chatId} connection={connection} chatDetails={chat}/>)}
+                {chats.map(chat => <UserChatHeadFooter key={chat.chatId} connection={connection} chatDetails={chat}/>)}
+                {chats.map(chat => <UserChatHeadFooter key={chat.chatId} connection={connection} chatDetails={chat}/>)}
+                {chats.map(chat => <UserChatHeadFooter key={chat.chatId} connection={connection} chatDetails={chat}/>)}
+                {chats.map(chat => <UserChatHeadFooter key={chat.chatId} connection={connection} chatDetails={chat}/>)}
+                {chats.map(chat => <UserChatHeadFooter key={chat.chatId} connection={connection} chatDetails={chat}/>)}
+                {chats.map(chat => <UserChatHeadFooter key={chat.chatId} connection={connection} chatDetails={chat}/>)}
+                {chats.map(chat => <UserChatHeadFooter key={chat.chatId} connection={connection} chatDetails={chat}/>)}
+                {chats.map(chat => <UserChatHeadFooter key={chat.chatId} connection={connection} chatDetails={chat}/>)}
+                {chats.map(chat => <UserChatHeadFooter key={chat.chatId} connection={connection} chatDetails={chat}/>)}
+                {chats.map(chat => <UserChatHeadFooter key={chat.chatId} connection={connection} chatDetails={chat}/>)}
+          </div>
         </div>
         )
 }
