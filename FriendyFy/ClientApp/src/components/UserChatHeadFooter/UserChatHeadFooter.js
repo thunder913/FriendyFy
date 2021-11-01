@@ -45,7 +45,7 @@ function UserChatHeadFooter({chatDetails, connection}){
     };
 
     const loadMoreMessages = () => {
-        getChat(loggedIn.userName, chatDetails.chatId, 20, chat.messages.length)
+        return getChat(loggedIn.userName, chatDetails.chatId, 20, chat.messages.length)
             .then(async res => { let obj = await res.json(); setChat(prevState => ({image: prevState.image, name: prevState.name, messages: [...obj.messages, ...prevState.messages]}))});
     }
 

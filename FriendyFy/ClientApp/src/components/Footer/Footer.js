@@ -14,7 +14,6 @@ function Footer(){
 
     useEffect(()=>{
         document.getElementsByClassName('site-footer-wrapper')[0].addEventListener('mousewheel', function(e) {
-          console.log(e.target.closest('.live-chat'));  
           if(e.target.closest('.live-chat') == null){
             this.scrollLeft -= (e.wheelDelta*5);
             e.preventDefault();
