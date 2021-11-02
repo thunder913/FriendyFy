@@ -1,49 +1,32 @@
-import React from 'react';
+import React, { useEffect, useState } from 'react';
 import Friend from '../Friend/Friend';
 import './Friends.css';
 import "../Profile/Profile.css"
 import ProfileHeader from '../ProfileHeader/ProfileHeader';
 import ProfileFriendSearch from '../ProfileFriendSearch/ProfileFriendSearch';
-const friends = [
-    {
-        name: "Ivan Petrov",
-        image: "https://scontent.fsof8-1.fna.fbcdn.net/v/t1.6435-9/194957949_4334439429940720_5542816028295677772_n.jpg?_nc_cat=108&ccb=1-5&_nc_sid=09cbfe&_nc_ohc=YeTxne8hWKoAX9bbJvR&_nc_ht=scontent.fsof8-1.fna&oh=51a6dbebf71ee668c34d7292be94abf0&oe=6192F854"
-    }
-    , {
-        name: "Ivan Petrov",
-        image: "https://scontent.fsof8-1.fna.fbcdn.net/v/t1.6435-9/194957949_4334439429940720_5542816028295677772_n.jpg?_nc_cat=108&ccb=1-5&_nc_sid=09cbfe&_nc_ohc=YeTxne8hWKoAX9bbJvR&_nc_ht=scontent.fsof8-1.fna&oh=51a6dbebf71ee668c34d7292be94abf0&oe=6192F854",
-    }, {
-        name: "Ivan Petrov",
-        image: "https://scontent.fsof8-1.fna.fbcdn.net/v/t1.6435-9/194957949_4334439429940720_5542816028295677772_n.jpg?_nc_cat=108&ccb=1-5&_nc_sid=09cbfe&_nc_ohc=YeTxne8hWKoAX9bbJvR&_nc_ht=scontent.fsof8-1.fna&oh=51a6dbebf71ee668c34d7292be94abf0&oe=6192F854",
-    }
-    , {
-        name: "IvanIvanPetrovPetrov Ivan Petrov Ivan Petrov",
-        image: "https://scontent.fsof8-1.fna.fbcdn.net/v/t1.6435-9/194957949_4334439429940720_5542816028295677772_n.jpg?_nc_cat=108&ccb=1-5&_nc_sid=09cbfe&_nc_ohc=YeTxne8hWKoAX9bbJvR&_nc_ht=scontent.fsof8-1.fna&oh=51a6dbebf71ee668c34d7292be94abf0&oe=6192F854",
-    }
-    , {
-        name: "Ivan Petrov",
-        image: "https://scontent.fsof8-1.fna.fbcdn.net/v/t1.6435-9/194957949_4334439429940720_5542816028295677772_n.jpg?_nc_cat=108&ccb=1-5&_nc_sid=09cbfe&_nc_ohc=YeTxne8hWKoAX9bbJvR&_nc_ht=scontent.fsof8-1.fna&oh=51a6dbebf71ee668c34d7292be94abf0&oe=6192F854",
-    }
-    , {
-        name: "Ivan Petrov",
-        image: "https://scontent.fsof8-1.fna.fbcdn.net/v/t1.6435-9/194957949_4334439429940720_5542816028295677772_n.jpg?_nc_cat=108&ccb=1-5&_nc_sid=09cbfe&_nc_ohc=YeTxne8hWKoAX9bbJvR&_nc_ht=scontent.fsof8-1.fna&oh=51a6dbebf71ee668c34d7292be94abf0&oe=6192F854",
-    }
-    , {
-        name: "Ivan Petrov",
-        image: "https://scontent.fsof8-1.fna.fbcdn.net/v/t1.6435-9/194957949_4334439429940720_5542816028295677772_n.jpg?_nc_cat=108&ccb=1-5&_nc_sid=09cbfe&_nc_ohc=YeTxne8hWKoAX9bbJvR&_nc_ht=scontent.fsof8-1.fna&oh=51a6dbebf71ee668c34d7292be94abf0&oe=6192F854",
-    }
-    , {
-        name: "Ivan Petrov",
-        image: "https://scontent.fsof8-1.fna.fbcdn.net/v/t1.6435-9/194957949_4334439429940720_5542816028295677772_n.jpg?_nc_cat=108&ccb=1-5&_nc_sid=09cbfe&_nc_ohc=YeTxne8hWKoAX9bbJvR&_nc_ht=scontent.fsof8-1.fna&oh=51a6dbebf71ee668c34d7292be94abf0&oe=6192F854",
-    }
-    , {
-        name: "Ivan Petrov",
-        image: "https://scontent.fsof8-1.fna.fbcdn.net/v/t1.6435-9/194957949_4334439429940720_5542816028295677772_n.jpg?_nc_cat=108&ccb=1-5&_nc_sid=09cbfe&_nc_ohc=YeTxne8hWKoAX9bbJvR&_nc_ht=scontent.fsof8-1.fna&oh=51a6dbebf71ee668c34d7292be94abf0&oe=6192F854",
-    }
-]
+import { getFriends } from '../../services/friendService';
 
-const Friends = () => (
-    <div className="profile-top">
+const Friends = () => {
+    const userId = decodeURI(window.location.href.substring(window.location.href.lastIndexOf('/')+1));
+    const [friends, setFriends] = useState([]);
+        
+    useEffect(() => {
+        getFriends(userId, 10, 0)
+            .then(async res => {
+                setFriends((await res.json()).friends)
+            })
+    }, [])
+
+    const getMoreFriends = () => {
+        getFriends(userId, 10, friends.length)
+        .then(async res => {
+            let obj = await res.json(); 
+            setFriends(prevState => ({friends: [...prevState.friends, ...obj.friends]}));
+            })
+        }
+
+
+    return (<div className="profile-top">
         <div className="profile-container">
             <ProfileHeader selected="friends" />
             <main className="friends-main">
@@ -56,7 +39,7 @@ const Friends = () => (
                 </div>
             </main>
         </div>
-    </div>
-)
+    </div>)
+}
 
 export default Friends;

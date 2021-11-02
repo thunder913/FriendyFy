@@ -28,6 +28,11 @@ namespace FriendyFy.Hubs
         }
         public async Task<bool> SendMessage(SendMessageDto dto)
         {
+            if (string.IsNullOrWhiteSpace(dto.Message))
+            {
+                return false;
+            }
+
             var userId = Context.UserIdentifier;
 
             var messageId = await this.chatService.SendChatMessage(dto.ChatId, userId, dto.Message);

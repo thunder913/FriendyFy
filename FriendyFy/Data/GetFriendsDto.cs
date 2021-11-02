@@ -5,5 +5,6 @@
         public string UserId { get; set; }
 
         public int Count { get; set; }
+        public int Skip { get; set; }
     }
 }

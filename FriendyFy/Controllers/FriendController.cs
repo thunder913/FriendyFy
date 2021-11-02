@@ -74,12 +74,14 @@ namespace FriendyFy.Controllers
         [HttpPost("getFriends")]
         public IActionResult GetFriendsToShow(GetFriendsDto dto)
         {
+            var user = this.GetUserByToken();
+
             if (dto == null || dto.UserId == null)
             {
                 return BadRequest("Invalid user!");
             }
 
-            var friends = this.friendService.GetUserFriends(dto.UserId, dto.Count);
+            var friends = this.friendService.GetUserFriends(dto.UserId, dto.Skip, dto.Count, user.Id);
             var friendsCount = this.friendService.GetUserFriendsCount(dto.UserId);
 
             return Ok(new ProfileSidebarFriendsViewModel() 

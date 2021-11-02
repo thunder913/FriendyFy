@@ -187,13 +187,15 @@ namespace FriendyFy.Services
             return "no-friends";
         }
 
-        public List<ProfileFriendViewModel> GetUserFriends(string userId, int count)
+        public List<ProfileFriendViewModel> GetUserFriends(string userId, int skip, int count)
         {
             return this.userFriendRepository
                 .All()
                 .Include(x => x.Friend)
                 .Include(x => x.CurrentUser)
                 .Where(x => x.CurrentUser.UserName==userId && x.IsFriend)
+                .OrderBy(x => x.CreatedOn)
+                .Skip(skip)
                 .Take(count)
                 .Select(x => new ProfileFriendViewModel()
                 {
