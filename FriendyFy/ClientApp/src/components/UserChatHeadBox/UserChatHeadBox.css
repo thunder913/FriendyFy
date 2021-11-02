@@ -147,6 +147,8 @@ fieldset {
     overflow-y: overlay;
     height: 300px;
     scroll-behavior:smooth;
+    display: flex;
+    flex-direction: column-reverse;
 }
 
 .chat-history::-webkit-scrollbar {

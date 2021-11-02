@@ -78,7 +78,8 @@ namespace FriendyFy.Services
                     .OrderByDescending(x => x.CreatedOn)
                     .Skip(skip)
                     .Take(take)
-                    .OrderBy(x => x.CreatedOn)
+                    // Reordering them on the FE
+                    .OrderByDescending(x => x.CreatedOn)
                     .Select(x => new ChatMessageViewModel()
                     {
                         Date = x.CreatedOn,

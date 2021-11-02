@@ -9,6 +9,7 @@ function UserChatHeadFooter({chatDetails, connection}){
     const [showChat, setShowChat] = React.useState(false);
     const [bigChatBox, setBigChatBox] = React.useState(false);
     const [chat, setChat] = useState({messages: []});
+    const [hasMore, setHasMore] = useState(true);
 
     const onClick = (e) => 
         {  
@@ -34,7 +35,7 @@ function UserChatHeadFooter({chatDetails, connection}){
         if (connection) {
               connection.on("ReceiveMessage", (message) => {
                   console.log(message);
-                  setChat(prevState => ({image: prevState.image, name: prevState.name, messages: [...prevState.messages, message]}))
+                  setChat(prevState => ({image: prevState.image, name: prevState.name, messages: [message, ...prevState.messages]}))
               });
         }
       }, [connection]);
@@ -46,8 +47,16 @@ function UserChatHeadFooter({chatDetails, connection}){
 
     const loadMoreMessages = () => {
         return getChat(loggedIn.userName, chatDetails.chatId, 20, chat.messages.length)
-            .then(async res => { let obj = await res.json(); setChat(prevState => ({image: prevState.image, name: prevState.name, messages: [...obj.messages, ...prevState.messages]}))});
-    }
+            .then(async res => { 
+                let obj = await res.json(); 
+                if(obj.messages.length>0){
+                    setChat(prevState => ({image: prevState.image, name: prevState.name, messages: [...prevState.messages, ...obj.messages]}));
+                }
+                else{
+                    setHasMore(false);
+                }
+            })
+        }
 
     let userOnline;
     let unreadMessages;
@@ -65,6 +74,7 @@ function UserChatHeadFooter({chatDetails, connection}){
     return (
         <div className="user-chat-head" >
             {showChat ? <UserChatHeadBox 
+            hasMore={hasMore}
             changeChatBox={() => closeChatPopup()}
             sendMessageEvent={sendMessageEvent}
             chat={chat}

@@ -5,12 +5,11 @@ import $ from 'jquery';
 import { faPaperPlane } from '@fortawesome/free-solid-svg-icons';
 import FadeIn from 'react-fade-in'
 import ChatMessage from '../ChatMessage/ChatMessage';
+import InfiniteScroll from 'react-infinite-scroll-component';
 
-function UserChatHeadBox({changeChatBox, chat, sendMessageEvent, loadMoreMessages}) {
+function UserChatHeadBox({changeChatBox, chat, sendMessageEvent, loadMoreMessages, hasMore}) {
 
-    const chatRef = useRef(null);
     const [message, setMessage] = useState('');
-    const [firstLoad, setFirstLoad] = useState(true);
     const closeChatPopup = (e) => {
         $(e.target).closest('.live-chat').slideToggle(300, 'swing');
         e.preventDefault();
@@ -28,48 +27,11 @@ function UserChatHeadBox({changeChatBox, chat, sendMessageEvent, loadMoreMessage
             chatElement.scrollTop -= (e.wheelDelta*2);
             e.preventDefault();
           }, false);
-          if(firstLoad){
-            scrollToBottom();
-            setFirstLoad(false);
-        }
     })
 
     const sendMessage = (e) => {
         e.preventDefault();
         sendMessageEvent(message, setMessage);
-    }
-
-    const scrollToBottom = () => {
-        scrollChatToHeight(0);
-    }
-
-    const loadMoreMessagesEvent = () => {
-        let chat = chatRef.current;
-
-        //Get the max scroll
-        const scrollHeight = chat.scrollHeight;
-        const clientHeight = chat.clientHeight;
-        const maxScrollTop = scrollHeight - clientHeight;
-
-        //Calculate the scroll from the bottom
-        let scrollBottom = maxScrollTop - chat.scrollTop;
-        loadMoreMessages().then(() => scrollChatToHeight(scrollBottom));
-    }
-
-    // Give this function the height from the bottom
-    const scrollChatToHeight = (bottomHeight) => {
-        let chat = chatRef.current;
-        chat.style.scrollBehavior = 'auto';
-
-        // Get the new max height, after the operations
-        const scrollHeight = chat.scrollHeight;
-        const clientHeight = chat.clientHeight;
-        const maxScrollTop = scrollHeight - clientHeight;
-        
-        // Get the calculated height
-        let currentScroll = maxScrollTop - bottomHeight;
-        chat.scrollTop = currentScroll > 0 ? currentScroll : 0;
-        chat.style.scrollBehavior = 'smooth';
     }
 
     return (
@@ -87,12 +49,23 @@ function UserChatHeadBox({changeChatBox, chat, sendMessageEvent, loadMoreMessage
             <span className="chat-message-counter">3</span>
         </header>
         <div className="chat">
-            <div className="chat-history" ref={chatRef}>
-                <div className="load-messages">
-                    <button onClick={loadMoreMessagesEvent}>Load More Messages</button>
-                </div>
-                {chat.messages.map(message => <ChatMessage key={message.messageId} message={message}/>)}
-            </div>
+                <InfiniteScroll
+                    className="chat-history"
+                    dataLength={chat.messages.length}
+                    next={loadMoreMessages}
+                    height={300}
+                    inverse={true}
+                    hasMore={hasMore}
+                    loader={<h4>Loading...</h4>}
+                    scrollableTarget="scrollableDiv"
+                    endMessage={
+                        <p style={{ textAlign: 'center' }}>
+                          <b>You reached the first message!</b>
+                        </p>
+                      }
+                >
+                    {chat.messages.map(message => <ChatMessage key={message.messageId} message={message}/>)}
+                </InfiniteScroll>
             <form className="send-message-container" action="#" method="post">
                 <fieldset>
                     <input 
