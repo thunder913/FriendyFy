@@ -5,24 +5,34 @@ import "../Profile/Profile.css"
 import ProfileHeader from '../ProfileHeader/ProfileHeader';
 import ProfileFriendSearch from '../ProfileFriendSearch/ProfileFriendSearch';
 import { getFriends } from '../../services/friendService';
-
+import InfiniteScroll from 'react-infinite-scroll-component';
 const Friends = () => {
     const userId = decodeURI(window.location.href.substring(window.location.href.lastIndexOf('/')+1));
     const [friends, setFriends] = useState([]);
-        
+    const [hasMore, setHasMore] = useState(true);    
+
     useEffect(() => {
         getFriends(userId, 10, 0)
             .then(async res => {
-                setFriends((await res.json()).friends)
+                let friendsObj = (await res.json()).friends;
+                setTimeout(() => {
+                    setFriends(friendsObj)                    
+                }, 300);
             })
     }, [])
 
     const getMoreFriends = () => {
         getFriends(userId, 10, friends.length)
         .then(async res => {
-            let obj = await res.json(); 
-            setFriends(prevState => ({friends: [...prevState.friends, ...obj.friends]}));
-            })
+            let obj = (await res.json()).friends;
+            console.log(friends.length)
+            if(obj.length>0){ 
+            setFriends(prevState => ([...prevState, ...obj]));
+            }
+            else{
+                setHasMore(false);
+            }
+        })
         }
 
 
@@ -34,9 +44,20 @@ const Friends = () => {
                     <h2>Friends</h2>
                     <ProfileFriendSearch/>
                 </header>
-                <div className="profile-friends">
+                <InfiniteScroll
+                    className="profile-friends"
+                    dataLength={friends.length}
+                    next={getMoreFriends}
+                    hasMore={hasMore}
+                    loader={<h4>Loading...</h4>}
+                    endMessage={
+                        <p style={{ textAlign: 'center' }}>
+                        <b>No more friends to show!</b>
+                        </p>
+                    }
+                    >
                     {friends.map(friend => <Friend friend={friend}></Friend>)}
-                </div>
+                </InfiniteScroll>
             </main>
         </div>
     </div>)

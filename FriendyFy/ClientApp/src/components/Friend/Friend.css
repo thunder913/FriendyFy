@@ -32,3 +32,17 @@
     cursor: pointer;
     background-color: #5d5c5c;
 }
+
+.bottom-section{
+    display: flex;
+    justify-content: space-between;
+}
+
+.friend-info .friend-name,.friend-info .mutual-friends, .friend-status{
+    color: white;
+}
+
+.friend-info:hover{
+    color: white;
+    text-decoration: underline white;
+}

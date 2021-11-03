@@ -13,7 +13,6 @@ const [eventsCount, setEventsCount] = useState('');
 const siteLocation = useLocation().pathname;
 
 useEffect(() => {
-    console.log('res')
     getFriends(userId, 9, 0)
         .then(async res => { await setSidebarFriends(await res.json())});
     getUserLocation(userId)

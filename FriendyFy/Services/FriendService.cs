@@ -187,22 +187,33 @@ namespace FriendyFy.Services
             return "no-friends";
         }
 
-        public List<ProfileFriendViewModel> GetUserFriends(string userId, int skip, int count)
+        public List<ProfileFriendViewModel> GetUserFriends(string userId, int skip, int count, string loggedIn)
         {
+            var user = this.userRepository.All().FirstOrDefault(x => x.Id == loggedIn);
+
             return this.userFriendRepository
                 .All()
                 .Include(x => x.Friend)
+                .ThenInclude(x => x.Friends)
                 .Include(x => x.CurrentUser)
                 .Where(x => x.CurrentUser.UserName==userId && x.IsFriend)
                 .OrderBy(x => x.CreatedOn)
-                .Skip(skip)
-                .Take(count)
+                .ToList()
                 .Select(x => new ProfileFriendViewModel()
                 {
                     FullName = x.Friend.FirstName + " " + x.Friend.LastName,
                     ProfileImage = this.blobService.GetBlobUrlAsync(x.Friend.UserName + ".jpeg", GlobalConstants.BlobProfilePictures).GetAwaiter().GetResult(),
                     Username = x.Friend.UserName,
+                    HasReceived = x.Friend.Friends.Any(y => !y.IsFriend && y.FriendId==loggedIn && y.RequestSenderId==x.Id),
+                    HasRequested = x.Friend.Friends.Any(y => !y.IsFriend && y.RequestSenderId==loggedIn),
+                    IsFriend = x.Friend.Friends.Any(y => y.IsFriend && y.FriendId==loggedIn),
+                    MutualFriends = x.Friend.Friends.Count(y => y.FriendId != loggedIn && user.Friends.Any(z => z.FriendId == y.FriendId)),
                 })
+                .OrderByDescending(x => x.IsFriend)
+                .ThenByDescending(x => x.HasRequested)
+                .ThenByDescending(x => x.HasReceived)
+                .Skip(skip)
+                .Take(count)
                 .ToList();
         }
 
@@ -244,7 +255,7 @@ namespace FriendyFy.Services
                     Name = x.FirstName + " " + x.LastName,
                     Username = x.UserName,
                     CommonInterests = x.Interests.Count(y => user.Interests.Any(z => z.Id == y.Id)),
-                    MutualFriends = x.Friends.Count(y => user.Friends.Any(z => z.FriendId == y.Id)),
+                    MutualFriends = x.Friends.Count(y => user.Friends.Any(z => z.FriendId == y.FriendId)),
                     ProfilePhoto = this.blobService.GetBlobUrlAsync(x.UserName + ".jpeg", GlobalConstants.BlobProfilePictures).GetAwaiter().GetResult()
                 })
                 .Take(6)

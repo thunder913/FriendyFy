@@ -1,8 +1,8 @@
 import React from 'react';
 import './Friend.css';
-
+import {Link} from "react-router-dom";
 const Friend = ({ friend }) => (
-    <div className="profile-friend">
+    <Link className="profile-friend" to={`/profile/${friend.username}`}>
         <div className="friend-image">
             <img src={friend.profileImage} alt="" />
         </div>
@@ -10,11 +10,18 @@ const Friend = ({ friend }) => (
             <span className="friend-name">
                 {friend.fullName}
             </span>
-            <span className="mutual-friends">
-                {/* {friend.friends.length}*/}{friend.mutualFriends} mutual friends
-            </span> 
+            <div className="bottom-section">
+                <span className="mutual-friends">
+                    {friend.mutualFriends} mutual friends
+                </span>
+                <span className="friend-status">
+                    {friend.isFriend ? 'Friends' :
+                    friend.hasRequested ? 'Friend Requested' :
+                    friend.hasReceived ? 'Request received' : ''}
+                </span>
+            </div>
         </div>
-    </div>
+    </Link>
 )
 
 export default Friend;

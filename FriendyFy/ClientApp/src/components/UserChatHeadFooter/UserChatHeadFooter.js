@@ -28,13 +28,18 @@ function UserChatHeadFooter({chatDetails, connection}){
 
     useEffect(() => {
         getChat(loggedIn.userName, chatDetails.chatId, 20, 0)
-            .then(async res => setChat(await res.json()));
+            .then(async res => {
+                let obj = await res.json();
+                setChat(obj)
+                if(obj.messages.length == 0){
+                    setHasMore(false);
+                }
+            });
     }, [])
 
     useEffect(() => {
         if (connection) {
               connection.on("ReceiveMessage", (message) => {
-                  console.log(message);
                   setChat(prevState => ({image: prevState.image, name: prevState.name, messages: [message, ...prevState.messages]}))
               });
         }
