@@ -31,7 +31,6 @@ function UserChatHeadFooter({chatDetails, connection}){
             .then(async res => {
                 let obj = await res.json();
                 checkChatMessages(obj.messages);
-                console.log(obj.messages, 'messages')
                 setChat(obj)
                 if(obj.messages.length == 0){
                     setHasMore(false);
@@ -55,9 +54,8 @@ function UserChatHeadFooter({chatDetails, connection}){
     const loadMoreMessages = () => {
         return getChat(loggedIn.userName, chatDetails.chatId, 20, chat.messages.length)
             .then(async res => { 
-                let obj = await res.json(); 
+                let obj = await res.json();
                 checkChatMessages(obj.messages);
-                console.log(obj.messages, 'messages')
                 if(obj.messages.length>0){
                     setChat(prevState => ({image: prevState.image, name: prevState.name, messages: [...prevState.messages, ...obj.messages]}));
                 }
@@ -68,6 +66,17 @@ function UserChatHeadFooter({chatDetails, connection}){
         }
 
     const checkChatMessages = (messages) => {
+        if(chat.messages && chat.messages.length > 0){
+            let firstMessage = chat.messages[chat.messages.length-1];
+            if(firstMessage && firstMessage.username == messages[0].username){
+                firstMessage.isTopMessage = false;
+                let chatMessages = [...chat.messages];
+                chatMessages[chat.messages.length-1] = firstMessage;
+                setChat(prevState => ({image: prevState.image, name: prevState.name, messages: [...prevState.messages]}));
+            }
+            messages.splice(0, 0, chat.messages.slice(chat.messages.length-2, 2));
+        }
+
         for (let i = 0; i < messages.length; i++) {
             //The logic is reverted, because the messages are flex-reversed
             messages[i].isTopMessage=true;
@@ -78,6 +87,10 @@ function UserChatHeadFooter({chatDetails, connection}){
             if(i+1 < messages.length && messages[i].username == messages[i+1].username){
                 messages[i].isTopMessage = false;
             }
+        }
+
+        if(chat.messages && chat.messages.length > 0){
+            messages.splice(0, 2);
         }
     }
 

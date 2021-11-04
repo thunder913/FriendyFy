@@ -30,7 +30,7 @@ function ChatMessage({message}) {
             <header>
             <h5>{message.name}</h5>
             </header>
-            <p className={(message.isTopMessage ? "top-right-radius" : "") + (message.isBottomMessage ? "bottom-right-radius" : "") } title={getTime(message.date)}>{message.message}</p>
+            <p className={(message.isTopMessage ? "top-right-radius" : "") + " " + (message.isBottomMessage ? "bottom-right-radius" : "") } title={getTime(message.date)}>{message.message}</p>
         </div>
     </div>
     </section>)
