@@ -2,7 +2,7 @@
 
 .live-chat {
 	background: #e9e9e9;
-	color: #9a9a9a;
+	color:white;
 	font: 100%/1.5em "Droid Sans", sans-serif;
 	margin: 0;
     bottom: 0px;
@@ -61,7 +61,7 @@ fieldset {
 /* ---------- LIVE-CHAT ---------- */
 
 
-.live-chat header {
+.live-chat .chat-header {
 	background: #293239;
 	border-radius: 5px 5px 0 0;
 	color: #fff;
@@ -79,6 +79,7 @@ fieldset {
 
 .live-chat h5 {
 	font-size: 10px;
+    color: rgb(165, 162, 162)
 }
 
 .live-chat form.send-message-container {
@@ -134,7 +135,7 @@ fieldset {
 .chat-close:hover{
     text-decoration: none;
     color: rgb(0, 0, 0);
-    background: #7a8085;
+    background: #2A2A2A;
 }
 
 .chat {
@@ -142,7 +143,7 @@ fieldset {
 }
 
 .chat-history {
-	padding: 0px 6px 8px 12px;
+	padding: 0px 6px 8px 6px;
     overflow-x: overlay;
     overflow-y: overlay;
     height: 300px;
@@ -177,11 +178,8 @@ fieldset {
     transition: 1s;
   }
 
-
-
-
 .chat-message {
-	margin: 8px 0;
+	margin: 0px 0px 8px 0px
 }
 
 .chat-message img {
@@ -192,11 +190,8 @@ fieldset {
 
 .chat-message-content {
 	margin-left: 0px;
-}
-
-.chat-time {
-	float: right;
-	font-size: 10px;
+    display: flex;
+    flex-direction: column;
 }
 
 .chat-feedback {
@@ -229,12 +224,22 @@ fieldset {
     margin-left: 30px !important;
 }
 
+.chat-message p {
+    padding:  8px;
+    background-color: #4a4b4d;
+    display: inline-block;
+} 
+
 .other-user-message{
     margin-right: 0px;
+    display: flex;
+    align-items: center;
 }
 
 .other-user-chat-image{
     width: 30px;
+    margin-right: 5px;
+    align-self: flex-end;
 }
 
 .other-user-chat-image > img{
@@ -246,7 +251,50 @@ header > .other-user-chat-image{
     width: 40px;
 }
 
+.other-user-message > .chat-message-content{
+    width: 100%;
+}
+
+.chat-message-content p{
+    word-break: break-word;
+    display: inline-block;
+    font-size: 16px;
+}
+
 .user-header{
     display: flex;
     align-items: center;
+}
+
+.other-user-message p{
+    border-radius: 1px 1px 1px 1px;
+    padding-right: 10px;
+    align-self: flex-start;
+}
+
+.your-message p {
+    border-radius: 1px 1px 1px 1px;
+    padding-left: 10px;
+    align-self: flex-end;
+}
+
+.your-message header{
+    align-self: flex-end;
+}
+
+.your-message .top-left-radius{
+    border-top-left-radius: 15px;
+}
+
+.your-message .bottom-left-radius{
+    border-bottom-left-radius: 15px;
+}
+
+.other-user-message .top-right-radius{
+    border-top-right-radius: 15px;
+}
+
+
+.other-user-message .bottom-right-radius{
+    border-bottom-right-radius: 15px;
 }

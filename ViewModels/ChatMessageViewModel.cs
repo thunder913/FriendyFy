@@ -10,5 +10,6 @@ namespace ViewModels
         public string Message { get; set; }
         public string Name{ get; set; }
         public string Photo { get; set; }
+        public string Username { get; set; }
     }
 }

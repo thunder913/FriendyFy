@@ -37,7 +37,7 @@ function UserChatHeadBox({changeChatBox, chat, sendMessageEvent, loadMoreMessage
     return (
     <div className="live-chat">
         <FadeIn>
-        <header className="" onClick={closeChatPopup}>
+        <header className="chat-header" onClick={closeChatPopup}>
             <div className="user-header">
             <div className="other-user-chat-image">
                         <img src={chat.image} alt="" width="32" height="32" />

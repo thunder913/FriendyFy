@@ -87,7 +87,8 @@ namespace FriendyFy.Services
                         Name = x.User.FirstName + " " + x.User.LastName,
                         Photo = this.blobService.GetBlobUrlAsync(x.User.UserName + ".jpeg", GlobalConstants.BlobProfilePictures).GetAwaiter().GetResult(),
                         IsYourMessage = x.User.Id == userId,
-                        MessageId = x.Id
+                        MessageId = x.Id,
+                        Username = x.User.UserName
                     })
                     .ToList()
             };

@@ -30,6 +30,8 @@ function UserChatHeadFooter({chatDetails, connection}){
         getChat(loggedIn.userName, chatDetails.chatId, 20, 0)
             .then(async res => {
                 let obj = await res.json();
+                checkChatMessages(obj.messages);
+                console.log(obj.messages, 'messages')
                 setChat(obj)
                 if(obj.messages.length == 0){
                     setHasMore(false);
@@ -54,6 +56,8 @@ function UserChatHeadFooter({chatDetails, connection}){
         return getChat(loggedIn.userName, chatDetails.chatId, 20, chat.messages.length)
             .then(async res => { 
                 let obj = await res.json(); 
+                checkChatMessages(obj.messages);
+                console.log(obj.messages, 'messages')
                 if(obj.messages.length>0){
                     setChat(prevState => ({image: prevState.image, name: prevState.name, messages: [...prevState.messages, ...obj.messages]}));
                 }
@@ -62,6 +66,20 @@ function UserChatHeadFooter({chatDetails, connection}){
                 }
             })
         }
+
+    const checkChatMessages = (messages) => {
+        for (let i = 0; i < messages.length; i++) {
+            //The logic is reverted, because the messages are flex-reversed
+            messages[i].isTopMessage=true;
+            messages[i].isBottomMessage=true;
+            if(i-1>=0 && messages[i].username == messages[i-1].username){
+                messages[i].isBottomMessage = false;
+            }
+            if(i+1 < messages.length && messages[i].username == messages[i+1].username){
+                messages[i].isTopMessage = false;
+            }
+        }
+    }
 
     let userOnline;
     let unreadMessages;

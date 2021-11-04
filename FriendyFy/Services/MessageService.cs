@@ -33,7 +33,8 @@ namespace FriendyFy.Services
                     Message = x.Text,
                     MessageId = x.Id,
                     Name = x.User.FirstName + " " + x.User.LastName,
-                    Photo = this.blobService.GetBlobUrlAsync(x.User.UserName + ".jpeg", GlobalConstants.BlobProfilePictures).GetAwaiter().GetResult()
+                    Photo = this.blobService.GetBlobUrlAsync(x.User.UserName + ".jpeg", GlobalConstants.BlobProfilePictures).GetAwaiter().GetResult(),
+                    Username = x.User.UserName,
                 })
                 .FirstOrDefault(x => x.MessageId == id);
         }
