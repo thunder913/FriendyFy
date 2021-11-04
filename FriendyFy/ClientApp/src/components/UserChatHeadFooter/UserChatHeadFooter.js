@@ -6,8 +6,8 @@ import { useLoggedIn } from '../../contexts/LoggedInContext';
 
 function UserChatHeadFooter({chatDetails, connection}){
     const {loggedIn} = useLoggedIn();
-    const [showChat, setShowChat] = React.useState(false);
-    const [bigChatBox, setBigChatBox] = React.useState(false);
+    const [showChat, setShowChat] = useState(false);
+    const [bigChatBox, setBigChatBox] = useState(false);
     const [chat, setChat] = useState({messages: []});
     const [hasMore, setHasMore] = useState(true);
 
@@ -30,7 +30,9 @@ function UserChatHeadFooter({chatDetails, connection}){
         getChat(loggedIn.userName, chatDetails.chatId, 20, 0)
             .then(async res => {
                 let obj = await res.json();
-                checkChatMessages(obj.messages);
+                if(obj.messages.length>0){
+                    checkChatMessages(obj.messages);
+                }
                 setChat(obj)
                 if(obj.messages.length == 0){
                     setHasMore(false);
@@ -41,10 +43,26 @@ function UserChatHeadFooter({chatDetails, connection}){
     useEffect(() => {
         if (connection) {
               connection.on("ReceiveMessage", (message) => {
-                  setChat(prevState => ({image: prevState.image, name: prevState.name, messages: [message, ...prevState.messages]}))
+                  //When adding check if the previous message has same username and change the isTopMessage and
+                  //isBottomMessage the way they should be
+
+                  //find out why the chat here is not the actual state......
+                  message.isBottomMessage=true;
+                  let firstMessage = chat.messages[0];
+                  let chatMessages = [...chat.messages];
+                  if(chat.messages.length>0 && chat.messages[0].username===message.username){
+                      message.isTopMessage=false;
+                      firstMessage.isBottomMessage=false;
+                  }else{
+                      message.isTopMessage=true;
+                      firstMessage.isBottomMessage=true;
+                  }
+                  console.log(message);
+                  chatMessages[0] = firstMessage;
+                  setChat(prevState => ({image: prevState.image, name: prevState.name, messages: [message ,...chatMessages]}));
               });
         }
-      }, [connection]);
+      }, [connection, chat]);
 
     const sendMessageEvent = (message, setMessage) => {
         connection.send("SendMessage", {chatId: chatDetails.chatId, message});
@@ -55,8 +73,8 @@ function UserChatHeadFooter({chatDetails, connection}){
         return getChat(loggedIn.userName, chatDetails.chatId, 20, chat.messages.length)
             .then(async res => { 
                 let obj = await res.json();
-                checkChatMessages(obj.messages);
                 if(obj.messages.length>0){
+                    checkChatMessages(obj.messages);
                     setChat(prevState => ({image: prevState.image, name: prevState.name, messages: [...prevState.messages, ...obj.messages]}));
                 }
                 else{
@@ -66,31 +84,37 @@ function UserChatHeadFooter({chatDetails, connection}){
         }
 
     const checkChatMessages = (messages) => {
+        const messagesToGet = 1;
+        // if there are previously added messages in the state and if so, add the first messages to check them
         if(chat.messages && chat.messages.length > 0){
+            // check if the top message is again the top message (sent by same user)
             let firstMessage = chat.messages[chat.messages.length-1];
             if(firstMessage && firstMessage.username == messages[0].username){
                 firstMessage.isTopMessage = false;
                 let chatMessages = [...chat.messages];
-                chatMessages[chat.messages.length-1] = firstMessage;
-                setChat(prevState => ({image: prevState.image, name: prevState.name, messages: [...prevState.messages]}));
+                chatMessages[chat.messages.length-messagesToGet] = firstMessage;
+                setChat(prevState => ({image: prevState.image, name: prevState.name, messages: [...chatMessages]}));
             }
-            messages.splice(0, 0, chat.messages.slice(chat.messages.length-2, 2));
+            messages = [...chat.messages.slice(chat.messages.length-1, chat.messages.length), ...messages];
         }
-
-        for (let i = 0; i < messages.length; i++) {
+        
+        // for every message, check if the message is top/bottom/middle
+        // start at messageToGet if there are any messages in the state or start with 0 when there are none
+        for (let i = chat.messages.length>0 ? messagesToGet : 0; i < messages.length; i++) {
             //The logic is reverted, because the messages are flex-reversed
             messages[i].isTopMessage=true;
             messages[i].isBottomMessage=true;
             if(i-1>=0 && messages[i].username == messages[i-1].username){
                 messages[i].isBottomMessage = false;
             }
-            if(i+1 < messages.length && messages[i].username == messages[i+1].username){
+            if(i != messages.length && i+1 < messages.length && messages[i].username == messages[i+1].username){
                 messages[i].isTopMessage = false;
             }
         }
 
+        // if there are messages in the state, revert the changes in the first if
         if(chat.messages && chat.messages.length > 0){
-            messages.splice(0, 2);
+            messages.splice(0, messagesToGet);
         }
     }
 

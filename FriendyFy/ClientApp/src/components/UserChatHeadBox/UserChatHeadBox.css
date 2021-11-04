@@ -298,3 +298,7 @@ header > .other-user-chat-image{
 .other-user-message .bottom-right-radius{
     border-bottom-right-radius: 15px;
 }
+
+.message-no-bottom-margin{
+    margin-bottom: 2px;   
+}
