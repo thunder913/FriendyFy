@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useState, useRef } from 'react';
 import UserChatHeadBox from '../UserChatHeadBox/UserChatHeadBox';
 import './UserChatHeadFooter.css';
 import { getChat, sendMessage } from '../../services/chatService';
@@ -10,7 +10,9 @@ function UserChatHeadFooter({chatDetails, connection}){
     const [bigChatBox, setBigChatBox] = useState(false);
     const [chat, setChat] = useState({messages: []});
     const [hasMore, setHasMore] = useState(true);
-
+    const latestChat = useRef(null);
+    latestChat.current = chat;
+    
     const onClick = (e) => 
         {  
             if (!showChat) {
@@ -38,31 +40,29 @@ function UserChatHeadFooter({chatDetails, connection}){
                     setHasMore(false);
                 }
             });
-    }, [])
+        }, [])
 
     useEffect(() => {
         if (connection) {
               connection.on("ReceiveMessage", (message) => {
                   //When adding check if the previous message has same username and change the isTopMessage and
                   //isBottomMessage the way they should be
-
                   //find out why the chat here is not the actual state......
                   message.isBottomMessage=true;
-                  let firstMessage = chat.messages[0];
-                  let chatMessages = [...chat.messages];
-                  if(chat.messages.length>0 && chat.messages[0].username===message.username){
+                  let firstMessage = latestChat.current.messages[0];
+                  let chatMessages = [...latestChat.current.messages];
+                  if(latestChat.current.messages.length>0 && latestChat.current.messages[0].username===message.username){
                       message.isTopMessage=false;
                       firstMessage.isBottomMessage=false;
                   }else{
                       message.isTopMessage=true;
                       firstMessage.isBottomMessage=true;
                   }
-                  console.log(message);
                   chatMessages[0] = firstMessage;
                   setChat(prevState => ({image: prevState.image, name: prevState.name, messages: [message ,...chatMessages]}));
               });
         }
-      }, [connection, chat]);
+      }, []);
 
     const sendMessageEvent = (message, setMessage) => {
         connection.send("SendMessage", {chatId: chatDetails.chatId, message});
