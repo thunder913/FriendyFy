@@ -19,3 +19,11 @@ export function getChats(username) {
         body: JSON.stringify({chatId, message})
     });
   }
+
+  export function seeMessages(chatId){
+    return fetch('/chat/seeMessages', {
+        method: 'POST',
+        headers: {'Content-Type': 'application/json'},
+        body: JSON.stringify({chatId})
+    });
+  }

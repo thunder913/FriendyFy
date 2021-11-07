@@ -19,28 +19,29 @@ namespace FriendyFy.Services
     {
         private readonly IDeletableEntityRepository<Chat> chatRepository;
         private readonly IBlobService blobService;
-        private readonly IHubContext<ChatHub> chatHub;
+        private readonly IDeletableEntityRepository<ApplicationUser> userRepository;
 
         public ChatService(IDeletableEntityRepository<Chat> chatRepository,
-            IBlobService blobService, 
-            IHubContext<ChatHub> chatHub)
+            IBlobService blobService, IDeletableEntityRepository<ApplicationUser> userRepository)
         {
             this.chatRepository = chatRepository;
             this.blobService = blobService;
-            this.chatHub = chatHub;
+            this.userRepository = userRepository;
         }
 
         public List<ChatFooterUserDto> GetUserChats(string username)
         {
             return this.chatRepository
                 .AllAsNoTracking()
+                .Include(x => x.Messages)
+                .ThenInclude(x => x.SeenBy)
                 .Where(x => x.Users.Any(y => y.UserName == username))
                 .Select(x => new ChatFooterUserDto()
                 {
                     ChatId = x.Id,
                     Name = x.ChatType == ChatType.Direct ? x.Users.FirstOrDefault(y => y.UserName != username).FirstName : x.Name,
                     IsActive = false,
-                    NewMessages = 0,
+                    NewMessages = x.Messages.Count() - x.Messages.Where(y => y.SeenBy.Any(y => y.UserName == username)).Count(),
                     Picture = x.ChatType == ChatType.Direct 
                         ? this.blobService.GetBlobUrlAsync(x.Users.FirstOrDefault(y => y.UserName != username).UserName + ".jpeg", GlobalConstants.BlobProfilePictures).GetAwaiter().GetResult() 
                         : x.Image,
@@ -49,10 +50,12 @@ namespace FriendyFy.Services
 
         }
 
-        public ChatViewModel GetChatMessages(string userId ,string chatId, int take, int skip)
+        public ChatViewModel GetChatMessages(string userId, string chatId, int take, int skip)
         {
             var chat = this.chatRepository
-                .AllAsNoTracking()
+                .All()
+                .Include(x => x.Messages)
+                .ThenInclude(x => x.SeenBy)
                 .Include(x => x.Messages)
                 .ThenInclude(x => x.User)
                 .Include(x => x.Users)
@@ -98,6 +101,7 @@ namespace FriendyFy.Services
 
         public async Task<string> SendChatMessage(string chatId, string userId, string message)
         {
+            var user = this.userRepository.All().FirstOrDefault(x => x.Id == userId);
             var chat = this.chatRepository.All().Include(x => x.Users).FirstOrDefault(x => x.Id == chatId);
             if (chat == null)
             {
@@ -115,6 +119,7 @@ namespace FriendyFy.Services
                 CreatedOn = DateTime.UtcNow,
                 Text = message,
                 UserId = userId,
+                SeenBy = { user }
             };
 
             chat.Messages.Add(messageObj);
@@ -132,6 +137,27 @@ namespace FriendyFy.Services
                 .Users
                 .Select(x => x.Id)
                 .ToList();
+        }
+
+        public async Task<bool> SeeMessagesAsync(string chatId, ApplicationUser user)
+        {
+            var notSeenMessages =
+                this.chatRepository
+                .All()
+                .Include(x => x.Messages)
+                .ThenInclude(x => x.SeenBy)
+                .FirstOrDefault(x => x.Id == chatId)
+                .Messages
+                .Where(x => !x.SeenBy.Any(y => y.Id == user.Id));
+
+            foreach (var message in notSeenMessages)
+            {
+                message.SeenBy.Add(user);
+            }
+
+            await this.chatRepository.SaveChangesAsync();
+
+            return true;
         }
     }
 }

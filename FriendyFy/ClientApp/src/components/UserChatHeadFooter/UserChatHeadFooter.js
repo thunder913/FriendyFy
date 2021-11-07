@@ -1,17 +1,26 @@
 import React, { useEffect, useState, useRef } from 'react';
 import UserChatHeadBox from '../UserChatHeadBox/UserChatHeadBox';
 import './UserChatHeadFooter.css';
-import { getChat, sendMessage } from '../../services/chatService';
+import { getChat, seeMessages } from '../../services/chatService';
 import { useLoggedIn } from '../../contexts/LoggedInContext';
 
 function UserChatHeadFooter({chatDetails, connection}){
+    // TODO
+    // Make the receive thingy on the Footer (upper component) and make it somehow, when I receive a message and open the chat, it becomes seen
+    // and make the chatDetails.newMessages into a state
     const {loggedIn} = useLoggedIn();
+    const [hasUnreadMessages, setHasUnreadMessages] = useState(chatDetails.newMessages > 0); 
     const [showChat, setShowChat] = useState(false);
     const [bigChatBox, setBigChatBox] = useState(false);
     const [chat, setChat] = useState({messages: []});
     const [hasMore, setHasMore] = useState(true);
+    const [firstTime, setFirstTime] = useState(true);
+    const [userOnline, setUserOnline] = useState('');
+    const [unreadMessages, setUnreadMessages] = useState('');
     const latestChat = useRef(null);
     latestChat.current = chat;
+    const isChatOpen = useRef(null);
+    isChatOpen.current = bigChatBox;
     
     const onClick = (e) => 
         {  
@@ -29,6 +38,7 @@ function UserChatHeadFooter({chatDetails, connection}){
     }
 
     useEffect(() => {
+        if(showChat && firstTime){
         getChat(loggedIn.userName, chatDetails.chatId, 20, 0)
             .then(async res => {
                 let obj = await res.json();
@@ -39,12 +49,16 @@ function UserChatHeadFooter({chatDetails, connection}){
                 if(obj.messages.length == 0){
                     setHasMore(false);
                 }
-            });
-        }, [])
+                setHasUnreadMessages(false);
+                chatDetails.newMessages=0;
+            })
+            setFirstTime(false);
+        }
+        }, [showChat])
 
     useEffect(() => {
         if (connection) {
-              connection.on("ReceiveMessage", (message) => {
+              connection.on(chatDetails.chatId, (message) => {
                   //When adding check if the previous message has same username and change the isTopMessage and
                   //isBottomMessage the way they should be
                   //find out why the chat here is not the actual state......
@@ -60,6 +74,17 @@ function UserChatHeadFooter({chatDetails, connection}){
                   }
                   chatMessages[0] = firstMessage;
                   setChat(prevState => ({image: prevState.image, name: prevState.name, messages: [message ,...chatMessages]}));
+                  console.log(isChatOpen.current, 'chat open')
+                  console.log(message.isYourMessage, 'is your message')
+                  if(!message.isYourMessage){
+                    if(isChatOpen.current){
+                        seeMessages({chatId: chatDetails.chatId});
+                    }else{
+                        setHasUnreadMessages(true);
+                      chatDetails.newMessages++;
+                    }
+                  }
+
               });
         }
       }, []);
@@ -118,18 +143,23 @@ function UserChatHeadFooter({chatDetails, connection}){
         }
     }
 
-    let userOnline;
-    let unreadMessages;
-    if (chatDetails.isActive) {
-        userOnline = <div className="user-online"></div>;
-    }else{
-        userOnline = <div className="user-offline"></div>;
-    }
-    if (chatDetails.newMessages > 0) {
-        unreadMessages = <div className="user-has-messages">
-            <span>1</span>
-        </div>;
-    }
+
+    useEffect(() => {
+        if (chatDetails.isActive) {
+            setUserOnline(<div className="user-online"></div>);
+        }else{
+            setUserOnline(<div className="user-offline"></div>);
+        }
+        if (hasUnreadMessages) {
+            let messages = chatDetails.newMessages > 9 ? "9+" : chatDetails.newMessages;
+            setUnreadMessages(<div className="user-has-messages">
+                <span>{messages}</span>
+            </div>);
+        }else{
+            setUnreadMessages('');
+        }
+    }, [hasUnreadMessages])
+
 
     return (
         <div className="user-chat-head" >

@@ -65,13 +65,15 @@
     border-radius: 50%;
     position: relative;
     margin-left: -25px;
-    border: 5px solid rgb(218, 8, 8);
+    border: 5px solid rgb(218, 8, 8, 0.5);
     top: -15px;
     left: -25px;
+    display: flex;
+    justify-content: center;
 }
 
 .user-has-messages > span{
-    position:relative;
-    top: -6px;
-    left: 4px;
+    display: table-cell;
+    vertical-align: middle;
+    align-self: center;
 }

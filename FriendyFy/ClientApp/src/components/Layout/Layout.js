@@ -39,7 +39,7 @@ export const Layout = (props) => {
                 </Container>
         </div>
         {loggedIn ? <RightNavigation/> : ''}
-        {loggedIn ? <Footer people={users}/> : ''}
+        {loggedIn ? <Footer/> : ''}
       </div>
     );
   }

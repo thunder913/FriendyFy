@@ -14,14 +14,9 @@ namespace FriendyFy.Controllers
     public class ChatController : BaseController
     {
         private readonly IChatService chatService;
-        private readonly IHubContext<ChatHub> chatHub;
-        private readonly IMessageService messageService;
-        public ChatController(IChatService chatService,
-            IHubContext<ChatHub> chatHub, IMessageService messageService)
+        public ChatController(IChatService chatService)
         {
             this.chatService = chatService;
-            this.chatHub = chatHub;
-            this.messageService = messageService;
         }
 
         [HttpGet("getChats/{username}")]
@@ -38,7 +33,7 @@ namespace FriendyFy.Controllers
         }
 
         [HttpPost("getChat")]
-        public IActionResult GetUserChat([FromBody] GetChatDto dto)
+        public async Task<IActionResult> GetUserChat([FromBody] GetChatDto dto)
         {
             var user = this.GetUserByToken();
 
@@ -47,7 +42,23 @@ namespace FriendyFy.Controllers
                 return Unauthorized("You are not signed in!");
             }
 
-            return Ok(this.chatService.GetChatMessages(user.Id, dto.ChatId, dto.Take, dto.Skip));
+            var chat = this.chatService.GetChatMessages(user.Id, dto.ChatId, dto.Take, dto.Skip);
+            await this.SeenMessage(dto.ChatId);
+
+            return Ok(chat);
+        }
+
+        [HttpPost("seeMessages")]
+        public async Task<IActionResult> SeenMessage(string chatId)
+        {
+            var user = this.GetUserByToken();
+
+            if (user == null)
+            {
+                return Unauthorized("You are not signed in!");
+            }
+
+            return Ok(await this.chatService.SeeMessagesAsync(chatId, user));
         }
     }
 }

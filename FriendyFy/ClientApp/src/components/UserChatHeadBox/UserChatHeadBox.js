@@ -45,7 +45,7 @@ function UserChatHeadBox({changeChatBox, chat, sendMessageEvent, loadMoreMessage
             <h4>{chat.name}</h4>
             </div>
 
-            <a href="#" className="chat-close">x</a>
+            {/* <a href="#" className="chat-close">x</a> */}
             <span className="chat-message-counter">3</span>
         </header>
         <div className="chat">

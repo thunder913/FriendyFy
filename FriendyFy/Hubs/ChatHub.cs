@@ -50,9 +50,9 @@ namespace FriendyFy.Hubs
                 return false;
             }
 
-            await this.Clients.Users(usersInChat).SendAsync("ReceiveMessage", message);
+            await this.Clients.Users(usersInChat).SendAsync(dto.ChatId, message);
             message.IsYourMessage = true;
-            await this.Clients.User(userId).SendAsync("ReceiveMessage", message);
+            await this.Clients.User(userId).SendAsync(dto.ChatId, message);
             
 
             return true;
