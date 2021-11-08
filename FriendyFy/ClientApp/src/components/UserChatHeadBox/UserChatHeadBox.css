@@ -302,3 +302,7 @@ header > .other-user-chat-image{
 .message-no-bottom-margin{
     margin-bottom: 2px;   
 }
+
+.loading-text{
+    text-align: center;
+}

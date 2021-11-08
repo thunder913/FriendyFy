@@ -40,6 +40,7 @@ namespace FriendyFy.Services
                 {
                     ChatId = x.Id,
                     Name = x.ChatType == ChatType.Direct ? x.Users.FirstOrDefault(y => y.UserName != username).FirstName : x.Name,
+                    FullName = x.ChatType == ChatType.Direct ? x.Users.FirstOrDefault(y => y.UserName != username).FirstName + " " + x.Users.FirstOrDefault(y => y.UserName != username).LastName : x.Name,
                     IsActive = false,
                     NewMessages = x.Messages.Count() - x.Messages.Where(y => y.SeenBy.Any(y => y.UserName == username)).Count(),
                     Picture = x.ChatType == ChatType.Direct 

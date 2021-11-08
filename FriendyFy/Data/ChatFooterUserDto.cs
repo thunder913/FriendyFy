@@ -7,5 +7,6 @@
         public bool IsActive { get; set; }
         public string ChatId { get; set; }
         public int NewMessages { get; set; }
+        public string FullName { get; set; }
     }
 }

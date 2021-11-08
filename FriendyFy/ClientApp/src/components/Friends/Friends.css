@@ -20,3 +20,7 @@
 .friends-main > h2{
     margin-bottom: 20px;
 }
+
+.loading-text{
+    text-align: center;
+}

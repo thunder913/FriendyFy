@@ -49,7 +49,7 @@ const Friends = () => {
                     dataLength={friends.length}
                     next={getMoreFriends}
                     hasMore={hasMore}
-                    loader={<h4>Loading...</h4>}
+                    loader={<h4 className="loading-text">Loading...</h4>}
                     endMessage={
                         <p style={{ textAlign: 'center' }}>
                         <b>No more friends to show!</b>

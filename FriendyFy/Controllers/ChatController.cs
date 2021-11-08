@@ -33,7 +33,7 @@ namespace FriendyFy.Controllers
         }
 
         [HttpPost("getChat")]
-        public async Task<IActionResult> GetUserChat([FromBody] GetChatDto dto)
+        public IActionResult GetUserChat([FromBody] GetChatDto dto)
         {
             var user = this.GetUserByToken();
 

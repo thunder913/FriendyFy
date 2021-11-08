@@ -46,7 +46,6 @@ function UserChatHeadBox({changeChatBox, chat, sendMessageEvent, loadMoreMessage
             </div>
 
             {/* <a href="#" className="chat-close">x</a> */}
-            <span className="chat-message-counter">3</span>
         </header>
         <div className="chat">
                 <InfiniteScroll
@@ -56,7 +55,7 @@ function UserChatHeadBox({changeChatBox, chat, sendMessageEvent, loadMoreMessage
                     height={300}
                     inverse={true}
                     hasMore={hasMore}
-                    loader={<h4>Loading...</h4>}
+                    loader={<h4 className="loading-text">Loading...</h4>}
                     scrollableTarget="scrollableDiv"
                     endMessage={
                         <p style={{ textAlign: 'center' }}>
