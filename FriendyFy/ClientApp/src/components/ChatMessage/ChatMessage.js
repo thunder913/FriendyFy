@@ -30,7 +30,8 @@ function ChatMessage({message}) {
 
     return (<section><div className={"chat-message clearfix other-user-message" + (!message.isBottomMessage ? " message-no-bottom-margin" : '')}>
         <div className="other-user-chat-image">
-            <img src={message.photo} alt="" width="32" height="32" />
+            {message.isBottomMessage ? <img src={message.photo} alt="" width="32" height="32" /> : ''}
+            
         </div>
         <div className="chat-message-content clearfix">
             <header>

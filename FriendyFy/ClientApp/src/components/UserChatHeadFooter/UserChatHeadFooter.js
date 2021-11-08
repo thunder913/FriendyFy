@@ -5,11 +5,8 @@ import { getChat, seeMessages } from '../../services/chatService';
 import { useLoggedIn } from '../../contexts/LoggedInContext';
 
 function UserChatHeadFooter({chatDetails, connection}){
-    // TODO
-    // Make the receive thingy on the Footer (upper component) and make it somehow, when I receive a message and open the chat, it becomes seen
-    // and make the chatDetails.newMessages into a state
+
     const {loggedIn} = useLoggedIn();
-    const [hasUnreadMessages, setHasUnreadMessages] = useState(chatDetails.newMessages > 0); 
     const [showChat, setShowChat] = useState(false);
     const [bigChatBox, setBigChatBox] = useState(false);
     const [chat, setChat] = useState({messages: []});
@@ -17,17 +14,22 @@ function UserChatHeadFooter({chatDetails, connection}){
     const [firstTime, setFirstTime] = useState(true);
     const [userOnline, setUserOnline] = useState('');
     const [unreadMessages, setUnreadMessages] = useState('');
-    const latestChat = useRef(null);
-    latestChat.current = chat;
-    const isChatOpen = useRef(null);
-    isChatOpen.current = bigChatBox;
+    const [newMessages, setNewMessages] = useState(chatDetails.newMessages);
     
+    // These are used in the receive message code
+    const latestChat = useRef(null); latestChat.current = chat;
+    const isChatOpen = useRef(null); isChatOpen.current = bigChatBox;
+    const newMessagesRef = useRef(null); newMessagesRef.current = newMessages;
+
     const onClick = (e) => 
         {  
             if (!showChat) {
-            }
             setBigChatBox(!bigChatBox);
             setShowChat(!showChat);
+            if(newMessages > 0)
+            seeMessages(chatDetails.chatId)
+            setNewMessages(0);
+            }
         };
 
     const closeChatPopup = () => {
@@ -37,6 +39,7 @@ function UserChatHeadFooter({chatDetails, connection}){
         }, 300);
     }
 
+    // Triggered when opening the chat
     useEffect(() => {
         if(showChat && firstTime){
         getChat(loggedIn.userName, chatDetails.chatId, 20, 0)
@@ -49,8 +52,7 @@ function UserChatHeadFooter({chatDetails, connection}){
                 if(obj.messages.length == 0){
                     setHasMore(false);
                 }
-                setHasUnreadMessages(false);
-                chatDetails.newMessages=0;
+                setNewMessages(0);
             })
             setFirstTime(false);
         }
@@ -59,7 +61,7 @@ function UserChatHeadFooter({chatDetails, connection}){
     useEffect(() => {
         if (connection) {
               connection.on(chatDetails.chatId, (message) => {
-                  //When adding check if the previous message has same username and change the isTopMessage and
+                //When adding check if the previous message has same username and change the isTopMessage and
                   //isBottomMessage the way they should be
                   //find out why the chat here is not the actual state......
                   message.isBottomMessage=true;
@@ -70,18 +72,19 @@ function UserChatHeadFooter({chatDetails, connection}){
                       firstMessage.isBottomMessage=false;
                   }else{
                       message.isTopMessage=true;
+                      if(firstMessage)
                       firstMessage.isBottomMessage=true;
                   }
-                  chatMessages[0] = firstMessage;
-                  setChat(prevState => ({image: prevState.image, name: prevState.name, messages: [message ,...chatMessages]}));
-                  console.log(isChatOpen.current, 'chat open')
-                  console.log(message.isYourMessage, 'is your message')
+                  if(chatMessages.length>0){
+                    chatMessages[0] = firstMessage;
+                    setChat(prevState => ({image: prevState.image, name: prevState.name, messages: [message ,...chatMessages]}));
+                  }
+
                   if(!message.isYourMessage){
                     if(isChatOpen.current){
-                        seeMessages({chatId: chatDetails.chatId});
+                        seeMessages(chatDetails.chatId);
                     }else{
-                        setHasUnreadMessages(true);
-                      chatDetails.newMessages++;
+                        setNewMessages(newMessagesRef.current+1);
                     }
                   }
 
@@ -150,15 +153,15 @@ function UserChatHeadFooter({chatDetails, connection}){
         }else{
             setUserOnline(<div className="user-offline"></div>);
         }
-        if (hasUnreadMessages) {
-            let messages = chatDetails.newMessages > 9 ? "9+" : chatDetails.newMessages;
+        if (newMessages > 0) {
+            let messages = newMessages > 9 ? "9+" : newMessages;
             setUnreadMessages(<div className="user-has-messages">
                 <span>{messages}</span>
             </div>);
         }else{
             setUnreadMessages('');
         }
-    }, [hasUnreadMessages])
+    }, [newMessages])
 
 
     return (

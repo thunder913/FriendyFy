@@ -43,13 +43,13 @@ namespace FriendyFy.Controllers
             }
 
             var chat = this.chatService.GetChatMessages(user.Id, dto.ChatId, dto.Take, dto.Skip);
-            await this.SeenMessage(dto.ChatId);
+            //await this.SeenMessage(dto.ChatId);
 
             return Ok(chat);
         }
 
         [HttpPost("seeMessages")]
-        public async Task<IActionResult> SeenMessage(string chatId)
+        public async Task<IActionResult> SeenMessage([FromBody] GetChatDto dto)
         {
             var user = this.GetUserByToken();
 
@@ -58,7 +58,7 @@ namespace FriendyFy.Controllers
                 return Unauthorized("You are not signed in!");
             }
 
-            return Ok(await this.chatService.SeeMessagesAsync(chatId, user));
+            return Ok(await this.chatService.SeeMessagesAsync(dto.ChatId, user));
         }
     }
 }
