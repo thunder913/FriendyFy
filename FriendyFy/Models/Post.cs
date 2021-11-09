@@ -1,4 +1,5 @@
 ﻿using FriendyFy.Models.Common;
+using FriendyFy.Models.Enums;
 using System.Collections.Generic;
 
 namespace FriendyFy.Models
@@ -11,5 +12,6 @@ namespace FriendyFy.Models
         public ICollection<PostLike> Likes { get; set; } = new HashSet<PostLike>();
         public ICollection<PostComment> Comments { get; set; } = new HashSet<PostComment>();
         public ICollection<ApplicationUser> Reposts { get; set; } = new HashSet<ApplicationUser>();
+        public PrivacySettings Privacy { get; set; }
     }
 }

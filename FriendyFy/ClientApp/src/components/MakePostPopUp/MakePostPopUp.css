@@ -1,0 +1,146 @@
+.make-post-popup{
+    position: absolute;
+    left: 0;
+    right: 0;
+    margin: auto;
+    padding: 20px; 
+    box-shadow: 5px 5px 27px 3px rgba(0,0,0,0.78);
+    top: 50%;
+    transform: translateY(-50%);
+    z-index: 2;
+    height: 5000px;
+    width: 100%;
+    background: transparent;
+    backdrop-filter: blur(5px);
+}
+
+.make-post-popup .post-popup{
+    width: 540px;
+    text-align: center;
+    background-color: #3F3B3B;
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    -webkit-transform: translateX(-50%) translateY(-50%);
+    transform: translateX(-50%) translateY(-50%);
+    padding: 20px;
+    display: flex;
+    flex-direction: column;
+    overflow:auto;
+    max-height: 800px;
+    box-shadow: 5px 4px 23px 9px rgba(0,0,0,0.89);
+    gap: 20px;
+}
+
+.make-post-underheader > .image{
+    width: 50px;
+    height: 50px;
+    border-radius: 50%;
+    box-shadow: 0px -1px 10px 10px rgba(0,0,0,0.10);
+}
+
+.make-post-underheader > .image > img{
+    width: 100%;
+    height: 100%;
+    border-radius: 50%;
+}
+
+.make-post-underheader{
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+}
+
+.make-post-underheader > span{
+    margin-left: 10px;
+}
+
+.privacy-picker{
+    position: relative;
+    right: 0px;
+    margin-left: auto;
+    background-color: #3F3B3B;
+}
+
+#post-message{
+    background-color: #3F3B3B;
+    border-radius: 5px;
+    color: white;
+    padding: 2px 5px;
+}
+
+#post-message:focus{
+    outline: #aaaaaa;
+    border-color: #aaaaaa;
+}
+
+.make-post-header{
+    display: flex;
+}
+
+.make-post-title{
+    align-self: center;
+    font-size: 22px;
+    font-weight: 600;
+
+}
+
+.close-make-post{
+    position: absolute;
+    top: 10px;
+    right: 0px;
+    width: 100px;
+    height: 50px;
+    background-color: transparent;
+    border: 0px;
+    font-size: 30px;
+    font-weight: 600;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: 0.3s;
+    color: rgb(206, 204, 204);
+    border-radius: 20px 0px 0px 20px;
+}
+
+.close-make-post:hover{
+    background-color: #5c5858;
+    color: black;
+}
+
+.make-post-popup .privacy-picker > div{
+    border-color: #aaaaaa;
+}
+
+.make-post-popup .post{
+    background-color: rgb(35, 87, 155);
+    font-size: 20px;
+    font-weight: 500;
+    padding: 5px;
+    border: 2px solid rgba(19, 60, 114, 0.2);
+    color: white;
+    transition: 0.3s;
+}
+
+
+.make-post-popup .post:hover{
+    background-color: rgb(58, 108, 173);
+    border: 2px solid rgba(54, 101, 163, 0.2);
+}
+
+.create-post-buttons{
+    display: flex;
+    flex-direction: row;
+    justify-content: space-evenly;
+}
+
+.create-post-buttons > .post-button-icon{
+    width: 80px;
+    height: 80px;
+    padding: 20px;
+    border-radius: 10px;
+}
+
+.create-post-buttons > .post-button-icon.active{
+    background-color: rgb(83, 80, 80, 0.8);
+}
