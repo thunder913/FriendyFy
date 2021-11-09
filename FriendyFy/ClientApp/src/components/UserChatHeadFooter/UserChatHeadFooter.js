@@ -77,7 +77,7 @@ function UserChatHeadFooter({chatDetails, connection}){
             if(i-1>=0 && messages[i].username === messages[i-1].username){
                 messages[i].isBottomMessage = false;
             }
-            if(i != messages.length && i+1 < messages.length && messages[i].username === messages[i+1].username){
+            if(i !== messages.length && i+1 < messages.length && messages[i].username === messages[i+1].username){
                 messages[i].isTopMessage = false;
             }
         }
@@ -105,7 +105,8 @@ function UserChatHeadFooter({chatDetails, connection}){
             })
             setFirstTime(false);
         }
-        }, [showChat, chatDetails.chatId, checkChatMessages, firstTime, loggedIn.userName])
+        //eslint-disable-next-line
+        }, [showChat, chatDetails.chatId, firstTime, loggedIn.userName])
 
     useEffect(() => {
         if (connection) {
@@ -160,7 +161,7 @@ function UserChatHeadFooter({chatDetails, connection}){
         }else{
             setUnreadMessages('');
         }
-    }, [newMessages])
+    }, [newMessages, chatDetails.isActive])
 
 
     return (

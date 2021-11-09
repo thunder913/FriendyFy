@@ -4,7 +4,7 @@ import FeedEvent from '../FeedEvent/FeedEvent';
 import ProfileHeader from '../ProfileHeader/ProfileHeader';
 import ProfileSidebar from '../ProfileSidebar/ProfileSidebar';
 import FeedPost from '../FeedPost/FeedPost';
-import { useLocation, useHistory } from 'react-router';
+import { useHistory } from 'react-router';
 
 const events = [
     {
@@ -100,10 +100,10 @@ const friends = [
 
 const Profile = () => {
     const history = useHistory();
-
+    
     useEffect(() => {
             window.scrollTo(0, 0);
-    })
+    }, [history.location])
 
     return(<div className="profile-top">
         <div className="profile-container">
@@ -114,7 +114,7 @@ const Profile = () => {
                     <div className="feed">
                     {events.map(event => <FeedEvent event={event} />)}
                         <FeedPost image="https://scontent.fsof8-1.fna.fbcdn.net/v/t1.6435-9/194957949_4334439429940720_5542816028295677772_n.jpg?_nc_cat=108&ccb=1-5&_nc_sid=09cbfe&_nc_ohc=YeTxne8hWKoAX9bbJvR&_nc_ht=scontent.fsof8-1.fna&oh=51a6dbebf71ee668c34d7292be94abf0&oe=6192F854"></FeedPost>
-                        <FeedPost image="https://image.shutterstock.com/image-photo/mountain-landscape-lake-range-large-600w-1017466240.jpg"></FeedPost>
+                        <FeedPost image="http://www.orneveien.org/nikon-d800/panoramas/huge/2015-02-06-wellville-mountains-gleaming-new-snow-panorama-halfsize.jpg"></FeedPost>
                         <FeedPost image="https://jillsbooks.files.wordpress.com/2011/02/abraham-lincoln-was-very-tall.jpg"></FeedPost>
                     </div>
                 </div>

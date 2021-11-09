@@ -90,15 +90,17 @@ header.profile-header{
     transition: 0.3s;
 }
 
-.profile-navigation > div a{
+.profile-navigation > div button{
     text-decoration: none;
     color: #FFF;
     padding: 6.5px 50px;
     border-radius: 10px;
     transition: 0.3s;
+    background-color: transparent;
+    border: 0px;
 }
 
-.profile-navigation > div a:hover{
+.profile-navigation > div button:hover{
     background-color: rgb(104, 104, 104, 0.8);
     cursor: pointer;
 }
@@ -116,7 +118,7 @@ header.profile-header{
 }
 
 .add-friend{
-    background-color: rgb(35, 87, 155);
+    background-color: rgb(35, 87, 155) !important;
 }
 
 .add-friend-nav > .add-friend:hover{

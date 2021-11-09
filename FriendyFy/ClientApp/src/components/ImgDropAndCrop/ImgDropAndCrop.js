@@ -2,8 +2,6 @@ import React, {  useRef, useState } from 'react'
 import { useDropzone } from 'react-dropzone'
 import './ImgDropAndCrop.css'
 import {
-    base64StringtoFile,
-    downloadBase64File,
     extractImageFileExtensionFromBase64,
     image64toCanvasRef
 } from '../../services/imageService'
@@ -16,7 +14,7 @@ function ImgDropAndCrop({placeholder, setCroppedImg, aspectRatio, imageClass}) {
 const defaultCrop = {aspect: aspectRatio, x: 0, y: 0, width: aspectRatio * 0, height: 0, unit:"px"}
 
     const [imgSrc, setImgSrc] = useState(null);
-    const [imgSrcExt, setImgSrcExt] = useState(null)
+    const [, setImgSrcExt] = useState(null)
     const [crop, setCrop] = useState(defaultCrop)
     const [firstTime, setFirstTime] = useState(true);
 

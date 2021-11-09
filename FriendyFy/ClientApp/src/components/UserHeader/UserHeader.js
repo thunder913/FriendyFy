@@ -2,11 +2,9 @@ import React from 'react';
 import './UserHeader.css';
 import { useHistory } from 'react-router';
 import {useLoggedIn} from '../../contexts/LoggedInContext.js';
-import { useLocation } from 'react-router';
 
 const UserHeader = () =>{
-    const {loggedIn, setLoggedIn} = useLoggedIn();
-    const location = useLocation().pathname;
+    const {loggedIn} = useLoggedIn();
     const history = useHistory();
 
     const goToProfile = () => {

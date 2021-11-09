@@ -4,7 +4,7 @@ import UserChatHeadFooter from '../UserChatHeadFooter/UserChatHeadFooter'
 import FriendSearchBar from '../FriendSearchBar/FriendSearchBar';
 import { getChats } from '../../services/chatService';
 import { useLoggedIn } from '../../contexts/LoggedInContext';
-import { HttpTransportType, HubConnectionBuilder } from "@microsoft/signalr";
+import { HubConnectionBuilder } from "@microsoft/signalr";
 
 function Footer(){
 
@@ -37,7 +37,7 @@ function Footer(){
     useEffect(() => {
         getChats(loggedIn.userName)
             .then(async res => setChats(await res.json()));
-          }, [])
+          }, [loggedIn.userName])
 
     return (
         <div className="site-footer" >

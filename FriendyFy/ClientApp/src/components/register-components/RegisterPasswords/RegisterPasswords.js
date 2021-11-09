@@ -43,7 +43,8 @@ const RegisterPasswords = () => {
         return () => clearTimeout(timeoutId);
         }
         setFirstLoad(false);
-    }, [password, firstLoad, passwordValidation]);
+        //eslint-disable-next-line
+    }, [password, firstLoad]);
 
     useEffect(() => {
         if(!firstLoad){
@@ -52,6 +53,7 @@ const RegisterPasswords = () => {
                 , 500);
             return () => clearTimeout(timeoutId);
             }
+            //eslint-disable-next-line
     },[confirmPassword, firstLoad])
 
     function onPasswordChange(e){

@@ -4,7 +4,6 @@ import InterestsDropdown from '../InterestsDropdown/InterestsDropdown';
 import './FirstTimePopUp..css';
 import ImgDropAndCrop from '../ImgDropAndCrop/ImgDropAndCrop.js';
 import axios from 'axios';
-import { useLoggedIn } from '../../contexts/LoggedInContext';
 
 const FirstTimePopUp = ({checkFirstTimePopUp}) => {
     const [location, setLocation] = useState('');
@@ -43,7 +42,7 @@ const FirstTimePopUp = ({checkFirstTimePopUp}) => {
         formdata.append("longitude", location.lng);
 
         let response = await axios.post("/api/FinishFirstTimeSetup", formdata);
-        if(response.status == 200){
+        if(response.status === 200){
             await checkFirstTimePopUp();
         }else{
             setErrorMessage(response.data);

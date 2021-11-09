@@ -2,10 +2,8 @@ import React, { useState } from 'react';
 import './FriendSuggestion.css';
 import { Link } from 'react-router-dom';
 import { addFriend, removeFriendSuggestion } from '../../services/friendService.js';
-import { useLoggedIn } from '../../contexts/LoggedInContext.js';
 
 const FriendSuggestion = ({friend}) =>{
-    const {loggedIn, setLoggedIn} = useLoggedIn();
     const [show, setShow] = useState(true)
 
     const addFriendEvent = () => {

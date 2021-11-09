@@ -3,10 +3,10 @@ import './TermsOfService.css';
 
 const TermsOfService = () =>(
     <ul className="terms-of-service">
-        <li><a href="">Privacy</a></li>
-        <li><a href="">Terms</a></li>
-        <li><a href="">Cookies</a></li>
-        <li><a href="">FriendyFy © {new Date().getFullYear()}</a></li>
+        <li><button href="">Privacy</button></li>
+        <li><button href="">Terms</button></li>
+        <li><button href="">Cookies</button></li>
+        <li><button href="">FriendyFy © {new Date().getFullYear()}</button></li>
     </ul>
     )
 

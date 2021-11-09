@@ -74,8 +74,10 @@ const HomePageSignedIn = () => {
     }
   }
   
-  useEffect(async () => {
-    await checkFirstTimePopUp();
+  //Make it async if anything goes wrong
+  useEffect(() => {
+    checkFirstTimePopUp();
+    //eslint-disable-next-line
   },[])
 
   return (<div className="feed home-feed">
