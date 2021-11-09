@@ -1,12 +1,12 @@
-import React, {useState, useEffect} from 'react';
+import React, {useState} from 'react';
 import { addFriend, checkFriendStatus, cancelFriendRequest, acceptFriendRequest, removeFriend } from '../../services/friendService';
 import "./UserFriendButton.css"
 function UserFriendButton({userId}){
     const [isHovering, setIsHovering] = useState(false)
-    const [friendStatus, setFriendStatus] = useState('');
     const [friendText, setFriendText] = useState('');
 
-    const addFriendEvent = () => {
+    const addFriendEvent = (e) => {
+        e.preventDefault();
         addFriend({userId: userId})
             .then(async res => {
                 if(res.ok){
@@ -16,7 +16,8 @@ function UserFriendButton({userId}){
         });
     }
 
-    const acceptEvent = () => {
+    const acceptEvent = (e) => {
+        e.preventDefault();
         acceptFriendRequest({userId: userId})
             .then(async res => {
                 if(res.ok){
@@ -26,7 +27,8 @@ function UserFriendButton({userId}){
         })
     }
 
-    const declineEvent = () => {
+    const declineEvent = (e) => {
+        e.preventDefault();
         cancelFriendRequest({userId: userId})
         .then(async res => {
             if(res.ok){
@@ -36,7 +38,8 @@ function UserFriendButton({userId}){
         })
     }
 
-    const cancelEvent = () => {
+    const cancelEvent = (e) => {
+        e.preventDefault();
         cancelFriendRequest({userId: userId})
         .then(async res => {
             if(res.ok){
@@ -46,7 +49,8 @@ function UserFriendButton({userId}){
         })
     }
 
-    const removeFriendEvent = () => {
+    const removeFriendEvent = (e) => {
+        e.preventDefault();
         removeFriend({userId: userId})
         .then(async res => {
             if(res.ok){
@@ -76,6 +80,8 @@ function UserFriendButton({userId}){
                     case 'same-user':
                         setFriendText("Manage")
                         break;
+                    default:
+                        break;
                 }
             });
 
@@ -88,24 +94,24 @@ function UserFriendButton({userId}){
     return(
         <div className="add-friend-nav">
 
-                {friendText == "Requested" ? 
-                <a className="request-cancel" onClick={cancelEvent}>Cancel Friend Request</a> : 
-                friendText=="Received" 
+                {friendText === "Requested" ? 
+                <button className="request-cancel" onClick={cancelEvent}>Cancel Friend Request</button> : 
+                friendText==="Received" 
                 ? <div className="receive">
-                    <a className="accept" onClick={acceptEvent}>Accept</a>
-                    <a className="decline" onClick={declineEvent}>Decline</a>
-                </div> : friendText=="Friends" ?
-                <a 
+                    <button className="accept" onClick={acceptEvent}>Accept</button>
+                    <button className="decline" onClick={declineEvent}>Decline</button>
+                </div> : friendText==="Friends" ?
+                <button 
                     className="add-friend remove-friend" 
                     onClick={removeFriendEvent}
                     onMouseEnter={() => setIsHovering(true)}
                     onMouseLeave={() => setIsHovering(false)}>
                     {isHovering ? "Remove Friend" : friendText}
-                </a>
+                </button>
                 :
-                <a className="add-friend " onClick={addFriendEvent}>
+                <button className="add-friend " onClick={addFriendEvent}>
                     {friendText}
-                </a>}
+                </button>}
         </div>
     );
 }

@@ -25,7 +25,7 @@ const HomePageNotSignedIn = () =>{
                     setShowEmailConfirmed(true);
                 }
             })}
-    },[]);
+    },[code, userId]);
 
     function onSubmitHandler(e){
         e.preventDefault();

@@ -1,4 +1,4 @@
-import React, { useCallback, useRef, useState } from 'react'
+import React, {  useRef, useState } from 'react'
 import { useDropzone } from 'react-dropzone'
 import './ImgDropAndCrop.css'
 import {
@@ -22,8 +22,6 @@ const defaultCrop = {aspect: aspectRatio, x: 0, y: 0, width: aspectRatio * 0, he
 
     const imagePreviewCanvasRef = useRef();
     const {
-        acceptedFiles,
-        fileRejections,
         getRootProps,
         getInputProps,
     } = useDropzone({
@@ -101,21 +99,21 @@ const defaultCrop = {aspect: aspectRatio, x: 0, y: 0, width: aspectRatio * 0, he
         }
     }
 
-    const handleDownloadClick = (event) => {
-        event.preventDefault()
-        if (imgSrc) {
-            const canvasRef = imagePreviewCanvasRef.current
-            const imageData64 = canvasRef.toDataURL('image/' + imgSrcExt)
-            const myFilename = "previewFile." + imgSrcExt
+    // const handleDownloadClick = (event) => {
+    //     event.preventDefault()
+    //     if (imgSrc) {
+    //         const canvasRef = imagePreviewCanvasRef.current
+    //         const imageData64 = canvasRef.toDataURL('image/' + imgSrcExt)
+    //         const myFilename = "previewFile." + imgSrcExt
 
-            // file to be uploaded
-            if(imageData64.length < 10) return;
-            const myNewCroppedFile = base64StringtoFile(imageData64, myFilename)
-            // download file
-            downloadBase64File(imageData64, myFilename)
-            handleClearToDefault()
-        }
-    }
+    //         // file to be uploaded
+    //         if(imageData64.length < 10) return;
+    //         const myNewCroppedFile = base64StringtoFile(imageData64, myFilename)
+    //         // download file
+    //         downloadBase64File(imageData64, myFilename)
+    //         handleClearToDefault()
+    //     }
+    // }
 
     const handleClearToDefault = event => {
         if (event) event.preventDefault()
@@ -129,25 +127,25 @@ const defaultCrop = {aspect: aspectRatio, x: 0, y: 0, width: aspectRatio * 0, he
         setFirstTime(true);
     }
 
-    const handleFileSelect = event => {
-        const files = event.target.files
-        if (files && files.length > 0) {
-            const isVerified = verifyFile(files)
-            if (isVerified) {
-                // imageBase64Data 
-                const currentFile = files[0]
-                const myFileItemReader = new FileReader()
-                myFileItemReader.addEventListener("load", () => {
-                    const myResult = myFileItemReader.result
-                    setImgSrc(myResult);
-                    setImgSrcExt(extractImageFileExtensionFromBase64(myResult));
-                }, false)
+    // const handleFileSelect = event => {
+    //     const files = event.target.files
+    //     if (files && files.length > 0) {
+    //         const isVerified = verifyFile(files)
+    //         if (isVerified) {
+    //             // imageBase64Data 
+    //             const currentFile = files[0]
+    //             const myFileItemReader = new FileReader()
+    //             myFileItemReader.addEventListener("load", () => {
+    //                 const myResult = myFileItemReader.result
+    //                 setImgSrc(myResult);
+    //                 setImgSrcExt(extractImageFileExtensionFromBase64(myResult));
+    //             }, false)
 
-                myFileItemReader.readAsDataURL(currentFile)
+    //             myFileItemReader.readAsDataURL(currentFile)
 
-            }
-        }
-    }
+    //         }
+    //     }
+    // }
 
     const onImageLoaded = image => {
         let height = image.offsetHeight;

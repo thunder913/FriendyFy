@@ -9,7 +9,7 @@ const LeftNavigationEvent = ({data}) =>(
             <header className="event-header">
                 <h4>{data.name}</h4>
                 <div className="event-information">
-                    <span className="location"><a href="#">{data.location}</a></span>
+                    <span className="location"><a href="/">{data.location}</a></span>
                     <span>next month</span>
                 </div>
             </header>

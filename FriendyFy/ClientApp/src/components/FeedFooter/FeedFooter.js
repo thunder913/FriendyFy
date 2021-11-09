@@ -8,19 +8,19 @@ const FeedFooter = (props) => (
             <div className="top-footer">
                 <div className="likes">
                     <span>
-                        <a href="">
+                        <a href="/">
                             {props.likes} likes
                         </a>
                     </span>
                 </div>
                 <div className="comments-reposts">
                     <span>
-                        <a href="">
+                        <a href="/">
                             {props.comments} comments
                         </a>
                     </span>
                     <span>
-                        <a href="">
+                        <a href="/">
                             {props.reposts} reposts
                         </a>
                     </span>

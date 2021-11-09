@@ -1,13 +1,9 @@
-import React, { useEffect, useState } from 'react';
-import './ProfileHeader.css';
-import { Link } from 'react-router-dom';
-import { useLoggedIn } from '../../contexts/LoggedInContext';
 import axios from 'axios';
-import { useLocation } from 'react-router';
-import { useHistory } from 'react-router';
+import React, { useEffect, useState } from 'react';
+import { useHistory, useLocation } from 'react-router';
 import UserFriendButton from '../UserFriendButton/UserFriendButton';
+import './ProfileHeader.css';
 const ProfileHeader = ({selected}) =>{
-    const {loggedIn} = useLoggedIn();
     const [profilePicture, setProfilePicture] = useState(''); 
     const [coverPicture, setCoverPicture] = useState(''); 
     const [name, setName] = useState(''); 
@@ -17,19 +13,21 @@ const ProfileHeader = ({selected}) =>{
     const location = useLocation().pathname;
     const history = useHistory();
 
-    const goToPhotos = () => {
+    const goToPhotos = (e) => {
         if(!location.includes("photos")){
             history.push('/photos/' + userId);
         }
     }
 
-    const goToTimeline = () => {
+    const goToTimeline = (e) => {
+        e.preventDefault();
         if(!location.includes("profile")){
             history.push('/profile/' + userId);
         }
     }
     
-    const goToFriends = () => {
+    const goToFriends = (e) => {
+        e.preventDefault();
         if(!location.includes("friends")){
             history.push('/friends/' + userId);
         }
@@ -46,7 +44,7 @@ const ProfileHeader = ({selected}) =>{
             await setQuote(user.quote);
         })
 
-    }, [location])
+    }, [location, userId])
 
     return (
     <header className="profile-header">
@@ -65,19 +63,19 @@ const ProfileHeader = ({selected}) =>{
     <p className="user-name">{name}</p>
     <div className="profile-navigation">
         <div className="timeline-nav">
-            <a className={"timeline " + (selected.match("timeline") ? "selected" : "")} onClick={goToTimeline}>
+            <button className={"timeline " + (selected.match("timeline") ? "selected" : "")} onClick={goToTimeline}>
                 Timeline
-            </a>
+            </button>
         </div>
         <div className="photos-nav">
-            <a className={"photos " + (selected.match("photos-nav") ? "selected" : "")} onClick={goToPhotos}>
+            <button className={"photos " + (selected.match("photos-nav") ? "selected" : "")} onClick={goToPhotos}>
                 Photos
-            </a>
+            </button>
         </div>
         <div className="friends-nav">
-            <a className={"friends " + (selected.match("friends") ? "selected" : "")} onClick={goToFriends}>
+            <button className={"friends " + (selected.match("friends") ? "selected" : "")} onClick={goToFriends}>
                 Friends
-            </a>
+            </button>
         </div>
         <UserFriendButton userId={userId}/>
     </div>

@@ -29,7 +29,7 @@ const RegisterEmailField = () => {
         return () => clearTimeout(timeoutId);
         }
         setFirstLoad(false);
-    }, [email]);
+    }, [email, firstLoad]);
 
     return (
     <InputWithValidation

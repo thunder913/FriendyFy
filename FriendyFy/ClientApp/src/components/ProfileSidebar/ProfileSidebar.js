@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import './ProfileSidebar.css';
 import { getUserLocation, getUserEventsCount } from '../../services/userService';
-import { getFriends, getRecommendedFriends } from '../../services/friendService';
+import { getFriends } from '../../services/friendService';
 import { useLocation } from 'react-router';
 import {Link} from "react-router-dom";
 
@@ -19,7 +19,7 @@ useEffect(() => {
         .then(async res => {setLocation((await res.json()).location)});
     getUserEventsCount(userId)
         .then(async res => {setEventsCount((await res.json()).count)});
-    }, [siteLocation])
+    }, [siteLocation, userId])
 
 return(
 <div className="profile-sidebar">

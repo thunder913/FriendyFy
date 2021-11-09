@@ -1,6 +1,6 @@
-import React, {useState, useEffect} from 'react'
+import React, { useEffect, useState } from 'react';
 import InputWithValidation from '../../InputWithValidation/InputWithValidation';
-import './RegisterPasswords.css'
+import './RegisterPasswords.css';
 const RegisterPasswords = () => {
     const [password, setPassword] = useState('');
     const [confirmPassword, setConfirmPassword] = useState('');
@@ -43,7 +43,7 @@ const RegisterPasswords = () => {
         return () => clearTimeout(timeoutId);
         }
         setFirstLoad(false);
-    }, [password]);
+    }, [password, firstLoad, passwordValidation]);
 
     useEffect(() => {
         if(!firstLoad){
@@ -52,7 +52,7 @@ const RegisterPasswords = () => {
                 , 500);
             return () => clearTimeout(timeoutId);
             }
-    },[confirmPassword])
+    },[confirmPassword, firstLoad])
 
     function onPasswordChange(e){
         setPassword(e.target.value);

@@ -11,19 +11,19 @@ import ProfilePhotos from './components/ProfilePhotos/ProfilePhotos';
 import Register from './components/register-components/Register/Register.js';
 import HomePageNotSignedIn from './components/HomePageNotSignedIn/HomePageNotSignedIn';
 import {useLoggedIn} from './contexts/LoggedInContext.js'
-import { useCallback } from 'react';
 
 
 function App(){
-  const {loggedIn, setLoggedIn, resetUser} = useLoggedIn();
+  const {loggedIn, resetUser} = useLoggedIn();
 
-  useEffect(async () => {
-    await resetUser();
-  }, [])
+  // Make this async if anything fails anywhere
+  useEffect(() => {
+    resetUser();
+  }, [resetUser])
 
   return (
               <Layout>
-              {!loggedIn ? (<HomePageNotSignedIn></HomePageNotSignedIn>) : (
+              {!loggedIn ? (<HomePageNotSignedIn/>) : (
                 <div className="app">
                   <Route path="/profile" component={Profile}></Route>
                   <Route path="/friends" component={Friends}></Route>

@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useRef } from 'react';
+import React, { useState, useEffect } from 'react';
 import './UserChatHeadBox.css';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import $ from 'jquery';

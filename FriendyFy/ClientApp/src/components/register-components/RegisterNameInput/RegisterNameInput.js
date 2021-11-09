@@ -44,7 +44,7 @@ const RegisterNameInput = () => {
         return () => clearTimeout(timeoutId);
         }
         setFirstLoad(false);
-    }, [firstName]);
+    }, [firstName, firstLoad, letterRegex]);
 
     useEffect(() => {
         function lastNameValidation(){
@@ -67,7 +67,7 @@ const RegisterNameInput = () => {
             , 500);
         return () => clearTimeout(timeoutId);
         }
-    }, [lastName]);
+    }, [lastName, firstLoad, letterRegex]);
 
     return(
     <div className="names">

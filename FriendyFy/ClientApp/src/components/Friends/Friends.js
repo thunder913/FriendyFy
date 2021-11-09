@@ -19,7 +19,7 @@ const Friends = () => {
                     setFriends(friendsObj)                    
                 }, 300);
             })
-    }, [])
+    }, [userId])
 
     const getMoreFriends = () => {
         getFriends(userId, 10, friends.length)
