@@ -25,7 +25,6 @@ const Friends = () => {
         getFriends(userId, 10, friends.length)
         .then(async res => {
             let obj = (await res.json()).friends;
-            console.log(friends.length)
             if(obj.length>0){ 
             setFriends(prevState => ([...prevState, ...obj]));
             }

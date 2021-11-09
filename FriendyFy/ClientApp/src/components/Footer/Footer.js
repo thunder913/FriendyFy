@@ -30,7 +30,7 @@ function Footer(){
 
     useEffect(() => {
       if(connection){
-        connection.start().then(() => console.log('started')).catch(err => console.log(err, 'error initializeing'));
+        connection.start();
       }
     }, [connection])
 
