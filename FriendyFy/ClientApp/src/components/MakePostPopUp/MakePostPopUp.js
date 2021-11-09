@@ -1,13 +1,19 @@
-import { faImage, faUserFriends, faThumbtack  } from '@fortawesome/free-solid-svg-icons';
+import { faImage, faThumbtack, faUserFriends } from '@fortawesome/free-solid-svg-icons';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import React, { useState } from 'react';
-import { useLoggedIn } from '../../contexts/LoggedInContext';
-import FirstTimePopUp from '../FirstTimePopUp/FirstTimePopUp';
-import './MakePostPopUp.css';
-import Select from 'react-select'
 import { TextareaAutosize } from '@mui/material';
+import React, { useState } from 'react';
+import Select from 'react-select';
+import { useLoggedIn } from '../../contexts/LoggedInContext';
+import CreatePostImage from '../CreatePostImage/CreatePostImage';
+import CreatePostMap from '../CreatePostMap/CreatePostMap';
+import CreatePostPeople from '../CreatePostPeople/CreatePostPeople';
+import './MakePostPopUp.css';
 
-const MakePostPopUp = ({hasImage}) =>{
+const MakePostPopUp = ({hasImage, closePopUp}) =>{
+    const [showImage, setShowImage] = useState(hasImage);
+    const [showPeople, setShowPeople] = useState(false);
+    const [showMap, setShowMap] = useState(false);
+    const [image, setImage] = useState('');
     const { loggedIn } = useLoggedIn();
 
     return(
@@ -15,7 +21,7 @@ const MakePostPopUp = ({hasImage}) =>{
         <div className="post-popup">
             <header className="make-post-header">
                 <p className="make-post-title">Create a post</p>
-                <button className="close-make-post">x</button>
+                <button onClick={closePopUp} className="close-make-post">x</button>
             </header>
             <section className="make-post-underheader">
                 <div className="image">
@@ -45,22 +51,27 @@ const MakePostPopUp = ({hasImage}) =>{
             <div className="create-post-buttons">
                 <FontAwesomeIcon 
                 title="Add an image" 
-                className={"post-button-icon " + (hasImage ? 'active' : '') } 
+                className={"post-button-icon " + (showImage ? 'active' : '') } 
                 icon={faImage}
+                onClick={() => setShowImage(prev => !prev)}
                 />
 
                 <FontAwesomeIcon 
                 title="Tag people" 
-                className="post-button-icon" 
+                className={"post-button-icon " + (showPeople ? 'active' : '') } 
                 icon={faUserFriends}
+                onClick={() => setShowPeople(prev => !prev)}
                 />
                 <FontAwesomeIcon 
                 title="Add a location" 
-                className="post-button-icon" 
+                className={"post-button-icon " + (showMap ? 'active' : '') } 
                 icon={faThumbtack}
+                onClick={() => setShowMap(prev => !prev)}
                 />
             </div>
-            {hasImage ? 'Image' : ''}
+            {showImage ? <CreatePostImage setImage={setImage}/> : ''}
+            {showPeople ? <CreatePostPeople/> : ''}
+            {showMap ? <CreatePostMap/> : ''}
             <button className="post">Post</button>
         </div>
     </div>)

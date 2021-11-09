@@ -21,9 +21,13 @@ const MakePost = () =>{
         setShowPopUp(true);
     }
 
+    const closePopUp = () => {
+        setShowPopUp(false);
+    }
+
     const escPressed = (e) => {
         if(e.keyCode === 27){
-            setShowPopUp(false);
+            closePopUp();
         }
     }
 
@@ -44,7 +48,7 @@ const MakePost = () =>{
 
     return(
     <section className="make-post">
-                <article onClick={CreatePostWithoutImage} className="make-post-text">
+        <article onClick={CreatePostWithoutImage} className="make-post-text">
             <p>Share a thought with you friends, {loggedIn.firstName}</p>
         </article>
         <article 
@@ -64,7 +68,11 @@ const MakePost = () =>{
                     icon={faCalendarPlus}
                     ></FontAwesomeIcon>
         </article>
-        {showPopUp ? <MakePostPopUp hasImage={postWithImage}/> : ''}
+        {showPopUp ? 
+        <MakePostPopUp 
+            hasImage={postWithImage}
+            closePopUp={closePopUp}
+        /> : ''}
     </section>)
 }
 

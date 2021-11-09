@@ -29,7 +29,8 @@ const RegisterEmailField = () => {
         return () => clearTimeout(timeoutId);
         }
         setFirstLoad(false);
-    }, [email, firstLoad]);
+        //eslint-disable-next-line
+    }, [email]);
 
     return (
     <InputWithValidation

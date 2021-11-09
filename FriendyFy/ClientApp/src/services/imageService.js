@@ -50,6 +50,7 @@ export function base64StringtoFile (base64String, filename) {
         pixelCrop.height
       )
     }
+    console.log(canvas.toDataURL('image/jpeg'));
     // It works with setTimeout, do not touch
     setTimeout(function(){
       setCroppedImage(canvas.toDataURL('image/jpeg')); 

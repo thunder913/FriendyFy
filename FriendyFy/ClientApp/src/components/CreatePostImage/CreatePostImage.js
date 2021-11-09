@@ -1,0 +1,15 @@
+import React from 'react';
+import ImgDropAndCrop from '../ImgDropAndCrop/ImgDropAndCrop';
+import './CreatePostImage.css';
+
+const CreatePostImage = ({setImage}) => (
+    <div className="create-post-image">
+                <ImgDropAndCrop 
+                    placeholder="Choose a profile photo." 
+                    aspectRatio={1/1}
+                    setCroppedImg={setImage}
+                    imageClass="user-profile-photo"/>
+    </div>
+)
+
+export default CreatePostImage;

@@ -27,9 +27,9 @@
     display: flex;
     flex-direction: column;
     overflow:auto;
-    max-height: 800px;
     box-shadow: 5px 4px 23px 9px rgba(0,0,0,0.89);
     gap: 20px;
+    border-radius: 5px;
 }
 
 .make-post-underheader > .image{
@@ -63,7 +63,7 @@
 }
 
 #post-message{
-    background-color: #3F3B3B;
+    background-color: #424040;;
     border-radius: 5px;
     color: white;
     padding: 2px 5px;
@@ -120,6 +120,7 @@
     border: 2px solid rgba(19, 60, 114, 0.2);
     color: white;
     transition: 0.3s;
+    border-radius: 5px;
 }
 
 
@@ -139,8 +140,14 @@
     height: 80px;
     padding: 20px;
     border-radius: 10px;
+    transition: 0.3s;
 }
 
-.create-post-buttons > .post-button-icon.active{
+.create-post-buttons > .post-button-icon:hover{
     background-color: rgb(83, 80, 80, 0.8);
+}
+
+
+.create-post-buttons > .post-button-icon.active{
+    background-color: rgba(104, 104, 104, 0.8);
 }
