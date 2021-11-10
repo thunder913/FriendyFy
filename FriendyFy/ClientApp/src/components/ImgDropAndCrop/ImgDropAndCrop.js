@@ -11,7 +11,7 @@ const imageMaxSize = 1000000000 // bytes
 const acceptedFileTypes = 'image/x-png, image/png, image/jpg, image/jpeg, image/gif'
 const acceptedFileTypesArray = acceptedFileTypes.split(",").map((item) => { return item.trim() })
 function ImgDropAndCrop({placeholder, setCroppedImg, aspectRatio, imageClass}) {
-const defaultCrop = {aspect: aspectRatio, x: 0, y: 0, width: aspectRatio * 0, height: 0, unit:"px"}
+const defaultCrop = {aspect: aspectRatio, x: 0, y: 0, width: 0, height: 0, unit:"px"}
 
     const [imgSrc, setImgSrc] = useState(null);
     const [, setImgSrcExt] = useState(null)
@@ -62,7 +62,6 @@ const defaultCrop = {aspect: aspectRatio, x: 0, y: 0, width: aspectRatio * 0, he
                 }, false)
 
                 myFileItemReader.readAsDataURL(currentFile)
-
             }
         }
     }
@@ -75,24 +74,31 @@ const defaultCrop = {aspect: aspectRatio, x: 0, y: 0, width: aspectRatio * 0, he
         }
     }
 
-    const handleOnCropComplete = (crop, pixelCrop) => {
+    const handleOnCropComplete = (crop) => {
         let image = document.querySelector(`.${imageClass}>div>img`);
         let offsetX = image.naturalWidth/image.offsetWidth;
         let offsetY = image.naturalHeight/image.offsetHeight;
-
         const canvasRef = imagePreviewCanvasRef.current;
-        var newCrop = {
-            x: crop.x*offsetX,
-            y: crop.y*offsetY,
-            width: crop.width*offsetX,
-            height: crop.height*offsetY,
-            unit: crop.unit,
-            aspect: crop.aspect
-        }
 
         if(firstTime){
-            image64toCanvasRef(canvasRef, imgSrc, crop, setCroppedImg)
+            let firstTimeCrop = {
+                x: defaultCrop.x*offsetX,
+                y: defaultCrop.y*offsetY,
+                width: defaultCrop.width*offsetX,
+                height: defaultCrop.height*offsetY,
+                unit: defaultCrop.unit,
+                aspect: defaultCrop.aspect
+            }
+            image64toCanvasRef(canvasRef, imgSrc, firstTimeCrop, setCroppedImg)          
         }else{
+            var newCrop = {
+                x: crop.x*offsetX,
+                y: crop.y*offsetY,
+                width: crop.width*offsetX,
+                height: crop.height*offsetY,
+                unit: crop.unit,
+                aspect: crop.aspect
+            }
             image64toCanvasRef(canvasRef, imgSrc, newCrop, setCroppedImg)
         }
     }
@@ -149,17 +155,19 @@ const defaultCrop = {aspect: aspectRatio, x: 0, y: 0, width: aspectRatio * 0, he
         let height = image.offsetHeight;
         let width = image.offsetWidth;
 
-        if(height > width){
-            height = width / aspectRatio;
-        }else{
-            height = width / aspectRatio;
+        if(aspectRatio){
+            if(height > width){
+                height = width / aspectRatio;
+            }else{
+                height = width / aspectRatio;
+            }
+    
+            if(height > image.offsetHeight){
+                height = image.offsetHeight;
+                width = height * aspectRatio;
+            }
         }
 
-        if(height > image.offsetHeight){
-            height = image.offsetHeight;
-            width = height * aspectRatio;
-        }
-        
         defaultCrop.height = height;
         defaultCrop.width = width;
         setCrop(defaultCrop);

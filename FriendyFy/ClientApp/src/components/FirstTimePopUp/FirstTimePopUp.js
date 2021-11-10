@@ -41,6 +41,8 @@ const FirstTimePopUp = ({checkFirstTimePopUp}) => {
         formdata.append("latitude", location.lat);
         formdata.append("longitude", location.lng);
 
+        console.log(profileImg);
+        console.log(coverImg);
         let response = await axios.post("/api/FinishFirstTimeSetup", formdata);
         if(response.status === 200){
             await checkFirstTimePopUp();

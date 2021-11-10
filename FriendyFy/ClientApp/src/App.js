@@ -19,7 +19,7 @@ function App(){
   // Make this async if anything fails anywhere
   useEffect(() => {
     resetUser();
-  }, [resetUser])
+  }, [])
 
   return (
               <Layout>

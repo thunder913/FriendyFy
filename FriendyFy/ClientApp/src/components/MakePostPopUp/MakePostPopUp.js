@@ -14,7 +14,12 @@ const MakePostPopUp = ({hasImage, closePopUp}) =>{
     const [showPeople, setShowPeople] = useState(false);
     const [showMap, setShowMap] = useState(false);
     const [image, setImage] = useState('');
+    const [people, setPeople] = useState([]);
     const { loggedIn } = useLoggedIn();
+
+    const onPostButtonClick = () => {
+        console.log(image);
+    }
 
     return(
     <div className="make-post-popup">
@@ -70,9 +75,11 @@ const MakePostPopUp = ({hasImage, closePopUp}) =>{
                 />
             </div>
             {showImage ? <CreatePostImage setImage={setImage}/> : ''}
-            {showPeople ? <CreatePostPeople/> : ''}
+            {showPeople ? <CreatePostPeople
+                onChange={(people) => setPeople(people)}
+                /> : ''}
             {showMap ? <CreatePostMap/> : ''}
-            <button className="post">Post</button>
+            <button className="post" onClick={onPostButtonClick}>Post</button>
         </div>
     </div>)
 }

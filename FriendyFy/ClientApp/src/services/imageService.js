@@ -31,6 +31,7 @@ export function base64StringtoFile (base64String, filename) {
   
   // Base64 Image to Canvas with a Crop
   export function image64toCanvasRef (canvasRef, image64, pixelCrop, setCroppedImage) {
+    console.log(pixelCrop);
     const canvas = canvasRef // document.createElement('canvas');
     canvas.width = pixelCrop.width
     canvas.height = pixelCrop.height
@@ -50,7 +51,6 @@ export function base64StringtoFile (base64String, filename) {
         pixelCrop.height
       )
     }
-    console.log(canvas.toDataURL('image/jpeg'));
     // It works with setTimeout, do not touch
     setTimeout(function(){
       setCroppedImage(canvas.toDataURL('image/jpeg')); 

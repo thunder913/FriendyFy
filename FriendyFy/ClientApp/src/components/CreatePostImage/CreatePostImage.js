@@ -6,7 +6,6 @@ const CreatePostImage = ({setImage}) => (
     <div className="create-post-image">
                 <ImgDropAndCrop 
                     placeholder="Choose a profile photo." 
-                    aspectRatio={1/1}
                     setCroppedImg={setImage}
                     imageClass="user-profile-photo"/>
     </div>

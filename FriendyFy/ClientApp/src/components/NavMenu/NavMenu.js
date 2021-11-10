@@ -9,7 +9,7 @@ import UserHeader from '../UserHeader/UserHeader';
 import { logout } from '../../services/userService'
 import { useLoggedIn } from '../../contexts/LoggedInContext';
 
-function NavMenu(props) {
+function NavMenu() {
 
   const {setLoggedIn} = useLoggedIn();
 
