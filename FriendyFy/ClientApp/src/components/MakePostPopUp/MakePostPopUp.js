@@ -13,6 +13,11 @@ const MakePostPopUp = ({hasImage, closePopUp}) =>{
     const [showImage, setShowImage] = useState(hasImage);
     const [showPeople, setShowPeople] = useState(false);
     const [showMap, setShowMap] = useState(false);
+
+    // TODO send these to the BE and make a post
+    const [privacySettings, setPrivacySettings] = useState('friends');
+    const [postMessage, setPostMessage] = useState('');
+    const [location, setLocation] = useState('');
     const [image, setImage] = useState('');
     const [people, setPeople] = useState([]);
     const { loggedIn } = useLoggedIn();
@@ -49,10 +54,13 @@ const MakePostPopUp = ({hasImage, closePopUp}) =>{
                       })}
                       className="privacy-picker" 
                       options={[{value: 'friends', label:'Friends'},{value: 'everyone', label: 'Everyone'}]}
-                      defaultValue={{value: 'friends', label:'Friends'}}
+                      defaultValue={{value: privacySettings, label:'Friends'}}
                       />
             </section>
-            <TextareaAutosize placeholder="What's on your mind?" id="post-message" minRows={3}/>
+            <TextareaAutosize 
+                onChange={(e) => setPostMessage(e.target.value)} 
+                placeholder="What's on your mind?" 
+                id="post-message" minRows={3}/>
             <div className="create-post-buttons">
                 <FontAwesomeIcon 
                 title="Add an image" 
@@ -78,7 +86,7 @@ const MakePostPopUp = ({hasImage, closePopUp}) =>{
             {showPeople ? <CreatePostPeople
                 onChange={(people) => setPeople(people)}
                 /> : ''}
-            {showMap ? <CreatePostMap/> : ''}
+            {showMap ? <CreatePostMap location={location} setLocation={setLocation}/> : ''}
             <button className="post" onClick={onPostButtonClick}>Post</button>
         </div>
     </div>)

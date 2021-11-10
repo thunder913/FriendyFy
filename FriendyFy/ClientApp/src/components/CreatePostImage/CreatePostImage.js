@@ -5,7 +5,7 @@ import './CreatePostImage.css';
 const CreatePostImage = ({setImage}) => (
     <div className="create-post-image">
                 <ImgDropAndCrop 
-                    placeholder="Choose a profile photo." 
+                    placeholder="Choose a photo." 
                     setCroppedImg={setImage}
                     imageClass="user-profile-photo"/>
     </div>

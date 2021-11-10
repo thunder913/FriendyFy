@@ -8,7 +8,7 @@
     top: 50%;
     transform: translateY(-50%);
     z-index: 2;
-    height: 5000px;
+    height: 100%;
     width: 100%;
     background: transparent;
     backdrop-filter: blur(5px);
@@ -30,7 +30,35 @@
     box-shadow: 5px 4px 23px 9px rgba(0,0,0,0.89);
     gap: 20px;
     border-radius: 5px;
+    max-height: 90vh;
+    border-bottom: 5px solid #3F3B3B;
 }
+
+.make-post-popup .post-popup::-webkit-scrollbar {
+    width: 5px;
+  }
+  
+  /* Track */
+  .make-post-popup .post-popup::-webkit-scrollbar-track {
+    background: transparent;
+  }
+  
+  /* Handle */
+  .make-post-popup .post-popup::-webkit-scrollbar-thumb {
+    background: transparent;
+    border-radius: 24px;
+  }
+  
+  /* Handle on hover */
+  .make-post-popup .post-popup::-webkit-scrollbar-thumb:hover {
+    background: rgb(61, 61, 61);
+    transition: 1s;
+  }
+  
+  .make-post-popup .post-popup:hover::-webkit-scrollbar-thumb{
+    background: rgb(168, 161, 161);
+    transition: 1s;
+  }
 
 .make-post-underheader > .image{
     width: 50px;
@@ -67,6 +95,7 @@
     border-radius: 5px;
     color: white;
     padding: 2px 5px;
+    min-height: 100px;
 }
 
 #post-message:focus{

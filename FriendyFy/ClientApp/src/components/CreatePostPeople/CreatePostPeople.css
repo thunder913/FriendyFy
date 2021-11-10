@@ -1,3 +1,4 @@
 .people-picker{
     background-color: #3F3B3B;
+    z-index: 3;
 }
