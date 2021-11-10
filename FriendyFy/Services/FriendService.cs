@@ -187,7 +187,7 @@ namespace FriendyFy.Services
             return "no-friends";
         }
 
-        public List<ProfileFriendViewModel> GetUserFriends(string userId, int skip, int count, string loggedIn)
+        public List<ProfileFriendViewModel> GetUserFriends(string userId, int skip, int count, string loggedIn, string searchQuery)
         {
             var user = this.userRepository.All().FirstOrDefault(x => x.Id == loggedIn);
 
@@ -197,8 +197,9 @@ namespace FriendyFy.Services
                 .ThenInclude(x => x.Friends)
                 .Include(x => x.CurrentUser)
                 .Where(x => x.CurrentUser.UserName==userId && x.IsFriend)
-                .OrderBy(x => x.CreatedOn)
                 .ToList()
+                .Where(x => searchQuery == null || (x.Friend.FirstName + " " + x.Friend.LastName).ToLowerInvariant().Contains(searchQuery.ToLowerInvariant()))
+                .OrderBy(x => x.CreatedOn)
                 .Select(x => new ProfileFriendViewModel()
                 {
                     FullName = x.Friend.FirstName + " " + x.Friend.LastName,

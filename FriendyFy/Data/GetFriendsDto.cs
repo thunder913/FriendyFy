@@ -6,5 +6,6 @@
 
         public int Count { get; set; }
         public int Skip { get; set; }
+        public string SearchQuery { get; set; } = null;
     }
 }

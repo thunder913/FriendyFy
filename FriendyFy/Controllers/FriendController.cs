@@ -81,7 +81,7 @@ namespace FriendyFy.Controllers
                 return BadRequest("Invalid user!");
             }
 
-            var friends = this.friendService.GetUserFriends(dto.UserId, dto.Skip, dto.Count, user.Id);
+            var friends = this.friendService.GetUserFriends(dto.UserId, dto.Skip, dto.Count, user.Id, dto.SearchQuery);
             var friendsCount = this.friendService.GetUserFriendsCount(dto.UserId);
 
             return Ok(new ProfileSidebarFriendsViewModel() 
@@ -145,5 +145,6 @@ namespace FriendyFy.Controllers
             await this.friendService.RemovePersonFromSuggestionsAsync(user.Id, dto.UserId);
             return Ok();
         }
+
     }
 }

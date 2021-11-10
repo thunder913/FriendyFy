@@ -38,11 +38,11 @@ function checkFriendStatus(data){
     });
 }
 
-function getFriends(userId, count, skip){
+function getFriends(userId, count, skip, searchQuery){
     return fetch('/friend/getFriends', {
         method: 'POST',
         headers: {'Content-Type': 'application/json'},
-        body: JSON.stringify({userId, count, skip: skip})
+        body: JSON.stringify({userId, count, skip: skip, searchQuery: searchQuery})
     });
 }
 

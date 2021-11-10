@@ -1,34 +1,8 @@
-import React, { useEffect, useState } from "react";
-import PropTypes from "prop-types";
+import React, { useState } from "react";
 import { AsyncPaginate } from "react-select-async-paginate";
-import { getFriends } from "../../services/friendService";
 import { useLoggedIn } from "../../contexts/LoggedInContext";
-
-const friends = [
-    {label:"gosho", value:"gosho1"},
-    {label:"gosho2", value:"gosho2"},
-    {label:"gosho3", value:"gosho3"},
-    {label:"gosho4", value:"gosho4"},
-    {label:"gosho5", value:"gosho5"},
-    {label:"gosho6", value:"gosho6"},
-    {label:"gosho7", value:"gosho7"},
-    {label:"gosho8", value:"gosho8"},
-    {label:"gosho9", value:"gosho9"},
-    {label:"gosho10", value:"gosho10"},
-    {label:"gosh", value:"gosh"},
-    {label:"gosh1", value:"gosh1"},
-    {label:"gosh2", value:"gosh2"},
-    {label:"gosh3", value:"gosh3"},
-    {label:"gosh4", value:"gosh4"},
-    {label:"gosh5", value:"gosh5"},
-    {label:"gosh6", value:"gosh6"},
-    {label:"gosh7", value:"gosh7"},
-    {label:"gosh8", value:"gosh8"},
-    {label:"gosh9", value:"gosh9"},
-    {label:"gosh10", value:"gosh10"},
-    {label:"gosh23", value:"gosh23"},
-    {label:"gos24", value:"gosh24"},
-]
+import { getFriends } from "../../services/friendService";
+import './CreatePostPeople.css';
 
 const CreatePostPeople = (props) => {
     const [regionName, setRegionName] = useState(null);
@@ -36,7 +10,7 @@ const CreatePostPeople = (props) => {
   
     const loadOptions = async (searchQuery, loadedOptions, { page }) => {
   
-      const response = await getFriends(loggedIn.userName, 10, (page-1)*10).then(async res => await (res.json()));
+      const response = await getFriends(loggedIn.userName, 10, (page-1)*10, searchQuery).then(async res => await (res.json()));
       let friends = [];
       response.friends.forEach(friend => {
           friends.push({label: friend.fullName, value: friend.username})

@@ -11,7 +11,7 @@ namespace FriendyFy.Services.Contracts
         Task<bool> CancelFriendRequestAsync(string senderId, string receiverUsername);
         Task<bool> AcceptFriendRequestAsync(string senderId, string receiverUsername);
         Task<bool> RemoveFriendAsync(string senderId, string receiverUsername);
-        List<ProfileFriendViewModel> GetUserFriends(string userId, int skip, int count, string loggedInId);
+        List<ProfileFriendViewModel> GetUserFriends(string userId, int skip, int count, string loggedInId, string searchQuery);
         int GetUserFriendsCount(string userId);
         List<SidebarFriendRecommendationViewModel> GetFriendRecommendations(string userId);
         Task RemovePersonFromSuggestionsAsync(string userId, string removedUsername);
