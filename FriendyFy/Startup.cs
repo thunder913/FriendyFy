@@ -69,6 +69,7 @@ namespace FriendyFy
             services.AddTransient<IInterestService, InterestService>();
             services.AddTransient<IJwtService, JwtService>();
             services.AddTransient<IImageService, ImageService>();
+            services.AddTransient<IPostService, PostService>();
             services.AddTransient<IFriendService, FriendService>();
             services.AddTransient<IGeolocationService, GeolocationService>();
             services.AddTransient<IChatService, ChatService>();

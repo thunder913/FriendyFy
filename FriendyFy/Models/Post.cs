@@ -1,6 +1,7 @@
 ﻿using FriendyFy.Models.Common;
 using FriendyFy.Models.Enums;
 using System.Collections.Generic;
+using System.ComponentModel.DataAnnotations.Schema;
 
 namespace FriendyFy.Models
 {
@@ -11,7 +12,12 @@ namespace FriendyFy.Models
         public ICollection<Image> Image { get; set; } = new HashSet<Image>();
         public ICollection<PostLike> Likes { get; set; } = new HashSet<PostLike>();
         public ICollection<PostComment> Comments { get; set; } = new HashSet<PostComment>();
-        public ICollection<ApplicationUser> Reposts { get; set; } = new HashSet<ApplicationUser>();
+        public ICollection<Post> Reposts { get; set; } = new HashSet<Post>();
+        public ICollection<PostTagged> TaggedPeople { get; set; } = new HashSet<PostTagged>();
+        [Column(TypeName = "decimal(11, 8)")]
+        public decimal? Latitude { get; set; }
+        [Column(TypeName = "decimal(11, 8)")]
+        public decimal? Longitude { get; set; }
         public PrivacySettings Privacy { get; set; }
     }
 }

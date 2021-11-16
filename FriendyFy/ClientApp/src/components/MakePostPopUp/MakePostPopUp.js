@@ -53,6 +53,7 @@ const MakePostPopUp = ({hasImage, closePopUp}) =>{
                         }
                       })}
                       className="privacy-picker" 
+                      isSearchable={false}
                       options={[{value: 'friends', label:'Friends'},{value: 'everyone', label: 'Everyone'}]}
                       defaultValue={{value: privacySettings, label:'Friends'}}
                       />

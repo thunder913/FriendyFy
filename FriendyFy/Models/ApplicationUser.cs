@@ -19,6 +19,7 @@ namespace FriendyFy.Models
         public string FirstName { get; set; }
         public string LastName { get; set; }
         public ICollection<Post> Posts { get; set; } = new HashSet<Post>();
+        public ICollection<PostTagged> PostsTagged { get; set; } = new HashSet<PostTagged>();
         public ICollection<Interest> Interests { get; set; } = new HashSet<Interest>();
         public ICollection<Event> Events { get; set; } = new HashSet<Event>();
         public ICollection<UserFriend> Friends { get; set; } = new HashSet<UserFriend>();
