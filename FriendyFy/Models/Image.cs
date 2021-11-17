@@ -8,10 +8,8 @@ namespace FriendyFy.Models
     public class Image : BaseModel<string>
     {
         public new string Id { get; set; } = Guid.NewGuid().ToString();
-
         [Required]
-        public string Name { get; set; }
-
+        public string ImageExtension { get; set; } = ".jpeg";
         [Required]
         public ImageType ImageType { get; set; }
     }

@@ -203,7 +203,7 @@ namespace FriendyFy.Services
                 .Select(x => new ProfileFriendViewModel()
                 {
                     FullName = x.Friend.FirstName + " " + x.Friend.LastName,
-                    ProfileImage = this.blobService.GetBlobUrlAsync(x.Friend.UserName + ".jpeg", GlobalConstants.BlobProfilePictures).GetAwaiter().GetResult(),
+                    ProfileImage = this.blobService.GetBlobUrlAsync(x.Friend.ProfileImage?.Id + x.Friend.ProfileImage?.ImageExtension, GlobalConstants.BlobPictures).GetAwaiter().GetResult(),
                     Username = x.Friend.UserName,
                     HasReceived = x.Friend.Friends.Any(y => !y.IsFriend && y.FriendId==loggedIn && y.RequestSenderId==x.Id),
                     HasRequested = x.Friend.Friends.Any(y => !y.IsFriend && y.RequestSenderId==loggedIn),
@@ -257,7 +257,7 @@ namespace FriendyFy.Services
                     Username = x.UserName,
                     CommonInterests = x.Interests.Count(y => user.Interests.Any(z => z.Id == y.Id)),
                     MutualFriends = x.Friends.Count(y => user.Friends.Any(z => z.FriendId == y.FriendId)),
-                    ProfilePhoto = this.blobService.GetBlobUrlAsync(x.UserName + ".jpeg", GlobalConstants.BlobProfilePictures).GetAwaiter().GetResult()
+                    ProfilePhoto = this.blobService.GetBlobUrlAsync(x.ProfileImage?.Id + x.ProfileImage?.ImageExtension, GlobalConstants.BlobPictures).GetAwaiter().GetResult()
                 })
                 .Take(6)
                 .ToList();

@@ -138,6 +138,7 @@ namespace FriendyFy.Controllers
         }
 
         [HttpPost("login")]
+        // TODO add email confirm check
         public IActionResult Login(LoginUserDto loginUserDto)
         {
             var user = this.userService.GetByEmail(loginUserDto.Email);
@@ -176,8 +177,8 @@ namespace FriendyFy.Controllers
                     FirstName = user.FirstName,
                     LastName = user.LastName,
                     UserName = user.UserName,
-                    CoverPhoto = await this.blobService.GetBlobUrlAsync(user.UserName + ".jpeg", GlobalConstants.BlobCoverPictures),
-                    ProfilePhoto = await this.blobService.GetBlobUrlAsync(user.UserName + ".jpeg", GlobalConstants.BlobProfilePictures)
+                    CoverPhoto = await this.blobService.GetBlobUrlAsync(user.CoverImage?.Id + user.CoverImage?.ImageExtension, GlobalConstants.BlobPictures),
+                    ProfilePhoto = await this.blobService.GetBlobUrlAsync(user.ProfileImage?.Id + user.ProfileImage?.ImageExtension, GlobalConstants.BlobPictures)
                 };
 
                 return Ok(viewModel);
@@ -222,24 +223,29 @@ namespace FriendyFy.Controllers
             return result.Succeeded ? Ok() : BadRequest("Could not confirm the email!");
         }
 
+        //userId is actually username
         [HttpGet("profilePicture/{userId}")]
         public async Task<string> GetProfilePicture(string userId)
         {
-            return await this.blobService.GetBlobUrlAsync(userId + ".jpeg", GlobalConstants.BlobProfilePictures);
+            var user = this.userService.GetByUsername(userId);
+
+            return await this.blobService.GetBlobUrlAsync(user.ProfileImage?.Id + user.ProfileImage?.ImageExtension, GlobalConstants.BlobPictures);
         }
 
         [HttpGet("coverPicture/{userId}")]
         public async Task<string> GetCoverPicture(string userId)
         {
-            return await this.blobService.GetBlobUrlAsync(userId + ".jpeg", GlobalConstants.BlobCoverPictures);
+            var user = this.userService.GetByUsername(userId);
+
+            return await this.blobService.GetBlobUrlAsync(user.CoverImage?.Id + user.CoverImage?.ImageExtension, GlobalConstants.BlobPictures);
         }
 
         [HttpGet("getUserInformation/{username}")]
         public async Task<UserInformationViewModel> GetUserInformation(string username)
         {
             var user = this.userService.GetByUsername(username);
-            var coverPicture = await this.blobService.GetBlobUrlAsync(username + ".jpeg", GlobalConstants.BlobCoverPictures);
-            var profilePicture = await this.blobService.GetBlobUrlAsync(username + ".jpeg", GlobalConstants.BlobProfilePictures);
+            var coverPicture = await this.blobService.GetBlobUrlAsync(user.CoverImage?.Id + user.CoverImage?.ImageExtension, GlobalConstants.BlobPictures);
+            var profilePicture = await this.blobService.GetBlobUrlAsync(user.ProfileImage?.Id + user.ProfileImage?.ImageExtension, GlobalConstants.BlobPictures);
 
             var viewModel = new UserInformationViewModel()
             {
@@ -258,8 +264,8 @@ namespace FriendyFy.Controllers
         public async Task<UserInformationViewModel> GetUserSideInformation(string username)
         {
             var user = this.userService.GetByUsername(username);
-            var coverPicture = await this.blobService.GetBlobUrlAsync(username + ".jpeg", GlobalConstants.BlobCoverPictures);
-            var profilePicture = await this.blobService.GetBlobUrlAsync(username + ".jpeg", GlobalConstants.BlobProfilePictures);
+            var coverPicture = await this.blobService.GetBlobUrlAsync(user.CoverImage?.Id + user.CoverImage?.ImageExtension, GlobalConstants.BlobPictures);
+            var profilePicture = await this.blobService.GetBlobUrlAsync(user.ProfileImage?.Id + user.ProfileImage?.ImageExtension, GlobalConstants.BlobPictures);
 
             var viewModel = new UserInformationViewModel()
             {
@@ -310,14 +316,11 @@ namespace FriendyFy.Controllers
                     allInterests.Add(this.interestService.GetInterest(item.Id));
                 }
             }
+            var profileImage = await imageService.AddImageAsync(ImageType.ProfileImage);
+            var coverImage = await imageService.AddImageAsync(ImageType.ProfileImage);
 
-            var imageName = user.UserName + ".jpeg";
-
-            await blobService.UploadBase64StringAsync(dto.ProfilePhoto, imageName, GlobalConstants.BlobProfilePictures);
-            await blobService.UploadBase64StringAsync(dto.CoverPhoto, imageName, GlobalConstants.BlobCoverPictures);
-
-            var profileImage = await imageService.AddImageAsync(ImageType.ProfileImage, imageName);
-            var coverImage = await imageService.AddImageAsync(ImageType.ProfileImage, imageName);
+            await blobService.UploadBase64StringAsync(dto.ProfilePhoto, profileImage.Id+profileImage.ImageExtension, GlobalConstants.BlobPictures);
+            await blobService.UploadBase64StringAsync(dto.CoverPhoto, coverImage.Id+coverImage.ImageExtension, GlobalConstants.BlobPictures);
 
             await this.userService.SetUserFirstTimeLoginAsync(user, profileImage, coverImage, dto.Quote, allInterests, dto.Longitude, dto.Latitude);
 

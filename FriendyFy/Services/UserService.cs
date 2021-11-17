@@ -66,12 +66,21 @@ namespace FriendyFy.Services
 
         public ApplicationUser GetById(string id)
         {
-            return this.userRepository.All().Include(x => x.Friends).FirstOrDefault(x => x.Id == id);
+            return this.userRepository.All()
+                .Include(x => x.Friends)
+                .Include(x => x.ProfileImage)
+                .Include(x => x.CoverImage)
+                .FirstOrDefault(x => x.Id == id);
         }
 
         public ApplicationUser GetByUsername(string username)
         {
-            return this.userRepository.All().Include(x => x.Interests).Include(x => x.Friends).FirstOrDefault(x => x.UserName == username && username != null);
+            return this.userRepository.All()
+                .Include(x => x.Interests)
+                .Include(x => x.Friends)
+                .Include(x => x.ProfileImage)
+                .Include(x => x.CoverImage)
+                .FirstOrDefault(x => x.UserName == username && username != null);
         }
 
         public int GetUserEventsCount(string username)
@@ -81,6 +90,8 @@ namespace FriendyFy.Services
 
         public async Task SetUserFirstTimeLoginAsync(ApplicationUser user, Image profileImage, Image coverImage, string quote, List<Interest> interests, decimal? longitude, decimal? latitude)
         {
+            user.ProfileImage = profileImage;
+            user.CoverImage = coverImage;
             user.Photos.Add(profileImage);
             user.Photos.Add(coverImage);
             user.Quote = quote;

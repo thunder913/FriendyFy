@@ -36,6 +36,8 @@ namespace FriendyFy.Services
                 .Include(x => x.Messages)
                 .ThenInclude(x => x.SeenBy)
                 .Where(x => x.Users.Any(y => y.UserName == username))
+                // TODO remove this tolist
+                .ToList()
                 .Select(x => new ChatFooterUserDto()
                 {
                     ChatId = x.Id,
@@ -44,7 +46,7 @@ namespace FriendyFy.Services
                     IsActive = false,
                     NewMessages = x.Messages.Count() - x.Messages.Where(y => y.SeenBy.Any(y => y.UserName == username)).Count(),
                     Picture = x.ChatType == ChatType.Direct 
-                        ? this.blobService.GetBlobUrlAsync(x.Users.FirstOrDefault(y => y.UserName != username).UserName + ".jpeg", GlobalConstants.BlobProfilePictures).GetAwaiter().GetResult() 
+                        ? this.blobService.GetBlobUrlAsync(x.Users.FirstOrDefault(y => y.UserName != username).ProfileImage?.Id + x.Users.FirstOrDefault(y => y.UserName != username).ProfileImage?.ImageExtension, GlobalConstants.BlobPictures).GetAwaiter().GetResult() 
                         : x.Image,
                 })
                 .ToList();
@@ -69,7 +71,7 @@ namespace FriendyFy.Services
             {
                 var otherUser = chat.Users.FirstOrDefault(x => x.Id != userId);
 
-                photo = this.blobService.GetBlobUrlAsync(otherUser.UserName + ".jpeg", GlobalConstants.BlobProfilePictures).GetAwaiter().GetResult();
+                photo = this.blobService.GetBlobUrlAsync(otherUser.ProfileImage?.Id + otherUser.ProfileImage?.ImageExtension, GlobalConstants.BlobPictures).GetAwaiter().GetResult();
                 chatName = otherUser.FirstName + " " + otherUser.LastName;
             }
 
@@ -89,7 +91,7 @@ namespace FriendyFy.Services
                         Date = x.CreatedOn,
                         Message = x.Text,
                         Name = x.User.FirstName + " " + x.User.LastName,
-                        Photo = this.blobService.GetBlobUrlAsync(x.User.UserName + ".jpeg", GlobalConstants.BlobProfilePictures).GetAwaiter().GetResult(),
+                        Photo = this.blobService.GetBlobUrlAsync(x.User.ProfileImage?.Id + x.User.ProfileImage?.ImageExtension, GlobalConstants.BlobPictures).GetAwaiter().GetResult(),
                         IsYourMessage = x.User.Id == userId,
                         MessageId = x.Id,
                         Username = x.User.UserName

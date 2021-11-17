@@ -29,6 +29,10 @@ header.profile-header{
     border-radius: 0px 0px 30px 30px;
 }
 
+.cover-photo{
+    width: 100%;
+}
+
 
 .quote{
     width: 300px;

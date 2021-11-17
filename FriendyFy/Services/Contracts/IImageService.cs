@@ -6,6 +6,6 @@ namespace FriendyFy.Services.Contracts
 {
     public interface IImageService
     {
-        public Task<Image> AddImageAsync(ImageType imageType, string name);
+        public Task<Image> AddImageAsync(ImageType imageType);
     }
 }

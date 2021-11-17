@@ -22,21 +22,21 @@ namespace FriendyFy.Services
 
         public ChatMessageViewModel GetChatMessageForOtherPeople(string id)
         {
-            var messages = this.messageRepository.AllAsNoTracking().Where(x => x.Id == id);
-            return this.messageRepository
+            var message = this.messageRepository
                 .AllAsNoTracking()
                 .Include(x => x.User)
-                .Select(x => new ChatMessageViewModel()
-                {
-                    Date = x.CreatedOn,
-                    IsYourMessage = false,
-                    Message = x.Text,
-                    MessageId = x.Id,
-                    Name = x.User.FirstName + " " + x.User.LastName,
-                    Photo = this.blobService.GetBlobUrlAsync(x.User.UserName + ".jpeg", GlobalConstants.BlobProfilePictures).GetAwaiter().GetResult(),
-                    Username = x.User.UserName,
-                })
-                .FirstOrDefault(x => x.MessageId == id);
+                .FirstOrDefault(x => x.Id == id);
+
+            return new ChatMessageViewModel()
+            {
+                Date = message.CreatedOn,
+                IsYourMessage = false,
+                Message = message.Text,
+                MessageId = message.Id,
+                Name = message.User.FirstName + " " + message.User.LastName,
+                Username = message.User.UserName,
+                Photo = this.blobService.GetBlobUrlAsync(message.User.ProfileImage?.Id + message.User.ProfileImage?.ImageExtension, GlobalConstants.BlobPictures).GetAwaiter().GetResult(),
+            };
         }
     }
 }
