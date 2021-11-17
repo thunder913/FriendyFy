@@ -1,9 +1,10 @@
 ﻿using FriendyFy.Data;
+using System.Threading.Tasks;
 
 namespace FriendyFy.Services.Contracts
 {
     public interface IPostService
     {
-        bool CreatePost(MakePostDto makePostDto);
+        Task<bool> CreatePostAsync(MakePostDto makePostDto, string userId);
     }
 }

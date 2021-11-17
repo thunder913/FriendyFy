@@ -4,6 +4,7 @@ import { TextareaAutosize } from '@mui/material';
 import React, { useState } from 'react';
 import Select from 'react-select';
 import { useLoggedIn } from '../../contexts/LoggedInContext';
+import { makePost } from '../../services/postService';
 import CreatePostImage from '../CreatePostImage/CreatePostImage';
 import CreatePostMap from '../CreatePostMap/CreatePostMap';
 import CreatePostPeople from '../CreatePostPeople/CreatePostPeople';
@@ -22,7 +23,10 @@ const MakePostPopUp = ({hasImage, closePopUp}) =>{
     const [people, setPeople] = useState([]);
     const { loggedIn } = useLoggedIn();
 
-    const onPostButtonClick = () => {
+    const onPostButtonClick = async () => {
+        let peopleIds = people.map(x => x.value)
+        await makePost(privacySettings, postMessage, location.lat, location.lng, image, peopleIds)
+            .then(async res => console.log(await res.json()));
         console.log(image);
     }
 
