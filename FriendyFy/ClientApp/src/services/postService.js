@@ -5,3 +5,9 @@ export function makePost(privacySetting, postMessage, locationLat, locationLng, 
         body: JSON.stringify({privacySetting, postMessage, locationLat, locationLng, image, people})
     });
   }
+
+  export function getPosts() {
+    return fetch('/post/getPosts', {
+        method: 'GET',
+    });
+  }

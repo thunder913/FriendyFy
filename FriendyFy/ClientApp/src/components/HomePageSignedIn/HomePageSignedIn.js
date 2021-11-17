@@ -1,4 +1,4 @@
-import React, { useEffect } from "react";
+import React, { useEffect, useState } from "react";
 import FeedPost from '../FeedPost/FeedPost';
 import FeedEvent from '../FeedEvent/FeedEvent';
 import { useLoggedIn } from "../../contexts/LoggedInContext";
@@ -6,6 +6,7 @@ import './HomePageSignedIn.css'
 import FirstTimePopUp from '../FirstTimePopUp/FirstTimePopUp.js'
 import useScrollBlock from "../../hooks/useScrollBlock";
 import MakePost from "../MakePost/MakePost.js"
+import { getPosts } from "../../services/postService";
 
 const events = [
   {
@@ -65,6 +66,7 @@ const HomePageSignedIn = () => {
   const [blockScroll, allowScroll] = useScrollBlock();
 
   const { loggedIn, resetUser } = useLoggedIn();
+  const [posts, setPosts] = useState([]);
   const checkFirstTimePopUp = async () => {
     await resetUser();
     if(loggedIn.finishedFirstTimeLogin){
@@ -74,20 +76,21 @@ const HomePageSignedIn = () => {
     }
   }
   
+  
   //Make it async if anything goes wrong
   useEffect(() => {
     checkFirstTimePopUp();
+    if(loggedIn){
+      getPosts().then(async res => setPosts(await res.json()))
+    }
     //eslint-disable-next-line
   },[])
 
   return (<div className="feed home-feed">
     {loggedIn.finishedFirstTimeLogin ? '' : <FirstTimePopUp checkFirstTimePopUp={checkFirstTimePopUp}></FirstTimePopUp>}
     <MakePost></MakePost>
+    {posts.map(post => <FeedPost post={post} />)}
     {events.map(event => <FeedEvent event={event} />)}
-    <FeedPost image="https://scontent.fsof8-1.fna.fbcdn.net/v/t1.6435-9/194957949_4334439429940720_5542816028295677772_n.jpg?_nc_cat=108&ccb=1-5&_nc_sid=09cbfe&_nc_ohc=YeTxne8hWKoAX9bbJvR&_nc_ht=scontent.fsof8-1.fna&oh=51a6dbebf71ee668c34d7292be94abf0&oe=6192F854"></FeedPost>
-    <FeedPost text="This is a very special post................. ......... This is a very special post................. ......... This is a very special post................. ......... This is a very special post................. ......... This is a very special post................. ......... This is a very special post................. ........."></FeedPost>
-    <FeedPost image="https://image.shutterstock.com/image-photo/mountain-landscape-lake-range-large-600w-1017466240.jpg"></FeedPost>
-    <FeedPost image="https://jillsbooks.files.wordpress.com/2011/02/abraham-lincoln-was-very-tall.jpg" text="This is my first post!"></FeedPost>
   </div>)
 }
 

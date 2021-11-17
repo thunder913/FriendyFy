@@ -4,7 +4,10 @@ using FriendyFy.Data;
 using FriendyFy.Models;
 using FriendyFy.Models.Enums;
 using FriendyFy.Services.Contracts;
+using Microsoft.EntityFrameworkCore;
 using System;
+using System.Collections.Generic;
+using System.Linq;
 using System.Threading.Tasks;
 
 namespace FriendyFy.Services
@@ -44,7 +47,6 @@ namespace FriendyFy.Services
                 CreatorId = userId,
             };
 
-            // figure out how to save the images
             if(makePostDto.Image != null && !string.IsNullOrWhiteSpace(makePostDto.Image))
             {
                 post.Image = await imageService.AddImageAsync(ImageType.NormalImage);
@@ -65,6 +67,29 @@ namespace FriendyFy.Services
             await this.postRepository.SaveChangesAsync();
 
             return true;
+        }
+
+        public List<PostDetailsDto> GetAllPosts()
+        {
+            return this.postRepository
+                .All()
+                .OrderByDescending(x => x.CreatedOn)
+                .Include(x => x.Creator)
+                .ThenInclude(x => x.ProfileImage)
+                .Include(x => x.Image)
+                .ToList()
+                .Select(x => new PostDetailsDto()
+                {
+                    CommentsCount = x.Comments.Count(),
+                    CreatedAgo = (int) ((DateTime.UtcNow - x.CreatedOn).TotalMinutes),
+                    CreatorImage = this.blobService.GetBlobUrlAsync(x.Creator.ProfileImage?.Id + x.Creator.ProfileImage?.ImageExtension, GlobalConstants.BlobPictures).GetAwaiter().GetResult(),
+                    CreatorName = x.Creator.FirstName + " " + x.Creator.LastName,
+                    LikesCount = x.Likes.Count(),
+                    PostMessage = x.Text,
+                    RepostsCount = x.Reposts.Count(),
+                    PostImage = this.blobService.GetBlobUrlAsync(x.Image?.Id + x.Image?.ImageExtension, GlobalConstants.BlobPictures).GetAwaiter().GetResult(),
+                })
+                .ToList();
         }
     }
 }

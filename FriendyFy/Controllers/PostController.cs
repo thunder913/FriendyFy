@@ -31,5 +31,11 @@ namespace FriendyFy.Controllers
 
             return Json(new { success = await postService.CreatePostAsync(makePostDto, user.Id) });
         }
+
+        [HttpGet("getPosts")]
+        public IActionResult GetPosts()
+        {
+            return Json(this.postService.GetAllPosts());
+        }
     }
 }
