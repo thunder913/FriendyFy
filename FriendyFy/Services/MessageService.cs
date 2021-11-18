@@ -25,6 +25,7 @@ namespace FriendyFy.Services
             var message = this.messageRepository
                 .AllAsNoTracking()
                 .Include(x => x.User)
+                .ThenInclude(x => x.ProfileImage)
                 .FirstOrDefault(x => x.Id == id);
 
             return new ChatMessageViewModel()

@@ -35,18 +35,20 @@ namespace FriendyFy.Services
                 .AllAsNoTracking()
                 .Include(x => x.Messages)
                 .ThenInclude(x => x.SeenBy)
+                .Include(x => x.Users)
+                .ThenInclude(x => x.ProfileImage)
                 .Where(x => x.Users.Any(y => y.UserName == username))
                 // TODO remove this tolist
                 .ToList()
                 .Select(x => new ChatFooterUserDto()
                 {
                     ChatId = x.Id,
-                    Name = x.ChatType == ChatType.Direct ? x.Users.FirstOrDefault(y => y.UserName != username).FirstName : x.Name,
-                    FullName = x.ChatType == ChatType.Direct ? x.Users.FirstOrDefault(y => y.UserName != username).FirstName + " " + x.Users.FirstOrDefault(y => y.UserName != username).LastName : x.Name,
+                    Name = x.ChatType == ChatType.Direct ? x.Users.FirstOrDefault(y => y.UserName != username)?.FirstName : x.Name,
+                    FullName = x.ChatType == ChatType.Direct ? x.Users.FirstOrDefault(y => y.UserName != username)?.FirstName + " " + x.Users.FirstOrDefault(y => y.UserName != username)?.LastName : x.Name,
                     IsActive = false,
                     NewMessages = x.Messages.Count() - x.Messages.Where(y => y.SeenBy.Any(y => y.UserName == username)).Count(),
-                    Picture = x.ChatType == ChatType.Direct 
-                        ? this.blobService.GetBlobUrlAsync(x.Users.FirstOrDefault(y => y.UserName != username).ProfileImage?.Id + x.Users.FirstOrDefault(y => y.UserName != username).ProfileImage?.ImageExtension, GlobalConstants.BlobPictures).GetAwaiter().GetResult() 
+                    Picture = x.ChatType == ChatType.Direct
+                        ? this.blobService.GetBlobUrlAsync(x.Users.FirstOrDefault(y => y.UserName != username)?.ProfileImage?.Id + x.Users.FirstOrDefault(y => y.UserName != username)?.ProfileImage?.ImageExtension, GlobalConstants.BlobPictures).GetAwaiter().GetResult()
                         : x.Image,
                 })
                 .ToList();
@@ -61,7 +63,9 @@ namespace FriendyFy.Services
                 .ThenInclude(x => x.SeenBy)
                 .Include(x => x.Messages)
                 .ThenInclude(x => x.User)
+                .ThenInclude(x => x.ProfileImage)
                 .Include(x => x.Users)
+                .ThenInclude(x => x.ProfileImage)
                 .FirstOrDefault(x => x.Id == chatId);
 
             string photo = chat.Image;
@@ -136,6 +140,7 @@ namespace FriendyFy.Services
             return this.chatRepository
                 .AllAsNoTracking()
                 .Include(x => x.Users)
+                .ThenInclude(x => x.ProfileImage)
                 .FirstOrDefault(x => x.Id == chatId)
                 .Users
                 .Select(x => x.Id)
