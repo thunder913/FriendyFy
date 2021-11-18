@@ -44,3 +44,63 @@ footer.feed-footer .bottom-footer > div.feed-repost:hover{
 footer.feed-footer .bottom-footer > div.feed-like.liked{
     color:rgb(29, 90, 170);
 }
+
+footer.feed-footer .bottom-footer > div.feed-comment.opened-comments{
+    color:rgb(211, 138, 55);
+}
+
+.feed-footer .comments-section .user-picture{
+    width: 40px;
+    min-width: 40px;
+    margin-right: 7px;
+}
+
+.feed-footer .comments-section .user-picture img{
+    width: 100%;
+    border-radius: 50%;
+    margin-top: 5px;
+}
+
+.feed-footer .comments-section .comment{
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    display: flex;
+    align-items: flex-start;
+    margin: 10px 5px;
+    border-radius: 20px;
+}
+
+.feed-footer .comments-section .comment .comment-footer{
+    display: flex;
+    font-size: 12px;
+    align-items: center;
+    gap: 5px;
+    color:  rgb(180, 180, 180);
+}
+
+.feed-footer .comments-section .comment .comment-footer button{
+    background-color: transparent;
+    border: transparent;
+    color:  rgb(214, 212, 212);
+    padding: 0px;
+}
+
+.feed-footer .comments-section .comment .comment-footer button:hover{
+    text-decoration: underline;
+}
+
+.feed-footer .comments-section .comment .inner-comment{
+    background-color: rgb(45, 46, 47);
+    border-radius: 20px;
+    padding: 10px;
+}
+
+.feed-footer .comments-section .inner-comment{
+    padding-left: 10px;
+}
+
+.feed-footer .comments-section{
+    display: flex;
+    flex-direction: column;
+}
