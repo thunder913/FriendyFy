@@ -35,7 +35,45 @@ namespace FriendyFy.Controllers
         [HttpGet("getPosts")]
         public IActionResult GetPosts()
         {
-            return Json(this.postService.GetAllPosts());
+            var user = this.GetUserByToken();
+
+            if (user == null)
+            {
+                return Unauthorized("You are not signed in!");
+            }
+
+            return Json(this.postService.GetAllPosts(user.Id));
+        }
+
+        [HttpPost("likePost")]
+        public async Task<IActionResult> LikePost(LikePostDto likePostDto)
+        {
+            var user = this.GetUserByToken();
+
+            if (user == null)
+            {
+                return Unauthorized("You are not signed in!");
+            }
+
+            int? likes;
+            try
+            {
+                likes = await this.postService.LikePostAsync(likePostDto.PostId, user);
+            }
+            catch (Exception)
+            {
+                return BadRequest("There was an error saving your like!");
+            }
+
+            if (likes != null)
+            {
+                return Ok(likes);
+            }
+            else
+            {
+                return BadRequest();
+            }
+
         }
     }
 }

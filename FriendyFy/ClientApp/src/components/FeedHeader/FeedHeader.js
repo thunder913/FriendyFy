@@ -4,6 +4,7 @@ import { faEllipsisH } from '@fortawesome/free-solid-svg-icons';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 
 function FeedHeader({photo, name, time}){
+
     return(
     <header className="feed-header">
     <div className="header-left">

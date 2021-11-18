@@ -11,3 +11,11 @@ export function makePost(privacySetting, postMessage, locationLat, locationLng, 
         method: 'GET',
     });
   }
+
+  export function likePost(postId) {
+    return fetch('/post/likePost', {
+        method: 'POST',
+        headers: {'Content-Type': 'application/json'},
+        body: JSON.stringify({postId})
+    });
+  }

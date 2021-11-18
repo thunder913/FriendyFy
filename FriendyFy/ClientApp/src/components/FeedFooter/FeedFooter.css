@@ -40,3 +40,7 @@ footer.feed-footer .bottom-footer > div.feed-repost:hover{
 .post-button{
     margin-right: 5px;
 }
+
+footer.feed-footer .bottom-footer > div.feed-like.liked{
+    color:rgb(29, 90, 170);
+}

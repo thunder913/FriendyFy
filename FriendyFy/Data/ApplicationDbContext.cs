@@ -63,6 +63,10 @@ namespace FriendyFy.Data
             builder.Entity<Message>()
                 .HasOne(x => x.User)
                 .WithMany(x => x.Messages);
+
+            builder.Entity<PostLike>()
+                .HasIndex(x => x.LikedById)
+                .IsUnique();
         }
     }
 }

@@ -1,15 +1,28 @@
-import React from 'react';
+import React, {useState} from 'react';
 import './FeedFooter.css';
 import { faComments, faShare, faThumbsUp } from '@fortawesome/free-solid-svg-icons';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import { likePost } from '../../services/postService';
 
-const FeedFooter = (props) => (
+const FeedFooter = (props) => {
+    const [isLiked, setIsLiked] = useState(props.isLiked);
+    const [likes, setLikes] = useState(props.likes)
+
+    const likeButtonClickEvent = () => {
+        likePost(props.postId)
+            .then(async res => {if(res.status==200){
+                setIsLiked(prev => !prev);
+                setLikes(await res.json())
+            }});    
+    }
+
+return(
 <footer className="feed-footer">
             <div className="top-footer">
                 <div className="likes">
                     <span>
                         <a href="/">
-                            {props.likes} likes
+                            {likes} likes
                         </a>
                     </span>
                 </div>
@@ -27,7 +40,7 @@ const FeedFooter = (props) => (
                 </div>
             </div>
             <div className="bottom-footer">
-                <div className="feed-like">
+                <div className={"feed-like " + (isLiked ? "liked" : "")} onClick={likeButtonClickEvent}>
                 <FontAwesomeIcon className="post-button like-button" icon={faThumbsUp} />
                     <span>Like</span>
                 </div>
@@ -40,7 +53,7 @@ const FeedFooter = (props) => (
                     <span>Repost</span>
                 </div>
             </div>
-        </footer>
-)
+        </footer>)
+}
 
 export default FeedFooter;
