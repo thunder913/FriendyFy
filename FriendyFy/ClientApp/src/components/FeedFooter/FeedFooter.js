@@ -1,6 +1,6 @@
 import React, {useState} from 'react';
 import './FeedFooter.css';
-import { faComments, faShare, faThumbsUp } from '@fortawesome/free-solid-svg-icons';
+import { faComment, faComments, faShare, faThumbsUp } from '@fortawesome/free-solid-svg-icons';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { likePost } from '../../services/postService';
 
@@ -44,8 +44,11 @@ return(
                     </span>
                 </div>
             </div>
+            
+            {showComments ? 
+            <div className="comments">
             <div className="comments-section">
-            <div className="comment">
+                <div className="comment">
                     <div className="user-picture">
                         <img src="https://friendyfy.blob.core.windows.net/pictures/ba8b368f-e711-44dd-b611-41cdbf36fb3c.jpeg" alt="" />
                     </div>
@@ -56,57 +59,20 @@ return(
                     <p>I have commented on your post!</p>
                     <footer className="comment-footer">
                         <button>Like</button>
-                        <button>Reply</button>
                         <p>23h ago</p>
+                        <div className="comment-likes">
+                        <FontAwesomeIcon className="comment-like-button" icon={faThumbsUp} />
+                        <p className="comment-likes-count">40</p>
+                        </div>
                     </footer>
                     </div>
                 </div>
-                <div className="comment">
-                    <div className="user-picture">
-                        <img src="https://friendyfy.blob.core.windows.net/pictures/ba8b368f-e711-44dd-b611-41cdbf36fb3c.jpeg" alt="" />
-                    </div>
-                    <div className="inner-comment">
-                        <div className="top-comment-half">
-                            Ivailo Gerenski
-                        </div>
-                    <p>I have commented on your post!I have commented on your post!I have commented on your post!I have commented on your post!I have commented on your post!I have commented on your post!I have commented on your post!</p>
-                    </div>
                 </div>
-                <div className="comment">
-                    <div className="user-picture">
-                        <img src="https://friendyfy.blob.core.windows.net/pictures/ba8b368f-e711-44dd-b611-41cdbf36fb3c.jpeg" alt="" />
-                    </div>
-                    <div className="inner-comment">
-                        <div className="top-comment-half">
-                            Ivailo Gerenski
-                        </div>
-                    <p>I have commented on your post!</p>
-                    </div>
+                <div className="add-comment">
+                    <input type="text" />
+                    <FontAwesomeIcon className="comment-send" icon={faComment} />
                 </div>
-                <div className="comment">
-                    <div className="user-picture">
-                        <img src="https://friendyfy.blob.core.windows.net/pictures/ba8b368f-e711-44dd-b611-41cdbf36fb3c.jpeg" alt="" />
-                    </div>
-                    <div className="inner-comment">
-                        <div className="top-comment-half">
-                            Ivailo Gerenski
-                        </div>
-                    <p>I have commented on your post!</p>
-                    </div>
-                </div>
-                <div className="comment">
-                    <div className="user-picture">
-                        <img src="https://friendyfy.blob.core.windows.net/pictures/ba8b368f-e711-44dd-b611-41cdbf36fb3c.jpeg" alt="" />
-                    </div>
-                    <div className="inner-comment">
-                        <div className="top-comment-half">
-                            Ivailo Gerenski
-                        </div>
-                    <p>I have commented on your post!I have commented on your post!I have commented on your post!I have commented on your post!I have commented on your post!</p>
-                    </div>
-                </div>
-            </div>
-            {showComments ? "COMMENTS!" : ""}
+            </div> : ""}
             {/* Make the comments show here */}
             <div className="bottom-footer">
                 <div className={"feed-like " + (isLiked ? "liked" : "")} onClick={likeButtonClickEvent}>
