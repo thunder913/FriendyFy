@@ -4,14 +4,16 @@ using FriendyFy.Data;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 namespace FriendyFy.Data.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    partial class ApplicationDbContextModelSnapshot : ModelSnapshot
+    [Migration("20211120155459_AddedPostComments")]
+    partial class AddedPostComments
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -256,9 +258,6 @@ namespace FriendyFy.Data.Migrations
                     b.Property<string>("Id")
                         .HasColumnType("nvarchar(450)");
 
-                    b.Property<string>("CommentId")
-                        .HasColumnType("nvarchar(450)");
-
                     b.Property<DateTime>("CreatedOn")
                         .HasColumnType("datetime2");
 
@@ -268,11 +267,14 @@ namespace FriendyFy.Data.Migrations
                     b.Property<DateTime?>("ModifiedOn")
                         .HasColumnType("datetime2");
 
+                    b.Property<string>("PostCommentId")
+                        .HasColumnType("nvarchar(450)");
+
                     b.HasKey("Id");
 
-                    b.HasIndex("CommentId");
-
                     b.HasIndex("LikedById");
+
+                    b.HasIndex("PostCommentId");
 
                     b.ToTable("CommentLike");
                 });
@@ -1012,13 +1014,13 @@ namespace FriendyFy.Data.Migrations
 
             modelBuilder.Entity("FriendyFy.Models.CommentLike", b =>
                 {
-                    b.HasOne("FriendyFy.Models.PostComment", "Comment")
-                        .WithMany("CommentLikes")
-                        .HasForeignKey("CommentId");
-
                     b.HasOne("FriendyFy.Models.ApplicationUser", "LikedBy")
                         .WithMany()
                         .HasForeignKey("LikedById");
+
+                    b.HasOne("FriendyFy.Models.PostComment", "Comment")
+                        .WithMany("CommentLikes")
+                        .HasForeignKey("PostCommentId");
 
                     b.Navigation("Comment");
 

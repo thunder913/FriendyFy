@@ -27,12 +27,16 @@ footer.feed-footer .bottom-footer > div.feed-repost:hover{
     color:rgb(74, 198, 255);
 }
 
-.likes a, .comments-reposts a{
+.likes a, .comments-reposts a, .likes a, .comments-reposts button{
     color: rgb(184, 179, 179);
     transition: 0.3s;
 }
+.likes a, .comments-reposts button{
+    background-color: transparent;
+    border: 0px;
+}
 
-.likes a:hover, .comments-reposts a:hover{
+.likes a:hover, .comments-reposts a:hover, .comments-reposts button:hover{
     text-decoration: none;
     text-decoration: underline;
 }
@@ -41,7 +45,7 @@ footer.feed-footer .bottom-footer > div.feed-repost:hover{
     margin-right: 5px;
 }
 
-footer.feed-footer .bottom-footer > div.feed-like.liked{
+footer.feed-footer .bottom-footer > div.feed-like.liked, .feed-footer .comments-section .comment .comment-footer button.liked{
     color:rgb(29, 90, 170);
 }
 

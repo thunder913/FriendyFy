@@ -15,7 +15,10 @@ namespace FriendyFy.Controllers
         protected ApplicationUser GetUserByToken()
         {
             var jwt = Request.Cookies["jwt"];
-
+            if (jwt == null)
+            {
+                return null;
+            }
             var token = this.JwtService.Verify(jwt);
 
             var userId = token.Id;

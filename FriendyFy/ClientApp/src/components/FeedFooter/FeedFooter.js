@@ -3,12 +3,16 @@ import './FeedFooter.css';
 import { faComment, faComments, faShare, faThumbsUp } from '@fortawesome/free-solid-svg-icons';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { likePost } from '../../services/postService';
-import $ from 'jquery'
+import $ from 'jquery';
+import { getComments, makeComment } from '../../services/commentService';
+import PostComment from '../PostComment/PostComment';
 const FeedFooter = (props) => {
     const [isLiked, setIsLiked] = useState(props.isLiked);
     const [likes, setLikes] = useState(props.likes)
     const [showComments, setShowComments] = useState(false);
+    const [comments, setComments] = useState([]);
     const commentRef = useRef()
+
     const likeButtonClickEvent = () => {
         likePost(props.postId)
             .then(async res => {if(res.status==200){
@@ -22,15 +26,24 @@ const FeedFooter = (props) => {
         setShowComments(prev => !prev);
     }
 
+    const addComment = (e) => {
+        e.preventDefault();
+        makeComment(commentRef.current.value, props.postId)
+            .then(async res => 
+            {
+                commentRef.current.value = '';
+                let comment = await (res.json());
+                setComments(prevState => ([...prevState, comment]));
+            });
+    }
+
     useEffect(() => {
-        console.log("commentRef", commentRef)
         if(commentRef.current){
             let textarea = commentRef.current;
             textarea.addEventListener('input', autoResize, false);
             $(textarea).keypress(function (e){
                 if(e.which === 13 && !e.shiftKey) {
-                    e.preventDefault();
-                    console.log("ENTER")
+                    addComment(e);
                 }
             })
             function autoResize() {
@@ -40,6 +53,14 @@ const FeedFooter = (props) => {
         }
 
     },[showComments, commentRef])
+
+    useEffect(() => {
+        if(showComments){
+            getComments(props.postId, 10, 0)
+                .then(async res => setComments(await (res.json())))
+        }
+
+    }, [showComments])
 
 return(
 <footer className="feed-footer">
@@ -53,9 +74,9 @@ return(
                 </div>
                 <div className="comments-reposts">
                     <span>
-                        <a href="/">
+                        <button onClick={showCommentsClickEvent}>
                             {props.comments} comments
-                        </a>
+                        </button>
                     </span>
                     <span>
                         <a href="/">
@@ -68,25 +89,8 @@ return(
             {showComments ? 
             <div className="comments">
             <div className="comments-section">
-                <div className="comment">
-                    <div className="user-picture">
-                        <img src="https://friendyfy.blob.core.windows.net/pictures/ba8b368f-e711-44dd-b611-41cdbf36fb3c.jpeg" alt="" />
-                    </div>
-                    <div className="inner-comment">
-                        <div className="top-comment-half">
-                            Ivailo Gerenski
-                        </div>
-                    <p>I have commented on your post!</p>
-                    <footer className="comment-footer">
-                        <button>Like</button>
-                        <p>23h ago</p>
-                        <div className="comment-likes">
-                        <FontAwesomeIcon className="comment-like-button" icon={faThumbsUp} />
-                        <p className="comment-likes-count">40</p>
-                        </div>
-                    </footer>
-                    </div>
-                </div>
+                {comments.map(c => 
+                <PostComment comment={c} key={c.id}/>)}
                 </div>
                 <div className="add-comment">
                     <textarea 
@@ -97,7 +101,7 @@ return(
                         ref={commentRef}
                         placeholder="What do you think?"
                         />
-                    <FontAwesomeIcon className="comment-send" icon={faComment} />
+                    <FontAwesomeIcon className="comment-send" icon={faComment} onClick={addComment}/>
                 </div>
             </div> : ""}
             {/* Make the comments show here */}
