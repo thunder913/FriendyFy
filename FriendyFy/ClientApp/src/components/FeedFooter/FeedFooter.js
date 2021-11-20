@@ -1,13 +1,14 @@
-import React, {useState} from 'react';
+import React, {useState, useRef, useEffect} from 'react';
 import './FeedFooter.css';
 import { faComment, faComments, faShare, faThumbsUp } from '@fortawesome/free-solid-svg-icons';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { likePost } from '../../services/postService';
-
+import $ from 'jquery'
 const FeedFooter = (props) => {
     const [isLiked, setIsLiked] = useState(props.isLiked);
     const [likes, setLikes] = useState(props.likes)
     const [showComments, setShowComments] = useState(false);
+    const commentRef = useRef()
     const likeButtonClickEvent = () => {
         likePost(props.postId)
             .then(async res => {if(res.status==200){
@@ -20,6 +21,25 @@ const FeedFooter = (props) => {
         console.log(showComments)
         setShowComments(prev => !prev);
     }
+
+    useEffect(() => {
+        console.log("commentRef", commentRef)
+        if(commentRef.current){
+            let textarea = commentRef.current;
+            textarea.addEventListener('input', autoResize, false);
+            $(textarea).keypress(function (e){
+                if(e.which === 13 && !e.shiftKey) {
+                    e.preventDefault();
+                    console.log("ENTER")
+                }
+            })
+            function autoResize() {
+                this.style.height = 'auto';
+                this.style.height = this.scrollHeight + 'px';
+            }
+        }
+
+    },[showComments, commentRef])
 
 return(
 <footer className="feed-footer">
@@ -69,7 +89,14 @@ return(
                 </div>
                 </div>
                 <div className="add-comment">
-                    <input type="text" />
+                    <textarea 
+                        name="" 
+                        id="comment-text" 
+                        cols="30" 
+                        rows="1" 
+                        ref={commentRef}
+                        placeholder="What do you think?"
+                        />
                     <FontAwesomeIcon className="comment-send" icon={faComment} />
                 </div>
             </div> : ""}

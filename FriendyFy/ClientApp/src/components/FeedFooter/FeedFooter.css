@@ -153,7 +153,7 @@ footer.feed-footer .bottom-footer > div.feed-comment.opened-comments{
     transition: 1s;
   }
   
-  .feed-footer .comments .add-comment input{
+  .feed-footer .comments .add-comment textarea{
     width: 99%;
     background: #5d5d5d;
     color: white;
@@ -161,16 +161,23 @@ footer.feed-footer .bottom-footer > div.feed-comment.opened-comments{
     margin: 3px;
     border-radius: 20px;
     padding: 3px 5px;
+    resize: none;
   }
+
+  .feed-footer .comments .add-comment textarea::placeholder{
+      color: rgb(170, 170, 170);
+      padding-left: 2px;
+    }
   
   .feed-footer .comments .comment-send{
       margin-left: -25px;
-      margin-left: -32px;
+      margin-left: -35px;
       background: #5d5d5d;
       font-size: 30px;
       padding: 5px;
       border-radius: 50%;
-      align-self: center;
+      align-self: flex-end;
+      margin-bottom: 3px;
       cursor: pointer;
   }
 
