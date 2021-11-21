@@ -60,7 +60,7 @@ namespace FriendyFy.Controllers
             {
                 likes = await this.postService.LikePostAsync(likePostDto.PostId, user);
             }
-            catch (Exception)
+            catch (Exception ex)
             {
                 return BadRequest("There was an error saving your like!");
             }

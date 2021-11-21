@@ -25,9 +25,7 @@ function App(){
               <Layout>
               {!loggedIn ? (<HomePageNotSignedIn/>) : (
                 <div className="app">
-                  <Route path="/profile" component={Profile}></Route>
-                  <Route path="/friends" component={Friends}></Route>
-                  <Route path="/photos" component={ProfilePhotos}></Route>
+                  <Route path={["/profile", "/friends", "/photos"]} component={Profile}></Route>
                   <Route path="/register" component={Register}></Route>
                   <Route path={ApplicationPaths.ApiAuthorizationPrefix} component={ApiAuthorizationRoutes} />
                   <Route exact path='/' component={Home} />

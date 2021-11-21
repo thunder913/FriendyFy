@@ -13,8 +13,10 @@ const FeedFooter = (props) => {
     const [likes, setLikes] = useState(props.likes)
     const [showComments, setShowComments] = useState(false);
     const [comments, setComments] = useState([]);
+    const [commentsCount, setCommentsCount] = useState(props.comments);
     const [hasMore, setHasMore] = useState(true);
     const commentRef = useRef()
+    const scrollRef = useRef();
 
     const likeButtonClickEvent = () => {
         likePost(props.postId)
@@ -35,12 +37,13 @@ const FeedFooter = (props) => {
             {
                 commentRef.current.value = '';
                 let comment = await (res.json());
-                setComments(prevState => ([...prevState, comment]));
+                setComments(prevState => ([comment, ...prevState]));
+                setCommentsCount(prev => prev+1)
+                scrollRef.current.el.scrollTop = 0;
             });
     }
 
     const loadMoreComments = () => {
-        console.log("in load more messages")
         return getComments(props.postId, 10, comments.length)
         .then(async res => { 
             let obj = await res.json();
@@ -71,11 +74,18 @@ const FeedFooter = (props) => {
     },[showComments, commentRef])
 
     useEffect(() => {
-        // if(showComments){
-            console.log("initial load")
+        if(showComments){
             getComments(props.postId, 10, 0)
-                .then(async res => setComments(await (res.json())))
-        // }
+                .then(async res => {
+                    let obj = await (res.json());
+                    if(obj.length>0){
+                        setComments(obj);
+                    }
+                    else{
+                        setHasMore(false);
+                    }
+            })
+        }
     }, [showComments]) 
 
 return(
@@ -91,7 +101,7 @@ return(
                 <div className="comments-reposts">
                     <span>
                         <button onClick={showCommentsClickEvent}>
-                            {props.comments} comments
+                            {commentsCount} comments
                         </button>
                     </span>
                     <span>
@@ -117,7 +127,8 @@ return(
                         <p style={{ textAlign: 'center' }}>
                           <b>No more comments available</b>
                         </p>
-                      }>
+                      }
+                    ref={scrollRef}>
                     {comments.map(c => <PostComment comment={c} key={c.id}/>)}
                 </InfiniteScroll>
                 <div className="add-comment">

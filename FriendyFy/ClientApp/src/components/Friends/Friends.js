@@ -35,9 +35,7 @@ const Friends = () => {
         }
 
 
-    return (<div className="profile-top">
-        <div className="profile-container">
-            <ProfileHeader selected="friends" />
+    return (
             <main className="friends-main">
                 <header className="friends-header">
                     <h2>Friends</h2>
@@ -57,9 +55,7 @@ const Friends = () => {
                     >
                     {friends.map(friend => <Friend friend={friend}></Friend>)}
                 </InfiniteScroll>
-            </main>
-        </div>
-    </div>)
+            </main>)
 }
 
 export default Friends;

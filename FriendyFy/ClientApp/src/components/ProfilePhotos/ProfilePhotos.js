@@ -61,9 +61,6 @@ const photos = [
 
 
 const ProfilePhotos = () => (
-    <div className="profile-top">
-        <div className="profile-container">
-            <ProfileHeader selected="photos-nav" />
             <main className="photos-main">
                 <header className="photos-header">
                     <h2>Photos</h2>
@@ -72,8 +69,6 @@ const ProfilePhotos = () => (
                     {photos.map(photo => <ProfilePhoto image={photo.image}/>)}
                 </div>
             </main>
-        </div>
-    </div>
 )
 
 export default ProfilePhotos;

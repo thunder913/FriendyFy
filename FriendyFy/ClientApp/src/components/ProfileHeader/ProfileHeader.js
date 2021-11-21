@@ -68,7 +68,7 @@ const ProfileHeader = ({selected}) =>{
             </button>
         </div>
         <div className="photos-nav">
-            <button className={"photos " + (selected.match("photos-nav") ? "selected" : "")} onClick={goToPhotos}>
+            <button className={"photos " + (selected.match("photos") ? "selected" : "")} onClick={goToPhotos}>
                 Photos
             </button>
         </div>
