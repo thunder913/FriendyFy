@@ -9,6 +9,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using ViewModels;
 
 namespace FriendyFy.Services
 {
@@ -132,6 +133,28 @@ namespace FriendyFy.Services
 
 
             return post.Likes.Count();
+        }
+
+        public List<PersonListPopupViewModel> GetPeopleLikes(string postId, int take, int skip)
+        {
+            var peopleLiked = this.postLikeRepository
+                .AllAsNoTracking()
+                .Include(x => x.LikedBy)
+                .ThenInclude(x => x.ProfileImage)
+                .Where(x => x.PostId == postId)
+                .OrderByDescending(x => x.CreatedOn)
+                .Skip(skip)
+                .Take(take)
+                .ToList()
+                .Select(x => new PersonListPopupViewModel()
+                {
+                    Name = x.LikedBy.FirstName + " " + x.LikedBy.LastName,
+                    Username = x.LikedBy.UserName,
+                    ProfileImage = this.blobService.GetBlobUrlAsync(x.LikedBy?.ProfileImage?.Id + x.LikedBy?.ProfileImage?.ImageExtension, GlobalConstants.BlobPictures).GetAwaiter().GetResult(),
+                })
+                .ToList();
+
+            return peopleLiked;
         }
     }
 }

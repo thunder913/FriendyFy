@@ -2,6 +2,7 @@
 using FriendyFy.Models;
 using System.Collections.Generic;
 using System.Threading.Tasks;
+using ViewModels;
 
 namespace FriendyFy.Services.Contracts
 {
@@ -10,5 +11,6 @@ namespace FriendyFy.Services.Contracts
         Task<bool> CreatePostAsync(MakePostDto makePostDto, string userId);
         List<PostDetailsDto> GetAllPosts(string userId);
         Task<int?> LikePostAsync(string postId, ApplicationUser user);
+        List<PersonListPopupViewModel> GetPeopleLikes(string postId, int take, int skip);
     }
 }

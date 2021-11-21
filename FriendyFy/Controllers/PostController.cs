@@ -5,6 +5,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using ViewModels;
 
 namespace FriendyFy.Controllers
 {
@@ -73,7 +74,12 @@ namespace FriendyFy.Controllers
             {
                 return BadRequest();
             }
+        }
 
+        [HttpPost("getLikes")]
+        public List<PersonListPopupViewModel> GetLikes(GetPostLikesCount dto)
+        {
+            return this.postService.GetPeopleLikes(dto.PostId, dto.Take, dto.Skip);
         }
     }
 }

@@ -19,3 +19,12 @@ export function makePost(privacySetting, postMessage, locationLat, locationLng, 
         body: JSON.stringify({postId})
     });
   }
+
+  
+  export function getPostLikes(postId, skip, take) {
+    return fetch('/post/getLikes', {
+        method: 'POST',
+        headers: {'Content-Type': 'application/json'},
+        body: JSON.stringify({postId, take, skip})
+    });
+  }

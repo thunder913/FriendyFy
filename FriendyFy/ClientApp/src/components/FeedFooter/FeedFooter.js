@@ -2,10 +2,11 @@ import React, {useState, useRef, useEffect} from 'react';
 import './FeedFooter.css';
 import { faComment, faComments, faShare, faThumbsUp } from '@fortawesome/free-solid-svg-icons';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { likePost } from '../../services/postService';
+import { getPostLikes, likePost } from '../../services/postService';
 import $ from 'jquery';
 import { getComments, makeComment } from '../../services/commentService';
 import PostComment from '../PostComment/PostComment';
+import PeopleListPopUp from '../PeopleListPopUp/PeopleListPopUp'
 import InfiniteScroll from 'react-infinite-scroll-component';
 
 const FeedFooter = (props) => {
@@ -13,10 +14,19 @@ const FeedFooter = (props) => {
     const [likes, setLikes] = useState(props.likes)
     const [showComments, setShowComments] = useState(false);
     const [comments, setComments] = useState([]);
+    const [showPeopleLiked, setShowPeopleLiked] = useState(false)
     const [commentsCount, setCommentsCount] = useState(props.comments);
     const [hasMore, setHasMore] = useState(true);
     const commentRef = useRef()
     const scrollRef = useRef();
+
+    const closePopUp = () => {
+        setShowPeopleLiked(false);
+    }
+
+    const loadLikes = (skip) => {
+        return getPostLikes(props.postId, skip, 10);
+    }
 
     const likeButtonClickEvent = () => {
         likePost(props.postId)
@@ -92,10 +102,17 @@ return(
 <footer className="feed-footer">
             <div className="top-footer">
                 <div className="likes">
+                    {showPeopleLiked ? 
+                            <PeopleListPopUp 
+                                title="Likes"
+                                count={likes}
+                                loadPeople={loadLikes}
+                                closePopUp={closePopUp}
+                            /> : ''}
                     <span>
-                        <a href="/">
+                        <button onClick={() => setShowPeopleLiked(true)} href="/">
                             {likes} likes
-                        </a>
+                        </button>
                     </span>
                 </div>
                 <div className="comments-reposts">
@@ -105,9 +122,9 @@ return(
                         </button>
                     </span>
                     <span>
-                        <a href="/">
+                        <button>
                             {props.reposts} reposts
-                        </a>
+                        </button>
                     </span>
                 </div>
             </div>

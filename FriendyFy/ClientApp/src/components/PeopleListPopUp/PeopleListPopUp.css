@@ -1,0 +1,100 @@
+.people-list-popup{
+    position: absolute;
+    left: 0;
+    right: 0;
+    margin: auto;
+    padding: 20px; 
+    box-shadow: 5px 5px 27px 3px rgba(0,0,0,0.78);
+    top: 50%;
+    transform: translateY(-50%);
+    z-index: 2;
+    height: 120%;
+    width: 100%;
+    background: transparent;
+    backdrop-filter: blur(5px);
+}
+.people-list-popup .inner-popup{
+    width: 540px;
+    text-align: center;
+    background-color: #3F3B3B;
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    -webkit-transform: translateX(-50%) translateY(-50%);
+    transform: translateX(-50%) translateY(-50%);
+    padding: 10px 0px 20px 0px;
+    display: flex;
+    flex-direction: column;
+    overflow:auto;
+    max-height: 800px;
+    box-shadow: 5px 4px 23px 9px rgba(0,0,0,0.89);
+    border-radius: 10px;
+}
+
+.people-list-popup .inner-popup .title{
+    display: flex;
+    flex-direction: row;
+    padding-bottom: 10px;
+    font-size: 28px;
+    justify-content: space-between;
+    border-bottom: 5px solid rgba(32, 30, 30, 0.76);
+    padding: 0px 110px 10px 20px;
+}
+
+.close-popup{
+    position: absolute;
+    top: 5px;
+    right: 0px;
+    width: 100px;
+    height: 50px;
+    background-color: transparent;
+    border: 0px;
+    font-size: 30px;
+    font-weight: 600;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: 0.3s;
+    color: rgb(206, 204, 204);
+    border-radius: 20px 0px 0px 20px;
+}
+
+.close-popup:hover{
+    background-color: #5c5858;
+    color: black;
+}
+
+.people-list-popup .person-image{
+    width: 50px;
+    height: 50px;
+    box-shadow: 0px 0px 8px 2px rgb(0 0 0 / 49%);
+    border-radius: 50%;
+}
+
+.people-list-popup .person-image img{
+    width: 100%;
+    height: 100%;
+    border-radius: 50%;
+}
+
+.people-list-popup .person{
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    gap: 10px;
+    cursor: pointer;
+    transition: 0.3s;
+    padding: 5px;
+    border-radius: 5px;
+}
+
+.people-list-popup .person:hover{
+    background-color: #555252;
+}
+
+.people-list-popup .people{
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+    padding: 20px 10px 0px 15px;
+}
