@@ -195,6 +195,8 @@ namespace FriendyFy.Services
                 .All()
                 .Include(x => x.Friend)
                 .ThenInclude(x => x.Friends)
+                .Include(x => x.Friend)
+                .ThenInclude(x => x.ProfileImage)
                 .Include(x => x.CurrentUser)
                 .Where(x => x.CurrentUser.UserName==userId && x.IsFriend)
                 .ToList()

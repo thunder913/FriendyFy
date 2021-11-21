@@ -84,7 +84,7 @@ namespace FriendyFy.Services
                 .ThenInclude(x => x.CommentLikes)
                 .FirstOrDefault(x => x.Id == postId)?
                 .Comments
-                .OrderBy(x => x.CreatedOn)
+                .OrderByDescending(x => x.CreatedOn)
                 .Skip(skip)
                 .Take(take)
                 .Select(x => new PostCommentViewModel() 

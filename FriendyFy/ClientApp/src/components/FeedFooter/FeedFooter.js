@@ -6,11 +6,14 @@ import { likePost } from '../../services/postService';
 import $ from 'jquery';
 import { getComments, makeComment } from '../../services/commentService';
 import PostComment from '../PostComment/PostComment';
+import InfiniteScroll from 'react-infinite-scroll-component';
+
 const FeedFooter = (props) => {
     const [isLiked, setIsLiked] = useState(props.isLiked);
     const [likes, setLikes] = useState(props.likes)
     const [showComments, setShowComments] = useState(false);
     const [comments, setComments] = useState([]);
+    const [hasMore, setHasMore] = useState(true);
     const commentRef = useRef()
 
     const likeButtonClickEvent = () => {
@@ -22,7 +25,6 @@ const FeedFooter = (props) => {
     }
 
     const showCommentsClickEvent = () => {
-        console.log(showComments)
         setShowComments(prev => !prev);
     }
 
@@ -35,6 +37,20 @@ const FeedFooter = (props) => {
                 let comment = await (res.json());
                 setComments(prevState => ([...prevState, comment]));
             });
+    }
+
+    const loadMoreComments = () => {
+        console.log("in load more messages")
+        return getComments(props.postId, 10, comments.length)
+        .then(async res => { 
+            let obj = await res.json();
+            if(obj.length>0){
+                setComments(prevState => ([...prevState, ...obj]));
+            }
+            else{
+                setHasMore(false);
+            }
+        })
     }
 
     useEffect(() => {
@@ -55,12 +71,12 @@ const FeedFooter = (props) => {
     },[showComments, commentRef])
 
     useEffect(() => {
-        if(showComments){
+        // if(showComments){
+            console.log("initial load")
             getComments(props.postId, 10, 0)
                 .then(async res => setComments(await (res.json())))
-        }
-
-    }, [showComments])
+        // }
+    }, [showComments]) 
 
 return(
 <footer className="feed-footer">
@@ -88,10 +104,22 @@ return(
             
             {showComments ? 
             <div className="comments">
-            <div className="comments-section">
-                {comments.map(c => 
-                <PostComment comment={c} key={c.id}/>)}
-                </div>
+                <InfiniteScroll
+                    className="comments-section"
+                    dataLength={comments.length}
+                    next={loadMoreComments}
+                    height={300}
+                    // inverse={true}
+                    hasMore={hasMore}
+                    loader={<h4 className="loading-text">Loading...</h4>}
+                    scrollableTarget="scrollableDiv"
+                    endMessage={
+                        <p style={{ textAlign: 'center' }}>
+                          <b>No more comments available</b>
+                        </p>
+                      }>
+                    {comments.map(c => <PostComment comment={c} key={c.id}/>)}
+                </InfiniteScroll>
                 <div className="add-comment">
                     <textarea 
                         name="" 
@@ -103,7 +131,8 @@ return(
                         />
                     <FontAwesomeIcon className="comment-send" icon={faComment} onClick={addComment}/>
                 </div>
-            </div> : ""}
+            </div> 
+            : ""}
             {/* Make the comments show here */}
             <div className="bottom-footer">
                 <div className={"feed-like " + (isLiked ? "liked" : "")} onClick={likeButtonClickEvent}>
