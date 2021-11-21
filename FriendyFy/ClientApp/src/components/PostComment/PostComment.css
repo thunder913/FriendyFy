@@ -1,0 +1,8 @@
+.comment .user-picture{
+    cursor: pointer;
+}
+
+.comment .inner-comment .top-comment-half:hover{
+    cursor: pointer;
+    text-decoration: underline;
+}

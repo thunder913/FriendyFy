@@ -88,7 +88,10 @@ const HomePageSignedIn = () => {
 
   return (<div className="feed home-feed">
     {loggedIn.finishedFirstTimeLogin ? '' : <FirstTimePopUp checkFirstTimePopUp={checkFirstTimePopUp}></FirstTimePopUp>}
-    <MakePost></MakePost>
+    <MakePost
+      showPostImage={true}
+      showCreatePost={true}
+      showCreateEvent={true}/>
     {posts.map(post => <FeedPost key={post.postId} post={post} />)}
     {events.map(event => <FeedEvent event={event} />)}
   </div>)

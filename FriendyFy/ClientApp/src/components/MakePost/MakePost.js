@@ -6,7 +6,7 @@ import MakePostPopUp from '../MakePostPopUp/MakePostPopUp.js';
 import useScrollBlock from "../../hooks/useScrollBlock";
 import './MakePost.css';
 
-const MakePost = () =>{
+const MakePost = ({showCreatePost ,showPostImage, showCreateEvent}) =>{
     const { loggedIn } = useLoggedIn();
     const [showPopUp, setShowPopUp] = useState(false);
     const [postWithImage, setPostWithImage] = useState(false);
@@ -14,6 +14,7 @@ const MakePost = () =>{
     const CreatePostWithoutImage = () => {
         setPostWithImage(false);
         setShowPopUp(true);
+        window.scrollTo(0,0);
     }
 
     const CreatePostWithImage = () => {
@@ -48,10 +49,11 @@ const MakePost = () =>{
 
     return(
     <section className="make-post">
+        {showCreatePost ?
         <article onClick={CreatePostWithoutImage} className="make-post-text">
             <p>Share a thought with you friends, {loggedIn.firstName}</p>
-        </article>
-        <article 
+        </article> : ''}
+        {showPostImage ? <article 
             className="make-post-image"
             onClick={CreatePostWithImage}>
             <FontAwesomeIcon 
@@ -59,15 +61,15 @@ const MakePost = () =>{
                 className="image-icon"
                 icon={faImages}
                 />
-        </article>
+        </article> : ''}
 
-        <article className="create-event">
+        {showCreateEvent ? <article className="create-event">
                 <FontAwesomeIcon 
                     title="Create an event" 
                     className="create-event-icon" 
                     icon={faCalendarPlus}
                     ></FontAwesomeIcon>
-        </article>
+        </article> : ''}
         {showPopUp ? 
         <MakePostPopUp 
             hasImage={postWithImage}

@@ -4,6 +4,7 @@
     {
         public string CommentorPicture { get; set; }
         public string CommentorName { get; set; }
+        public string CommentorUsername { get; set; }
         public int LikesCount { get; set; }
         public string CommentText { get; set; }
         public bool IsLikedByUser { get; set; }

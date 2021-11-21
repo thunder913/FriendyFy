@@ -25,9 +25,18 @@ const MakePostPopUp = ({hasImage, closePopUp}) =>{
 
     const onPostButtonClick = async () => {
         let peopleIds = people.map(x => x.value)
+        if(postMessage.length == 0){
+            return;
+        }
         await makePost(privacySettings, postMessage, location.lat, location.lng, image, peopleIds)
-            .then(async res => console.log(await res.json()));
-        console.log(image);
+            .then(async res => {
+                let result = await (res.json());
+                if(result.success){
+                    closePopUp();
+                }else{
+                    //error
+                }
+            }) 
     }
 
     return(

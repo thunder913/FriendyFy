@@ -75,7 +75,7 @@ const FeedFooter = (props) => {
 
     useEffect(() => {
         if(showComments){
-            getComments(props.postId, 10, 0)
+            getComments(props.postId, 10, 0) 
                 .then(async res => {
                     let obj = await (res.json());
                     if(obj.length>0){

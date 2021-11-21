@@ -89,6 +89,7 @@ namespace FriendyFy.Services
                 .Take(take)
                 .Select(x => new PostCommentViewModel() 
                 {
+                    CommentorUsername = x.CommentedBy.UserName,
                     CommentorName = x.CommentedBy.FirstName + " " + x.CommentedBy.LastName,
                     CommentorPicture = this.blobService.GetBlobUrlAsync(x.CommentedBy.ProfileImage?.Id + x.CommentedBy.ProfileImage?.ImageExtension, GlobalConstants.BlobPictures).GetAwaiter().GetResult(),
                     CommentText = x.Text,
@@ -144,6 +145,7 @@ namespace FriendyFy.Services
                 .ToList()
                 .Select(x => new PostCommentViewModel()
                 {
+                    CommentorUsername = x.CommentedBy.UserName,
                     CommentorName = x.CommentedBy.FirstName + " " + x.CommentedBy.LastName,
                     CommentorPicture = this.blobService.GetBlobUrlAsync(x.CommentedBy.ProfileImage?.Id + x.CommentedBy.ProfileImage?.ImageExtension, GlobalConstants.BlobPictures).GetAwaiter().GetResult(),
                     CommentText = x.Text,

@@ -2,6 +2,7 @@ import React, {useState, useEffect} from "react";
 import ProfileSidebar from '../ProfileSidebar/ProfileSidebar';
 import FeedPost from '../FeedPost/FeedPost';
 import FeedEvent from '../FeedEvent/FeedEvent';
+import MakePost from '../MakePost/MakePost'
 import { getPosts } from "../../services/postService";
 import { useLoggedIn } from "../../contexts/LoggedInContext";
 
@@ -21,6 +22,11 @@ const ProfileTimeline = () => {
     <ProfileSidebar/>
        <div className="profile-feed">
            <div className="feed">
+           <MakePost 
+            showPostImage={false}
+            showCreatePost={true}
+            showCreateEvent={false}
+            />
            {/* {events.map(event => <FeedEvent event={event} />)} */}
            {posts.map(post => <FeedPost key={post.postId} post={post} />)}
            </div>

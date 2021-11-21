@@ -3,9 +3,12 @@ import { parseTime } from '../../services/helperService';
 import { faThumbsUp } from '@fortawesome/free-solid-svg-icons';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { likeComment } from "../../services/commentService";
+import { useHistory } from 'react-router';
+import "./PostComment.css"
 const PostComment = ({comment}) => {
     const [likedByYou, setLikedByYou] = useState(comment.isLikedByUser);
     const [likesCount, setLikesCount] = useState(comment.likesCount)
+    const history = useHistory();
     const commentLikeEvent = (e) => {
         e.preventDefault();
         likeComment(comment.id)
@@ -16,12 +19,16 @@ const PostComment = ({comment}) => {
                 });
     }
 
+    const redirectToUserProfile = () => {
+        history.push('/profile/' + comment.commentorUsername);
+    }
+
     return (<div key={comment.id} className="comment">
-                    <div className="user-picture">
+                    <div className="user-picture" onClick={redirectToUserProfile}>
                         <img src={comment.commentorPicture} alt="" />
                     </div>
                     <div className="inner-comment">
-                        <div className="top-comment-half">
+                        <div className="top-comment-half" onClick={redirectToUserProfile}>
                             {comment.commentorName}
                         </div>
                     <p>{comment.commentText}</p>
