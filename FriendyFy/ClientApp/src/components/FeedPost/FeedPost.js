@@ -12,7 +12,8 @@ const FeedPost = ({post}) => {
         <FeedHeader 
             photo={post.creatorImage} 
             name={post.creatorName} 
-            time={parseTime(post.createdAgo)}/>
+            time={parseTime(post.createdAgo)}
+            username={post.username}/>
         {post.postMessage ? <div className="post-text">
             <p>{post.postMessage}</p>
         </div> : ""}

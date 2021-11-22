@@ -139,8 +139,9 @@ return(
             
             {showComments ? 
             <div className="comments">
+                <div className={"infinite-scroll "+ (comments.length == 0 ? 'display-none' : '')}>
                 <InfiniteScroll
-                    className="comments-section"
+                    className={"comments-section"}
                     dataLength={comments.length}
                     next={loadMoreComments}
                     height={300}
@@ -156,6 +157,8 @@ return(
                     ref={scrollRef}>
                     {comments.map(c => <PostComment comment={c} key={c.id}/>)}
                 </InfiniteScroll>
+                </div>
+
                 <div className="add-comment">
                     <textarea 
                         name="" 

@@ -17,5 +17,6 @@ namespace FriendyFy.Data
         public int RepostsCount { get; set; }
         public string PostImage { get; set; }
         public bool IsLikedByUser { get; set; }
+        public string Username { get; set; }
     }
 }

@@ -10,7 +10,8 @@ const MakePost = ({showCreatePost ,showPostImage, showCreateEvent}) =>{
     const { loggedIn } = useLoggedIn();
     const [showPopUp, setShowPopUp] = useState(false);
     const [postWithImage, setPostWithImage] = useState(false);
-    const [blockScroll, allowScroll] = useScrollBlock();
+    const [blockScroll, allowScroll] = useScrollBlock()
+
     const CreatePostWithoutImage = () => {
         setPostWithImage(false);
         setShowPopUp(true);

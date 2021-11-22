@@ -188,3 +188,7 @@ footer.feed-footer .bottom-footer > div.feed-comment.opened-comments{
   .feed-footer .comments .add-comment{
       display: flex;
   }
+
+  .display-none{
+      display: none;
+  }

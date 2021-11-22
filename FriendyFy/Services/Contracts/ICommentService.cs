@@ -11,5 +11,6 @@ namespace FriendyFy.Services.Contracts
         Task<bool> RemoveCommentAsync(string commentId, string userId);
         List<PostCommentViewModel> GetCommentsForPost(string userId, string postId, int take, int skip);
         Task<int?> LikeCommentAsync(string commentId, ApplicationUser user);
+        List<PersonListPopupViewModel> GetPeopleLikes(string commentId, int take, int skip);
     }
 }

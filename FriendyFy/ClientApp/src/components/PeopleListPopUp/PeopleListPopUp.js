@@ -2,9 +2,7 @@ import React, { useEffect, useState } from "react";
 import './PeopleListPopUp.css'
 import InfiniteScroll from "react-infinite-scroll-component";
 import { useHistory } from 'react-router';
-import useScrollBlock from "../../hooks/useScrollBlock";
 const PeopleListPopUp = ({title, count, loadPeople, closePopUp}) => {
-    const [blockScroll, allowScroll] = useScrollBlock();
     const [hasMore, setHasMore] = useState(true); 
     const [people, setPeople] = useState([]); 
     const history = useHistory();
@@ -59,7 +57,7 @@ const PeopleListPopUp = ({title, count, loadPeople, closePopUp}) => {
                     <p>{count}</p>
                     <button className="close-popup" onClick={closePopUp}>x</button>
                 </header>
-                <section className="people">
+                <section className={"people " + (people.length === 0 ? 'display-none' : '')}>
                 <InfiniteScroll
                         className="comments-section"
                         dataLength={people.length}
@@ -70,8 +68,8 @@ const PeopleListPopUp = ({title, count, loadPeople, closePopUp}) => {
                         loader={<h4 className="loading-text">Loading...</h4>}
                         scrollableTarget="scrollableDiv"
                         >
-                        {people.map(p => <article className="person">
-                        <div className="person-image" onClick={() => redirectToUserProfile(p.username)}>
+                        {people.map(p => <article className="person" onClick={() => redirectToUserProfile(p.username)}>
+                        <div className="person-image">
                             <img src={p.profileImage} alt="" />
                         </div>
                         <div className="name">

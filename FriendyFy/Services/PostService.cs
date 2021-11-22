@@ -96,7 +96,8 @@ namespace FriendyFy.Services
                     PostMessage = x.Text,
                     RepostsCount = x.Reposts.Count(),
                     PostImage = this.blobService.GetBlobUrlAsync(x.Image?.Id + x.Image?.ImageExtension, GlobalConstants.BlobPictures).GetAwaiter().GetResult(),
-                    IsLikedByUser = x.Likes.Any(x => x.LikedById == userId)
+                    IsLikedByUser = x.Likes.Any(x => x.LikedById == userId),
+                    Username = x.Creator.UserName,
                 })
                 .ToList();
         }

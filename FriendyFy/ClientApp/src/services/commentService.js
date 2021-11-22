@@ -21,3 +21,11 @@ export function makeComment(text, postId) {
         body: JSON.stringify({commentId})
     });
   }
+
+  export function getCommentLikes(commentId, skip, take) {
+    return fetch('/comment/getLikes', {
+        method: 'POST',
+        headers: {'Content-Type': 'application/json'},
+        body: JSON.stringify({commentId, take, skip})
+    });
+  }

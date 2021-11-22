@@ -76,5 +76,11 @@ namespace FriendyFy.Controllers
             }
 
         }
+
+        [HttpPost("getLikes")]
+        public List<PersonListPopupViewModel> GetLikes(GetCommentLikesDto dto)
+        {
+            return this.commentService.GetPeopleLikes(dto.CommentId, dto.Take, dto.Skip);
+        }
     }
 }

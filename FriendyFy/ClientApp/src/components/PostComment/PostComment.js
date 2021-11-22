@@ -5,10 +5,29 @@ import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { likeComment } from "../../services/commentService";
 import { useHistory } from 'react-router';
 import "./PostComment.css"
+import useScrollBlock from "../../hooks/useScrollBlock";
+import PeopleListPopUp from '../PeopleListPopUp/PeopleListPopUp';
+import { getCommentLikes } from "../../services/commentService";
 const PostComment = ({comment}) => {
     const [likedByYou, setLikedByYou] = useState(comment.isLikedByUser);
     const [likesCount, setLikesCount] = useState(comment.likesCount)
+    const [showPeopleLikesPopUp, setShowPeopleLiekdPopUp] = useState(false);
+    const [blockScroll, allowScroll] = useScrollBlock();
     const history = useHistory();
+
+    const loadLikes = (skip) => {
+        return getCommentLikes(comment.id, skip, 10);
+    }
+    
+    const showPeopleLikes = () => {
+        setShowPeopleLiekdPopUp(true);
+        blockScroll();
+    }
+    
+    const closePopUp = () => {
+        allowScroll();
+        setShowPeopleLiekdPopUp(false);
+    }
     const commentLikeEvent = (e) => {
         e.preventDefault();
         likeComment(comment.id)
@@ -24,6 +43,13 @@ const PostComment = ({comment}) => {
     }
 
     return (<div key={comment.id} className="comment">
+                                {showPeopleLikesPopUp ? 
+                            <PeopleListPopUp 
+                                title="Likes"
+                                count={likesCount}
+                                loadPeople={loadLikes}
+                                closePopUp={closePopUp}
+                            /> : ''}
                     <div className="user-picture" onClick={redirectToUserProfile}>
                         <img src={comment.commentorPicture} alt="" />
                     </div>
@@ -36,7 +62,7 @@ const PostComment = ({comment}) => {
                         <button className={likedByYou ? 'liked' : ''} onClick={commentLikeEvent}>Like</button>
                         <p>{parseTime(comment.createdAgo)}</p>
                         {likesCount > 0 ? 
-                        <div className="comment-likes">
+                        <div className="comment-likes" onClick={showPeopleLikes}>
                         <FontAwesomeIcon className="comment-like-button" icon={faThumbsUp} />
                         <p className="comment-likes-count">{likesCount}</p></div> : ''}
                     </footer>

@@ -135,6 +135,27 @@ namespace FriendyFy.Services
             return comment.CommentLikes.Count();
         }
 
+        public List<PersonListPopupViewModel> GetPeopleLikes(string commentId, int take, int skip)
+        {
+            var peopleLiked = this.commentLikeRepository
+                .AllAsNoTracking()
+                .Include(x => x.LikedBy)
+                .ThenInclude(x => x.ProfileImage)
+                .Where(x => x.CommentId == commentId)
+                .OrderByDescending(x => x.CreatedOn)
+                .Skip(skip)
+                .Take(take)
+                .ToList()
+                .Select(x => new PersonListPopupViewModel()
+                {
+                    Name = x.LikedBy.FirstName + " " + x.LikedBy.LastName,
+                    Username = x.LikedBy.UserName,
+                    ProfileImage = this.blobService.GetBlobUrlAsync(x.LikedBy?.ProfileImage?.Id + x.LikedBy?.ProfileImage?.ImageExtension, GlobalConstants.BlobPictures).GetAwaiter().GetResult(),
+                })
+                .ToList();
+
+            return peopleLiked;
+        }
         private PostCommentViewModel GetCommentViewModelById(string commentId)
         {
             return this.postCommentRepository
