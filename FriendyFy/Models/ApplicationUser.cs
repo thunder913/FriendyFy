@@ -34,6 +34,7 @@ namespace FriendyFy.Models
         public ICollection<Chat> Chats { get; set; } = new HashSet<Chat>();
         public ICollection<Message> ReadMessages { get; set; } = new HashSet<Message>();
         public ICollection<Message> Messages { get; set; } = new HashSet<Message>();
+        public ICollection<Event> EventsOrganized { get; set; } = new HashSet<Event>();
         public DateTime BirthDate { get; set; }
         public Gender Gender { get; set; }
         public bool FinishedFirstTimeLogin { get; set; }

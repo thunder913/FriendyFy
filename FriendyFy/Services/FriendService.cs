@@ -236,6 +236,8 @@ namespace FriendyFy.Services
                 .Include(x => x.RemoveSuggestionFriends)
                 .FirstOrDefault(x => x.Id == userId);
             var rand = new Random();
+
+            const int takeFriendsCount = 6;
             // TODO optimize the request
             var recommendations = this.userRepository
                 .All()
@@ -261,8 +263,36 @@ namespace FriendyFy.Services
                     MutualFriends = x.Friends.Count(y => user.Friends.Any(z => z.FriendId == y.FriendId)),
                     ProfilePhoto = this.blobService.GetBlobUrlAsync(x.ProfileImage?.Id + x.ProfileImage?.ImageExtension, GlobalConstants.BlobPictures).GetAwaiter().GetResult()
                 })
-                .Take(6)
+                .Take(takeFriendsCount)
                 .ToList();
+
+           if(recommendations.Count < takeFriendsCount)
+            {
+                recommendations.AddRange(this.userRepository
+                    .All()
+                    .Include(x => x.Friends)
+                    .Include(x => x.Interests)
+                    .Include(x => x.RemoveSuggestionFriends)
+                    .ToList()
+                    .Where(x =>
+                    x.Id != user.Id
+                    && !user.RemoveSuggestionFriends.Any(y => y.BlockedUserId == x.Id)
+                    && !user.Friends.Any(y => y.FriendId == x.Id
+                    && x.Id != user.Id))
+                    .OrderByDescending(x => x.Interests.Count(y => user.Interests.Any(z => z.Id == y.Id)) * 0.5
+                    + x.Friends.Count(y => user.Friends.Any(z => z.FriendId == y.Id)) * 0.1
+                    + rand.Next((int)((-x.Friends.Count() - x.Interests.Count()) * 0.2), (int)((x.Friends.Count() + x.Interests.Count()) * 0.2)))
+                    .Select(x => new SidebarFriendRecommendationViewModel()
+                    {
+                        Name = x.FirstName + " " + x.LastName,
+                        Username = x.UserName,
+                        CommonInterests = x.Interests.Count(y => user.Interests.Any(z => z.Id == y.Id)),
+                        MutualFriends = x.Friends.Count(y => user.Friends.Any(z => z.FriendId == y.FriendId)),
+                        ProfilePhoto = this.blobService.GetBlobUrlAsync(x.ProfileImage?.Id + x.ProfileImage?.ImageExtension, GlobalConstants.BlobPictures).GetAwaiter().GetResult()
+                    })
+                    .Take(takeFriendsCount - recommendations.Count())
+                    .ToList());
+            }
 
             return recommendations;
         }
