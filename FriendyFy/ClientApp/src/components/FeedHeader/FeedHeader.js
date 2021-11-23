@@ -5,11 +5,22 @@ import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { useHistory } from 'react-router';
 import PeopleListPopUp from '../PeopleListPopUp/PeopleListPopUp'
 import { getTaggedPeople } from '../../services/postService';
+import MapPopUp from '../MapPopUp/MapPopUp'
+
 function FeedHeader({photo, name, time, username, city, lat, long, taggedPeople, postId}){
     const history = useHistory();
+    const [showPostLocation, setShowPostLocation] = useState(false);
     const [showTaggedPeople, setShowTaggedPeople] = useState(false);
 
-    const closePopUp = () => {
+    const closePostLocationPopUp = () => {
+        setShowPostLocation(false);
+    }
+
+    const showPostLocationPopUp = () => {
+        setShowPostLocation(true);
+    }
+
+    const closeTaggedPeoplePopUp = () => {
         setShowTaggedPeople(false);
     }
 
@@ -32,8 +43,17 @@ function FeedHeader({photo, name, time, username, city, lat, long, taggedPeople,
         title="Tagged People"
         count={taggedPeople}
         loadPeople={loadTaggedPeople}
-        closePopUp={closePopUp}
+        closePopUp={closeTaggedPeoplePopUp}
     /> : ''}
+    {showPostLocation ? 
+    <MapPopUp 
+        title="Map" 
+        location="Petrich"
+        lat={lat}
+        long={long}
+        closePopUp={closePostLocationPopUp}/>
+        : ''}
+
     <div className="header-left">
         <div className="post-creator-image" onClick={redirectToUserProfile}>
             <img src={photo} alt="" />
@@ -41,7 +61,7 @@ function FeedHeader({photo, name, time, username, city, lat, long, taggedPeople,
         <div className="header-user-data">
             <div className="upper-post-data">
                 <h3 onClick={redirectToUserProfile}>{name}</h3>
-                {city != null ? <p className="post-location"> is at <button>{city}</button></p> : ''}
+                {city != null ? <p className="post-location"> is at <button onClick={showPostLocationPopUp}>{city}</button></p> : ''}
                 {taggedPeople != 0 ? <p>with <button onClick={showTaggedPeopleEvent}> {taggedPeople} {taggedPeople == 1 ? 'person' : 'people'} </button></p> : ''}
                 
             </div>  

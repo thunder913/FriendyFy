@@ -1,11 +1,38 @@
-import React from 'react'
+import React, { useEffect } from 'react'
+import MyGoogleMap from '../GoogleMap/MyGoogleMap'
 import './MapPopUp.css'
-const MapPopUp = () => {
-    
+import useScrollBlock from '../../hooks/useScrollBlock'
+const MapPopUp = ({title, location, closePopUp, lat, long}) => {
+    const [blockScroll, allowScroll] = useScrollBlock();
+    const escPressed = (e) => {
+        if(e.keyCode === 27){
+            closePopUpEvent();
+        }
+    }
+    const closePopUpEvent = () => {
+        allowScroll();
+        closePopUp();
+    }
+
+    useEffect(() => {
+        blockScroll();
+    }, [])
+
+    useEffect(() => {
+        document.addEventListener("keydown", escPressed, false);
+        return () => {
+            document.removeEventListener("keydown", escPressed, false);
+          };
+    }, [])
     return(
         <div className="map-popup">
             <div className="inner-map-popup">
-                <h1>TEST</h1>
+                <header className="title">
+                    <p>{title}</p>
+                    <p className="town">{location}</p>
+                    <button className="close-popup" onClick={closePopUpEvent}>x</button>
+                </header>
+                <MyGoogleMap location={{lat: lat, lng: long}} staticMap={true}/>
             </div>
         </div>
     )
