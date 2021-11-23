@@ -32,14 +32,29 @@ header.feed-header{
     background-color: #5d5c5c;
 }
 
-.header-user-data > h3{
+.header-user-data h3{
     margin-bottom: 0px;
     font-size: 24px;
+    font-weight: 500;
 }
 
 .header-user-data > span{
     font-size: 12px;
     font-style: italic;
+}
+
+.header-user-data .upper-post-data{
+    display: flex;
+    align-items: flex-end;
+    gap: 5px;
+}
+
+.header-user-data .upper-post-data button{
+    background-color: transparent;
+    border: 0px;
+    color: white;
+    font-weight: 600;
+    padding: 0px;
 }
 
 .post-creator-image:hover, .header-user-data > h3:hover{

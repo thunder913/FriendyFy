@@ -81,5 +81,12 @@ namespace FriendyFy.Controllers
         {
             return this.postService.GetPeopleLikes(dto.PostId, dto.Take, dto.Skip);
         }
+
+        [HttpPost("getTaggedPeople")]
+        public List<PersonListPopupViewModel> GetTaggedPeople(GetPostLikesCount dto)
+        {
+            return this.postService.GetTaggedPeople(dto.PostId, dto.Take, dto.Skip);
+        }
+
     }
 }

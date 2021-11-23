@@ -28,3 +28,11 @@ export function makePost(privacySetting, postMessage, locationLat, locationLng, 
         body: JSON.stringify({postId, take, skip})
     });
   }
+
+  export function getTaggedPeople(postId, skip, take) {
+    return fetch('/post/getTaggedPeople', {
+        method: 'POST',
+        headers: {'Content-Type': 'application/json'},
+        body: JSON.stringify({postId, take, skip})
+    });
+  }

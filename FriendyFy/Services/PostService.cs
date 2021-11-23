@@ -16,7 +16,9 @@ namespace FriendyFy.Services
     public class PostService : IPostService
     {
         private IDeletableEntityRepository<Post> postRepository { get; set; }
+        private IRepository<PostTagged> postTaggedRepository { get; set; }
         private IRepository<PostLike> postLikeRepository { get; set; }
+        private IGeolocationService geolocationService { get; set; }
         private IBlobService blobService { get; set; }
         private IImageService imageService { get; set; }
         private IUserService userService { get; set; }
@@ -25,13 +27,16 @@ namespace FriendyFy.Services
             IBlobService blobService,
             IImageService imageService,
             IUserService userService,
-            IRepository<PostLike> postLikeRepository)
+            IRepository<PostLike> postLikeRepository,
+            IGeolocationService geolocationService, IRepository<PostTagged> postTaggedRepository)
         {
             this.postRepository = postRepository;
             this.blobService = blobService;
             this.imageService = imageService;
             this.userService = userService;
             this.postLikeRepository = postLikeRepository;
+            this.geolocationService = geolocationService;
+            this.postTaggedRepository = postTaggedRepository;
         }
 
         public async Task<bool> CreatePostAsync(MakePostDto makePostDto, string userId)
@@ -50,6 +55,11 @@ namespace FriendyFy.Services
                 CreatedOn = DateTime.UtcNow,
                 CreatorId = userId,
             };
+
+            if (makePostDto.LocationLat != null && makePostDto.LocationLng != null)
+            {
+                post.LocationCity = this.geolocationService.GetUserLocation(Decimal.ToDouble((decimal)makePostDto.LocationLat), Decimal.ToDouble((decimal)makePostDto.LocationLng));
+            }
 
             if (makePostDto.Image != null && !string.IsNullOrWhiteSpace(makePostDto.Image))
             {
@@ -84,6 +94,7 @@ namespace FriendyFy.Services
                 .Include(x => x.Likes)
                 .Include(x => x.Comments)
                 .Include(x => x.Reposts)
+                .Include(x => x.TaggedPeople)
                 .ToList()
                 .Select(x => new PostDetailsDto()
                 {
@@ -98,6 +109,10 @@ namespace FriendyFy.Services
                     PostImage = this.blobService.GetBlobUrlAsync(x.Image?.Id + x.Image?.ImageExtension, GlobalConstants.BlobPictures).GetAwaiter().GetResult(),
                     IsLikedByUser = x.Likes.Any(x => x.LikedById == userId),
                     Username = x.Creator.UserName,
+                    Latitude = x.Latitude ?? x.Latitude,
+                    Longitude = x.Longitude ?? x.Longitude,
+                    LocationCity = x.LocationCity,
+                    TaggedPeopleCount = x.TaggedPeople.Count()
                 })
                 .ToList();
         }
@@ -156,6 +171,26 @@ namespace FriendyFy.Services
                 .ToList();
 
             return peopleLiked;
+        }
+
+        public List<PersonListPopupViewModel> GetTaggedPeople(string postId, int take, int skip)
+        {
+            return this.postTaggedRepository
+                .AllAsNoTracking()
+                .Where(x => x.PostId == postId)
+                .Include(x => x.User)
+                .ThenInclude(x => x.ProfileImage)
+                .OrderByDescending(x => x.CreatedOn)
+                .Skip(skip)
+                .Take(take)
+                .ToList()
+                .Select(x => new PersonListPopupViewModel()
+                {
+                    Name = x.User.FirstName + " " + x.User.LastName,
+                    Username = x.User.UserName,
+                    ProfileImage = this.blobService.GetBlobUrlAsync(x.User?.ProfileImage?.Id + x.User?.ProfileImage?.ImageExtension, GlobalConstants.BlobPictures).GetAwaiter().GetResult(),
+                })
+                .ToList();
         }
     }
 }

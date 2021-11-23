@@ -13,7 +13,13 @@ const FeedPost = ({post}) => {
             photo={post.creatorImage} 
             name={post.creatorName} 
             time={parseTime(post.createdAgo)}
-            username={post.username}/>
+            username={post.username}
+            city={post.locationCity}
+            lat={post.latitude}
+            long={post.longitude}
+            taggedPeople={post.taggedPeopleCount}
+            postId={post.postId}
+            />
         {post.postMessage ? <div className="post-text">
             <p>{post.postMessage}</p>
         </div> : ""}

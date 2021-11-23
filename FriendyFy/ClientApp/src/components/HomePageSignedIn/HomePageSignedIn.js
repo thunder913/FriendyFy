@@ -76,7 +76,6 @@ const HomePageSignedIn = () => {
     }
   }
   
-  
   //Make it async if anything goes wrong
   useEffect(() => {
     checkFirstTimePopUp();

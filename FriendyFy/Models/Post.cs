@@ -21,6 +21,7 @@ namespace FriendyFy.Models
         public decimal? Latitude { get; set; }
         [Column(TypeName = "decimal(11, 8)")]
         public decimal? Longitude { get; set; }
+        public string LocationCity { get; set; }
         public PrivacySettings Privacy { get; set; }
     }
 }

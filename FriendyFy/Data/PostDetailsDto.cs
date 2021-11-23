@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using ViewModels;
 
 namespace FriendyFy.Data
 {
@@ -18,5 +19,9 @@ namespace FriendyFy.Data
         public string PostImage { get; set; }
         public bool IsLikedByUser { get; set; }
         public string Username { get; set; }
+        public decimal? Latitude { get; set; }
+        public decimal? Longitude { get; set; }
+        public string LocationCity { get; set; }
+        public int TaggedPeopleCount { get; set; }
     }
 }
