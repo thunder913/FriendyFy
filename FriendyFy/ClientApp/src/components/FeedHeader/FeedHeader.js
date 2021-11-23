@@ -48,7 +48,7 @@ function FeedHeader({photo, name, time, username, city, lat, long, taggedPeople,
     {showPostLocation ? 
     <MapPopUp 
         title="Map" 
-        location="Petrich"
+        location={city}
         lat={lat}
         long={long}
         closePopUp={closePostLocationPopUp}/>

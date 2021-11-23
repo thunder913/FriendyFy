@@ -5,41 +5,52 @@ import { useLoggedIn } from '../../contexts/LoggedInContext';
 import MakePostPopUp from '../MakePostPopUp/MakePostPopUp.js';
 import useScrollBlock from "../../hooks/useScrollBlock";
 import './MakePost.css';
+import CreateEventPopUp from '../CreateEventPopUp/CreateEventPopUp';
 
 const MakePost = ({showCreatePost ,showPostImage, showCreateEvent}) =>{
     const { loggedIn } = useLoggedIn();
-    const [showPopUp, setShowPopUp] = useState(false);
+    const [showEventPopUp, setShowEventPopUp] = useState(false);
+    const [showPostPopUp, setshowPostPopUp] = useState(false);
     const [postWithImage, setPostWithImage] = useState(false);
     const [blockScroll, allowScroll] = useScrollBlock()
 
     const CreatePostWithoutImage = () => {
         setPostWithImage(false);
-        setShowPopUp(true);
+        setshowPostPopUp(true);
         window.scrollTo(0,0);
     }
 
     const CreatePostWithImage = () => {
         setPostWithImage(true);
-        setShowPopUp(true);
+        setshowPostPopUp(true);
     }
 
-    const closePopUp = () => {
-        setShowPopUp(false);
+    const CreateEvent = () => {
+        setShowEventPopUp(true);
+    }
+
+    const closePostPopUp = () => {
+        setshowPostPopUp(false);
+    }
+
+    const closeEventPopUp = () => {
+        setShowEventPopUp(false);
     }
 
     const escPressed = (e) => {
         if(e.keyCode === 27){
-            closePopUp();
+            closePostPopUp();
+            closeEventPopUp();
         }
     }
 
     useEffect(() => {
-        if(showPopUp){
+        if(showPostPopUp || showEventPopUp){
             blockScroll();
         }else{
             allowScroll();
         }
-    })
+    }, [showEventPopUp, showPostPopUp])
 
     useEffect(() => {
         document.addEventListener("keydown", escPressed, false);
@@ -64,18 +75,22 @@ const MakePost = ({showCreatePost ,showPostImage, showCreateEvent}) =>{
                 />
         </article> : ''}
 
-        {showCreateEvent ? <article className="create-event">
+        {showCreateEvent ? <article onClick={CreateEvent} className="create-event">
                 <FontAwesomeIcon 
                     title="Create an event" 
                     className="create-event-icon" 
                     icon={faCalendarPlus}
                     ></FontAwesomeIcon>
         </article> : ''}
-        {showPopUp ? 
+        {showPostPopUp ? 
         <MakePostPopUp 
             hasImage={postWithImage}
-            closePopUp={closePopUp}
+            closePopUp={closePostPopUp}
         /> : ''}
+        {showEventPopUp ?
+        <CreateEventPopUp
+            closePopUp={closeEventPopUp}
+        />: ''}
     </section>)
 }
 
