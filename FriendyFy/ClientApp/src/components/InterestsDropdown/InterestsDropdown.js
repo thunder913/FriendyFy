@@ -17,7 +17,8 @@ export default class InterestsDropdown extends Component {
     super(props)
     this.state = {
       dropDownOpt : [],
-      setInterests: props.setInterests
+      setInterests: props.setInterests,
+      placeholder: props.placeholder
     }
   }
 
@@ -54,7 +55,7 @@ export default class InterestsDropdown extends Component {
            options={this.state.dropDownOpt} 
            onChange={this.onChange.bind(this)}
            isMulti
-           placeholder={'Choose at least 3 interests'}
+           placeholder={this.state.placeholder}
            theme={(theme) => ({
              ...theme,
              colors: {

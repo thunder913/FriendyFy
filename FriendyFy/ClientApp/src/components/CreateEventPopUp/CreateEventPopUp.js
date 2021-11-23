@@ -14,6 +14,10 @@ const CreateEventPopUp = ({ closePopUp }) => {
     const [description, setDescription] = useState('');
     const [location, setLocation] = useState('');
     const [interests, setInterests] = useState([]);
+    const [name, setName] = useState('');
+    const [momentDate, setMomentDate] = useState('');
+    const [date, setDate] = useState('');
+    const [isReocurring, setIsReocurring] = useState(false);
     const { loggedIn } = useLoggedIn();
 
     function getCurrentLocalization() {
@@ -22,9 +26,31 @@ const CreateEventPopUp = ({ closePopUp }) => {
         return moment.locale();
     }
 
+    const onDateChangeHandler = (e) => {
+        let date = moment(e._d).format("DD/MM/YYYY HH:mm");
+        setDate(date);
+        setMomentDate(e._d);
+    }
+
     const onCreateButtonClicked = (e) => {
         e.preventDefault();
+        // Add some validation (make it show an error)
+        if(name.length < 2){
+            console.log('The name cannot be that short!')
+        }else if(moment() > momentDate){
+            console.log('The date cannot be in the past!')
+        }else if(interests.length == 0){
+            console.log('Choose some interests, in order to make the event more attractable!')
+        }else if(!location){
+            console.log('Choose a location!')
+        }else if(!description){
+            console.log('Add some description to the event!')
+        }else if(privacySettings!='private' && privacySettings!='public'){
+            console.log('The privacy of the event must be either Private or Public!')
+        }
 
+        //Submit the form to the BE and make checks there too
+        e.preventDefault();
     }
 
     return (
@@ -57,23 +83,24 @@ const CreateEventPopUp = ({ closePopUp }) => {
                         isSearchable={false}
                         options={[{ value: 'private', label: 'Private' }, { value: 'public', label: 'Public' }]}
                         defaultValue={{ value: privacySettings, label: 'Private' }}
+                        onChange={(e) => setPrivacySettings(e.value)}
                     />
                 </section>
                 <div className="top-inputs">
-                <input className="event-name" type="text" placeholder="Name"/>
+                <input className="event-name" type="text" placeholder="Name" onChange={e => setName(e.target.value)}/>
                 <Datetime 
                     dateFormat="YYYY-MM-DD" 
                     timeFormat="HH:mm"
-                    initialValue={{minutes: 0, hours: 12}}
                     input={true}
                     initialViewMode='years'
                     dateFormat={moment.localeData().longDateFormat('LL')}
                     locale={getCurrentLocalization()}
+                    onChange={onDateChangeHandler}
                     placeholder="When is it going to happen?"
                     inputProps={{id: 'datetime', placeholder: 'When is it going to happen?', autoComplete: "off" }}
                      />
                 </div>
-                <InterestsDropdown setInterests={setInterests}></InterestsDropdown>
+                <InterestsDropdown setInterests={setInterests} placeholder='Choose interests to attract more people easily'></InterestsDropdown>
                 <MyGoogleMap location={location} setLocation={setLocation}></MyGoogleMap>
 
                 <TextareaAutosize 
@@ -81,7 +108,7 @@ const CreateEventPopUp = ({ closePopUp }) => {
                 placeholder="What is the event about?" 
                 id="post-description" minRows={2}/>
                 <div className="reocurring-checkbox">
-                <input type="checkbox" id="reocurring" />
+                <input type="checkbox" id="reocurring" onChange={() => setIsReocurring(prev => !prev)} />
                 <label htmlFor="reocurring">Reocurring event</label>                    
                 </div>
                 <button className="create-event" onClick={onCreateButtonClicked}>Create Event</button>

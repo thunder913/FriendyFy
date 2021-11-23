@@ -67,7 +67,7 @@ const FirstTimePopUp = ({checkFirstTimePopUp}) => {
                         <MyGoogleMap location={location} setLocation={setLocation}></MyGoogleMap>
                     </div>
                 </form>
-                <InterestsDropdown setInterests={setInterests}></InterestsDropdown>
+                <InterestsDropdown placeholder='Choose at least 3 interests' setInterests={setInterests}></InterestsDropdown>
 
                 <ImgDropAndCrop 
                     placeholder="Choose a cover photo." 
