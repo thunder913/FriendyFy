@@ -6,6 +6,7 @@ import './HomePageSignedIn.css'
 import FirstTimePopUp from '../FirstTimePopUp/FirstTimePopUp.js'
 import useScrollBlock from "../../hooks/useScrollBlock";
 import MakePost from "../MakePost/MakePost.js"
+import MapPopUp from "../MapPopUp/MapPopUp";
 import { getPosts } from "../../services/postService";
 
 const events = [
@@ -86,6 +87,7 @@ const HomePageSignedIn = () => {
   },[])
 
   return (<div className="feed home-feed">
+    {/* <MapPopUp></MapPopUp> */}
     {loggedIn.finishedFirstTimeLogin ? '' : <FirstTimePopUp checkFirstTimePopUp={checkFirstTimePopUp}></FirstTimePopUp>}
     <MakePost
       showPostImage={true}

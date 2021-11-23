@@ -8,7 +8,6 @@ import { getComments, makeComment } from '../../services/commentService';
 import PostComment from '../PostComment/PostComment';
 import PeopleListPopUp from '../PeopleListPopUp/PeopleListPopUp'
 import InfiniteScroll from 'react-infinite-scroll-component';
-import useScrollBlock from "../../hooks/useScrollBlock";
 
 const FeedFooter = (props) => {
     const [isLiked, setIsLiked] = useState(props.isLiked);
@@ -20,10 +19,8 @@ const FeedFooter = (props) => {
     const [hasMore, setHasMore] = useState(true);
     const commentRef = useRef()
     const scrollRef = useRef();
-    const [blockScroll, allowScroll] = useScrollBlock();
 
     const closePopUp = () => {
-        allowScroll();
         setShowPeopleLiked(false);
     }
 
@@ -41,7 +38,6 @@ const FeedFooter = (props) => {
 
     const showPeopleLikes = () => {
         setShowPeopleLiked(true);
-        blockScroll();
     }
 
     const showCommentsClickEvent = () => {

@@ -5,14 +5,12 @@ import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { likeComment } from "../../services/commentService";
 import { useHistory } from 'react-router';
 import "./PostComment.css"
-import useScrollBlock from "../../hooks/useScrollBlock";
 import PeopleListPopUp from '../PeopleListPopUp/PeopleListPopUp';
 import { getCommentLikes } from "../../services/commentService";
 const PostComment = ({comment}) => {
     const [likedByYou, setLikedByYou] = useState(comment.isLikedByUser);
     const [likesCount, setLikesCount] = useState(comment.likesCount)
     const [showPeopleLikesPopUp, setShowPeopleLiekdPopUp] = useState(false);
-    const [blockScroll, allowScroll] = useScrollBlock();
     const history = useHistory();
 
     const loadLikes = (skip) => {
@@ -21,11 +19,9 @@ const PostComment = ({comment}) => {
     
     const showPeopleLikes = () => {
         setShowPeopleLiekdPopUp(true);
-        blockScroll();
     }
     
     const closePopUp = () => {
-        allowScroll();
         setShowPeopleLiekdPopUp(false);
     }
     const commentLikeEvent = (e) => {

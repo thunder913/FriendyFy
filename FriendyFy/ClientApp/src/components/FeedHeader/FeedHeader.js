@@ -3,22 +3,18 @@ import './FeedHeader.css';
 import { faEllipsisH } from '@fortawesome/free-solid-svg-icons';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { useHistory } from 'react-router';
-import useScrollBlock from "../../hooks/useScrollBlock";
 import PeopleListPopUp from '../PeopleListPopUp/PeopleListPopUp'
 import { getTaggedPeople } from '../../services/postService';
 function FeedHeader({photo, name, time, username, city, lat, long, taggedPeople, postId}){
     const history = useHistory();
     const [showTaggedPeople, setShowTaggedPeople] = useState(false);
-    const [blockScroll, allowScroll] = useScrollBlock();
 
     const closePopUp = () => {
-        allowScroll();
         setShowTaggedPeople(false);
     }
 
     const showTaggedPeopleEvent = () => {
         setShowTaggedPeople(true);
-        blockScroll();
     }
 
     const loadTaggedPeople = (skip) => {

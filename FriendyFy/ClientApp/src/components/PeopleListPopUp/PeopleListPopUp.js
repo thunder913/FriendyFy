@@ -2,14 +2,21 @@ import React, { useEffect, useState } from "react";
 import './PeopleListPopUp.css'
 import InfiniteScroll from "react-infinite-scroll-component";
 import { useHistory } from 'react-router';
+import useScrollBlock from "../../hooks/useScrollBlock";
 const PeopleListPopUp = ({title, count, loadPeople, closePopUp}) => {
     const [hasMore, setHasMore] = useState(true); 
     const [people, setPeople] = useState([]); 
+    const [blockScroll, allowScroll] = useScrollBlock();
     const history = useHistory();
     const escPressed = (e) => {
         if(e.keyCode === 27){
-            closePopUp();
+            closePopUpEvent();
         }
+    }
+
+    const closePopUpEvent = () => {
+        allowScroll();
+        closePopUp();
     }
 
     const redirectToUserProfile = (username) => {
@@ -17,6 +24,7 @@ const PeopleListPopUp = ({title, count, loadPeople, closePopUp}) => {
     }
     
     useEffect(() => {
+        blockScroll();
         loadPeople(0)
             .then(async res => {
                 let obj = await (res.json());
@@ -55,7 +63,7 @@ const PeopleListPopUp = ({title, count, loadPeople, closePopUp}) => {
             <header className="title">
                     <p>{title}</p>
                     <p>{count}</p>
-                    <button className="close-popup" onClick={closePopUp}>x</button>
+                    <button className="close-popup" onClick={closePopUpEvent}>x</button>
                 </header>
                 <section className={"people " + (people.length === 0 ? 'display-none' : '')}>
                 <InfiniteScroll
