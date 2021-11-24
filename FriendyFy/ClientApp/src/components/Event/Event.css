@@ -15,3 +15,33 @@
 .event-page .event-page-top .middle{
     width: 40%;
 }
+
+.event-page .event-page-top .image{
+    width: 100%;
+    height: 75%;
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
+}
+
+.event-page .event-page-top .image .main-image{
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    object-position: center;
+    aspect-ratio: 16/9;
+}
+
+/* Middle */
+
+.event-page-top .going-images .going-image{
+    width: 40px;
+    height: 40px;
+    border-radius: 50%;
+}
+
+.event-page-top .bottom-going{
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+}

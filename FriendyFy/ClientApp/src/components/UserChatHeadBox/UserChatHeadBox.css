@@ -22,12 +22,12 @@ fieldset {
 	padding: 0;
 }
 
-.live-chat, h4, h5 {
+.live-chat h4,.live-chat h5 {
 	line-height: 1.5em;
 	margin: 0;
 }
 
-.live-chat, hr {
+.live-chat hr {
 	background: #e9e9e9;
     border: 0;
     -moz-box-sizing: content-box;
@@ -37,7 +37,7 @@ fieldset {
     min-height: 1px;
 }
 
-.live-chat, img {
+.live-chat img {
     border: 0;
     display: block;
     height: auto;

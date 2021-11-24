@@ -1,6 +1,7 @@
 .event-page .one-image{
-    width: 200px;
-    height: 200px;
+    width: 100%;
+    height: 100%;
+    border: 2px solid gray;
 }
 
 .event-page .one-image img{
@@ -8,4 +9,5 @@
     height: 100%;
     object-fit: cover;
     object-position: center;
+    aspect-ratio: 1;
 }
