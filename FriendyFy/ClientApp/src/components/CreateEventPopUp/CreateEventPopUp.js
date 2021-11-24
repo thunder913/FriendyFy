@@ -7,18 +7,21 @@ import { TextareaAutosize } from '@mui/material';
 import Datetime from 'react-datetime';
 import InterestsDropdown from "../InterestsDropdown/InterestsDropdown";
 import moment from 'moment';
+import { createEvent } from '../../services/eventService'
 import "react-datetime/css/react-datetime.css";
 
 const CreateEventPopUp = ({ closePopUp }) => {
-    const [privacySettings, setPrivacySettings] = useState('private');
+    const [privacySettings, setPrivacySettings] = useState('Private');
+    const [reocurringTime, setReocurringTime] = useState('daily');
     const [description, setDescription] = useState('');
     const [location, setLocation] = useState('');
     const [interests, setInterests] = useState([]);
     const [name, setName] = useState('');
     const [momentDate, setMomentDate] = useState('');
-    const [date, setDate] = useState('');
+    const [utcDate, setUtcDate] = useState('');
     const [isReocurring, setIsReocurring] = useState(false);
     const { loggedIn } = useLoggedIn();
+    const [eventError, setEventError] = useState('');
 
     function getCurrentLocalization() {
         let localization = window.navigator.userLanguage || window.navigator.language;
@@ -27,30 +30,29 @@ const CreateEventPopUp = ({ closePopUp }) => {
     }
 
     const onDateChangeHandler = (e) => {
-        let date = moment(e._d).format("DD/MM/YYYY HH:mm");
-        setDate(date);
+        setUtcDate(moment(e._d).utc().format("DD/MM/YYYY HH:mm"));
         setMomentDate(e._d);
     }
 
     const onCreateButtonClicked = (e) => {
         e.preventDefault();
-        // Add some validation (make it show an error)
         if(name.length < 2){
-            console.log('The name cannot be that short!')
+            setEventError('The name cannot be that short!')
         }else if(moment() > momentDate){
-            console.log('The date cannot be in the past!')
+            setEventError('The date may not be selected or is in the past!')
         }else if(interests.length == 0){
-            console.log('Choose some interests, in order to make the event more attractable!')
+            setEventError('Choose some interests, in order to make the event more attractable!')
         }else if(!location){
-            console.log('Choose a location!')
+            setEventError('Choose a location!')
         }else if(!description){
-            console.log('Add some description to the event!')
-        }else if(privacySettings!='private' && privacySettings!='public'){
-            console.log('The privacy of the event must be either Private or Public!')
+            setEventError('Add a short description to the event!')
+        }else if(privacySettings!='Private' && privacySettings!='Public'){
+            setEventError('The privacy of the event must be either Private or Public!')
         }
-
-        //Submit the form to the BE and make checks there too
-        e.preventDefault();
+        if(!eventError){
+            let intereststString = JSON.stringify(interests.map(x => ({label: x.label, id: Number.isInteger(x.value) ? x.value : 0, isNew: x.__isNew__ ?? false})));
+            createEvent(name, utcDate, intereststString, privacySettings, location.lat, location.lng, description, isReocurring, (isReocurring ? reocurringTime : null));
+        }
     }
 
     return (
@@ -81,7 +83,7 @@ const CreateEventPopUp = ({ closePopUp }) => {
                         })}
                         className="privacy-picker"
                         isSearchable={false}
-                        options={[{ value: 'private', label: 'Private' }, { value: 'public', label: 'Public' }]}
+                        options={[{ value: 'Private', label: 'Private' }, { value: 'Public', label: 'Public' }]}
                         defaultValue={{ value: privacySettings, label: 'Private' }}
                         onChange={(e) => setPrivacySettings(e.value)}
                     />
@@ -102,15 +104,35 @@ const CreateEventPopUp = ({ closePopUp }) => {
                 </div>
                 <InterestsDropdown setInterests={setInterests} placeholder='Choose interests to attract more people easily'></InterestsDropdown>
                 <MyGoogleMap location={location} setLocation={setLocation}></MyGoogleMap>
-
+                <div className="reocurring-checkbox">
+                    <input type="checkbox" id="reocurring" onChange={() => setIsReocurring(prev => !prev)} />
+                    <label htmlFor="reocurring">Reocurring event</label>         
+                    {isReocurring ? <Select
+                            theme={(theme) => ({
+                                ...theme,
+                                colors: {
+                                    ...theme.colors,
+                                    primary25: '#595757',
+                                    primary: 'rgb(212, 212, 212)',
+                                    neutral0: '#3F3B3B',
+                                    neutral80: 'white',
+                                    neutral60: '#aaaaaa',
+                                    neutral10: '#595757',
+                                    dangerLight: '#523737',
+                                }
+                            })}
+                            className="privacy-picker"
+                            isSearchable={false}
+                            options={[{ value: 'daily', label: 'Daily' }, { value: 'weekly', label: 'Weekly' }, { value:'monthly', label:'Monthly'}]}
+                            defaultValue={{ value: reocurringTime, label: 'Daily' }}
+                            onChange={(e) => setReocurringTime(e.value)}
+                        /> : ''}
+                </div>
                 <TextareaAutosize 
                 onChange={(e) => setDescription(e.target.value)} 
                 placeholder="What is the event about?" 
                 id="post-description" minRows={2}/>
-                <div className="reocurring-checkbox">
-                <input type="checkbox" id="reocurring" onChange={() => setIsReocurring(prev => !prev)} />
-                <label htmlFor="reocurring">Reocurring event</label>                    
-                </div>
+                <p className="event-error-message">{eventError}</p>
                 <button className="create-event" onClick={onCreateButtonClicked}>Create Event</button>
             </div>
         </div>

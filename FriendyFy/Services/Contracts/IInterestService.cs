@@ -11,5 +11,6 @@ namespace FriendyFy.Services.Contracts
         public Interest CheckInterestSimillarWord(InterestDto interest);
         public Task<Interest> AddInterestToDbAsync(InterestDto interest);
         public Interest GetInterest(int id);
+        Task<List<Interest>> AddNewInterestsAsync(List<InterestDto> interests);
     }
 }

@@ -301,21 +301,7 @@ namespace FriendyFy.Controllers
                 return BadRequest("You must choose a location!");
             }
 
-            var existingInterests = interests.Where(x => !x.IsNew).ToList();
-            var newInterests = interests.Where(x => x.IsNew);
-            
-            var allInterests = new List<Interest>();
-            foreach (var item in interests)
-            {
-                if (item.IsNew)
-                {
-                    allInterests.Add(await this.interestService.AddInterestToDbAsync(item));
-                }
-                else
-                {
-                    allInterests.Add(this.interestService.GetInterest(item.Id));
-                }
-            }
+            var allInterests = await this.interestService.AddNewInterestsAsync(interests);
             var profileImage = await imageService.AddImageAsync(ImageType.ProfileImage);
             var coverImage = await imageService.AddImageAsync(ImageType.ProfileImage);
 

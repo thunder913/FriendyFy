@@ -8,12 +8,14 @@ namespace FriendyFy.Models
 {
     public class Event : BaseDeletableModel<string>
     {
+        public new string Id = Guid.NewGuid().ToString();
         public virtual ICollection<ApplicationUser> Users { get; set; } = new HashSet<ApplicationUser>();
         public virtual ICollection<Interest> Interests { get; set; } = new HashSet<Interest>();
         public virtual Chat Chat { get; set; }
         public PrivacySettings PrivacySettings { get; set; }
         public DateTime Time { get; set; }
         public bool IsReocurring{ get; set; }
+        public ReocurringType ReocurringType { get; set; }
         [Column(TypeName = "decimal(11, 8)")]
         public decimal? Latitude { get; set; }
         [Column(TypeName = "decimal(11, 8)")]

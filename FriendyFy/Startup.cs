@@ -75,6 +75,8 @@ namespace FriendyFy
             services.AddTransient<IChatService, ChatService>();
             services.AddTransient<IMessageService, MessageService>();
             services.AddTransient<ICommentService, CommentService>();
+            services.AddTransient<IEventService, EventService>();
+
 
             services.AddControllersWithViews();
             services.AddRazorPages();

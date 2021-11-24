@@ -16,6 +16,27 @@ namespace FriendyFy.Services
             this.interestRepository = interestRepository;
         }
 
+        public async Task<List<Interest>> AddNewInterestsAsync(List<InterestDto> interests)
+        {
+            var existingInterests = interests.Where(x => !x.IsNew).ToList();
+            var newInterests = interests.Where(x => x.IsNew);
+
+            var allInterests = new List<Interest>();
+            foreach (var item in interests)
+            {
+                if (item.IsNew)
+                {
+                    allInterests.Add(await this.AddInterestToDbAsync(item));
+                }
+                else
+                {
+                    allInterests.Add(this.GetInterest(item.Id));
+                }
+            }
+
+            return allInterests;
+        }
+
         public async Task<Interest> AddInterestToDbAsync(InterestDto interest)
         {
             var interestToAdd = new Interest(){ Name = interest.Label};
@@ -48,7 +69,7 @@ namespace FriendyFy.Services
         public Interest GetInterest(int id)
         {
             return this.interestRepository
-                .AllAsNoTracking()
+                .All()
                 .Where(x => x.Id == id)
                 .FirstOrDefault();
         }
