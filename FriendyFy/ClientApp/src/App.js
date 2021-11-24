@@ -7,6 +7,7 @@ import { ApplicationPaths } from './components/api-authorization/ApiAuthorizatio
 import Profile from './components/Profile/Profile';
 import './custom.css'
 import Friends from './components/Friends/Friends';
+import Event from './components/Event/Event'
 import ProfilePhotos from './components/ProfilePhotos/ProfilePhotos';
 import Register from './components/register-components/Register/Register.js';
 import HomePageNotSignedIn from './components/HomePageNotSignedIn/HomePageNotSignedIn';
@@ -27,6 +28,7 @@ function App(){
                 <div className="app">
                   <Route path={["/profile", "/friends", "/photos"]} component={Profile}></Route>
                   <Route path="/register" component={Register}></Route>
+                  <Route path="/event" component={Event}></Route>
                   <Route path={ApplicationPaths.ApiAuthorizationPrefix} component={ApiAuthorizationRoutes} />
                   <Route exact path='/' component={Home} />
                 </div>

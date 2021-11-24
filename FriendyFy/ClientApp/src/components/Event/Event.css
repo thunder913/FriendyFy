@@ -1,0 +1,17 @@
+.event-page{
+    padding-top: 30px;
+}
+
+.event-page-top{
+    display: flex;
+    flex-direction: row;
+    gap: 25px;
+}
+
+.event-page .event-page-top .photos, .event-page .event-page-top .location-time{
+    width: 30%;
+}
+
+.event-page .event-page-top .middle{
+    width: 40%;
+}
