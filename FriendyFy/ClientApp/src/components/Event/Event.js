@@ -1,5 +1,6 @@
 import React from "react";
 import './Event.css'
+import MyGoogleMap from "../GoogleMap/MyGoogleMap";
 import EventOneImage from "./EventImages/EventOneImage";
 
 const Event = () => {
@@ -13,10 +14,16 @@ const Event = () => {
                 </div>
                 <div className="middle">
                     <div className="image">
-                        <img className="main-image" src={mainImage} alt="" />
+                        <div className="main-image">
+                            <img src={mainImage} alt="" />
+                        </div>
                         <div className="bottom-going">
                         <h2>GOING:</h2>
                         <div className="going-images">
+                            <img className="going-image" src="https://friendyfy.blob.core.windows.net/pictures/ba8b368f-e711-44dd-b611-41cdbf36fb3c.jpeg" alt="" />
+                            <img className="going-image" src="https://friendyfy.blob.core.windows.net/pictures/ba8b368f-e711-44dd-b611-41cdbf36fb3c.jpeg" alt="" />
+                            <img className="going-image" src="https://friendyfy.blob.core.windows.net/pictures/ba8b368f-e711-44dd-b611-41cdbf36fb3c.jpeg" alt="" />
+                            <img className="going-image" src="https://friendyfy.blob.core.windows.net/pictures/ba8b368f-e711-44dd-b611-41cdbf36fb3c.jpeg" alt="" />
                             <img className="going-image" src="https://friendyfy.blob.core.windows.net/pictures/ba8b368f-e711-44dd-b611-41cdbf36fb3c.jpeg" alt="" />
                             <img className="going-image" src="https://friendyfy.blob.core.windows.net/pictures/ba8b368f-e711-44dd-b611-41cdbf36fb3c.jpeg" alt="" />
                             <img className="going-image" src="https://friendyfy.blob.core.windows.net/pictures/ba8b368f-e711-44dd-b611-41cdbf36fb3c.jpeg" alt="" />
@@ -26,7 +33,10 @@ const Event = () => {
                     </div>
                 </div>
                 <div className="location-time">
-                    Location is here!!!!!!
+                    <MyGoogleMap location={{lat:33, lng:66}} staticMap={true}/>
+                    Location: Sofia
+                    Date: 22.11.2021
+                    Time: 20.45
                 </div>
             </section>
             <h1>test</h1>
