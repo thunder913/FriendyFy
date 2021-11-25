@@ -1,16 +1,21 @@
 import React from "react";
 import './Event.css'
 import MyGoogleMap from "../GoogleMap/MyGoogleMap";
-import EventOneImage from "./EventImages/EventOneImage";
+import EventOneImage from "./EventImages/EventOneImage/EventOneImage";
+import EventTwoImages from "./EventImages/EventTwoImages/EventTwoImages";
+import EventThreeImages from "./EventImages/EventThreeImages/EventThreeImages";
 
 const Event = () => {
-    const images = ['https://cdn.pixabay.com/photo/2017/07/21/23/57/concert-2527495__480.jpg']
+    const images = ['https://cdn.pixabay.com/photo/2017/07/21/23/57/concert-2527495__480.jpg', 'https://cdn.pixabay.com/photo/2017/07/21/23/57/concert-2527495__480.jpg', 'https://media.istockphoto.com/photos/nicelooking-attractive-gorgeous-glamorous-elegant-stylish-cheerful-picture-id1165055006?k=20&m=1165055006&s=612x612&w=0&h=OD4-_BceL_R2eaaBzDQrXNIyydwYXOJX-m-0z12z17s=']
     const mainImage = 'https://media.istockphoto.com/photos/nicelooking-attractive-gorgeous-glamorous-elegant-stylish-cheerful-picture-id1165055006?k=20&m=1165055006&s=612x612&w=0&h=OD4-_BceL_R2eaaBzDQrXNIyydwYXOJX-m-0z12z17s=';
     return(
         <article className="event-page">
             <section className="event-page-top">
                 <div className="photos">
-                    <EventOneImage image={images[0]}/>
+                    {images.length === 1 ? <EventOneImage image={images[0]}/> :
+                    images.length === 2 ? <EventTwoImages images={images}/> :
+                    images.length === 3 ? <EventThreeImages images={images}/> : ''}
+                    
                 </div>
                 <div className="middle">
                     <div className="image">

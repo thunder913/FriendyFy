@@ -1,0 +1,25 @@
+.event-page .two-images{
+    width: 100%;
+    height: 100%;
+    border: 2px solid gray;
+}
+
+.event-page .two-images .image{
+    height: 50%;
+    width: 100%;
+}
+
+.event-page .two-images img{
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    object-position: center;
+}
+
+.event-page .two-images .image:nth-child(2n){
+    border-top: 1px solid rgba(128, 128, 128, 0.5);
+}
+
+.event-page .two-images .image:nth-child(2n+1){
+    border-bottom: 1px solid rgba(128, 128, 128, 0.5);
+}
