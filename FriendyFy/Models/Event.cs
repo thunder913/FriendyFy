@@ -25,5 +25,7 @@ namespace FriendyFy.Models
         public ApplicationUser Organizer { get; set; }
         public string OrganizerId { get; set; }
         public string Description { get; set; }
+        public ICollection<Image> Images { get; set; } = new HashSet<Image>();
+        public Image ProfileImage { get; set; }
     }
 }

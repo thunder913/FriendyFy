@@ -4,7 +4,9 @@ using FriendyFy.Models.Enums;
 using FriendyFy.Services.Contracts;
 using System;
 using System.Collections.Generic;
+using System.Linq;
 using System.Threading.Tasks;
+using ViewModels;
 
 namespace FriendyFy.Services
 {
@@ -44,6 +46,38 @@ namespace FriendyFy.Services
 
             await this.eventRepository.AddAsync(newEvent);
             await this.eventRepository.SaveChangesAsync();
+        }
+
+        public EventPageViewModel GetEventById(string id, string userId)
+        {
+            return this.eventRepository
+                .AllAsNoTracking()
+                .Select(x => new EventPageViewModel()
+                {
+                    Id = x.Id,
+                    City = x.LocationCity,
+                    CreatedOn = x.CreatedOn,
+                    Description = x.Description,
+                    Interests = x.Interests.Select(y => new InterestViewModel()
+                    {
+                        Id = y.Id,
+                        Label = y.Name,
+                    })
+                    .ToList(),
+                    IsInEvent = x.Users.Any(y => y.Id == userId),
+                    IsReocurring = x.IsReocurring,
+                    Lat = x.Latitude,
+                    Lng = x.Longitude,
+                    Organizer = x.Organizer.FirstName + " " + x.Organizer.LastName,
+                    OrganizerUsername = x.Organizer.UserName,
+                    Privacy = x.PrivacySettings.ToString(),
+                    ReocurringTime = x.ReocurringType.ToString(),
+                    Time = x.Time,
+                    Title = x.Name,
+                    //UserImages = x.Users.Select(y => y.ProfileImage.Id),
+
+                })
+                .FirstOrDefault(x => x.Id == id);
         }
     }
 }
