@@ -1,0 +1,30 @@
+
+
+.event-page .event-details{
+    padding: 20px 0px;
+    display: flex;
+    flex-direction: column;
+    gap: 40px;
+}
+
+.event-page .event-details .description{
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+}
+
+.event-page .event-details .description-label{
+    font-size: 16px;
+    font-weight: 400;
+}
+
+.event-page .event-details .description-text{
+    font-size: 24px;
+    font-weight: 400;
+    font-style: italic;
+}
+
+.event-page .event-details .organized{
+    font-size: 16px;
+    font-weight: 400;
+}
