@@ -13,3 +13,9 @@ export function getEventById(id){
         body: JSON.stringify({id})
     })
 }
+
+export function getEvents(){
+    return fetch('/event', {
+        method: 'GET'
+    })
+}

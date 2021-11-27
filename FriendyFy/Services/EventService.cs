@@ -11,6 +11,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using ViewModels;
+using ViewModels.ViewModels;
 
 namespace FriendyFy.Services
 {
@@ -115,6 +116,44 @@ namespace FriendyFy.Services
             return toReturn;
         }
 
-
+        public List<PostDetailsViewModel> GetEvents(string userId)
+        {
+            return this.eventRepository
+                .AllAsNoTracking()
+                .Include(x => x.Organizer)
+                .ThenInclude(x => x.ProfileImage)
+                .Include(x => x.Users)
+                .ThenInclude(x => x.ProfileImage)
+                .Include(x => x.Likes)
+                .Include(x => x.Comments)
+                .Include(x => x.Reposts)
+                .ToList()
+                .Select(x => new PostDetailsViewModel()
+                {
+                    Username = x.Organizer.UserName,
+                    CreatorName = x.Organizer.FirstName + " " + x.Organizer.LastName,
+                    CreatedAgo = (int)((DateTime.UtcNow - x.CreatedOn).TotalMinutes),
+                    CreatorImage = this.blobService.GetBlobUrlAsync(x.Organizer.ProfileImage?.Id + x.Organizer.ProfileImage?.ImageExtension, GlobalConstants.BlobPictures).GetAwaiter().GetResult(),
+                    EventGoing = x.Users.Select(y => this.blobService.GetBlobUrlAsync(y.ProfileImage?.Id + y.ProfileImage?.ImageExtension, GlobalConstants.BlobPictures).GetAwaiter().GetResult()).ToList(),
+                    EventTitle = x.Name,
+                    EventInterests = x.Interests.Select(y => new InterestViewModel()
+                    {
+                        Id = y.Id,
+                        Label = y.Name,
+                    }).ToList(),
+                    LocationCity = x.LocationCity,
+                    Latitude = x.Latitude,
+                    Longitude = x.Longitude,
+                    EventTime = x.Time,
+                    LikesCount = x.Likes.Count(),
+                    RepostsCount = x.Reposts.Count(),
+                    CommentsCount = x.Comments.Count(),
+                    EventIsReocurring = x.IsReocurring,
+                    EventReocurring = x.ReocurringType.ToString(),
+                    IsLikedByUser = x.Likes.Any(x => x.LikedById == userId),
+                    PostId = x.Id
+                })
+                .ToList();
+        }
     }
 }

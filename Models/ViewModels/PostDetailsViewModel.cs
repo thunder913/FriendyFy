@@ -1,4 +1,7 @@
-﻿namespace ViewModels.ViewModels
+﻿using System;
+using System.Collections.Generic;
+
+namespace ViewModels.ViewModels
 {
     public class PostDetailsViewModel
     {
@@ -17,5 +20,13 @@
         public decimal? Longitude { get; set; }
         public string LocationCity { get; set; }
         public int TaggedPeopleCount { get; set; }
+        
+        // Event only properties
+        public string EventTitle { get; set; }
+        public List<InterestViewModel> EventInterests { get; set; } = new List<InterestViewModel>();
+        public List<string> EventGoing { get; set; } = new List<string>();
+        public bool EventIsReocurring { get; set; }
+        public string EventReocurring { get; set; }
+        public DateTime EventTime { get; set; }
     }
 }

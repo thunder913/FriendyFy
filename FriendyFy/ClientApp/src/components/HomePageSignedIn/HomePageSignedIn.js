@@ -7,6 +7,7 @@ import FirstTimePopUp from '../FirstTimePopUp/FirstTimePopUp.js'
 import useScrollBlock from "../../hooks/useScrollBlock";
 import MakePost from "../MakePost/MakePost.js"
 import { getPosts } from "../../services/postService";
+import { getEvents } from "../../services/eventService";
 
 const events = [
   {
@@ -66,6 +67,7 @@ const HomePageSignedIn = () => {
   const [blockScroll, allowScroll] = useScrollBlock();
 
   const { loggedIn, resetUser } = useLoggedIn();
+  const [events, setEvents] = useState([]);
   const [posts, setPosts] = useState([]);
   const checkFirstTimePopUp = async () => {
     await resetUser();
@@ -81,6 +83,7 @@ const HomePageSignedIn = () => {
     checkFirstTimePopUp();
     if(loggedIn){
       getPosts().then(async res => setPosts(await res.json()))
+      getEvents().then(async res => setEvents(await res.json()));
     }
     //eslint-disable-next-line
   },[])
