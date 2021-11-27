@@ -5,11 +5,11 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <PackageReference Include="AutoMapper" Version="10.1.1" />
+    <ProjectReference Include="..\FriendyFy.Mapping\FriendyFy.Mapping.csproj" />
   </ItemGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\FriendyFy.Mapping\FriendyFy.Mapping.csproj" />
+    <Folder Include="DtoModels\" />
   </ItemGroup>
 
 </Project>

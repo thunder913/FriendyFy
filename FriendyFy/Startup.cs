@@ -5,6 +5,7 @@ using FriendyFy.Data.Common.QueryRunner;
 using FriendyFy.Helpers;
 using FriendyFy.Helpers.Contracts;
 using FriendyFy.Hubs;
+using FriendyFy.Mapping;
 using FriendyFy.Messaging;
 using FriendyFy.Models;
 using FriendyFy.Services;
@@ -21,6 +22,8 @@ using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
+using System.Reflection;
+using ViewModels;
 
 namespace FriendyFy
 {
@@ -92,6 +95,7 @@ namespace FriendyFy
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
         public void Configure(IApplicationBuilder app, IWebHostEnvironment env)
         {
+            AutoMapperConfig.RegisterMappings(typeof(ErrorViewModel).GetTypeInfo().Assembly);
             if (env.IsDevelopment())
             {
                 app.UseDeveloperExceptionPage();

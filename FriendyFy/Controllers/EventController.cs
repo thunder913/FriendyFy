@@ -8,6 +8,7 @@ using System.Collections.Generic;
 using System.Globalization;
 using System.Linq;
 using System.Threading.Tasks;
+using ViewModels;
 
 namespace FriendyFy.Controllers
 {
@@ -74,6 +75,14 @@ namespace FriendyFy.Controllers
             await this.eventService.CreateEventAsync(dto.Name, date, allInterests, privacySettings, (decimal) dto.Latitude,(decimal) dto.Longitude, dto.IsReocurring, reocurringType, dto.Description, user.Id);
             return Ok();
             //return Ok(await this.chatService.SeeMessagesAsync(dto.ChatId, user));
+        }
+
+        [HttpGet("{eventId}")]
+        public async Task<IActionResult> GetEventById(string eventId)
+        {
+            var user = this.GetUserByToken();
+            var toReturn = await this.eventService.GetEventByIdAsync(eventId, user?.Id);
+            return Ok(toReturn);
         }
     }
 }

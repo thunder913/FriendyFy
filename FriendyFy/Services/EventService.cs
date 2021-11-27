@@ -1,7 +1,11 @@
-﻿using FriendyFy.Data;
+﻿using FriendyFy.BlobStorage;
+using FriendyFy.Common;
+using FriendyFy.Data;
+using FriendyFy.Mapping;
 using FriendyFy.Models;
 using FriendyFy.Models.Enums;
 using FriendyFy.Services.Contracts;
+using Microsoft.EntityFrameworkCore;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -14,12 +18,15 @@ namespace FriendyFy.Services
     {
         private readonly IGeolocationService geolocationService;
         private readonly IDeletableEntityRepository<Event> eventRepository;
+        private readonly IBlobService blobService;
 
         public EventService(IGeolocationService geolocationService,
-            IDeletableEntityRepository<Event> eventRepository)
+            IDeletableEntityRepository<Event> eventRepository,
+            IBlobService blobService)
         {
             this.geolocationService = geolocationService;
             this.eventRepository = eventRepository;
+            this.blobService = blobService;
         }
 
         public async Task CreateEventAsync(string name, DateTime date, List<Interest> interests, PrivacySettings privacySettings, decimal latitude, decimal longitude, bool isReocurring, ReocurringType reocurringType, string description, string organizerId)
@@ -48,11 +55,18 @@ namespace FriendyFy.Services
             await this.eventRepository.SaveChangesAsync();
         }
 
-        public EventPageViewModel GetEventById(string id, string userId)
+        public async Task<EventPageViewModel> GetEventByIdAsync(string id, string userId)
         {
-            return this.eventRepository
+            var mapper = AutoMapperConfig.MapperInstance;
+            var eventWithId = this.eventRepository
                 .AllAsNoTracking()
-                .Select(x => new EventPageViewModel()
+                .Include(x => x.Interests)
+                .Include(x => x.Users)
+                .ThenInclude(x => x.ProfileImage)
+                .Include(x => x.Organizer)
+                .Include(x => x.Images)
+                .Include(x => x.ProfileImage)
+                .Select(x => new EventPageMapperDto()
                 {
                     Id = x.Id,
                     City = x.LocationCity,
@@ -74,10 +88,24 @@ namespace FriendyFy.Services
                     ReocurringTime = x.ReocurringType.ToString(),
                     Time = x.Time,
                     Title = x.Name,
-                    //UserImages = x.Users.Select(y => y.ProfileImage.Id),
-
+                    UserImages = x.Users.Select(y => y.ProfileImage.Id + y.ProfileImage.ImageExtension).ToList(),
+                    Photos = x.Images.Select(y => y.Id + y.ImageExtension).ToList(),
+                    MainPhoto = x.ProfileImage.Id + x.ProfileImage.ImageExtension
                 })
                 .FirstOrDefault(x => x.Id == id);
+
+            var toReturn = mapper.Map<EventPageViewModel>(eventWithId);
+            foreach (var item in eventWithId.UserImages)
+            {
+                toReturn.UserImages.Add(await this.blobService.GetBlobUrlAsync(item, GlobalConstants.BlobPictures));
+            }
+            foreach (var item in eventWithId.Photos)
+            {
+                toReturn.Photos.Add(await this.blobService.GetBlobUrlAsync(item, GlobalConstants.BlobPictures));
+            }
+            toReturn.MainPhoto = await this.blobService.GetBlobUrlAsync(eventWithId.MainPhoto, GlobalConstants.BlobPictures);
+
+            return toReturn;
         }
     }
 }

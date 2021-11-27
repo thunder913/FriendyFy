@@ -13,7 +13,7 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "FriendyFy.Common", "Friendy
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "FriendyFy.BlobStorage", "FriendyFy.BlobStorage\FriendyFy.BlobStorage.csproj", "{E2346939-8073-4871-B7E2-E02B02BE382C}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ViewModels", "ViewModels\ViewModels.csproj", "{A68ADAC9-C476-40B6-A252-DA96A62BAA74}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ViewModels", "Models\ViewModels.csproj", "{BBEBD445-8ECD-42AF-B365-57A8E41862CE}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -41,10 +41,10 @@ Global
 		{E2346939-8073-4871-B7E2-E02B02BE382C}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{E2346939-8073-4871-B7E2-E02B02BE382C}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{E2346939-8073-4871-B7E2-E02B02BE382C}.Release|Any CPU.Build.0 = Release|Any CPU
-		{A68ADAC9-C476-40B6-A252-DA96A62BAA74}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{A68ADAC9-C476-40B6-A252-DA96A62BAA74}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{A68ADAC9-C476-40B6-A252-DA96A62BAA74}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{A68ADAC9-C476-40B6-A252-DA96A62BAA74}.Release|Any CPU.Build.0 = Release|Any CPU
+		{BBEBD445-8ECD-42AF-B365-57A8E41862CE}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{BBEBD445-8ECD-42AF-B365-57A8E41862CE}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{BBEBD445-8ECD-42AF-B365-57A8E41862CE}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{BBEBD445-8ECD-42AF-B365-57A8E41862CE}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

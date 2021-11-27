@@ -50,7 +50,7 @@
     <ProjectReference Include="..\FriendyFy.Common\FriendyFy.Common.csproj" />
     <ProjectReference Include="..\FriendyFy.Mapping\FriendyFy.Mapping.csproj" />
     <ProjectReference Include="..\FriendyFy.Messaging\FriendyFy.Messaging.csproj" />
-    <ProjectReference Include="..\ViewModels\ViewModels.csproj" />
+    <ProjectReference Include="..\Models\ViewModels.csproj" />
   </ItemGroup>
 
   <Target Name="DebugEnsureNodeEnv" BeforeTargets="Build" Condition=" '$(Configuration)' == 'Debug' And !Exists('$(SpaRoot)node_modules') ">

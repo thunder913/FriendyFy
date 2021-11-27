@@ -1,13 +1,18 @@
-﻿using System;
+﻿using FriendyFy.Mapping;
+using System;
 using System.Collections.Generic;
+using System.ComponentModel.DataAnnotations.Schema;
 
 namespace ViewModels
 {
     public class EventPageViewModel
     {
         public string Id { get; set; }
+        [NotMapped]
         public List<string> Photos { get; set; } = new List<string>();
-        public List<string> MainPhoto { get; set; } = new List<string>();
+        [NotMapped]
+        public string MainPhoto { get; set; }
+        [NotMapped]
         public List<string> UserImages { get; set; } = new List<string>();
         public decimal? Lat { get; set; }
         public decimal? Lng { get; set; }
