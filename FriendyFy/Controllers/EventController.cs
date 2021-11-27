@@ -77,11 +77,11 @@ namespace FriendyFy.Controllers
             //return Ok(await this.chatService.SeeMessagesAsync(dto.ChatId, user));
         }
 
-        [HttpGet("{eventId}")]
-        public async Task<IActionResult> GetEventById(string eventId)
+        [HttpPost("getById")]
+        public async Task<IActionResult> GetEventById(GetEventIdDto eventDto)
         {
             var user = this.GetUserByToken();
-            var toReturn = await this.eventService.GetEventByIdAsync(eventId, user?.Id);
+            var toReturn = await this.eventService.GetEventByIdAsync(eventDto.Id, user?.Id);
             return Ok(toReturn);
         }
     }

@@ -1,15 +1,14 @@
 import React from 'react'
 import './EventMiddle.css'
 
-const EventMiddle = () => {
-    const interests = [{id: 'drinking', label: 'Drinking'}, {id: 'driving', label: 'Driving'}, {id: 'fitness', label: 'Fitness'}, {id: 'drinking', label: 'Drinking'}, {id: 'driving', label: 'Driving'}, {id: 'fitness', label: 'Fitness'}]
+const EventMiddle = ({title, privacy, isReocurring, reocurringTime, interests=[], organizerName, organizerUsername, isInEvent}) => {
     return(
             <section className="event-page-middle">
                 <div className="left-side">
-                    <h2 className="event-title">Partying with ivan</h2>
+                    <h2 className="event-title">{title}</h2>
                     <div className="other-info">
-                    <p className="event-privacy">Private</p>
-                    <p className="reocurring">Weekly</p>
+                    <p className="event-privacy">{privacy}</p>
+                    <p className="reocurring">{isReocurring ? reocurringTime : ''}</p>
                     </div>
                 </div>
                 <div className="middle">
@@ -19,7 +18,7 @@ const EventMiddle = () => {
                 </div>
                 <div className="right-side">
                     <p className="organized-text">organized by:</p>
-                    <h3 className="organizer-name">Andon Gorchov</h3>
+                    <h3 className="organizer-name">{organizerName}</h3>
                     <div className="buttons">
                         <button className="invite">Invite</button>
                         <button className="share">Share</button>
