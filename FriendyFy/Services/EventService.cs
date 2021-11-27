@@ -19,17 +19,20 @@ namespace FriendyFy.Services
         private readonly IGeolocationService geolocationService;
         private readonly IDeletableEntityRepository<Event> eventRepository;
         private readonly IBlobService blobService;
+        private readonly IImageService imageService;
 
         public EventService(IGeolocationService geolocationService,
             IDeletableEntityRepository<Event> eventRepository,
-            IBlobService blobService)
+            IBlobService blobService,
+            IImageService imageService)
         {
             this.geolocationService = geolocationService;
             this.eventRepository = eventRepository;
             this.blobService = blobService;
+            this.imageService = imageService;
         }
 
-        public async Task CreateEventAsync(string name, DateTime date, List<Interest> interests, PrivacySettings privacySettings, decimal latitude, decimal longitude, bool isReocurring, ReocurringType reocurringType, string description, string organizerId)
+        public async Task CreateEventAsync(string name, DateTime date, List<Interest> interests, PrivacySettings privacySettings, decimal latitude, decimal longitude, bool isReocurring, ReocurringType reocurringType, string description, string profileImage, string organizerId)
         {
             var newEvent = new Event()
             {
@@ -44,7 +47,11 @@ namespace FriendyFy.Services
                 CreatedOn = DateTime.UtcNow,
                 LocationCity = this.geolocationService.GetUserLocation(Decimal.ToDouble((decimal)latitude), Decimal.ToDouble((decimal)longitude))
             };
-
+            if (profileImage != null && !string.IsNullOrWhiteSpace(profileImage))
+            {
+                newEvent.ProfileImage = await imageService.AddImageAsync(ImageType.NormalImage);
+                await blobService.UploadBase64StringAsync(profileImage, newEvent.ProfileImage?.Id + newEvent.ProfileImage?.ImageExtension, GlobalConstants.BlobPictures);
+            }
             if (isReocurring)
             {
                 newEvent.IsReocurring = true;

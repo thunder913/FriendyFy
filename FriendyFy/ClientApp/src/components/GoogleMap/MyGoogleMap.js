@@ -1,10 +1,9 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import "./MyGoogleMap.css";
 import {
   GoogleMap,
   useLoadScript,
   Marker,
-  InfoWindow
 } from "@react-google-maps/api";
 import usePlacesAutocomplete,
 {
@@ -29,25 +28,26 @@ const mapContainerStyle = {
   height: '300px'
 }
 
-const center = {
-  lat: 43.653225,
-  lng: -79.383186
-}
-
 const options = {
   styles: mapDarkStyles,
   disableDefaultUI: true,
   zoomControl: true
 }
 
-const MyGoogleMap = ({ location, setLocation }) => {
+const MyGoogleMap = ({ location, setLocation, staticMap }) => {  
+  const [center, setCenter] = useState({
+    lat: location.lat ?? 43.653225,
+    lng: location.lng ?? -79.383186
+  });
 
   const onMapClick = React.useCallback((e) => {
-    setLocation({
-      lat: e.latLng.lat(),
-      lng: e.latLng.lng(),
-      time: new Date(),
-    })
+    if(!staticMap){
+      setLocation({
+        lat: e.latLng.lat() ?? 0,
+        lng: e.latLng.lng() ?? 0,
+        time: new Date(),
+      })
+    }
   }, [])
 
   const mapRef = React.useRef();
@@ -61,17 +61,18 @@ const MyGoogleMap = ({ location, setLocation }) => {
   }, []);
 
   const { isLoaded, loadError } = useLoadScript({
-    googleMapsApiKey: "AIzaSyAW0sl6m4y17JzkWaamloCpJuY0bccg1Tw",
+    googleMapsApiKey: "AIzaSyAvwsD0Ypp_pwZjeNt5YSrvJvl0rGgknbM",
     libraries: libraries,
   });
   if (loadError) return "Erorr loading maps;";
   if (!isLoaded) return "Loading maps";
 
   return (<div>
+    {!staticMap ?
     <div className="map-user-search">
       <Search panTo={panTo} />
       <Locate panTo={panTo} />
-    </div>
+    </div> : ''}
 
     <GoogleMap
       mapContainerStyle={mapContainerStyle}
@@ -81,9 +82,10 @@ const MyGoogleMap = ({ location, setLocation }) => {
       onClick={onMapClick}
       onLoad={onMapLoad}
       className="map">
-      <Marker
+        {location ?       <Marker
         key={location.time}
-        position={{ lat: location.lat, lng: location.lng }} />)
+        position={{ lat: location.lat, lng: location.lng }} /> : ''}
+)
     </GoogleMap>
   </div>)
 }
@@ -96,7 +98,6 @@ function Locate({ panTo }) {
         e.preventDefault();
         navigator.geolocation.getCurrentPosition(
           (position) => {
-            console.log(position);
             panTo({
               lat: position.coords.latitude,
               lng: position.coords.longitude,
@@ -138,7 +139,6 @@ function Search({ panTo }) {
       const { lat, lng } = await getLatLng(results[0]);
       panTo({ lat, lng });
     } catch (error) {
-      console.log("😱 Error: ", error);
     }
   };
 

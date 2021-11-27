@@ -11,5 +11,6 @@
         public bool IsReocurring { get; set; }
         public string ReocurringFrequency { get; set; }
         public string Description { get; set; }
+        public string Image { get; set; }
     }
 }

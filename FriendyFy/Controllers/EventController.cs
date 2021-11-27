@@ -69,10 +69,14 @@ namespace FriendyFy.Controllers
             {
                 return BadRequest("You have entered an invalid reocurring type!");
             }
+            else if (string.IsNullOrWhiteSpace(dto.Image))
+            {
+                return BadRequest("The profile image is empty!");
+            }
 
 
             var allInterests = await this.interestService.AddNewInterestsAsync(interests);
-            await this.eventService.CreateEventAsync(dto.Name, date, allInterests, privacySettings, (decimal) dto.Latitude,(decimal) dto.Longitude, dto.IsReocurring, reocurringType, dto.Description, user.Id);
+            await this.eventService.CreateEventAsync(dto.Name, date, allInterests, privacySettings, (decimal) dto.Latitude,(decimal) dto.Longitude, dto.IsReocurring, reocurringType, dto.Description, dto.Image, user.Id);
             return Ok();
             //return Ok(await this.chatService.SeeMessagesAsync(dto.ChatId, user));
         }

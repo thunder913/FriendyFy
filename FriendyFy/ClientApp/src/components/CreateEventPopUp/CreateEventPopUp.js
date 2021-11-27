@@ -9,6 +9,7 @@ import InterestsDropdown from "../InterestsDropdown/InterestsDropdown";
 import moment from 'moment';
 import { createEvent } from '../../services/eventService'
 import "react-datetime/css/react-datetime.css";
+import ImgDropAndCrop from "../ImgDropAndCrop/ImgDropAndCrop";
 
 const CreateEventPopUp = ({ closePopUp }) => {
     const [privacySettings, setPrivacySettings] = useState('Private');
@@ -22,6 +23,7 @@ const CreateEventPopUp = ({ closePopUp }) => {
     const [isReocurring, setIsReocurring] = useState(false);
     const { loggedIn } = useLoggedIn();
     const [eventError, setEventError] = useState('');
+    const [image, setImage] = useState('');
 
     function getCurrentLocalization() {
         let localization = window.navigator.userLanguage || window.navigator.language;
@@ -36,22 +38,28 @@ const CreateEventPopUp = ({ closePopUp }) => {
 
     const onCreateButtonClicked = (e) => {
         e.preventDefault();
+        console.log(image);
         if(name.length < 2){
             setEventError('The name cannot be that short!')
         }else if(moment() > momentDate){
             setEventError('The date may not be selected or is in the past!')
         }else if(interests.length == 0){
             setEventError('Choose some interests, in order to make the event more attractable!')
-        }else if(!location){
+        }else if(interests.length>6){
+            setEventError('You have chosen more than 6 interests!');
+        }
+        else if(!location){
             setEventError('Choose a location!')
         }else if(!description){
             setEventError('Add a short description to the event!')
         }else if(privacySettings!='Private' && privacySettings!='Public'){
             setEventError('The privacy of the event must be either Private or Public!')
+        }else if(!image){
+            setEventError('You must upload an image for the event!');
         }
         if(!eventError){
             let intereststString = JSON.stringify(interests.map(x => ({label: x.label, id: Number.isInteger(x.value) ? x.value : 0, isNew: x.__isNew__ ?? false})));
-            createEvent(name, utcDate, intereststString, privacySettings, location.lat, location.lng, description, isReocurring, (isReocurring ? reocurringTime : null));
+            createEvent(name, utcDate, intereststString, privacySettings, location.lat, location.lng, description, image, isReocurring, (isReocurring ? reocurringTime : null));
         }
     }
 
@@ -102,8 +110,14 @@ const CreateEventPopUp = ({ closePopUp }) => {
                     inputProps={{id: 'datetime', placeholder: 'When is it going to happen?', autoComplete: "off" }}
                      />
                 </div>
-                <InterestsDropdown setInterests={setInterests} placeholder='Choose interests to attract more people easily'></InterestsDropdown>
+                <InterestsDropdown setInterests={setInterests} placeholder='Choose up to 6 interests to attract more people easily'></InterestsDropdown>
                 <MyGoogleMap location={location} setLocation={setLocation}></MyGoogleMap>
+                <div className="create-event-image">
+                    <ImgDropAndCrop 
+                        placeholder="Import an image for the event." 
+                        setCroppedImg={setImage}
+                        imageClass="user-profile-photo"/>
+                </div>
                 <div className="reocurring-checkbox">
                     <input type="checkbox" id="reocurring" onChange={() => setIsReocurring(prev => !prev)} />
                     <label htmlFor="reocurring">Reocurring event</label>         
@@ -133,6 +147,7 @@ const CreateEventPopUp = ({ closePopUp }) => {
                 placeholder="What is the event about?" 
                 id="post-description" minRows={2}/>
                 <p className="event-error-message">{eventError}</p>
+
                 <button className="create-event" onClick={onCreateButtonClicked}>Create Event</button>
             </div>
         </div>
