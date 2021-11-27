@@ -26,6 +26,7 @@ namespace FriendyFy.Data
         public bool IsInEvent { get; set; }
         public string Description { get; set; }
         public DateTime CreatedOn { get; set; }
+        public bool IsOrganizer { get; set; }
 
         public void CreateMappings(IProfileExpression configuration)
         {

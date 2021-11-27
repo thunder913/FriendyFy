@@ -38,7 +38,6 @@ const CreateEventPopUp = ({ closePopUp }) => {
 
     const onCreateButtonClicked = (e) => {
         e.preventDefault();
-        console.log(image);
         if(name.length < 2){
             setEventError('The name cannot be that short!')
         }else if(moment() > momentDate){
@@ -56,10 +55,17 @@ const CreateEventPopUp = ({ closePopUp }) => {
             setEventError('The privacy of the event must be either Private or Public!')
         }else if(!image){
             setEventError('You must upload an image for the event!');
-        }
-        if(!eventError){
+        }else{
             let intereststString = JSON.stringify(interests.map(x => ({label: x.label, id: Number.isInteger(x.value) ? x.value : 0, isNew: x.__isNew__ ?? false})));
-            createEvent(name, utcDate, intereststString, privacySettings, location.lat, location.lng, description, image, isReocurring, (isReocurring ? reocurringTime : null));
+            createEvent(name, utcDate, intereststString, privacySettings, location.lat, location.lng, description, image, isReocurring, (isReocurring ? reocurringTime : null))
+                .then((res) => {
+                    if(res.status === 200){
+                        closePopUp()
+                    }
+                })
+                .catch(err => {
+                    setEventError("There was an error sending your request. Try again!");
+                });
         }
     }
 

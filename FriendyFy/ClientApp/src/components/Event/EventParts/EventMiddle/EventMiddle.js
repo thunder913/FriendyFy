@@ -1,7 +1,7 @@
-import React from 'react'
+import React, { useEffect } from 'react'
 import './EventMiddle.css'
 
-const EventMiddle = ({title, privacy, isReocurring, reocurringTime, interests=[], organizerName, organizerUsername, isInEvent}) => {
+const EventMiddle = ({title, privacy, isReocurring, reocurringTime, interests=[], organizerName, organizerUsername, isInEvent, isOrganizer}) => {
     return(
             <section className="event-page-middle">
                 <div className="left-side">
@@ -18,7 +18,7 @@ const EventMiddle = ({title, privacy, isReocurring, reocurringTime, interests=[]
                 </div>
                 <div className="right-side">
                     <p className="organized-text">organized by:</p>
-                    <h3 className="organizer-name">{organizerName}</h3>
+                    <h3 className="organizer-name">{isOrganizer ? 'you' : organizerName}</h3>
                     <div className="buttons">
                         <button className="invite">Invite</button>
                         <button className="share">Share</button>

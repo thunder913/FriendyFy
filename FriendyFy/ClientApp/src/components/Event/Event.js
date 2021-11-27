@@ -13,7 +13,6 @@ const Event = () => {
         getEventById(eventId)
             .then(async res => {
                 let obj = await res.json();
-                console.log(obj.interests);
                 setEvent(obj);
             });
     }, [])
@@ -38,11 +37,13 @@ const Event = () => {
                 organizerName={event.organizer}
                 organizerUsername={event.organizerUsername}
                 isInEvent={event.isInEvent}
+                isOrganizer={event.isOrganizer}
             />
             <EventDetails
                 description={event.description}
                 createdOn={event.createdOn}
                 organizer={event.organizer}
+                isOrganizer={event.isOrganizer}
             />
         </article>
     )

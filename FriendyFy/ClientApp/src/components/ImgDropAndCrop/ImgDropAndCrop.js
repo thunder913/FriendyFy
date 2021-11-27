@@ -127,6 +127,7 @@ const defaultCrop = {aspect: aspectRatio, x: 0, y: 0, width: 0, height: 0, unit:
 
         setImgSrc(null);
         setImgSrcExt(null);
+        setCroppedImg(null);
         setCrop(defaultCrop);
         setFirstTime(true);
     }

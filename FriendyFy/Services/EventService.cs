@@ -79,7 +79,7 @@ namespace FriendyFy.Services
                     City = x.LocationCity,
                     CreatedOn = x.CreatedOn,
                     Description = x.Description,
-                    Interests = x.Interests.Select(y => new InterestViewModel()
+                    Interests = x.Interests.Take(6).Select(y => new InterestViewModel()
                     {
                         Id = y.Id,
                         Label = y.Name,
@@ -97,16 +97,16 @@ namespace FriendyFy.Services
                     Title = x.Name,
                     UserImages = x.Users.Select(y => y.ProfileImage.Id + y.ProfileImage.ImageExtension).ToList(),
                     Photos = x.Images.Select(y => y.Id + y.ImageExtension).ToList(),
-                    MainPhoto = x.ProfileImage.Id + x.ProfileImage.ImageExtension
+                    MainPhoto = x.ProfileImage.Id + x.ProfileImage.ImageExtension,
+                    IsOrganizer = x.Organizer.Id == userId,
                 })
                 .FirstOrDefault(x => x.Id == id);
-
             var toReturn = mapper.Map<EventPageViewModel>(eventWithId);
-            foreach (var item in eventWithId.UserImages)
+            foreach (var item in eventWithId.UserImages.Take(8))
             {
                 toReturn.UserImages.Add(await this.blobService.GetBlobUrlAsync(item, GlobalConstants.BlobPictures));
             }
-            foreach (var item in eventWithId.Photos)
+            foreach (var item in eventWithId.Photos.Take(3))
             {
                 toReturn.Photos.Add(await this.blobService.GetBlobUrlAsync(item, GlobalConstants.BlobPictures));
             }
@@ -114,5 +114,7 @@ namespace FriendyFy.Services
 
             return toReturn;
         }
+
+
     }
 }

@@ -1,10 +1,18 @@
-import React from "react";
+import React, { useEffect, useState } from "react";
 import './EventTop.css'
 import MyGoogleMap from "../../../GoogleMap/MyGoogleMap";
 import EventOneImage from "../../EventImages/EventOneImage/EventOneImage";
 import EventTwoImages from "../../EventImages/EventTwoImages/EventTwoImages";
 import EventThreeImages from "../../EventImages/EventThreeImages/EventThreeImages";
+import moment from "moment-timezone";
 const EventTop = ({images=[], mainImage, lat, lng, city, time, userImages=[]}) => {
+    const [localTime, setLocalTime] = useState('');
+    useEffect(() => {
+        let localization = window.navigator.userLanguage || window.navigator.language;
+        moment.locale(localization);
+        let utcTime = moment.utc(time);
+        setLocalTime(utcTime.local().format('LLL'))
+    }, [time])
 
 return(<section className="event-page-top">
                 <div className="photos">
@@ -27,7 +35,7 @@ return(<section className="event-page-top">
                 </div>
                 <div className="location-time">
                     <MyGoogleMap location={{lat:lat, lng:lng}} staticMap={true}/>
-                    <p className="info-text">{city} {time}</p>
+                    <p className="info-text">{city} {localTime}</p>
                 </div>
             </section>)
 }

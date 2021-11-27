@@ -1,12 +1,6 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
-using ViewModels;
-
-namespace FriendyFy.Data
+﻿namespace ViewModels.ViewModels
 {
-    public class PostDetailsDto
+    public class PostDetailsViewModel
     {
         public string PostId { get; set; }
         public string CreatorImage { get; set; }

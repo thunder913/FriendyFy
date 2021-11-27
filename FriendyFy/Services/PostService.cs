@@ -10,6 +10,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using ViewModels;
+using ViewModels.ViewModels;
 
 namespace FriendyFy.Services
 {
@@ -83,7 +84,7 @@ namespace FriendyFy.Services
             return true;
         }
 
-        public List<PostDetailsDto> GetAllPosts(string userId)
+        public List<PostDetailsViewModel> GetAllPosts(string userId)
         {
             return this.postRepository
                 .All()
@@ -96,7 +97,7 @@ namespace FriendyFy.Services
                 .Include(x => x.Reposts)
                 .Include(x => x.TaggedPeople)
                 .ToList()
-                .Select(x => new PostDetailsDto()
+                .Select(x => new PostDetailsViewModel()
                 {
                     PostId = x.Id,
                     CommentsCount = x.Comments.Count(),

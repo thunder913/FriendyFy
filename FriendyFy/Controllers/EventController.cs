@@ -73,6 +73,10 @@ namespace FriendyFy.Controllers
             {
                 return BadRequest("The profile image is empty!");
             }
+            else if (interests.Count > 6)
+            {
+                return BadRequest("The interests cannot be more than 6!");
+            }
 
 
             var allInterests = await this.interestService.AddNewInterestsAsync(interests);

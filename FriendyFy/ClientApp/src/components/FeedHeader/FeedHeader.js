@@ -62,7 +62,7 @@ function FeedHeader({photo, name, time, username, city, lat, long, taggedPeople,
             <div className="upper-post-data">
                 <h3 onClick={redirectToUserProfile}>{name}</h3>
                 {city != null ? <p className="post-location"> is at <button onClick={showPostLocationPopUp}>{city}</button></p> : ''}
-                {taggedPeople != 0 ? <p>with <button onClick={showTaggedPeopleEvent}> {taggedPeople} {taggedPeople == 1 ? 'person' : 'people'} </button></p> : ''}
+                {taggedPeople && taggedPeople != 0 ? <p>with <button onClick={showTaggedPeopleEvent}> {taggedPeople} {taggedPeople == 1 ? 'person' : 'people'} </button></p> : ''}
                 
             </div>  
             <span>{time}</span>
