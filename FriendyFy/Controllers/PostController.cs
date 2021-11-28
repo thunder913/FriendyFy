@@ -29,6 +29,10 @@ namespace FriendyFy.Controllers
             {
                 return Unauthorized("You are not signed in!");
             }
+            else if (string.IsNullOrWhiteSpace(makePostDto.Image) && string.IsNullOrWhiteSpace(makePostDto.PostMessage))
+            {
+                return BadRequest("Something went wrong, try again!");
+            }
 
             return Json(new { success = await postService.CreatePostAsync(makePostDto, user.Id) });
         }

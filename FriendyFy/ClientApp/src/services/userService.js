@@ -46,11 +46,21 @@ function getUserEventsCount(userId){
         body: JSON.stringify(userId)
     });
 }
+
+function getUserImages(username, take, skip){
+    return fetch('/api/getUserImages', {
+        method: 'POST',
+        headers: {'Content-Type': 'application/json'},
+        body: JSON.stringify({username, take, skip})
+    });
+}
+
 export {
     getLoggedInUser,
     logout,
     confirmEmail,
     finishFirstTimeSetup,
     getUserLocation,
-    getUserEventsCount
+    getUserEventsCount,
+    getUserImages
 }

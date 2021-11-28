@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import './ProfileSidebar.css';
-import { getUserLocation, getUserEventsCount } from '../../services/userService';
+import { getUserLocation, getUserEventsCount, getUserImages } from '../../services/userService';
 import { getFriends } from '../../services/friendService';
 import { useLocation } from 'react-router';
 import {Link} from "react-router-dom";
@@ -10,6 +10,7 @@ const [location, setLocation] = useState('');
 const [sidebarFriends, setSidebarFriends] = useState({});
 const userId = decodeURI(window.location.href.substring(window.location.href.lastIndexOf('/')+1));
 const [eventsCount, setEventsCount] = useState('');
+const [photos, setPhotos] = useState([]);
 const siteLocation = useLocation().pathname;
 
 useEffect(() => {
@@ -19,6 +20,8 @@ useEffect(() => {
         .then(async res => {setLocation((await res.json()).location)});
     getUserEventsCount(userId)
         .then(async res => {setEventsCount((await res.json()).count)});
+    getUserImages(userId, 9, 0)
+        .then(async res => setPhotos(await res.json()));
     }, [siteLocation, userId])
 
 return(
@@ -36,33 +39,9 @@ return(
         <p className="see-all-photos"><Link to={`/photos/${userId}`}>See All Photos</Link></p>
     </header>
     <div className="pictures">
-        <div className="small-profile-photo">
-            <img src="https://scontent.fsof8-1.fna.fbcdn.net/v/t1.6435-9/194957949_4334439429940720_5542816028295677772_n.jpg?_nc_cat=108&ccb=1-5&_nc_sid=09cbfe&_nc_ohc=YeTxne8hWKoAX9bbJvR&_nc_ht=scontent.fsof8-1.fna&oh=51a6dbebf71ee668c34d7292be94abf0&oe=6192F854" alt="" />
-        </div>
-        <div className="small-profile-photo">
-            <img src="https://scontent.fsof8-1.fna.fbcdn.net/v/t1.6435-9/194957949_4334439429940720_5542816028295677772_n.jpg?_nc_cat=108&ccb=1-5&_nc_sid=09cbfe&_nc_ohc=YeTxne8hWKoAX9bbJvR&_nc_ht=scontent.fsof8-1.fna&oh=51a6dbebf71ee668c34d7292be94abf0&oe=6192F854" alt="" />
-        </div>
-        <div className="small-profile-photo">
-            <img src="https://scontent.fsof8-1.fna.fbcdn.net/v/t1.6435-9/194957949_4334439429940720_5542816028295677772_n.jpg?_nc_cat=108&ccb=1-5&_nc_sid=09cbfe&_nc_ohc=YeTxne8hWKoAX9bbJvR&_nc_ht=scontent.fsof8-1.fna&oh=51a6dbebf71ee668c34d7292be94abf0&oe=6192F854" alt="" />
-        </div>
-        <div className="small-profile-photo">
-            <img src="https://scontent.fsof8-1.fna.fbcdn.net/v/t1.6435-9/194957949_4334439429940720_5542816028295677772_n.jpg?_nc_cat=108&ccb=1-5&_nc_sid=09cbfe&_nc_ohc=YeTxne8hWKoAX9bbJvR&_nc_ht=scontent.fsof8-1.fna&oh=51a6dbebf71ee668c34d7292be94abf0&oe=6192F854" alt="" />
-        </div>
-        <div className="small-profile-photo">
-            <img src="https://scontent.fsof8-1.fna.fbcdn.net/v/t1.6435-9/194957949_4334439429940720_5542816028295677772_n.jpg?_nc_cat=108&ccb=1-5&_nc_sid=09cbfe&_nc_ohc=YeTxne8hWKoAX9bbJvR&_nc_ht=scontent.fsof8-1.fna&oh=51a6dbebf71ee668c34d7292be94abf0&oe=6192F854" alt="" />
-        </div>
-        <div className="small-profile-photo">
-            <img src="https://scontent.fsof8-1.fna.fbcdn.net/v/t1.6435-9/194957949_4334439429940720_5542816028295677772_n.jpg?_nc_cat=108&ccb=1-5&_nc_sid=09cbfe&_nc_ohc=YeTxne8hWKoAX9bbJvR&_nc_ht=scontent.fsof8-1.fna&oh=51a6dbebf71ee668c34d7292be94abf0&oe=6192F854" alt="" />
-        </div>
-        <div className="small-profile-photo">
-            <img src="https://scontent.fsof8-1.fna.fbcdn.net/v/t1.6435-9/194957949_4334439429940720_5542816028295677772_n.jpg?_nc_cat=108&ccb=1-5&_nc_sid=09cbfe&_nc_ohc=YeTxne8hWKoAX9bbJvR&_nc_ht=scontent.fsof8-1.fna&oh=51a6dbebf71ee668c34d7292be94abf0&oe=6192F854" alt="" />
-        </div>
-        <div className="small-profile-photo">
-            <img src="https://scontent.fsof8-1.fna.fbcdn.net/v/t1.6435-9/194957949_4334439429940720_5542816028295677772_n.jpg?_nc_cat=108&ccb=1-5&_nc_sid=09cbfe&_nc_ohc=YeTxne8hWKoAX9bbJvR&_nc_ht=scontent.fsof8-1.fna&oh=51a6dbebf71ee668c34d7292be94abf0&oe=6192F854" alt="" />
-        </div>
-        <div className="small-profile-photo">
-            <img src="https://scontent.fsof8-1.fna.fbcdn.net/v/t1.6435-9/194957949_4334439429940720_5542816028295677772_n.jpg?_nc_cat=108&ccb=1-5&_nc_sid=09cbfe&_nc_ohc=YeTxne8hWKoAX9bbJvR&_nc_ht=scontent.fsof8-1.fna&oh=51a6dbebf71ee668c34d7292be94abf0&oe=6192F854" alt="" />
-        </div>
+        {photos.map(photo => <div className="small-profile-photo">
+            <img src={photo.imageUrl} alt="" />
+        </div>)}
     </div>
     </div>
 <div className="friend-list rounded-side">

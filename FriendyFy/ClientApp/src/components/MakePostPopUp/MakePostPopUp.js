@@ -15,7 +15,6 @@ const MakePostPopUp = ({hasImage, closePopUp}) =>{
     const [showPeople, setShowPeople] = useState(false);
     const [showMap, setShowMap] = useState(false);
 
-    // TODO send these to the BE and make a post
     const [privacySettings, setPrivacySettings] = useState('friends');
     const [postMessage, setPostMessage] = useState('');
     const [location, setLocation] = useState('');
@@ -25,7 +24,8 @@ const MakePostPopUp = ({hasImage, closePopUp}) =>{
 
     const onPostButtonClick = async () => {
         let peopleIds = people.map(x => x.value)
-        if(postMessage.length == 0){
+        console.log(image);
+        if(postMessage.length == 0 && !image){
             return;
         }
         await makePost(privacySettings, postMessage, location.lat, location.lng, image, peopleIds)

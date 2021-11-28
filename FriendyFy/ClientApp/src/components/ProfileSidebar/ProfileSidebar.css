@@ -6,12 +6,14 @@
 }
 
 .small-profile-photo{
-    width: 100px;
+    width: 32%;
     margin: 1px;
 }
 
 .small-profile-photo > img{
     width: 100%;
+    aspect-ratio: 1;
+    object-fit: cover;
 }
 
 .profile-sidebar{

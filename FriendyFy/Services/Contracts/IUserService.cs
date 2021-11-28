@@ -3,6 +3,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using ViewModels.ViewModels;
 
 namespace FriendyFy.Services.Contracts
 {
@@ -19,5 +20,6 @@ namespace FriendyFy.Services.Contracts
         ApplicationUser GetByUsername(string username);
         Task SetUserFirstTimeLoginAsync(ApplicationUser user, Image profileImage, Image coverImage, string quote, List<Interest> interests, decimal? longitude, decimal? latitude);
         int GetUserEventsCount(string username);
+        List<DisplayImageViewModel> GetUserImages(string username, int take, int skip);
     }
 }

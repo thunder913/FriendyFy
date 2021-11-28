@@ -312,5 +312,11 @@ namespace FriendyFy.Controllers
 
             return Ok("success");
         }
+
+        [HttpPost("getUserImages")]
+        public IActionResult GetUserImages(GetUserImagesDto dto)
+        {
+            return Ok(this.userService.GetUserImages(dto.Username, dto.Take, dto.Skip));
+        }
     }
 }

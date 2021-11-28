@@ -1,4 +1,6 @@
-﻿using FriendyFy.Data;
+﻿using FriendyFy.BlobStorage;
+using FriendyFy.Common;
+using FriendyFy.Data;
 using FriendyFy.Models;
 using FriendyFy.Services.Contracts;
 using Microsoft.EntityFrameworkCore;
@@ -7,16 +9,23 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using ViewModels.ViewModels;
 
 namespace FriendyFy.Services
 {
     public class UserService : IUserService
     {
         private readonly IDeletableEntityRepository<ApplicationUser> userRepository;
+        private readonly IDeletableEntityRepository<Post> postRepositry;
+        private readonly IBlobService blobService;
 
-        public UserService(IDeletableEntityRepository<ApplicationUser> userRepository)
+        public UserService(IDeletableEntityRepository<ApplicationUser> userRepository,
+            IDeletableEntityRepository<Post> postRepositry,
+            IBlobService blobService)
         {
             this.userRepository = userRepository;
+            this.postRepositry = postRepositry;
+            this.blobService = blobService;
         }
         public async Task<ApplicationUser> CreateAsync(ApplicationUser user)
         {
@@ -100,6 +109,32 @@ namespace FriendyFy.Services
             user.Latitude = latitude;
             user.FinishedFirstTimeLogin = true;
             await userRepository.SaveChangesAsync();
+        }
+
+        public List<DisplayImageViewModel> GetUserImages(string username, int take, int skip)
+        {
+            var images = this.postRepositry
+                .AllAsNoTracking()
+                .Include(x => x.Creator)
+                .Include(x => x.Image)
+                .Where(x => x.Creator.UserName == username && x.Image != null)
+                .OrderByDescending(x => x.CreatedOn)
+                .Skip(skip)
+                .Take(take)
+                .Select(x => new
+                {
+                    ImageId = x.Image.Id,
+                    ImageInUrl = x.Image.Id + x.Image.ImageExtension
+                })
+                .ToList();
+
+            var toReturn = images.Select(x => new DisplayImageViewModel()
+            {
+                ImageId = x.ImageId,
+                ImageUrl = this.blobService.GetBlobUrlAsync(x.ImageInUrl, GlobalConstants.BlobPictures).GetAwaiter().GetResult(),
+            }).ToList();
+
+            return toReturn;
         }
     }
 }
