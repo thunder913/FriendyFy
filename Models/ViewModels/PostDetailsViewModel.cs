@@ -20,6 +20,7 @@ namespace ViewModels.ViewModels
         public decimal? Longitude { get; set; }
         public string LocationCity { get; set; }
         public int TaggedPeopleCount { get; set; }
+        public string PostType { get; set; }
         
         // Event only properties
         public string EventTitle { get; set; }

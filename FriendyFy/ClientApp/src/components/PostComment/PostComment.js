@@ -26,7 +26,7 @@ const PostComment = ({comment}) => {
     }
     const commentLikeEvent = (e) => {
         e.preventDefault();
-        likeComment(comment.id)
+        likeComment(comment.id, comment.postType)
             .then(async res => 
                 {
                     setLikedByYou(prev => !prev)

@@ -19,3 +19,11 @@ export function getEvents(){
         method: 'GET'
     })
 }
+
+export function likeEvent(eventId) {
+    return fetch('/event/likeEvent', {
+        method: 'POST',
+        headers: {'Content-Type': 'application/json'},
+        body: JSON.stringify({postId: eventId})
+    });
+  }

@@ -113,7 +113,8 @@ namespace FriendyFy.Services
                     Latitude = x.Latitude ?? x.Latitude,
                     Longitude = x.Longitude ?? x.Longitude,
                     LocationCity = x.LocationCity,
-                    TaggedPeopleCount = x.TaggedPeople.Count()
+                    TaggedPeopleCount = x.TaggedPeople.Count(),
+                    PostType = PostType.Post.ToString(),
                 })
                 .ToList();
         }

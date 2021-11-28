@@ -10,5 +10,6 @@
         public bool IsLikedByUser { get; set; }
         public int CreatedAgo { get; set; }
         public string Id { get; set; }
+        public string PostType { get; set; }
     }
 }

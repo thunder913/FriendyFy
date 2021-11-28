@@ -63,7 +63,14 @@ const FeedEvent = ({ event }) => {
             <span className="location" onClick={() => setShowLocation(true)}>Location: {event.locationCity}</span>
             <span>{localTime}</span>
         </div>
-        <FeedFooter likes={event.likesCount} comments={event.commentsCount} reposts={event.repostsCount}/>
+        <FeedFooter 
+            likes={event.likesCount}
+            comments={event.commentsCount}
+            reposts={event.repostsCount}
+            postType={event.postType}
+            isLiked={event.isLikedByUser}
+            postId={event.postId}
+            />
     </div>)
 }
 

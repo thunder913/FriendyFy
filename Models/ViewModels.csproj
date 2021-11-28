@@ -8,8 +8,4 @@
     <ProjectReference Include="..\FriendyFy.Mapping\FriendyFy.Mapping.csproj" />
   </ItemGroup>
 
-  <ItemGroup>
-    <Folder Include="DtoModels\" />
-  </ItemGroup>
-
 </Project>

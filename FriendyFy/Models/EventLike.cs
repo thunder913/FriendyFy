@@ -3,14 +3,12 @@ using System;
 
 namespace FriendyFy.Models
 {
-    public class CommentLike : BaseModel<string>, IAuditInfo
+    public class EventLike : BaseModel<string>, IAuditInfo
     {
         public new string Id { get; set; } = Guid.NewGuid().ToString();
         public ApplicationUser LikedBy { get; set; }
         public string LikedById { get; set; }
-        public PostComment Comment { get; set; }
-        public string CommentId { get; set; }
-        public EventComment EventComment { get; set; }
-        public string EventCommentId { get; set; }
+        public Event Event { get; set; }
+        public string EventId { get; set; }
     }
 }

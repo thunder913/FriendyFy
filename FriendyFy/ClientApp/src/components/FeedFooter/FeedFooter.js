@@ -8,6 +8,7 @@ import { getComments, makeComment } from '../../services/commentService';
 import PostComment from '../PostComment/PostComment';
 import PeopleListPopUp from '../PeopleListPopUp/PeopleListPopUp'
 import InfiniteScroll from 'react-infinite-scroll-component';
+import { likeEvent } from '../../services/eventService';
 
 const FeedFooter = (props) => {
     const [isLiked, setIsLiked] = useState(props.isLiked);
@@ -29,11 +30,21 @@ const FeedFooter = (props) => {
     }
 
     const likeButtonClickEvent = () => {
-        likePost(props.postId)
+        console.log(props.postType);
+        if(props.postType === "Post"){
+            likePost(props.postId)
             .then(async res => {if(res.status==200){
                 setIsLiked(prev => !prev);
                 setLikes(await res.json())
             }});    
+        }else if(props.postType === "Event"){
+            likeEvent(props.postId)
+            .then(async res => {if(res.status==200){
+                setIsLiked(prev => !prev);
+                setLikes(await res.json())
+            }}); 
+        }
+
     }
 
     const showPeopleLikes = () => {
@@ -46,7 +57,7 @@ const FeedFooter = (props) => {
 
     const addComment = (e) => {
         e.preventDefault();
-        makeComment(commentRef.current.value, props.postId)
+        makeComment(commentRef.current.value, props.postId, props.postType)
             .then(async res => 
             {
                 commentRef.current.value = '';
@@ -58,7 +69,7 @@ const FeedFooter = (props) => {
     }
 
     const loadMoreComments = () => {
-        return getComments(props.postId, 10, comments.length)
+        return getComments(props.postId, 10, comments.length, props.postType)
         .then(async res => { 
             let obj = await res.json();
             if(obj.length>0){
@@ -89,7 +100,7 @@ const FeedFooter = (props) => {
 
     useEffect(() => {
         if(showComments){
-            getComments(props.postId, 10, 0) 
+            getComments(props.postId, 10, 0, props.postType) 
                 .then(async res => {
                     let obj = await (res.json());
                     if(obj.length>0){

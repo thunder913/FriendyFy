@@ -31,7 +31,8 @@ const FeedPost = ({post}) => {
             likes={post.likesCount} 
             comments={post.commentsCount} 
             reposts={post.repostsCount} 
-            isLiked={post.isLikedByUser}/>
+            isLiked={post.isLikedByUser}
+            postType={post.postType}/>
     </div>)
 }
 

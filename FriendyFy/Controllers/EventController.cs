@@ -100,5 +100,35 @@ namespace FriendyFy.Controllers
             var events = this.eventService.GetEvents(user.Id);
             return Ok(events);
         }
+
+        [HttpPost("likeEvent")]
+        public async Task<IActionResult> LikeEvent(LikePostDto likePostDto)
+        {
+            var user = this.GetUserByToken();
+
+            if (user == null)
+            {
+                return Unauthorized("You are not signed in!");
+            }
+
+            int? likes;
+            try
+            {
+                likes = await this.eventService.LikeEventAsync(likePostDto.PostId, user);
+            }
+            catch (Exception ex)
+            {
+                return BadRequest("There was an error saving your like!");
+            }
+
+            if (likes != null)
+            {
+                return Ok(likes);
+            }
+            else
+            {
+                return BadRequest();
+            }
+        }
     }
 }

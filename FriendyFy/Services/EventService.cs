@@ -21,16 +21,22 @@ namespace FriendyFy.Services
         private readonly IDeletableEntityRepository<Event> eventRepository;
         private readonly IBlobService blobService;
         private readonly IImageService imageService;
+        private readonly IRepository<EventLike> eventLikeRepository;
+        private readonly IRepository<EventComment> eventCommentRepository;
 
         public EventService(IGeolocationService geolocationService,
             IDeletableEntityRepository<Event> eventRepository,
             IBlobService blobService,
-            IImageService imageService)
+            IImageService imageService,
+            IRepository<EventLike> eventLikeRepository,
+            IRepository<EventComment> eventCommentRepository)
         {
             this.geolocationService = geolocationService;
             this.eventRepository = eventRepository;
             this.blobService = blobService;
             this.imageService = imageService;
+            this.eventLikeRepository = eventLikeRepository;
+            this.eventCommentRepository = eventCommentRepository;
         }
 
         public async Task CreateEventAsync(string name, DateTime date, List<Interest> interests, PrivacySettings privacySettings, decimal latitude, decimal longitude, bool isReocurring, ReocurringType reocurringType, string description, string profileImage, string organizerId)
@@ -153,9 +159,66 @@ namespace FriendyFy.Services
                     EventIsReocurring = x.IsReocurring,
                     EventReocurring = x.ReocurringType.ToString(),
                     IsLikedByUser = x.Likes.Any(x => x.LikedById == userId),
-                    PostId = x.Id
+                    PostId = x.Id,
+                    PostType = PostType.Event.ToString(),
                 })
                 .ToList();
+        }
+
+        public async Task<int?> LikeEventAsync(string eventId, ApplicationUser user)
+        {
+            var currEvent = this.eventRepository
+                .All()
+                .Include(x => x.Likes)
+                .FirstOrDefault(x => x.Id == eventId);
+
+            if (currEvent == null)
+            {
+                return null;
+            }
+
+            var existingLike = currEvent.Likes.FirstOrDefault(x => x.LikedById == user.Id);
+            if (existingLike != null)
+            {
+                eventLikeRepository.Delete(existingLike);
+            }
+            else
+            {
+                var eventLike = new EventLike()
+                {
+                    CreatedOn = DateTime.Now,
+                    LikedBy = user,
+                    Event = currEvent,
+                };
+
+                currEvent.Likes.Add(eventLike);
+            }
+            await eventRepository.SaveChangesAsync();
+
+
+            return currEvent.Likes.Count();
+        }
+
+        public List<PersonListPopupViewModel> GetPeopleLikes(string eventId, int take, int skip)
+        {
+            var peopleLiked = this.eventLikeRepository
+                .AllAsNoTracking()
+                .Include(x => x.LikedBy)
+                .ThenInclude(x => x.ProfileImage)
+                .Where(x => x.EventId == eventId)
+                .OrderByDescending(x => x.CreatedOn)
+                .Skip(skip)
+                .Take(take)
+                .ToList()
+                .Select(x => new PersonListPopupViewModel()
+                {
+                    Name = x.LikedBy.FirstName + " " + x.LikedBy.LastName,
+                    Username = x.LikedBy.UserName,
+                    ProfileImage = this.blobService.GetBlobUrlAsync(x.LikedBy?.ProfileImage?.Id + x.LikedBy?.ProfileImage?.ImageExtension, GlobalConstants.BlobPictures).GetAwaiter().GetResult(),
+                })
+                .ToList();
+
+            return peopleLiked;
         }
     }
 }

@@ -1,24 +1,24 @@
-export function makeComment(text, postId) {
+export function makeComment(text, postId, postType) {
     return fetch('/comment/make', {
         method: 'POST',
         headers: {'Content-Type': 'application/json'},
-        body: JSON.stringify({text, postId})
+        body: JSON.stringify({text, postId, postType})
     });
   }
 
-  export function getComments(postId, take, skip) {
+  export function getComments(postId, take, skip, postType) {
     return fetch('/comment', {
         method: 'POST',
         headers: {'Content-Type': 'application/json'},
-        body: JSON.stringify({postId, take, skip})
+        body: JSON.stringify({postId, take, skip, postType})
     });
   }
 
-  export function likeComment(commentId) {
+  export function likeComment(commentId, postType) {
     return fetch('/comment/like', {
         method: 'POST',
         headers: {'Content-Type': 'application/json'},
-        body: JSON.stringify({commentId})
+        body: JSON.stringify({commentId, postType})
     });
   }
 

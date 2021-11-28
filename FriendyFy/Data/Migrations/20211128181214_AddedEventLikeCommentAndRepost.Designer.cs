@@ -4,14 +4,16 @@ using FriendyFy.Data;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 namespace FriendyFy.Data.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    partial class ApplicationDbContextModelSnapshot : ModelSnapshot
+    [Migration("20211128181214_AddedEventLikeCommentAndRepost")]
+    partial class AddedEventLikeCommentAndRepost
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -1138,7 +1140,7 @@ namespace FriendyFy.Data.Migrations
                         .WithMany("CommentLikes")
                         .HasForeignKey("CommentId");
 
-                    b.HasOne("FriendyFy.Models.EventComment", "eventComment")
+                    b.HasOne("FriendyFy.Models.EventComment", null)
                         .WithMany("CommentLikes")
                         .HasForeignKey("EventCommentId");
 
@@ -1147,8 +1149,6 @@ namespace FriendyFy.Data.Migrations
                         .HasForeignKey("LikedById");
 
                     b.Navigation("Comment");
-
-                    b.Navigation("eventComment");
 
                     b.Navigation("LikedBy");
                 });
