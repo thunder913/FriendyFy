@@ -1,6 +1,6 @@
 .feed-event .user-photo{
     width: 40px;
-    margin-right: 3px;
+    margin-left: -25px;
 }
 
 .feed-event .user-photo img{
@@ -9,8 +9,15 @@
 }
 
 .event-images{
+    margin-left: 25px;
     display: flex;
     padding: 0px 5px 0px 5px;
+}
+
+.going-text{
+    padding: 5px 0px 5px 10px;
+    font-size: 12px;
+    font-style: italic;
 }
 
 .feed-event{
@@ -32,6 +39,10 @@
     margin: 0px auto 10px auto;
 }
 
+.feed-event .second-row{
+    margin-top: 5px;
+}
+
  .second-row, .third-row{
      display: flex;
      justify-content: space-between;
@@ -40,7 +51,13 @@
 
  .second-row > h2{
      margin-bottom: 2px;
- }
+    font-size: 24px;
+}
+
+.second-row > h2:hover{
+    cursor: pointer;
+    text-decoration: underline;
+}
 
  .second-row button{
      padding: 2px 50px;
@@ -59,6 +76,12 @@
 
  .third-row span{
      font-weight: 200;
+     font-size: 16px;
+ }
+
+ .third-row .location:hover{
+    cursor: pointer;
+    text-decoration: underline;
  }
 
  .feed .interest{

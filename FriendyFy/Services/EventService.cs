@@ -120,6 +120,7 @@ namespace FriendyFy.Services
         {
             return this.eventRepository
                 .AllAsNoTracking()
+                .OrderByDescending(x => x.CreatedOn)
                 .Include(x => x.Organizer)
                 .ThenInclude(x => x.ProfileImage)
                 .Include(x => x.Users)
@@ -127,6 +128,7 @@ namespace FriendyFy.Services
                 .Include(x => x.Likes)
                 .Include(x => x.Comments)
                 .Include(x => x.Reposts)
+                .Include(x => x.Interests)
                 .ToList()
                 .Select(x => new PostDetailsViewModel()
                 {
