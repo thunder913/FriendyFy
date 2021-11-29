@@ -9,6 +9,7 @@ using System.Globalization;
 using System.Linq;
 using System.Threading.Tasks;
 using ViewModels;
+using ViewModels.ViewModels;
 
 namespace FriendyFy.Controllers
 {
@@ -92,7 +93,6 @@ namespace FriendyFy.Controllers
             var toReturn = await this.eventService.GetEventByIdAsync(eventDto.Id, user?.Id);
             return Ok(toReturn);
         }
-
         [HttpGet]
         public IActionResult GetEvents()
         {
@@ -163,6 +163,22 @@ namespace FriendyFy.Controllers
                 return Ok();
             }
             return BadRequest();
+        }
+
+        [HttpPost("getNavEvents")]
+        public IActionResult GetNavigationEvents()
+        {
+            var user = this.GetUserByToken();
+            if (user == null)
+            {
+                return Unauthorized("You are not logged in!");
+            }
+            var toReturn = new LeftNavigationEventsViewModel();
+            toReturn.AttendingEvents = this.eventService.GetAttendingEvents(user.UserName);
+            toReturn.OrganizedEvents = this.eventService.GetOrganizedEvents(user.UserName);
+            toReturn.SuggestedEvents = this.eventService.GetSuggestedEvents(user);
+
+            return Ok(toReturn);
         }
     }
 }

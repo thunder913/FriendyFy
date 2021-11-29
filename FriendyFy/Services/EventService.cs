@@ -118,7 +118,7 @@ namespace FriendyFy.Services
                     Photos = x.Images.Select(y => y.Id + y.ImageExtension).ToList(),
                     MainPhoto = x.ProfileImage.Id + x.ProfileImage.ImageExtension,
                     IsOrganizer = x.Organizer.Id == userId,
-                    OrganizerImageUrl = x.Organizer.ProfileImage.Id+x.Organizer.ProfileImage.ImageExtension
+                    OrganizerImageUrl = x.Organizer.ProfileImage.Id + x.Organizer.ProfileImage.ImageExtension
                 })
                 .FirstOrDefault(x => x.Id == id);
             var toReturn = mapper.Map<EventPageViewModel>(eventWithId);
@@ -249,7 +249,7 @@ namespace FriendyFy.Services
             var added = await this.eventRepository.SaveChangesAsync();
             return added > 0;
         }
-        
+
         public async Task<bool> CreateEventPostAsync(string eventId, string userId)
         {
             var currEvent = this.eventRepository.All().FirstOrDefault(x => x.Id == eventId);
@@ -268,6 +268,138 @@ namespace FriendyFy.Services
             await this.eventPostRepository.AddAsync(eventPost);
             var saved = await this.eventPostRepository.SaveChangesAsync();
             return saved > 0;
+        }
+
+        public List<NavigationEventViewModel> GetAttendingEvents(string username)
+        {
+            var result = this.eventRepository
+                .AllAsNoTracking()
+                .Include(x => x.Organizer)
+                .Include(x => x.Users)
+                .ThenInclude(x => x.ProfileImage)
+                .Where(x => (x.Organizer.UserName == username || x.Users.Any(y => y.UserName == username)) && x.Time > DateTime.UtcNow)
+                .OrderBy(x => x.Time)
+                .Take(2)
+                .Select(x => new
+                {
+                    Interests = x.Interests.Take(6).Select(y => new InterestViewModel()
+                    {
+                        Id = y.Id,
+                        Label = y.Name,
+                    }).ToList(),
+                    Id = x.Id,
+                    Location = x.LocationCity,
+                    Name = x.Name,
+                    Time = x.Time,
+                    GoingPhotos = x.Users.Select(y => y.ProfileImage.Id + y.ProfileImage.ImageExtension)
+                })
+                .ToList();
+
+            var toReturn = new List<NavigationEventViewModel>();
+            foreach (var item in result)
+            {
+                toReturn.Add(new NavigationEventViewModel()
+                {
+                    GoingPhotos = item.GoingPhotos.Select(x => this.blobService.GetBlobUrlAsync(x, GlobalConstants.BlobPictures).GetAwaiter().GetResult()).ToList(),
+                    Id = item.Id,
+                    Interests = item.Interests,
+                    Location = item.Location,
+                    Name = item.Name,
+                    Time = item.Time
+                });
+            }
+
+            return toReturn;
+        }
+
+        public List<NavigationEventViewModel> GetOrganizedEvents(string username)
+        {
+            var result = this.eventRepository
+                .AllAsNoTracking()
+                .Include(x => x.Organizer)
+                .Include(x => x.Users)
+                .ThenInclude(x => x.ProfileImage)
+                .Where(x => x.Organizer.UserName == username && x.Time > DateTime.UtcNow)
+                .OrderBy(x => x.Time)
+                .Take(2)
+                .Select(x => new
+                {
+                    Interests = x.Interests.Take(6).Select(y => new InterestViewModel()
+                    {
+                        Id = y.Id,
+                        Label = y.Name,
+                    }).ToList(),
+                    Id = x.Id,
+                    Location = x.LocationCity,
+                    Name = x.Name,
+                    Time = x.Time,
+                    GoingPhotos = x.Users.Select(y => y.ProfileImage.Id + y.ProfileImage.ImageExtension)
+                })
+                .ToList();
+
+            var toReturn = new List<NavigationEventViewModel>();
+            foreach (var item in result)
+            {
+                toReturn.Add(new NavigationEventViewModel()
+                {
+                    GoingPhotos = item.GoingPhotos.Select(x => this.blobService.GetBlobUrlAsync(x, GlobalConstants.BlobPictures).GetAwaiter().GetResult()).ToList(),
+                    Id = item.Id,
+                    Interests = item.Interests,
+                    Location = item.Location,
+                    Name = item.Name,
+                    Time = item.Time
+                });
+            }
+
+            return toReturn;
+        }
+
+        public List<NavigationEventViewModel> GetSuggestedEvents(ApplicationUser user)
+        {
+            // todo add better suggesting
+            var result = this.eventRepository
+                .AllAsNoTracking()
+                .Include(x => x.Organizer)
+                .Include(x => x.Interests)
+                .Include(x => x.Users)
+                .ThenInclude(x => x.ProfileImage)
+                .Include(x => x.Users)
+                .ThenInclude(x => x.Friends)
+                .Where(x => x.Organizer.UserName != user.UserName && !x.Users.Any(y => y.UserName == user.UserName) && x.Time > DateTime.UtcNow)
+                .Where(x => (x.Latitude < user.Latitude && x.Latitude + 5 > user.Latitude) || (x.Latitude - 5 < user.Latitude && x.Latitude > user.Latitude)
+                && (x.Longitude < user.Longitude && x.Longitude + 5 > user.Longitude) || (x.Longitude - 5 < user.Longitude && x.Longitude > user.Longitude))
+                .OrderBy(x => x.Time)
+                .Take(2)
+                .Select(x => new
+                {
+                    Interests = x.Interests.Take(6).Select(y => new InterestViewModel()
+                    {
+                        Id = y.Id,
+                        Label = y.Name,
+                    }).ToList(),
+                    Id = x.Id,
+                    Location = x.LocationCity,
+                    Name = x.Name,
+                    Time = x.Time,
+                    GoingPhotos = x.Users.Select(y => y.ProfileImage.Id + y.ProfileImage.ImageExtension)
+                })
+                .ToList();
+
+            var toReturn = new List<NavigationEventViewModel>();
+            foreach (var item in result)
+            {
+                toReturn.Add(new NavigationEventViewModel()
+                {
+                    GoingPhotos = item.GoingPhotos.Select(x => this.blobService.GetBlobUrlAsync(x, GlobalConstants.BlobPictures).GetAwaiter().GetResult()).ToList(),
+                    Id = item.Id,
+                    Interests = item.Interests,
+                    Location = item.Location,
+                    Name = item.Name,
+                    Time = item.Time
+                });
+            }
+
+            return toReturn;
         }
     }
 }

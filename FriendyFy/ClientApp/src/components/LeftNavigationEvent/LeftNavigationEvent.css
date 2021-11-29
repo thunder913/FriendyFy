@@ -11,10 +11,17 @@
 }
 
 .event{
-    flex-basis: 49%;
     height: 100%;
     width: 100%;
     background-color: #5C5C5C;
+}
+
+.event-tab .event:nth-child(2n+1){
+    margin-bottom: 3px;
+}
+
+.event-tab .event:nth-child(2n){
+    margin-top: 3px;
 }
 
 .attendingUsers{

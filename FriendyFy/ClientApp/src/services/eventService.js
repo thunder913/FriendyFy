@@ -43,3 +43,10 @@ export function likeEvent(eventId) {
         body: JSON.stringify({eventId})
     });
   }
+
+  export function getNavigationEvents() {
+    return fetch('/event/getNavEvents', {
+        method: 'POST',
+    });
+  }
+

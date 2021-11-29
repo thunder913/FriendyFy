@@ -10,26 +10,26 @@ const LeftNavigationEvent = ({data}) =>(
                 <h4>{data.name}</h4>
                 <div className="event-information">
                     <span className="location"><a href="/">{data.location}</a></span>
-                    <span>next month</span>
+                    <span>{data.time}</span>
                 </div>
             </header>
             <main className="event-card">
             <div className="left-side">
                 <section className="interests">
-                    {data.interests.map(interest => (<div className="interest">{interest}</div>))}
+                    {data.interests.map(interest => (<div key={interest.id} className="interest">{interest.label}</div>))}
                 </section>
             </div>
             <div className="right-side">
-            <div className={"attendingUsers "+getImageWidthClassName(data.attending.length)}>
-                {data.attending.map(user => (
-                    <div className="attending-user">
+            <div className={"attendingUsers "+getImageWidthClassName(data.goingPhotos.length)}>
+                {data.goingPhotos ? data.goingPhotos.map(user => (
+                    <div key={user} className="attending-user">
                         <div className="attending-user-photo">
-                            <img src={user.photo} alt="" />
+                            <img src={user} alt="" />
                         </div>
                     </div>
-                ))}
+                )): ''}
             </div>
-            <button>Text</button>
+            <button>View</button>
             </div>
             </main>
         </div>
