@@ -29,6 +29,7 @@ const Event = () => {
                 userImages={event.userImages}
                 />
             <EventMiddle
+                eventId = {eventId}
                 title={event.title}
                 privacy={event.privacy}
                 isReocurring={event.isReocurring}

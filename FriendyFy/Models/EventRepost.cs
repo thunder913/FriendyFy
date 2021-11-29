@@ -6,7 +6,7 @@ namespace FriendyFy.Models
     {
         public ApplicationUser User { get; set; }
         public string UserId { get; set; }
-        public Event Event { get; set; }
-        public string EventId { get; set; }
+        public EventPost EventPost { get; set; }
+        public string EventPostId { get; set; }
     }
 }

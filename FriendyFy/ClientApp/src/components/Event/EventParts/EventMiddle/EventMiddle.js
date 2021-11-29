@@ -1,9 +1,54 @@
-import React, { useEffect } from 'react'
+import React, { useEffect, useState } from 'react'
+import { joinEvent, shareEvent } from '../../../../services/eventService'
+import {NotificationContainer, NotificationManager} from 'react-notifications';
+import { useHistory } from 'react-router';
+import 'react-notifications/lib/notifications.css';
 import './EventMiddle.css'
 
-const EventMiddle = ({title, privacy, isReocurring, reocurringTime, interests=[], organizerName, organizerUsername, isInEvent, isOrganizer}) => {
+const EventMiddle = ({eventId, title, privacy, isReocurring, reocurringTime, interests=[], organizerName, organizerUsername, isInEvent, isOrganizer}) => {
+    const [isUserInEvent, setIsUserInEvent] = useState(isInEvent);
+    const history = useHistory();
+    const joinEventHandler = () => {
+        joinEvent(eventId)
+            .then(res => {
+                if(res.status === 200){
+                    NotificationManager.success('Successfully joined the event!', '', 2000);
+                    setIsUserInEvent(true);
+                }else{
+                    NotificationManager.error('There was an error joining the event!', '', 2000);
+                    setIsUserInEvent(false);
+                }
+            })
+    }
+
+    const inviteEventHandler = () => {
+        NotificationManager.success('Successfully joined the event!', '', 2000);
+        NotificationManager.error('There was an error joining the event!');
+        
+    }
+
+    const shareEventHandler = () => {
+        shareEvent(eventId)
+            .then(res => {
+                if(res.status === 200){
+                    NotificationManager.success('Successfully shared the event in your feed!', '', 2000);
+                }else{
+                    NotificationManager.error("There was an error sharing the event!, try again", '', 3000)
+                }
+            })
+    }
+
+    const goToOrganizerProfil = () => {
+        history.push('/profile/' + organizerUsername);
+    }
+
+    useEffect(() => {
+        setIsUserInEvent(isInEvent);
+    }, [isInEvent])
+
     return(
             <section className="event-page-middle">
+                <NotificationContainer/>
                 <div className="left-side">
                     <h2 className="event-title">{title}</h2>
                     <div className="other-info">
@@ -18,11 +63,13 @@ const EventMiddle = ({title, privacy, isReocurring, reocurringTime, interests=[]
                 </div>
                 <div className="right-side">
                     <p className="organized-text">organized by:</p>
-                    <h3 className="organizer-name">{isOrganizer ? 'you' : organizerName}</h3>
+                    <h3 className="organizer-name" onClick={goToOrganizerProfil}>{isOrganizer ? 'you' : organizerName}</h3>
                     <div className="buttons">
-                        <button className="invite">Invite</button>
-                        <button className="share">Share</button>
-                    </div>
+                        {!isUserInEvent ? 
+                        <button className="join" onClick={joinEventHandler}>Join</button> :
+                        <button className="invite" onClick={inviteEventHandler}>Invite</button>}
+                        <button className="share" onClick={shareEventHandler}>Share</button>
+                    </div> 
                 </div>
             </section>
     )

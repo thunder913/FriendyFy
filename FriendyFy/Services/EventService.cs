@@ -23,13 +23,15 @@ namespace FriendyFy.Services
         private readonly IImageService imageService;
         private readonly IRepository<EventLike> eventLikeRepository;
         private readonly IRepository<EventComment> eventCommentRepository;
+        private readonly IRepository<EventPost> eventPostRepository;
 
         public EventService(IGeolocationService geolocationService,
             IDeletableEntityRepository<Event> eventRepository,
             IBlobService blobService,
             IImageService imageService,
             IRepository<EventLike> eventLikeRepository,
-            IRepository<EventComment> eventCommentRepository)
+            IRepository<EventComment> eventCommentRepository,
+            IRepository<EventPost> eventPostRepository)
         {
             this.geolocationService = geolocationService;
             this.eventRepository = eventRepository;
@@ -37,6 +39,7 @@ namespace FriendyFy.Services
             this.imageService = imageService;
             this.eventLikeRepository = eventLikeRepository;
             this.eventCommentRepository = eventCommentRepository;
+            this.eventPostRepository = eventPostRepository;
         }
 
         public async Task CreateEventAsync(string name, DateTime date, List<Interest> interests, PrivacySettings privacySettings, decimal latitude, decimal longitude, bool isReocurring, ReocurringType reocurringType, string description, string profileImage, string organizerId)
@@ -66,6 +69,14 @@ namespace FriendyFy.Services
             }
 
             await this.eventRepository.AddAsync(newEvent);
+
+            var eventPost = new EventPost()
+            {
+                CreatedOn = DateTime.UtcNow,
+                CreatorId = organizerId,
+                EventId = newEvent.Id
+            };
+            await this.eventPostRepository.AddAsync(eventPost);
             await this.eventRepository.SaveChangesAsync();
         }
 
@@ -78,6 +89,7 @@ namespace FriendyFy.Services
                 .Include(x => x.Users)
                 .ThenInclude(x => x.ProfileImage)
                 .Include(x => x.Organizer)
+                .ThenInclude(x => x.ProfileImage)
                 .Include(x => x.Images)
                 .Include(x => x.ProfileImage)
                 .Select(x => new EventPageMapperDto()
@@ -92,7 +104,7 @@ namespace FriendyFy.Services
                         Label = y.Name,
                     })
                     .ToList(),
-                    IsInEvent = x.Users.Any(y => y.Id == userId),
+                    IsInEvent = x.OrganizerId == userId || x.Users.Any(y => y.Id == userId),
                     IsReocurring = x.IsReocurring,
                     Lat = x.Latitude,
                     Lng = x.Longitude,
@@ -106,6 +118,7 @@ namespace FriendyFy.Services
                     Photos = x.Images.Select(y => y.Id + y.ImageExtension).ToList(),
                     MainPhoto = x.ProfileImage.Id + x.ProfileImage.ImageExtension,
                     IsOrganizer = x.Organizer.Id == userId,
+                    OrganizerImageUrl = x.Organizer.ProfileImage.Id+x.Organizer.ProfileImage.ImageExtension
                 })
                 .FirstOrDefault(x => x.Id == id);
             var toReturn = mapper.Map<EventPageViewModel>(eventWithId);
@@ -113,6 +126,7 @@ namespace FriendyFy.Services
             {
                 toReturn.UserImages.Add(await this.blobService.GetBlobUrlAsync(item, GlobalConstants.BlobPictures));
             }
+            toReturn.UserImages.Add(await this.blobService.GetBlobUrlAsync(eventWithId.OrganizerImageUrl, GlobalConstants.BlobPictures));
             foreach (var item in eventWithId.Photos.Take(3))
             {
                 toReturn.Photos.Add(await this.blobService.GetBlobUrlAsync(item, GlobalConstants.BlobPictures));
@@ -124,42 +138,44 @@ namespace FriendyFy.Services
 
         public List<PostDetailsViewModel> GetEvents(string userId)
         {
-            return this.eventRepository
+            return this.eventPostRepository
                 .AllAsNoTracking()
                 .OrderByDescending(x => x.CreatedOn)
-                .Include(x => x.Organizer)
+                .Include(x => x.Creator)
                 .ThenInclude(x => x.ProfileImage)
-                .Include(x => x.Users)
+                .Include(x => x.Event)
+                .ThenInclude(x => x.Users)
                 .ThenInclude(x => x.ProfileImage)
                 .Include(x => x.Likes)
                 .Include(x => x.Comments)
                 .Include(x => x.Reposts)
-                .Include(x => x.Interests)
+                .Include(x => x.Event)
+                .ThenInclude(x => x.Interests)
                 .ToList()
                 .Select(x => new PostDetailsViewModel()
                 {
-                    Username = x.Organizer.UserName,
-                    CreatorName = x.Organizer.FirstName + " " + x.Organizer.LastName,
+                    Username = x.Creator.UserName,
+                    CreatorName = x.Creator.FirstName + " " + x.Creator.LastName,
                     CreatedAgo = (int)((DateTime.UtcNow - x.CreatedOn).TotalMinutes),
-                    CreatorImage = this.blobService.GetBlobUrlAsync(x.Organizer.ProfileImage?.Id + x.Organizer.ProfileImage?.ImageExtension, GlobalConstants.BlobPictures).GetAwaiter().GetResult(),
-                    EventGoing = x.Users.Select(y => this.blobService.GetBlobUrlAsync(y.ProfileImage?.Id + y.ProfileImage?.ImageExtension, GlobalConstants.BlobPictures).GetAwaiter().GetResult()).ToList(),
-                    EventTitle = x.Name,
-                    EventInterests = x.Interests.Select(y => new InterestViewModel()
+                    CreatorImage = this.blobService.GetBlobUrlAsync(x.Creator.ProfileImage?.Id + x.Creator.ProfileImage?.ImageExtension, GlobalConstants.BlobPictures).GetAwaiter().GetResult(),
+                    EventGoing = x.Event.Users.Select(y => this.blobService.GetBlobUrlAsync(y.ProfileImage?.Id + y.ProfileImage?.ImageExtension, GlobalConstants.BlobPictures).GetAwaiter().GetResult()).ToList(),
+                    EventTitle = x.Event.Name,
+                    EventInterests = x.Event.Interests.Select(y => new InterestViewModel()
                     {
                         Id = y.Id,
                         Label = y.Name,
                     }).ToList(),
-                    LocationCity = x.LocationCity,
-                    Latitude = x.Latitude,
-                    Longitude = x.Longitude,
-                    EventTime = x.Time,
+                    LocationCity = x.Event.LocationCity,
+                    Latitude = x.Event.Latitude,
+                    Longitude = x.Event.Longitude,
+                    EventTime = x.Event.Time,
                     LikesCount = x.Likes.Count(),
                     RepostsCount = x.Reposts.Count(),
                     CommentsCount = x.Comments.Count(),
-                    EventIsReocurring = x.IsReocurring,
-                    EventReocurring = x.ReocurringType.ToString(),
+                    EventIsReocurring = x.Event.IsReocurring,
+                    EventReocurring = x.Event.ReocurringType.ToString(),
                     IsLikedByUser = x.Likes.Any(x => x.LikedById == userId),
-                    PostId = x.Id,
+                    PostId = x.EventId,
                     PostType = PostType.Event.ToString(),
                 })
                 .ToList();
@@ -167,7 +183,7 @@ namespace FriendyFy.Services
 
         public async Task<int?> LikeEventAsync(string eventId, ApplicationUser user)
         {
-            var currEvent = this.eventRepository
+            var currEvent = this.eventPostRepository
                 .All()
                 .Include(x => x.Likes)
                 .FirstOrDefault(x => x.Id == eventId);
@@ -188,7 +204,7 @@ namespace FriendyFy.Services
                 {
                     CreatedOn = DateTime.Now,
                     LikedBy = user,
-                    Event = currEvent,
+                    EventPost = currEvent,
                 };
 
                 currEvent.Likes.Add(eventLike);
@@ -205,7 +221,7 @@ namespace FriendyFy.Services
                 .AllAsNoTracking()
                 .Include(x => x.LikedBy)
                 .ThenInclude(x => x.ProfileImage)
-                .Where(x => x.EventId == eventId)
+                .Where(x => x.EventPostId == eventId)
                 .OrderByDescending(x => x.CreatedOn)
                 .Skip(skip)
                 .Take(take)
@@ -219,6 +235,39 @@ namespace FriendyFy.Services
                 .ToList();
 
             return peopleLiked;
+        }
+
+        public async Task<bool> JoinEventAsync(string eventId, ApplicationUser user)
+        {
+            var currEvent = this.eventRepository.All().Include(x => x.Users).FirstOrDefault(x => x.Id == eventId);
+            if (currEvent == null)
+            {
+                return false;
+            }
+
+            currEvent.Users.Add(user);
+            var added = await this.eventRepository.SaveChangesAsync();
+            return added > 0;
+        }
+        
+        public async Task<bool> CreateEventPostAsync(string eventId, string userId)
+        {
+            var currEvent = this.eventRepository.All().FirstOrDefault(x => x.Id == eventId);
+            if (currEvent == null)
+            {
+                return false;
+            }
+
+            var eventPost = new EventPost()
+            {
+                CreatedOn = DateTime.UtcNow,
+                CreatorId = userId,
+                Event = currEvent
+            };
+
+            await this.eventPostRepository.AddAsync(eventPost);
+            var saved = await this.eventPostRepository.SaveChangesAsync();
+            return saved > 0;
         }
     }
 }

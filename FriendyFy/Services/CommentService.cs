@@ -16,18 +16,19 @@ namespace FriendyFy.Services
     {
         private readonly IRepository<EventComment> eventCommentRepository;
         private readonly IDeletableEntityRepository<Event> eventRepositry;
-
-        private IDeletableEntityRepository<Post> postRepository { get; set; }
-        private IRepository<PostComment> postCommentRepository { get; set; }
-        private IRepository<CommentLike> commentLikeRepository { get; set; }
-        private IBlobService blobService { get; set; }
+        private readonly IRepository<EventPost> eventPostRepository;
+        private readonly IDeletableEntityRepository<Post> postRepository;
+        private readonly IRepository<PostComment> postCommentRepository;
+        private readonly IRepository<CommentLike> commentLikeRepository;
+        private readonly IBlobService blobService;
 
         public CommentService(IRepository<PostComment> postCommentRepository,
             IDeletableEntityRepository<Post> postRepository,
             IBlobService blobService,
             IRepository<CommentLike> commentLikeRepository,
             IRepository<EventComment> eventCommentRepository,
-            IDeletableEntityRepository<Event> eventRepositry)
+            IDeletableEntityRepository<Event> eventRepositry,
+            IRepository<EventPost> eventPostRepository)
         {
             this.postCommentRepository = postCommentRepository;
             this.postRepository = postRepository;
@@ -35,6 +36,7 @@ namespace FriendyFy.Services
             this.commentLikeRepository = commentLikeRepository;
             this.eventCommentRepository = eventCommentRepository;
             this.eventRepositry = eventRepositry;
+            this.eventPostRepository = eventPostRepository;
         }
 
         public async Task<PostCommentViewModel> AddCommentAsync(ApplicationUser user, string comment, string postId, PostType postType)
@@ -78,7 +80,7 @@ namespace FriendyFy.Services
                 {
                     CommentedBy = user,
                     CreatedOn = DateTime.UtcNow,
-                    EventId = postId,
+                    EventPostId = postId,
                     Text = comment,
                 };
 
@@ -140,7 +142,7 @@ namespace FriendyFy.Services
             }
             else if(postType == PostType.Event)
             {
-                return this.eventRepositry
+                return this.eventPostRepository
                     .AllAsNoTracking()
                     .Include(x => x.Comments)
                     .ThenInclude(x => x.CommentedBy)

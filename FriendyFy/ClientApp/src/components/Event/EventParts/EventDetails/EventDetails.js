@@ -8,7 +8,7 @@ const EventDetails = ({description, createdOn, organizer, isOrganizer}) => {
         moment.locale(localization);
         let utcTime = moment.utc(createdOn);
         setLocalTime(utcTime.local().format('LLL'))
-    }, createdOn)
+    }, [createdOn])
 
     return(<section className="event-details">
     <div className="description">

@@ -72,9 +72,14 @@
     font-weight: 400;
 }
 
+.event-page-middle .right-side .organizer-name:hover{
+    text-decoration: underline;
+    cursor: pointer;
+}
+
 /* Middle right side */
 
-.event-page .event-page-middle .right-side .invite{
+.event-page .event-page-middle .right-side .invite, .event-page .event-page-middle .right-side .join{
     background-color: rgb(29, 90, 170);
     color: white;
     padding: 5px 20px;
@@ -83,7 +88,7 @@
     transition: 0.3s;
 }
 
-.event-page .event-page-middle .right-side .invite:hover{
+.event-page .event-page-middle .right-side .invite:hover, .event-page .event-page-middle .right-side .join:hover{
     background-color: rgb(45, 109, 194);
 }
 

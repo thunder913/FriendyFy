@@ -27,8 +27,6 @@ namespace FriendyFy.Models
         public string Description { get; set; }
         public ICollection<Image> Images { get; set; } = new HashSet<Image>();
         public Image ProfileImage { get; set; }
-        public ICollection<EventLike> Likes { get; set; } = new HashSet<EventLike>();
-        public ICollection<EventComment> Comments { get; set; } = new HashSet<EventComment>();
-        public ICollection<EventRepost> Reposts { get; set; } = new HashSet<EventRepost>();
+        public ICollection<EventPost> EventPosts = new HashSet<EventPost>();
     }
 }

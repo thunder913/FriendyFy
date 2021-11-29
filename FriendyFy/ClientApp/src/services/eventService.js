@@ -27,3 +27,19 @@ export function likeEvent(eventId) {
         body: JSON.stringify({postId: eventId})
     });
   }
+
+  export function joinEvent(eventId) {
+    return fetch('/event/join', {
+        method: 'POST',
+        headers: {'Content-Type': 'application/json'},
+        body: JSON.stringify({eventId})
+    });
+  }
+
+  export function shareEvent(eventId) {
+    return fetch('/event/share', {
+        method: 'POST',
+        headers: {'Content-Type': 'application/json'},
+        body: JSON.stringify({eventId})
+    });
+  }

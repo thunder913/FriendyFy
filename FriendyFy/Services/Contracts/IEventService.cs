@@ -15,5 +15,7 @@ namespace FriendyFy.Services.Contracts
         List<PostDetailsViewModel> GetEvents(string userId);
         Task<int?> LikeEventAsync(string eventId, ApplicationUser user);
         List<PersonListPopupViewModel> GetPeopleLikes(string eventId, int take, int skip);
+        Task<bool> JoinEventAsync(string eventId, ApplicationUser user);
+        Task<bool> CreateEventPostAsync(string eventId, string userId);
     }
 }

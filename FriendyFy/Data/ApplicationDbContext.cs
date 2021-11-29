@@ -71,6 +71,22 @@ namespace FriendyFy.Data
             builder.Entity<ApplicationUser>()
                 .HasMany(x => x.EventsOrganized)
                 .WithOne(x => x.Organizer);
+
+            builder.Entity<Event>()
+               .HasMany(x => x.EventPosts)
+               .WithOne(x => x.Event);
+
+            builder.Entity<EventPost>()
+                .HasMany(x => x.Likes)
+                .WithOne(x => x.EventPost);
+
+            builder.Entity<EventPost>()
+                .HasMany(x => x.Comments)
+                .WithOne(x => x.EventPost);
+
+            builder.Entity<EventPost>()
+                .HasMany(x => x.Reposts)
+                .WithOne(x => x.EventPost);
         }
     }
 }

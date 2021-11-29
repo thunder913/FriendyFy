@@ -7,12 +7,13 @@ import EventThreeImages from "../../EventImages/EventThreeImages/EventThreeImage
 import moment from "moment-timezone";
 const EventTop = ({images=[], mainImage, lat, lng, city, time, userImages=[]}) => {
     const [localTime, setLocalTime] = useState('');
+    const [eventTime, setEventTime] = useState(time);
     useEffect(() => {
         let localization = window.navigator.userLanguage || window.navigator.language;
         moment.locale(localization);
         let utcTime = moment.utc(time);
         setLocalTime(utcTime.local().format('LLL'))
-    }, [time])
+    }, [eventTime])
 
 return(<section className="event-page-top">
                 <div className="photos">
@@ -28,7 +29,7 @@ return(<section className="event-page-top">
                         <div className="bottom-going">
                         <h2>GOING:</h2>
                         <div className="going-images">
-                            {userImages.map(img => <img className="going-image" src="https://friendyfy.blob.core.windows.net/pictures/ba8b368f-e711-44dd-b611-41cdbf36fb3c.jpeg" alt="" />)}
+                            {userImages.map(img => <img key={img} className="going-image" src={img} alt="" />)}
                         </div>
                         </div>
                     </div>

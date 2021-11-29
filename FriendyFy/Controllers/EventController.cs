@@ -130,5 +130,39 @@ namespace FriendyFy.Controllers
                 return BadRequest();
             }
         }
+
+        [HttpPost("join")]
+        public async Task<IActionResult> JoinEvent(JoinEventDto dto)
+        {
+            var user = this.GetUserByToken();
+            if (user == null)
+            {
+                return Unauthorized("You are not logged in!");
+            }
+
+            var joined = await this.eventService.JoinEventAsync(dto.EventId, user);
+            if (!joined)
+            {
+                return BadRequest("There was an error joining the event!");
+            }
+            return Ok();
+        }
+
+        [HttpPost("share")]
+        public async Task<IActionResult> ShareEvent(ShareEventDto dto)
+        {
+            var user = this.GetUserByToken();
+            if (user == null)
+            {
+                return Unauthorized("You are not logged in!");
+            }
+
+            var success = await this.eventService.CreateEventPostAsync(dto.EventId, user.Id);
+            if (success)
+            {
+                return Ok();
+            }
+            return BadRequest();
+        }
     }
 }
