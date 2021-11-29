@@ -121,19 +121,21 @@
     width: 90px;
 }
 
-.location > a{
+.location > button{
     color: white;
     text-decoration: none;
     transition: 0.5s;
-    padding: 5px;
+    padding: 5px 10px;
     margin-left: 5px;
+    background-color: transparent;
+    border: 0px;
+    border-radius: 30px;
 }
 
-.location > a:hover{
+.location > button:hover{
     text-decoration: none;
-    border-radius: 30px;
     background-color: rgb(104, 102, 102);
-    box-shadow: 0px 0px 33px 0px rgba(0,0,0,0.2);
+    box-shadow: 0px 0px 33px 0px rgba(0,0,0,0.05);
 }
 
 .right-side{
@@ -148,4 +150,18 @@
 .event-information{
     display: flex;
     justify-content: space-between;
+}
+
+.event-card .view-button{
+    background-color: rgb(35, 87, 155);
+    border: 0px;
+    padding: 5px 15px;
+    margin: 5px 0px;
+    border-radius: 20px;
+    color: white;
+    transition: 0.3s;
+}
+
+.event-card .view-button:hover{
+    background-color: rgb(45, 109, 194);
 }

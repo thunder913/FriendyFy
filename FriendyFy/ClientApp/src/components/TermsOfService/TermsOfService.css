@@ -6,8 +6,14 @@ ul.terms-of-service{
     padding: 0px 20px
 }
 
-ul.terms-of-service a{
+ul.terms-of-service button{
+    background-color: transparent;
+    border: 0px;
     color: white;
+}
+
+ul.terms-of-service button:hover{
+    text-decoration: underline;
 }
 
 .terms-of-service{
@@ -15,4 +21,8 @@ ul.terms-of-service a{
     height: 42px;
     border: 2px solid rgb(32, 32, 32, 0.5);
     background-color: #5C5C5C;
+}
+
+.tos{
+    font-size: 12px;
 }

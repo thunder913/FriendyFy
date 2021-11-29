@@ -275,6 +275,7 @@ namespace FriendyFy.Services
             var result = this.eventRepository
                 .AllAsNoTracking()
                 .Include(x => x.Organizer)
+                .ThenInclude(x => x.ProfileImage)
                 .Include(x => x.Users)
                 .ThenInclude(x => x.ProfileImage)
                 .Where(x => (x.Organizer.UserName == username || x.Users.Any(y => y.UserName == username)) && x.Time > DateTime.UtcNow)
@@ -291,22 +292,30 @@ namespace FriendyFy.Services
                     Location = x.LocationCity,
                     Name = x.Name,
                     Time = x.Time,
-                    GoingPhotos = x.Users.Select(y => y.ProfileImage.Id + y.ProfileImage.ImageExtension)
+                    GoingPhotos = x.Users.Select(y => y.ProfileImage.Id + y.ProfileImage.ImageExtension),
+                    OrganizerImage = x.Organizer.ProfileImage.Id + x.Organizer.ProfileImage.ImageExtension,
+                    Latitude = x.Latitude,
+                    Longitude = x.Longitude
                 })
                 .ToList();
 
             var toReturn = new List<NavigationEventViewModel>();
             foreach (var item in result)
             {
-                toReturn.Add(new NavigationEventViewModel()
+                var navigationEvent = new NavigationEventViewModel()
                 {
                     GoingPhotos = item.GoingPhotos.Select(x => this.blobService.GetBlobUrlAsync(x, GlobalConstants.BlobPictures).GetAwaiter().GetResult()).ToList(),
                     Id = item.Id,
                     Interests = item.Interests,
                     Location = item.Location,
                     Name = item.Name,
-                    Time = item.Time
-                });
+                    Time = item.Time,
+                    Latitude = item.Latitude,
+                    Longitude = item.Longitude
+                };
+                navigationEvent.GoingPhotos.Add(this.blobService.GetBlobUrlAsync(item.OrganizerImage, GlobalConstants.BlobPictures).GetAwaiter().GetResult());
+
+                toReturn.Add(navigationEvent);
             }
 
             return toReturn;
@@ -317,6 +326,7 @@ namespace FriendyFy.Services
             var result = this.eventRepository
                 .AllAsNoTracking()
                 .Include(x => x.Organizer)
+                .ThenInclude(x => x.ProfileImage)
                 .Include(x => x.Users)
                 .ThenInclude(x => x.ProfileImage)
                 .Where(x => x.Organizer.UserName == username && x.Time > DateTime.UtcNow)
@@ -333,22 +343,30 @@ namespace FriendyFy.Services
                     Location = x.LocationCity,
                     Name = x.Name,
                     Time = x.Time,
-                    GoingPhotos = x.Users.Select(y => y.ProfileImage.Id + y.ProfileImage.ImageExtension)
+                    GoingPhotos = x.Users.Select(y => y.ProfileImage.Id + y.ProfileImage.ImageExtension),
+                    OrganizerImage = x.Organizer.ProfileImage.Id + x.Organizer.ProfileImage.ImageExtension,
+                    Latitude = x.Latitude,
+                    Longitude = x.Longitude
                 })
                 .ToList();
 
             var toReturn = new List<NavigationEventViewModel>();
             foreach (var item in result)
             {
-                toReturn.Add(new NavigationEventViewModel()
+                var navigationEvent = new NavigationEventViewModel()
                 {
                     GoingPhotos = item.GoingPhotos.Select(x => this.blobService.GetBlobUrlAsync(x, GlobalConstants.BlobPictures).GetAwaiter().GetResult()).ToList(),
                     Id = item.Id,
                     Interests = item.Interests,
                     Location = item.Location,
                     Name = item.Name,
-                    Time = item.Time
-                });
+                    Time = item.Time,
+                    Latitude = item.Latitude,
+                    Longitude = item.Longitude
+                };
+                navigationEvent.GoingPhotos.Add(this.blobService.GetBlobUrlAsync(item.OrganizerImage, GlobalConstants.BlobPictures).GetAwaiter().GetResult());
+
+                toReturn.Add(navigationEvent);
             }
 
             return toReturn;
@@ -360,6 +378,7 @@ namespace FriendyFy.Services
             var result = this.eventRepository
                 .AllAsNoTracking()
                 .Include(x => x.Organizer)
+                .ThenInclude(x => x.ProfileImage)
                 .Include(x => x.Interests)
                 .Include(x => x.Users)
                 .ThenInclude(x => x.ProfileImage)
@@ -381,22 +400,30 @@ namespace FriendyFy.Services
                     Location = x.LocationCity,
                     Name = x.Name,
                     Time = x.Time,
-                    GoingPhotos = x.Users.Select(y => y.ProfileImage.Id + y.ProfileImage.ImageExtension)
+                    GoingPhotos = x.Users.Select(y => y.ProfileImage.Id + y.ProfileImage.ImageExtension).ToList(), 
+                    OrganizerImage = x.Organizer.ProfileImage.Id+x.Organizer.ProfileImage.ImageExtension,
+                    Latitude = x.Latitude,
+                    Longitude = x.Longitude
                 })
                 .ToList();
 
             var toReturn = new List<NavigationEventViewModel>();
             foreach (var item in result)
             {
-                toReturn.Add(new NavigationEventViewModel()
+                var navigationEvent = new NavigationEventViewModel()
                 {
                     GoingPhotos = item.GoingPhotos.Select(x => this.blobService.GetBlobUrlAsync(x, GlobalConstants.BlobPictures).GetAwaiter().GetResult()).ToList(),
                     Id = item.Id,
                     Interests = item.Interests,
                     Location = item.Location,
                     Name = item.Name,
-                    Time = item.Time
-                });
+                    Time = item.Time,
+                    Latitude = item.Latitude,
+                    Longitude = item.Longitude
+                };
+                navigationEvent.GoingPhotos.Add(this.blobService.GetBlobUrlAsync(item.OrganizerImage, GlobalConstants.BlobPictures).GetAwaiter().GetResult());
+
+                toReturn.Add(navigationEvent);
             }
 
             return toReturn;

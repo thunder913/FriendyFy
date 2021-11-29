@@ -36,9 +36,16 @@
     border: 2px solid rgb(32, 32, 32);
     border-radius: 12px 0px 0px 12px;
     box-shadow: 2px 3px 30px 10px rgba(0,0,0,0.3);
-    height: 320px;
     white-space: nowrap;
     margin: 5px 10px 0px 10px;
+}
+
+.event-row.h-1{
+    height: 160px;
+}
+
+.event-row.h-2{
+    height: 320px;
 }
 
 .event-tab{

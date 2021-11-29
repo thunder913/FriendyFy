@@ -5,27 +5,27 @@ import './LeftNavigationEvents.css';
 const LeftNavigationEvents = ({events}) =>(
     <div className="events">
         
-        {events.attendingEvents ? 
-            <div className="event-row">
+        {events.attendingEvents && events.attendingEvents.length ? 
+            <div className={"event-row " + (events.attendingEvents.length == 1 ? 'h-1' : 'h-2')}>
             <h3 className="event-tab-title">Attending</h3>
             <div className="event-tab">
                 {events.attendingEvents.map(event => <LeftNavigationEvent key={event.id} data={event}/>)}
             </div>
             </div>
             : ''}
-        {events.organizedEvents ?
-            <div className="event-row">
+        {events.suggestedEvents && events.suggestedEvents.length ?
+            <div className={"event-row " + (events.suggestedEvents.length == 1 ? 'h-1' : 'h-2')}>
             <h3 className="event-tab-title">Suggested</h3>
             <div className="event-tab">
-                {events.organizedEvents.map(event => <LeftNavigationEvent key={event.id} data={event}/>)}
+                {events.suggestedEvents.map(event => <LeftNavigationEvent key={event.id} data={event}/>)}
             </div>
             </div>
             : ''}
-        {events.suggestedEvents ?
-            <div className="event-row">
+        {events.organizedEvents && events.organizedEvents.length ?
+            <div className={"event-row " + (events.organizedEvents.length == 1 ? 'h-1' : 'h-2')}>
             <h3 className="event-tab-title">Organized</h3>
             <div className="event-tab">
-                {events.suggestedEvents.map(event => <LeftNavigationEvent key={event.id} data={event}/>)}
+                {events.organizedEvents.map(event => <LeftNavigationEvent key={event.id} data={event}/>)}
             </div>
             </div>
             : ''}

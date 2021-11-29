@@ -1,16 +1,49 @@
-import React from 'react';
+import React, { useState } from 'react';
 import './LeftNavigationEvent.css';
+import MapPopUp from '../MapPopUp/MapPopUp';
+import { useHistory } from 'react-router';
+import moment from 'moment';
+const LeftNavigationEvent = ({data}) =>{
+    const [showMap, setShowMap] = useState(false);
+    const [parsedTime, setParsedTime] = useState('');
+    const history = useHistory();
+    const closeLocationPopUp = () => {
+        setShowMap(false);
+    }
 
-const LeftNavigationEvent = ({data}) =>(
+    const showLocationPopUp = () => {
+        setShowMap(true);
+    }
+
+    const viewEventHandler = () => {
+        history.push('/event/' + data.id);
+    }
+
+    useState(() => {
+        let localization = window.navigator.userLanguage || window.navigator.language;
+        moment.locale(localization);
+        let utcTime = moment.utc(data.time);
+        setParsedTime(utcTime.local().format('LLL'))
+    }, [data.time])
+
+    return(
         <div className="event">
+        {showMap ? 
+        <MapPopUp 
+            title="Event Location" 
+            location={data.location}
+            lat={data.latitude}
+            long={data.longitude}
+            closePopUp={closeLocationPopUp}/>
+            : ''}
             <div className="line-parent">
                 <div className="line"></div>
             </div>
             <header className="event-header">
                 <h4>{data.name}</h4>
                 <div className="event-information">
-                    <span className="location"><a href="/">{data.location}</a></span>
-                    <span>{data.time}</span>
+                   <span className="location"> {data.location ? <button onClick={showLocationPopUp}>{data.location}</button> : ''}</span>
+                    <span>{parsedTime}</span>
                 </div>
             </header>
             <main className="event-card">
@@ -29,11 +62,11 @@ const LeftNavigationEvent = ({data}) =>(
                     </div>
                 )): ''}
             </div>
-            <button>View</button>
+            <button className="view-button" onClick={viewEventHandler}>View</button>
             </div>
             </main>
-        </div>
-    )
+        </div>)
+}
 
 function getImageWidthClassName(count){
     if (count===1) {
