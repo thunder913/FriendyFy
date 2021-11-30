@@ -8,7 +8,7 @@ import useScrollBlock from "../../hooks/useScrollBlock";
 import MakePost from "../MakePost/MakePost.js"
 import { getPosts } from "../../services/postService";
 import { getEvents } from "../../services/eventService";
-
+import ViewImagePopUp from "../PopUps/ViewImagePopUp/ViewImagePopUp";
 const events = [
   {
     name: "Event_Name1",
@@ -89,6 +89,7 @@ const HomePageSignedIn = () => {
   },[])
 
   return (<div className="feed home-feed">
+    <ViewImagePopUp></ViewImagePopUp>
     {loggedIn.finishedFirstTimeLogin ? '' : <FirstTimePopUp checkFirstTimePopUp={checkFirstTimePopUp}></FirstTimePopUp>}
     <MakePost
       showPostImage={true}
