@@ -21,5 +21,6 @@ namespace FriendyFy.Services.Contracts
         List<NavigationEventViewModel> GetSuggestedEvents(ApplicationUser user);
         List<NavigationEventViewModel> GetOrganizedEvents(string username);
         Task<string> AddImageToEventAsync(string eventId, string userId, string image);
+        Task<bool> LeaveEventAsync(string eventId, string userId);
     }
 }

@@ -453,5 +453,27 @@ namespace FriendyFy.Services
             }
             return null;
         }
+
+        public async Task<bool> LeaveEventAsync(string eventId, string userId)
+        {
+            var currEvent = this.eventRepository
+                .All()
+                .Include(x => x.Users)
+                .FirstOrDefault(x => x.Id == eventId);
+            if (currEvent == null)
+            {
+                return false;
+            }
+
+            var userInEvent = currEvent.Users.FirstOrDefault(x => x.Id == userId);
+            if (userInEvent == null)
+            {
+                return false;
+            }
+
+            currEvent.Users.Remove(userInEvent);
+            var removed = await this.eventRepository.SaveChangesAsync();
+            return removed > 0;
+        }
     }
 }

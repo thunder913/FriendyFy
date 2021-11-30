@@ -198,5 +198,22 @@ namespace FriendyFy.Controllers
             
             return Ok(result);
         }
+
+        [HttpPost("leaveEvent")]
+        public async Task<IActionResult> LeaveEvent(LeaveEventDto dto)
+        {
+            var user = this.GetUserByToken();
+            if (user == null)
+            {
+                return Unauthorized("You are not logged in!");
+            }
+
+            var removed = await this.eventService.LeaveEventAsync(dto.EventId, user.Id);
+            if (removed)
+            {
+                return Ok();
+            }
+            return BadRequest();
+        }
     }
 }

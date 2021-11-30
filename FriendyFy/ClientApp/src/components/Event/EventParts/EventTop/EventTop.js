@@ -6,7 +6,8 @@ import EventTwoImages from "../../EventImages/EventTwoImages/EventTwoImages";
 import EventThreeImages from "../../EventImages/EventThreeImages/EventThreeImages";
 import moment from "moment-timezone";
 import AddImagePopUp from "../../../AddImagePopUp/AddImagePopUp";
-const EventTop = ({images=[], mainImage, lat, lng, city, time, userImages=[], isOrganizer, eventId}) => {
+import { leaveEvent } from "../../../../services/eventService";
+const EventTop = ({images=[], mainImage, lat, lng, city, time, userImages=[], isOrganizer, eventId, isInEvent}) => {
     const [localTime, setLocalTime] = useState('');
     const [eventTime,] = useState(time);
     const [showAddImagePopUp, setShowAddImagePopUp] = useState(false);
@@ -18,6 +19,15 @@ const EventTop = ({images=[], mainImage, lat, lng, city, time, userImages=[], is
 
     const openImagePopUp = () => {
         setShowAddImagePopUp(true);
+    }
+
+    const leaveEventHandler = () => {
+        leaveEvent(eventId)
+            .then(async res =>{
+                if(res === 200){
+                    isInEvent = false;
+                }
+            })
     }
 
     useEffect(() => {
@@ -33,7 +43,7 @@ const EventTop = ({images=[], mainImage, lat, lng, city, time, userImages=[], is
 
 return(<section className="event-page-top">
                 {showAddImagePopUp ? <AddImagePopUp setImages={setEventImages} eventId={eventId} closePopUp={closeImagePopUp}/> : ''}
-                <button className="leave-button">Leave</button>
+                {isInEvent ? <button className="leave-button" onClick={leaveEventHandler}>Leave</button> : ''}
                 <div className="photos">
                     {eventImages.length === 0 && isOrganizer ? <div className="add-image">
                         <button onClick={openImagePopUp} className="big-add-image">Add Image</button>

@@ -58,3 +58,11 @@ export function likeEvent(eventId) {
         body: JSON.stringify({eventId, image})
     });
   }
+
+  export function leaveEvent(eventId) {
+    return fetch('/event/leaveEvent', {
+        method: 'POST',
+        headers: {'Content-Type': 'application/json'},
+        body: JSON.stringify({eventId})
+    });
+  }
