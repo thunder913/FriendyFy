@@ -1,6 +1,6 @@
 import React, {useEffect} from "react";
 import './ApprovePopUp.css'
-import useScrollBlock from "../../hooks/useScrollBlock";
+import useScrollBlock from "../../../hooks/useScrollBlock";
 import PopUpHeader from "../PopUpHeader/PopUpHeader";
 const ApproveEventPopUp = ({text, acceptEvent, closePopUp}) => {
     const [blockScroll, allowScroll] = useScrollBlock();

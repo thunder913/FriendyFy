@@ -5,10 +5,10 @@ import EventOneImage from "../../EventImages/EventOneImage/EventOneImage";
 import EventTwoImages from "../../EventImages/EventTwoImages/EventTwoImages";
 import EventThreeImages from "../../EventImages/EventThreeImages/EventThreeImages";
 import moment from "moment-timezone";
-import AddImagePopUp from "../../../AddImagePopUp/AddImagePopUp";
+import AddImagePopUp from "../../../PopUps/AddImagePopUp/AddImagePopUp";
 import { deleteEvent, leaveEvent } from "../../../../services/eventService";
 import {NotificationContainer, NotificationManager} from 'react-notifications';
-import ApproveEventPopUp from "../../../ApprovePopUp/ApprovePopUp";
+import ApproveEventPopUp from "../../../PopUps/ApprovePopUp/ApprovePopUp";
 import { useHistory } from "react-router";
 
 const EventTop = ({images=[], mainImage, lat, lng, city, time, userImages=[], isOrganizer, eventId, isInEvent, setIsInEvent}) => {

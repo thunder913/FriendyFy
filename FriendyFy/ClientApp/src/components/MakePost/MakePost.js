@@ -2,10 +2,10 @@ import { faCalendarPlus, faImages,  } from '@fortawesome/free-solid-svg-icons';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import React, { useEffect, useState } from 'react';
 import { useLoggedIn } from '../../contexts/LoggedInContext';
-import MakePostPopUp from '../MakePostPopUp/MakePostPopUp.js';
+import MakePostPopUp from '../PopUps/MakePostPopUp/MakePostPopUp.js';
 import useScrollBlock from "../../hooks/useScrollBlock";
 import './MakePost.css';
-import CreateEventPopUp from '../CreateEventPopUp/CreateEventPopUp';
+import CreateEventPopUp from '../PopUps/CreateEventPopUp/CreateEventPopUp';
 
 const MakePost = ({showCreatePost ,showPostImage, showCreateEvent}) =>{
     const { loggedIn } = useLoggedIn();

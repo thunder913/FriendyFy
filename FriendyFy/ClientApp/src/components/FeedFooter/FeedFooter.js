@@ -6,7 +6,7 @@ import { getPostLikes, likePost } from '../../services/postService';
 import $ from 'jquery';
 import { getComments, makeComment } from '../../services/commentService';
 import PostComment from '../PostComment/PostComment';
-import PeopleListPopUp from '../PeopleListPopUp/PeopleListPopUp'
+import PeopleListPopUp from '../PopUps/PeopleListPopUp/PeopleListPopUp'
 import InfiniteScroll from 'react-infinite-scroll-component';
 import { likeEvent } from '../../services/eventService';
 

@@ -5,7 +5,7 @@ import FeedFooter from '../FeedFooter/FeedFooter';
 import { parseTime } from '../../services/helperService';
 import { useHistory } from 'react-router';
 import moment from 'moment';
-import MapPopUp from '../MapPopUp/MapPopUp';
+import MapPopUp from '../PopUps/MapPopUp/MapPopUp';
 
 const FeedEvent = ({ event }) => {
     const history = useHistory();

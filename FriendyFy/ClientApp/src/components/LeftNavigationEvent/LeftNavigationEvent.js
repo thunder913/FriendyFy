@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import './LeftNavigationEvent.css';
-import MapPopUp from '../MapPopUp/MapPopUp';
+import MapPopUp from '../PopUps/MapPopUp/MapPopUp';
 import { useHistory } from 'react-router';
 import moment from 'moment';
 const LeftNavigationEvent = ({data}) =>{

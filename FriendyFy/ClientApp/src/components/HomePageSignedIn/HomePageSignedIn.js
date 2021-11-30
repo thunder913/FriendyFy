@@ -3,7 +3,7 @@ import FeedPost from '../FeedPost/FeedPost';
 import FeedEvent from '../FeedEvent/FeedEvent';
 import { useLoggedIn } from "../../contexts/LoggedInContext";
 import './HomePageSignedIn.css'
-import FirstTimePopUp from '../FirstTimePopUp/FirstTimePopUp.js'
+import FirstTimePopUp from '../PopUps/FirstTimePopUp/FirstTimePopUp.js'
 import useScrollBlock from "../../hooks/useScrollBlock";
 import MakePost from "../MakePost/MakePost.js"
 import { getPosts } from "../../services/postService";

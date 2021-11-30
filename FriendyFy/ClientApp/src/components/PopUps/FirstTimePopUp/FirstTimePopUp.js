@@ -1,8 +1,8 @@
 import React, { useState } from 'react';
-import MyGoogleMap from '../GoogleMap/MyGoogleMap';
-import InterestsDropdown from '../InterestsDropdown/InterestsDropdown';
+import MyGoogleMap from '../../GoogleMap/MyGoogleMap';
+import InterestsDropdown from '../../InterestsDropdown/InterestsDropdown';
 import './FirstTimePopUp..css';
-import ImgDropAndCrop from '../ImgDropAndCrop/ImgDropAndCrop.js';
+import ImgDropAndCrop from '../../ImgDropAndCrop/ImgDropAndCrop.js';
 import axios from 'axios';
 
 const FirstTimePopUp = ({checkFirstTimePopUp}) => {

@@ -1,9 +1,9 @@
 import React, {useState, useEffect} from "react";
 import './AddImagePopUp.css';
-import ImgDropAndCrop from "../ImgDropAndCrop/ImgDropAndCrop";
+import ImgDropAndCrop from "../../ImgDropAndCrop/ImgDropAndCrop";
 import PopUpHeader from "../PopUpHeader/PopUpHeader";
-import useScrollBlock from "../../hooks/useScrollBlock";
-import { addImageToEvent } from "../../services/eventService";
+import useScrollBlock from "../../../hooks/useScrollBlock";
+import { addImageToEvent } from "../../../services/eventService";
 import NotificationManager from "react-notifications/lib/NotificationManager";
 import { NotificationContainer } from "react-notifications";
 

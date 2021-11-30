@@ -40,6 +40,12 @@ const MyGoogleMap = ({ location, setLocation, staticMap }) => {
     lng: location.lng ?? -79.383186
   });
 
+  useEffect(() => {
+    if(location){
+      setCenter({lat: location.lat, lng: location.lng})
+    }
+  }, [location])
+
   const onMapClick = React.useCallback((e) => {
     if(!staticMap){
       setLocation({
@@ -50,23 +56,26 @@ const MyGoogleMap = ({ location, setLocation, staticMap }) => {
     }
   }, [])
 
-  const mapRef = React.useRef();
-  const onMapLoad = React.useCallback((map) => {
-    mapRef.current = map;
-  }, []);
-
   const panTo = React.useCallback(({ lat, lng }) => {
     mapRef.current.panTo({ lat, lng });
     mapRef.current.setZoom(18);
   }, []);
 
+  const mapRef = React.useRef();
+  const onMapLoad = React.useCallback((map) => {
+    mapRef.current = map;
+  }, []);
+
   const { isLoaded, loadError } = useLoadScript({
-    googleMapsApiKey: "AIzaSyAvwsD0Ypp_pwZjeNt5YSrvJvl0rGgknbM",
+    googleMapsApiKey: "AIzaSyDG_zBAZ6lRpVgMYo2qfO9iHxek8xosU44",
     libraries: libraries,
   });
+
   if (loadError) return "Erorr loading maps;";
   if (!isLoaded) return "Loading maps";
 
+
+  
   return (<div>
     {!staticMap ?
     <div className="map-user-search">

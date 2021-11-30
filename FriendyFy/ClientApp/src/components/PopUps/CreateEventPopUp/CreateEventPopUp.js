@@ -1,15 +1,15 @@
 import React, { useState, useEffect } from "react";
 import './CreateEventPopUp.css';
 import Select from 'react-select';
-import { useLoggedIn } from "../../contexts/LoggedInContext";
-import MyGoogleMap from "../GoogleMap/MyGoogleMap";
+import { useLoggedIn } from "../../../contexts/LoggedInContext";
+import MyGoogleMap from "../../GoogleMap/MyGoogleMap";
 import { TextareaAutosize } from '@mui/material';
 import Datetime from 'react-datetime';
-import InterestsDropdown from "../InterestsDropdown/InterestsDropdown";
+import InterestsDropdown from "../../InterestsDropdown/InterestsDropdown";
 import moment from 'moment';
-import { createEvent } from '../../services/eventService'
+import { createEvent } from '../../../services/eventService'
 import "react-datetime/css/react-datetime.css";
-import ImgDropAndCrop from "../ImgDropAndCrop/ImgDropAndCrop";
+import ImgDropAndCrop from "../../ImgDropAndCrop/ImgDropAndCrop";
 import PopUpHeader from "../PopUpHeader/PopUpHeader";
 const CreateEventPopUp = ({ closePopUp }) => {
     const [privacySettings, setPrivacySettings] = useState('Private');

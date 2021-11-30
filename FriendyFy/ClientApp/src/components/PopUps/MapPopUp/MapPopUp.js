@@ -1,7 +1,7 @@
 import React, { useEffect } from 'react'
-import MyGoogleMap from '../GoogleMap/MyGoogleMap'
+import MyGoogleMap from '../../GoogleMap/MyGoogleMap'
 import './MapPopUp.css'
-import useScrollBlock from '../../hooks/useScrollBlock'
+import useScrollBlock from '../../../hooks/useScrollBlock'
 const MapPopUp = ({title, location, closePopUp, lat, long}) => {
     const [blockScroll, allowScroll] = useScrollBlock();
     const escPressed = (e) => {

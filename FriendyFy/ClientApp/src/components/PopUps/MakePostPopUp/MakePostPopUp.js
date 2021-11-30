@@ -3,11 +3,11 @@ import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { TextareaAutosize } from '@mui/material';
 import React, { useState } from 'react';
 import Select from 'react-select';
-import { useLoggedIn } from '../../contexts/LoggedInContext';
-import { makePost } from '../../services/postService';
-import CreatePostImage from '../CreatePostImage/CreatePostImage';
-import CreatePostMap from '../CreatePostMap/CreatePostMap';
-import CreatePostPeople from '../CreatePostPeople/CreatePostPeople';
+import { useLoggedIn } from '../../../contexts/LoggedInContext';
+import { makePost } from '../../../services/postService';
+import CreatePostImage from '../../CreatePostImage/CreatePostImage';
+import CreatePostMap from '../../CreatePostMap/CreatePostMap';
+import CreatePostPeople from '../../CreatePostPeople/CreatePostPeople';
 import './MakePostPopUp.css';
 
 const MakePostPopUp = ({hasImage, closePopUp}) =>{

@@ -5,7 +5,7 @@ import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { likeComment } from "../../services/commentService";
 import { useHistory } from 'react-router';
 import "./PostComment.css"
-import PeopleListPopUp from '../PeopleListPopUp/PeopleListPopUp';
+import PeopleListPopUp from '../PopUps/PeopleListPopUp/PeopleListPopUp';
 import { getCommentLikes } from "../../services/commentService";
 const PostComment = ({comment}) => {
     const [likedByYou, setLikedByYou] = useState(comment.isLikedByUser);
