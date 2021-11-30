@@ -6,12 +6,22 @@ import EventTwoImages from "../../EventImages/EventTwoImages/EventTwoImages";
 import EventThreeImages from "../../EventImages/EventThreeImages/EventThreeImages";
 import moment from "moment-timezone";
 import AddImagePopUp from "../../../AddImagePopUp/AddImagePopUp";
-import { leaveEvent } from "../../../../services/eventService";
-const EventTop = ({images=[], mainImage, lat, lng, city, time, userImages=[], isOrganizer, eventId, isInEvent}) => {
+import { deleteEvent, leaveEvent } from "../../../../services/eventService";
+import {NotificationContainer, NotificationManager} from 'react-notifications';
+import ApproveEventPopUp from "../../../ApprovePopUp/ApprovePopUp";
+import { useHistory } from "react-router";
+
+const EventTop = ({images=[], mainImage, lat, lng, city, time, userImages=[], isOrganizer, eventId, isInEvent, setIsInEvent}) => {
     const [localTime, setLocalTime] = useState('');
     const [eventTime,] = useState(time);
     const [showAddImagePopUp, setShowAddImagePopUp] = useState(false);
     const [eventImages, setEventImages] = useState([]);
+    const [showLeaveEventPopUp, setShowLeaveEventPopUp] = useState(false);
+    const history = useHistory();
+
+    const closeLeavePopUp = () => {
+        setShowLeaveEventPopUp(false);
+    }
 
     const closeImagePopUp = () => {
         setShowAddImagePopUp(false);
@@ -22,10 +32,24 @@ const EventTop = ({images=[], mainImage, lat, lng, city, time, userImages=[], is
     }
 
     const leaveEventHandler = () => {
+        if(isOrganizer){
+            setShowLeaveEventPopUp(true)
+            return;
+        }
         leaveEvent(eventId)
             .then(async res =>{
-                if(res === 200){
-                    isInEvent = false;
+                if(res.status === 200){
+                    NotificationManager.success('Successfully left the event!', '', 2000);
+                    setIsInEvent(false);
+                }
+            })
+    }
+
+    const leaveEventAsOrganizer = () => {
+        deleteEvent(eventId)
+            .then(res => {
+                if(res.status === 200){
+                    history.push('/');
                 }
             })
     }
@@ -42,6 +66,11 @@ const EventTop = ({images=[], mainImage, lat, lng, city, time, userImages=[], is
     }, [eventTime])
 
 return(<section className="event-page-top">
+                <NotificationContainer/>
+                {showLeaveEventPopUp ? <ApproveEventPopUp
+                    text="Are you sure you want to delete the event. If you click the Approve button, it will be gone permanently!"
+                    acceptEvent={leaveEventAsOrganizer}
+                    closePopUp={closeLeavePopUp}/> : ''}
                 {showAddImagePopUp ? <AddImagePopUp setImages={setEventImages} eventId={eventId} closePopUp={closeImagePopUp}/> : ''}
                 {isInEvent ? <button className="leave-button" onClick={leaveEventHandler}>Leave</button> : ''}
                 <div className="photos">

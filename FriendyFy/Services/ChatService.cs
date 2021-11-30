@@ -38,6 +38,7 @@ namespace FriendyFy.Services
                 .Include(x => x.Users)
                 .ThenInclude(x => x.ProfileImage)
                 .Where(x => x.Users.Any(y => y.UserName == username))
+                .Where(x => x.ChatType != ChatType.NotAccepted)
                 // TODO remove this tolist
                 .ToList()
                 .Select(x => new ChatFooterUserDto()

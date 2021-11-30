@@ -475,5 +475,26 @@ namespace FriendyFy.Services
             var removed = await this.eventRepository.SaveChangesAsync();
             return removed > 0;
         }
+
+        public async Task<bool> DeleteEventAsync(string eventId, string userId)
+        {
+            var currEvent = this.eventRepository
+                .All()
+                .Include(x => x.EventPosts)
+                .FirstOrDefault(x => x.Id == eventId && x.OrganizerId == userId);
+
+            if (currEvent == null)
+            {
+                return false;
+            }
+            var eventPosts = currEvent.EventPosts;
+            foreach (var eventPost in eventPosts)
+            {
+                this.eventPostRepository.Delete(eventPost);
+            }
+            this.eventRepository.Delete(currEvent);
+            var removed = await this.eventRepository.SaveChangesAsync();
+            return removed > 0;
+        }
     }
 }

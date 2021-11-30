@@ -23,7 +23,7 @@
     margin-top: 12px;
     flex-basis: 50%;
     position: sticky;
-    top: -270px;
+    top: -450px;
     height: 1100px;
 } 
 
@@ -87,7 +87,7 @@ header.headline > h2, header.headline > p{
 }
 
 .friends-section .friend-image{
-    width: 100px;
+    width: 140px;
     margin: 3px
 }
 
@@ -99,7 +99,7 @@ header.headline > h2, header.headline > p{
     display: flex;
     flex-wrap: wrap;
     justify-content: center;
-    height: 462px;
+    height: 570px;
 }
 
 .friend-list{

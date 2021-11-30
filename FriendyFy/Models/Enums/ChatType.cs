@@ -3,6 +3,7 @@
     public enum ChatType
     {
         Direct,
-        Group
+        Group,
+        NotAccepted
     }
 }

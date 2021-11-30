@@ -66,3 +66,11 @@ export function likeEvent(eventId) {
         body: JSON.stringify({eventId})
     });
   }
+
+  export function deleteEvent(eventId) {
+    return fetch('/event/deleteEvent', {
+        method: 'POST',
+        headers: {'Content-Type': 'application/json'},
+        body: JSON.stringify({eventId})
+    });
+  }

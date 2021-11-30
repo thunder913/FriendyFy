@@ -5,7 +5,7 @@ import { useHistory } from 'react-router';
 import 'react-notifications/lib/notifications.css';
 import './EventMiddle.css'
 
-const EventMiddle = ({eventId, title, privacy, isReocurring, reocurringTime, interests=[], organizerName, organizerUsername, isInEvent, isOrganizer}) => {
+const EventMiddle = ({eventId, title, privacy, isReocurring, reocurringTime, interests=[], organizerName, organizerUsername, isInEvent, isOrganizer, setIsInEvent}) => {
     const [isUserInEvent, setIsUserInEvent] = useState(isInEvent);
     const history = useHistory();
     const joinEventHandler = () => {
@@ -14,6 +14,7 @@ const EventMiddle = ({eventId, title, privacy, isReocurring, reocurringTime, int
                 if(res.status === 200){
                     NotificationManager.success('Successfully joined the event!', '', 2000);
                     setIsUserInEvent(true);
+                    setIsInEvent(true);
                 }else{
                     NotificationManager.error('There was an error joining the event!', '', 2000);
                     setIsUserInEvent(false);

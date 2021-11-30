@@ -2,6 +2,7 @@
 using FriendyFy.Common;
 using FriendyFy.Data;
 using FriendyFy.Models;
+using FriendyFy.Models.Enums;
 using FriendyFy.Services.Contracts;
 using Microsoft.EntityFrameworkCore;
 using System;
@@ -60,7 +61,7 @@ namespace FriendyFy.Services
 
             await this.chatRepository.AddAsync(new Chat()
             {
-                ChatType = Models.Enums.ChatType.Direct,
+                ChatType = Models.Enums.ChatType.NotAccepted,
                 CreatedOn = DateTime.Now,
                 Users = new HashSet<ApplicationUser>() { userOne, userTwo }
             });
@@ -152,6 +153,15 @@ namespace FriendyFy.Services
             userTwoFriend.IsFriend = true;
             userOneFriend.ModifiedOn = DateTime.UtcNow;
             userTwoFriend.ModifiedOn = DateTime.UtcNow;
+
+            var chat = this.chatRepository
+                .All()
+                .Include(x => x.Users)
+                .FirstOrDefault(x => x.Users.Any(y => y.Id == userOneFriend.CurrentUserId) && x.Users.Any(y => y.Id == userTwoFriend.CurrentUserId) && x.ChatType == ChatType.NotAccepted);
+            if (chat != null)
+            {
+                chat.ChatType = ChatType.Direct;
+            }
 
             await userFriendRepository.SaveChangesAsync();
             return true;

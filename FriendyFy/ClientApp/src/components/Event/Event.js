@@ -9,11 +9,13 @@ import EventTop from "./EventParts/EventTop/EventTop";
 const Event = () => {
     const eventId = decodeURI(window.location.href.substring(window.location.href.lastIndexOf('/')+1));
     const [event, setEvent] = useState({});
+    const [isInEvent, setIsInEvent] = useState(event.isInEvent);
     useEffect(() => {
         getEventById(eventId)
             .then(async res => {
                 let obj = await res.json();
                 setEvent(obj);
+                setIsInEvent(obj.isInEvent);
             });
     }, [])
 
@@ -29,7 +31,8 @@ const Event = () => {
                 userImages={event.userImages}
                 isOrganizer={event.isOrganizer}
                 eventId={eventId}
-                isInEvent={event.isInEvent}
+                setIsInEvent={setIsInEvent}
+                isInEvent={isInEvent}
                 />
             <EventMiddle
                 eventId = {eventId}
@@ -40,7 +43,8 @@ const Event = () => {
                 interests={event.interests}
                 organizerName={event.organizer}
                 organizerUsername={event.organizerUsername}
-                isInEvent={event.isInEvent}
+                isInEvent={isInEvent}
+                setIsInEvent={setIsInEvent}
                 isOrganizer={event.isOrganizer}
             />
             <EventDetails

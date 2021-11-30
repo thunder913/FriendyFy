@@ -215,5 +215,21 @@ namespace FriendyFy.Controllers
             }
             return BadRequest();
         }
+
+        [HttpPost("deleteEvent")]
+        public async Task<IActionResult> DeleteEvent(LeaveEventDto dto)
+        {
+            var user = this.GetUserByToken();
+            if (user == null)
+            {
+                return Unauthorized("You are not logged in!");
+            }
+
+            var deleted = await this.eventService.DeleteEventAsync(dto.EventId, user.Id);
+            if(deleted)
+                return Ok(deleted);
+
+            return BadRequest();
+        }
     }
 }
