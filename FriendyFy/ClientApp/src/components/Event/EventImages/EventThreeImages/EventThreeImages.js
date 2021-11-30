@@ -9,7 +9,7 @@ const EventThreeImages = ({images}) => {
                     <img src={images[0]} alt="" />
                 </div>
                 <div className="top-image">
-                    <img src={images[2]} alt="" />
+                    <img src={images[1]} alt="" />
                 </div>
             </div>
             <div className="bottom-image">

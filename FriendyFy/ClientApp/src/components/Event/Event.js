@@ -28,6 +28,7 @@ const Event = () => {
                 time={event.time}
                 userImages={event.userImages}
                 isOrganizer={event.isOrganizer}
+                eventId={eventId}
                 />
             <EventMiddle
                 eventId = {eventId}

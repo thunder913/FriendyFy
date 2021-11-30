@@ -50,3 +50,11 @@ export function likeEvent(eventId) {
     });
   }
 
+
+  export function addImageToEvent(eventId, image) {
+    return fetch('/event/addImage', {
+        method: 'POST',
+        headers: {'Content-Type': 'application/json'},
+        body: JSON.stringify({eventId, image})
+    });
+  }

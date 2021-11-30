@@ -180,5 +180,23 @@ namespace FriendyFy.Controllers
 
             return Ok(toReturn);
         }
+
+        [HttpPost("addImage")]
+        public async Task<IActionResult> AddImage(AddEventImageDto dto)
+        {
+            var user = this.GetUserByToken();
+            if (user == null)
+            {
+                return Unauthorized("You are not logged in!");
+            }
+
+            var result = await this.eventService.AddImageToEventAsync(dto.EventId, user.Id, dto.Image);
+            if (string.IsNullOrWhiteSpace(result))
+            {
+                return BadRequest("Something went wrong, try again!");
+            }
+            
+            return Ok(result);
+        }
     }
 }

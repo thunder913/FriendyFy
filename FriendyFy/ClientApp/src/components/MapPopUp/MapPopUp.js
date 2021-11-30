@@ -19,9 +19,9 @@ const MapPopUp = ({title, location, closePopUp, lat, long}) => {
     }, [])
 
     useEffect(() => {
-        document.addEventListener("keydown", escPressed, false);
+        window.addEventListener("keydown", escPressed, false);
         return () => {
-            document.removeEventListener("keydown", escPressed, false);
+            window.removeEventListener("keydown", escPressed, false);
           };
     }, [])
     return(

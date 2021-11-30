@@ -22,7 +22,6 @@ namespace FriendyFy.Services
         private readonly IBlobService blobService;
         private readonly IImageService imageService;
         private readonly IRepository<EventLike> eventLikeRepository;
-        private readonly IRepository<EventComment> eventCommentRepository;
         private readonly IRepository<EventPost> eventPostRepository;
 
         public EventService(IGeolocationService geolocationService,
@@ -30,7 +29,6 @@ namespace FriendyFy.Services
             IBlobService blobService,
             IImageService imageService,
             IRepository<EventLike> eventLikeRepository,
-            IRepository<EventComment> eventCommentRepository,
             IRepository<EventPost> eventPostRepository)
         {
             this.geolocationService = geolocationService;
@@ -38,7 +36,6 @@ namespace FriendyFy.Services
             this.blobService = blobService;
             this.imageService = imageService;
             this.eventLikeRepository = eventLikeRepository;
-            this.eventCommentRepository = eventCommentRepository;
             this.eventPostRepository = eventPostRepository;
         }
 
@@ -427,6 +424,34 @@ namespace FriendyFy.Services
             }
 
             return toReturn;
+        }
+
+        public async Task<string> AddImageToEventAsync(string eventId, string userId, string image)
+        {
+            var currEvent = this.eventRepository
+                .All()
+                .Include(x => x.Images)
+                .FirstOrDefault(x => x.Id == eventId && x.OrganizerId == userId);
+            if (currEvent == null || currEvent.Images.Count >= 3)
+            {
+                return null;
+            }
+
+            string imageUrl = null;
+            if (!string.IsNullOrWhiteSpace(image))
+            {
+                var addedImage =  await imageService.AddImageAsync(ImageType.NormalImage);
+                await blobService.UploadBase64StringAsync(image, addedImage?.Id + addedImage?.ImageExtension, GlobalConstants.BlobPictures);
+                currEvent.Images.Add(addedImage);
+                imageUrl = await this.blobService.GetBlobUrlAsync(addedImage?.Id + addedImage?.ImageExtension, GlobalConstants.BlobPictures);
+            }
+
+            var added = await this.eventRepository.SaveChangesAsync();
+            if (added > 0)
+            {
+                return imageUrl;
+            }
+            return null;
         }
     }
 }

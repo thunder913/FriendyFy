@@ -4,6 +4,22 @@
     gap: 25px;
     border-bottom: 2px solid rgba(128, 128, 128, 0.376);
     padding-bottom: 20px;
+    height: 360px;
+}
+
+.event-page-top .leave-button{
+    position: absolute;
+    top: 55px;
+    padding: 5px 15px;
+    border: 0px;
+    background-color: rgb(148, 0, 0);
+    color: white;
+    transition: 0.3s;
+    border-radius: 20px;
+}
+
+.event-page-top .leave-button:hover{
+    background-color: rgb(177, 6, 6);
 }
 
 .event-page .event-page-top .photos, .event-page .event-page-top .location-time{

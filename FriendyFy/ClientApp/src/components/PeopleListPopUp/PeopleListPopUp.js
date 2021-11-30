@@ -38,9 +38,9 @@ const PeopleListPopUp = ({title, count, loadPeople, closePopUp}) => {
     }, [])
 
     useEffect(() => {
-        document.addEventListener("keydown", escPressed, false);
+        window.addEventListener("keydown", escPressed, false);
         return () => {
-            document.removeEventListener("keydown", escPressed, false);
+            window.removeEventListener("keydown", escPressed, false);
           };
     }, [])
 

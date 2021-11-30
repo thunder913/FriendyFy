@@ -6,10 +6,11 @@ import EventTwoImages from "../../EventImages/EventTwoImages/EventTwoImages";
 import EventThreeImages from "../../EventImages/EventThreeImages/EventThreeImages";
 import moment from "moment-timezone";
 import AddImagePopUp from "../../../AddImagePopUp/AddImagePopUp";
-const EventTop = ({images=[], mainImage, lat, lng, city, time, userImages=[], isOrganizer}) => {
+const EventTop = ({images=[], mainImage, lat, lng, city, time, userImages=[], isOrganizer, eventId}) => {
     const [localTime, setLocalTime] = useState('');
     const [eventTime,] = useState(time);
     const [showAddImagePopUp, setShowAddImagePopUp] = useState(false);
+    const [eventImages, setEventImages] = useState([]);
 
     const closeImagePopUp = () => {
         setShowAddImagePopUp(false);
@@ -20,6 +21,10 @@ const EventTop = ({images=[], mainImage, lat, lng, city, time, userImages=[], is
     }
 
     useEffect(() => {
+        setEventImages(images);
+    }, [images])
+
+    useEffect(() => {
         let localization = window.navigator.userLanguage || window.navigator.language;
         moment.locale(localization);
         let utcTime = moment.utc(time);
@@ -27,15 +32,16 @@ const EventTop = ({images=[], mainImage, lat, lng, city, time, userImages=[], is
     }, [eventTime])
 
 return(<section className="event-page-top">
-                {showAddImagePopUp ? <AddImagePopUp closePopUp={closeImagePopUp}/> : ''}
+                {showAddImagePopUp ? <AddImagePopUp setImages={setEventImages} eventId={eventId} closePopUp={closeImagePopUp}/> : ''}
+                <button className="leave-button">Leave</button>
                 <div className="photos">
-                    {images.length === 0 ? <div className="add-image">
+                    {eventImages.length === 0 && isOrganizer ? <div className="add-image">
                         <button onClick={openImagePopUp} className="big-add-image">Add Image</button>
-                    </div> : images.length === 1 ? <EventOneImage image={images[0]}/> :
-                    images.length === 2 ? <EventTwoImages images={images}/> :
-                    images.length === 3 ? <EventThreeImages images={images}/> : ''}
-                    {(images.length > 1 && images.length < 3 && isOrganizer) ? 
-                    <button className="add-event-image" onClick={openImagePopUp}>Add Image</button> 
+                    </div> : eventImages.length === 1 ? <EventOneImage image={eventImages[0]}/> :
+                    eventImages.length === 2 ? <EventTwoImages images={eventImages}/> :
+                    eventImages.length === 3 ? <EventThreeImages images={eventImages}/> : ''}
+                    {(eventImages.length >= 1 && eventImages.length < 3 && isOrganizer) ? 
+                    <button className="add-event-image" onClick={openImagePopUp}>Add Image</button>
                     : ''}
                 </div>
                 <div className="middle">
@@ -46,7 +52,7 @@ return(<section className="event-page-top">
                         <div className="bottom-going">
                         <h2>GOING:</h2>
                         <div className="going-images">
-                            {userImages.map(img => <img key={img} className="going-image" src={img} alt="" />)}
+                        {userImages.map(img => <img key={img} className="going-image" src={img} alt="" />)}
                         </div>
                         </div>
                     </div>
