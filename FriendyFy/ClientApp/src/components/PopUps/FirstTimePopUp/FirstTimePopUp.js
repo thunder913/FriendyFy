@@ -4,6 +4,7 @@ import InterestsDropdown from '../../InterestsDropdown/InterestsDropdown';
 import './FirstTimePopUp..css';
 import ImgDropAndCrop from '../../ImgDropAndCrop/ImgDropAndCrop.js';
 import axios from 'axios';
+import '../PopUp.css';
 
 const FirstTimePopUp = ({checkFirstTimePopUp}) => {
     const [location, setLocation] = useState('');
@@ -52,8 +53,8 @@ const FirstTimePopUp = ({checkFirstTimePopUp}) => {
     }
 
     return (
-        <div className="first-time-popup">
-            <div className="popup-text">
+        <div className="popup-outer first-time-popup">
+            <div className="popup-inner popup-text">
                 <h2 className="first-time-title">This is your first time logging in.</h2>
                 <h3 className="first-time-undertitle">You have to fill some information about yourself in order to help us recommend the events, you really wish to attend!</h3>
                 <form>

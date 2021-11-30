@@ -3,6 +3,8 @@ import './PeopleListPopUp.css'
 import InfiniteScroll from "react-infinite-scroll-component";
 import { useHistory } from 'react-router';
 import useScrollBlock from "../../../hooks/useScrollBlock";
+import '../PopUp.css';
+
 const PeopleListPopUp = ({title, count, loadPeople, closePopUp}) => {
     const [hasMore, setHasMore] = useState(true); 
     const [people, setPeople] = useState([]); 
@@ -58,8 +60,8 @@ const PeopleListPopUp = ({title, count, loadPeople, closePopUp}) => {
     }
 
     return(
-        <div className="people-list-popup">
-            <div className="inner-popup">
+        <div className="popup-outer people-list-popup">
+            <div className="popup-inner inner-popup">
             <header className="title">
                     <p>{title}</p>
                     <p>{count}</p>

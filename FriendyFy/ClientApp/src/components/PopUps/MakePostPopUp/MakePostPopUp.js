@@ -9,6 +9,7 @@ import CreatePostImage from '../../CreatePostImage/CreatePostImage';
 import CreatePostMap from '../../CreatePostMap/CreatePostMap';
 import CreatePostPeople from '../../CreatePostPeople/CreatePostPeople';
 import './MakePostPopUp.css';
+import '../PopUp.css';
 
 const MakePostPopUp = ({hasImage, closePopUp}) =>{
     const [showImage, setShowImage] = useState(hasImage);
@@ -40,8 +41,8 @@ const MakePostPopUp = ({hasImage, closePopUp}) =>{
     }
 
     return(
-    <div className="make-post-popup">
-        <div className="post-popup">
+    <div className="popup-outer make-post-popup">
+        <div className="popup-inner post-popup">
             <header className="make-post-header">
                 <p className="make-post-title">Create a post</p>
                 <button onClick={closePopUp} className="close-make-post">x</button>

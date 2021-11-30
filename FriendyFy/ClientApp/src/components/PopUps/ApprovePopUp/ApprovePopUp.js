@@ -2,6 +2,8 @@ import React, {useEffect} from "react";
 import './ApprovePopUp.css'
 import useScrollBlock from "../../../hooks/useScrollBlock";
 import PopUpHeader from "../PopUpHeader/PopUpHeader";
+import '../PopUp.css';
+
 const ApproveEventPopUp = ({text, acceptEvent, closePopUp}) => {
     const [blockScroll, allowScroll] = useScrollBlock();
     
@@ -25,8 +27,8 @@ const ApproveEventPopUp = ({text, acceptEvent, closePopUp}) => {
     }, [])
 
 
-    return(<div className="approve-popup">
-    <div className="approve-inner">
+    return(<div className="popup-outer approve-popup">
+    <div className="popup-inner approve-inner popup-flex-center">
         <PopUpHeader title={text} closePopUp={closePopUpEvent}></PopUpHeader>
         <button className="approve-button" onClick={acceptEvent}>Approve</button>
     </div>

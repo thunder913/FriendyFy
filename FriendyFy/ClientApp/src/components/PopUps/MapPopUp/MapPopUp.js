@@ -2,6 +2,8 @@ import React, { useEffect } from 'react'
 import MyGoogleMap from '../../GoogleMap/MyGoogleMap'
 import './MapPopUp.css'
 import useScrollBlock from '../../../hooks/useScrollBlock'
+import '../PopUp.css';
+
 const MapPopUp = ({title, location, closePopUp, lat, long}) => {
     const [blockScroll, allowScroll] = useScrollBlock();
     const escPressed = (e) => {
@@ -25,8 +27,8 @@ const MapPopUp = ({title, location, closePopUp, lat, long}) => {
           };
     }, [])
     return(
-        <div className="map-popup">
-            <div className="inner-map-popup">
+        <div className="popup-outer map-popup">
+            <div className="popup-inner inner-map-popup">
                 <header className="title">
                     <p>{title}</p>
                     <p className="town">{location}</p>

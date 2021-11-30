@@ -11,6 +11,8 @@ import { createEvent } from '../../../services/eventService'
 import "react-datetime/css/react-datetime.css";
 import ImgDropAndCrop from "../../ImgDropAndCrop/ImgDropAndCrop";
 import PopUpHeader from "../PopUpHeader/PopUpHeader";
+import '../PopUp.css';
+
 const CreateEventPopUp = ({ closePopUp }) => {
     const [privacySettings, setPrivacySettings] = useState('Private');
     const [reocurringTime, setReocurringTime] = useState('daily');
@@ -70,8 +72,8 @@ const CreateEventPopUp = ({ closePopUp }) => {
     }
 
     return (
-        <div className="create-event-popup">
-            <div className="event-popup">
+        <div className="popup-outer create-event-popup">
+            <div className="popup-inner event-popup">
                 <PopUpHeader title="Create An Event" closePopUp={closePopUp}></PopUpHeader>
 
                 <section className="create-event-underheader">

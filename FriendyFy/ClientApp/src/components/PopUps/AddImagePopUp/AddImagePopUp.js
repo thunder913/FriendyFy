@@ -6,7 +6,7 @@ import useScrollBlock from "../../../hooks/useScrollBlock";
 import { addImageToEvent } from "../../../services/eventService";
 import NotificationManager from "react-notifications/lib/NotificationManager";
 import { NotificationContainer } from "react-notifications";
-
+import '../PopUp.css';
 const AddImagePopUp = ({closePopUp, eventId, setImages}) => {
     const [image, setImage] = useState('');
     const [blockScroll, allowScroll] = useScrollBlock();
@@ -47,9 +47,9 @@ const AddImagePopUp = ({closePopUp, eventId, setImages}) => {
           };
     }, [])
 
-    return(<div className="add-image-popup">
+    return(<div className="popup-outer add-image-popup">
         <NotificationContainer/>
-    <div className="image-popup">
+    <div className="popup-inner image-popup popup-flex-center">
         <PopUpHeader title="Add an image to your event" closePopUp={closePopUpEvent}></PopUpHeader>
         <div className="add-event-image">
             <ImgDropAndCrop 
