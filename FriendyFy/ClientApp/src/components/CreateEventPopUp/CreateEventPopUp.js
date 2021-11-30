@@ -10,7 +10,7 @@ import moment from 'moment';
 import { createEvent } from '../../services/eventService'
 import "react-datetime/css/react-datetime.css";
 import ImgDropAndCrop from "../ImgDropAndCrop/ImgDropAndCrop";
-
+import PopUpHeader from "../PopUpHeader/PopUpHeader";
 const CreateEventPopUp = ({ closePopUp }) => {
     const [privacySettings, setPrivacySettings] = useState('Private');
     const [reocurringTime, setReocurringTime] = useState('daily');
@@ -72,10 +72,8 @@ const CreateEventPopUp = ({ closePopUp }) => {
     return (
         <div className="create-event-popup">
             <div className="event-popup">
-                <header className="create-event-header">
-                    <p className="create-event-title">Create An Event</p>
-                    <button onClick={closePopUp} className="close-create-event">x</button>
-                </header>
+                <PopUpHeader title="Create An Event" closePopUp={closePopUp}></PopUpHeader>
+
                 <section className="create-event-underheader">
                     <div className="image">
                         <img src={loggedIn.profilePhoto} alt="" />

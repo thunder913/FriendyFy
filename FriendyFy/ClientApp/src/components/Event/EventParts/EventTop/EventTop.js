@@ -5,9 +5,20 @@ import EventOneImage from "../../EventImages/EventOneImage/EventOneImage";
 import EventTwoImages from "../../EventImages/EventTwoImages/EventTwoImages";
 import EventThreeImages from "../../EventImages/EventThreeImages/EventThreeImages";
 import moment from "moment-timezone";
-const EventTop = ({images=[], mainImage, lat, lng, city, time, userImages=[]}) => {
+import AddImagePopUp from "../../../AddImagePopUp/AddImagePopUp";
+const EventTop = ({images=[], mainImage, lat, lng, city, time, userImages=[], isOrganizer}) => {
     const [localTime, setLocalTime] = useState('');
-    const [eventTime, setEventTime] = useState(time);
+    const [eventTime,] = useState(time);
+    const [showAddImagePopUp, setShowAddImagePopUp] = useState(false);
+
+    const closeImagePopUp = () => {
+        setShowAddImagePopUp(false);
+    }
+
+    const openImagePopUp = () => {
+        setShowAddImagePopUp(true);
+    }
+
     useEffect(() => {
         let localization = window.navigator.userLanguage || window.navigator.language;
         moment.locale(localization);
@@ -16,10 +27,16 @@ const EventTop = ({images=[], mainImage, lat, lng, city, time, userImages=[]}) =
     }, [eventTime])
 
 return(<section className="event-page-top">
+                {showAddImagePopUp ? <AddImagePopUp closePopUp={closeImagePopUp}/> : ''}
                 <div className="photos">
-                    {images.length === 1 ? <EventOneImage image={images[0]}/> :
+                    {images.length === 0 ? <div className="add-image">
+                        <button onClick={openImagePopUp} className="big-add-image">Add Image</button>
+                    </div> : images.length === 1 ? <EventOneImage image={images[0]}/> :
                     images.length === 2 ? <EventTwoImages images={images}/> :
                     images.length === 3 ? <EventThreeImages images={images}/> : ''}
+                    {(images.length > 1 && images.length < 3 && isOrganizer) ? 
+                    <button className="add-event-image" onClick={openImagePopUp}>Add Image</button> 
+                    : ''}
                 </div>
                 <div className="middle">
                     <div className="image">

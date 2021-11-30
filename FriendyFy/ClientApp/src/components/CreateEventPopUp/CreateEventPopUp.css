@@ -14,12 +14,6 @@
     backdrop-filter: blur(5px);
 }
 
-.create-event-title{
-    align-self: center;
-    font-size: 22px;
-    font-weight: 600;
-}
-
 .create-event-popup .event-popup{
     width: 540px;
     text-align: center;
@@ -96,28 +90,6 @@
     background-color: #3F3B3B;
 }
 
-.close-create-event{
-    position: absolute;
-    top: 10px;
-    right: 0px;
-    width: 100px;
-    height: 50px;
-    background-color: transparent;
-    border: 0px;
-    font-size: 30px;
-    font-weight: 600;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    transition: 0.3s;
-    color: rgb(206, 204, 204);
-    border-radius: 20px 0px 0px 20px;
-}
-
-.close-create-event:hover{
-    background-color: #5c5858;
-    color: black;
-}
 #datetime::placeholder{
     color: white;
     float: left;
