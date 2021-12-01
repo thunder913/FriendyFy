@@ -10,6 +10,7 @@ import { deleteEvent, leaveEvent } from "../../../../services/eventService";
 import {NotificationContainer, NotificationManager} from 'react-notifications';
 import ApproveEventPopUp from "../../../PopUps/ApprovePopUp/ApprovePopUp";
 import { useHistory } from "react-router";
+import ViewImagePopUp from "../../../PopUps/ViewImagePopUp/ViewImagePopUp";
 
 const EventTop = ({images=[], mainImage, lat, lng, city, time, userImages=[], isOrganizer, eventId, isInEvent, setIsInEvent}) => {
     const [localTime, setLocalTime] = useState('');
@@ -17,6 +18,8 @@ const EventTop = ({images=[], mainImage, lat, lng, city, time, userImages=[], is
     const [showAddImagePopUp, setShowAddImagePopUp] = useState(false);
     const [eventImages, setEventImages] = useState([]);
     const [showLeaveEventPopUp, setShowLeaveEventPopUp] = useState(false);
+    const [showImagePopUp, setShowImagePopUp] = useState(false);
+    const [imagePopUpUrl, setImagePopUpUrl] = useState('');
     const history = useHistory();
 
     const closeLeavePopUp = () => {
@@ -54,6 +57,18 @@ const EventTop = ({images=[], mainImage, lat, lng, city, time, userImages=[], is
             })
     }
 
+    const showImagePopUpEvent = (imageUrl) => {
+        if(imageUrl){
+        setShowImagePopUp(true);
+        setImagePopUpUrl({postImage: imageUrl});
+        }
+    }
+
+    const closeImagePopUpEvent = () => {
+        setShowImagePopUp(false);
+        setImagePopUpUrl(null);
+    }
+
     useEffect(() => {
         setEventImages(images);
     }, [images])
@@ -66,6 +81,7 @@ const EventTop = ({images=[], mainImage, lat, lng, city, time, userImages=[], is
     }, [eventTime])
 
 return(<section className="event-page-top">
+                {showImagePopUp ? <ViewImagePopUp closePopUp={closeImagePopUpEvent} showRightSection={false} post={imagePopUpUrl}></ViewImagePopUp> : ''}
                 <NotificationContainer/>
                 {showLeaveEventPopUp ? <ApproveEventPopUp
                     text="Are you sure you want to delete the event. If you click the Approve button, it will be gone permanently!"
@@ -76,16 +92,16 @@ return(<section className="event-page-top">
                 <div className="photos">
                     {eventImages.length === 0 && isOrganizer ? <div className="add-image">
                         <button onClick={openImagePopUp} className="big-add-image">Add Image</button>
-                    </div> : eventImages.length === 1 ? <EventOneImage image={eventImages[0]}/> :
-                    eventImages.length === 2 ? <EventTwoImages images={eventImages}/> :
-                    eventImages.length === 3 ? <EventThreeImages images={eventImages}/> : ''}
+                    </div> : eventImages.length === 1 ? <EventOneImage showImagePopUp={showImagePopUpEvent} image={eventImages[0]}/> :
+                    eventImages.length === 2 ? <EventTwoImages showImagePopUp={showImagePopUpEvent} images={eventImages}/> :
+                    eventImages.length === 3 ? <EventThreeImages showImagePopUp={showImagePopUpEvent} images={eventImages}/> : ''}
                     {(eventImages.length >= 1 && eventImages.length < 3 && isOrganizer) ? 
                     <button className="add-event-image" onClick={openImagePopUp}>Add Image</button>
                     : ''}
                 </div>
                 <div className="middle">
                     <div className="image">
-                        <div className="main-image">
+                        <div onClick={() => showImagePopUpEvent(mainImage)} className="main-image">
                             <img src={mainImage} alt="" />
                         </div>
                         <div className="bottom-going">

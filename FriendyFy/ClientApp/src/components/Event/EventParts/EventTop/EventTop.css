@@ -29,6 +29,7 @@
 .event-page-top .photos{
     display: flex;
     flex-direction: column;
+    cursor: pointer;
 }
 
 .event-page-top .photos .add-event-image, .event-page-top .photos .big-add-image{
@@ -81,6 +82,7 @@
     width: 100%;
     min-height: 100%;
     margin-top: 15px;
+    cursor: pointer;
 }
 
 .event-page .event-page-top .image .main-image img{
