@@ -4,6 +4,7 @@
 }
 
 .post-image{
+    cursor: pointer;
     width: 100%;
 }
 

@@ -35,7 +35,8 @@ const FeedEvent = ({ event }) => {
             location={event.locationCity}
             lat={event.latitude}
             long={event.longitude}
-            closePopUp={closeLocationPopUp}/>
+            closePopUp={closeLocationPopUp}
+            blockPageScroll={true}/>
             : ''}
         <FeedHeader 
             photo={event.creatorImage} 

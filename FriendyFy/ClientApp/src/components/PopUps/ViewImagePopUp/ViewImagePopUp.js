@@ -32,10 +32,10 @@ const ViewImagePopUp = (props) => {
     return(<div className="popup-outer image-outer-popup">
         <div className="popup-inner image-popup">
             <button onClick={closePopUpEvent} className="close-popup">x</button>
-            <div className="picture">
+            <div className={"picture " + (!props.showRightSection ? 'full-width' : '')}>
                 <img src={props.post.postImage} alt="" />
             </div>
-            <ViewImagePopUpRightSide props={props}></ViewImagePopUpRightSide>
+            {props.showRightSection ? <ViewImagePopUpRightSide props={props}></ViewImagePopUpRightSide> : ''}
         </div>
     </div>)
 

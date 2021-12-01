@@ -1,3 +1,8 @@
+.popup-outer .popup-inner.inner-map-popup{
+    position: fixed;
+}
+
+
 .map-popup .inner-map-popup .title{
     display: flex;
     flex-direction: row;

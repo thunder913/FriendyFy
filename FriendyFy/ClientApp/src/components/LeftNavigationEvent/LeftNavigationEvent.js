@@ -3,16 +3,18 @@ import './LeftNavigationEvent.css';
 import MapPopUp from '../PopUps/MapPopUp/MapPopUp';
 import { useHistory } from 'react-router';
 import moment from 'moment';
-const LeftNavigationEvent = ({data}) =>{
+const LeftNavigationEvent = ({data, setBlockNavScroll}) =>{
     const [showMap, setShowMap] = useState(false);
     const [parsedTime, setParsedTime] = useState('');
     const history = useHistory();
     const closeLocationPopUp = () => {
         setShowMap(false);
+        setBlockNavScroll(false);
     }
 
     const showLocationPopUp = () => {
         setShowMap(true);
+        setBlockNavScroll(true);
     }
 
     const viewEventHandler = () => {
@@ -34,7 +36,8 @@ const LeftNavigationEvent = ({data}) =>{
             location={data.location}
             lat={data.latitude}
             long={data.longitude}
-            closePopUp={closeLocationPopUp}/>
+            closePopUp={closeLocationPopUp}
+            blockPageScroll={false}/>
             : ''}
             <div className="line-parent">
                 <div className="line"></div>

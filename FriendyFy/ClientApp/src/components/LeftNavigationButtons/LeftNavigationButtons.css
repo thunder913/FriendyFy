@@ -10,6 +10,10 @@
     padding-bottom: 54px;
 }
 
+.left-navigation.scroll-blocked{
+  overflow: hidden;
+}
+
 .left-navigation::-webkit-scrollbar {
     width: 5px;
   }

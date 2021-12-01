@@ -11,7 +11,7 @@ import { getNavigationEvents } from '../../services/eventService';
 const LeftNavigationButtons = () => {
     const [friends, setFriends] = useState([]);
     const [events, setEvents] = useState({});
-
+    const [blockNavScroll, setBlockNavScroll] = useState(false);
     useEffect(() => {
         getRecommendedFriends()
         .then(async res => setFriends(await res.json()));   
@@ -26,8 +26,8 @@ const LeftNavigationButtons = () => {
     if (location.pathname.match("/profile") || location.pathname.match("/event")  || location.pathname.match("/friends") || location.pathname.match("/photos")) {
         return null;
     }
-    return (<div className="left-navigation">
-        <LeftNavigationEvents events={events} />
+    return (<div className={"left-navigation " + (blockNavScroll ? 'scroll-blocked' : '')}>
+        <LeftNavigationEvents events={events} setBlockNavScroll={setBlockNavScroll}/>
         <div className="people-you-may-know">
             <div className="friend-suggestions">
                 {friends.map(friend => <FriendSuggestion key={friend.username} friend={friend} />)}

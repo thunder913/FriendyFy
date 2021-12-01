@@ -51,7 +51,8 @@ function FeedHeader({photo, name, time, username, city, lat, long, taggedPeople,
         location={city}
         lat={lat}
         long={long}
-        closePopUp={closePostLocationPopUp}/>
+        closePopUp={closePostLocationPopUp}
+        blockPageScroll={true}/>
         : ''}
 
     <div className="header-left">

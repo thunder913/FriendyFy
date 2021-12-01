@@ -70,7 +70,7 @@ const FeedFooter = (props) => {
                 .then(async res => {
                     let obj = await (res.json());
                     if(obj.length>0){
-                        props.setComments(obj);
+                        props.setComments(prevState => ([...prevState, ...obj]));
                     }
                     else{
                         setHasMore(false);

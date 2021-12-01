@@ -11,9 +11,7 @@ import $ from 'jquery';
 import '../../FeedFooter/FeedFooter.css'
 const ViewImagePopUpRightSide = ({props}) => {
     const post = props.post;
-
     const [hasMore, setHasMore] = useState(true);
-    const {loggedIn} = useLoggedIn();
     const scrollRef = useRef();
     const commentRef = useRef()
 
@@ -28,6 +26,10 @@ const ViewImagePopUpRightSide = ({props}) => {
 
     const likeButtonClickEvent = () => {
         likedButtonClicked(post.postType, post.postId, props.setIsLiked, props.setLikes);
+    }
+
+    const focusCommentInput = () => {
+        commentRef.current.focus();
     }
     
     useEffect(() => {
@@ -80,8 +82,8 @@ const ViewImagePopUpRightSide = ({props}) => {
         <FontAwesomeIcon className="post-button like-button" icon={faThumbsUp} />
             <span>Like</span>
         </div>
-        <div className={"comment"}>
-            <FontAwesomeIcon className="post-button like-button" icon={faComments} />
+        <div className={"comment"} onClick={focusCommentInput}>
+            <FontAwesomeIcon className="post-button like-button" icon={faComments}/>
             <span>Comment</span>
         </div>
         <div className="repost">
