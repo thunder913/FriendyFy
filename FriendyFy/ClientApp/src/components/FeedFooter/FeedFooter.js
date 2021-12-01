@@ -9,14 +9,11 @@ import PostComment from '../PostComment/PostComment';
 import PeopleListPopUp from '../PopUps/PeopleListPopUp/PeopleListPopUp'
 import InfiniteScroll from 'react-infinite-scroll-component';
 import { likeEvent } from '../../services/eventService';
+import { loadMoreComments, addComment, likedButtonClicked } from '../../services/postRequests';
 
 const FeedFooter = (props) => {
-    const [isLiked, setIsLiked] = useState(props.isLiked);
-    const [likes, setLikes] = useState(props.likes)
     const [showComments, setShowComments] = useState(false);
-    const [comments, setComments] = useState([]);
-    const [showPeopleLiked, setShowPeopleLiked] = useState(false)
-    const [commentsCount, setCommentsCount] = useState(props.comments);
+    const [showPeopleLiked, setShowPeopleLiked] = useState(false);
     const [hasMore, setHasMore] = useState(true);
     const commentRef = useRef()
     const scrollRef = useRef();
@@ -30,21 +27,7 @@ const FeedFooter = (props) => {
     }
 
     const likeButtonClickEvent = () => {
-        console.log(props.postType);
-        if(props.postType === "Post"){
-            likePost(props.postId)
-            .then(async res => {if(res.status==200){
-                setIsLiked(prev => !prev);
-                setLikes(await res.json())
-            }});    
-        }else if(props.postType === "Event"){
-            likeEvent(props.postId)
-            .then(async res => {if(res.status==200){
-                setIsLiked(prev => !prev);
-                setLikes(await res.json())
-            }}); 
-        }
-
+        likedButtonClicked(props.postType, props.postId, props.setIsLiked, props.setLikes);
     }
 
     const showPeopleLikes = () => {
@@ -55,30 +38,13 @@ const FeedFooter = (props) => {
         setShowComments(prev => !prev);
     }
 
-    const addComment = (e) => {
+    const addCommentEvent = (e) => {
         e.preventDefault();
-        makeComment(commentRef.current.value, props.postId, props.postType)
-            .then(async res => 
-            {
-                commentRef.current.value = '';
-                let comment = await (res.json());
-                setComments(prevState => ([comment, ...prevState]));
-                setCommentsCount(prev => prev+1)
-                scrollRef.current.el.scrollTop = 0;
-            });
+        addComment(commentRef, props.postId, props.postType, props.setComments, props.setCommentsCount, scrollRef);
     }
 
-    const loadMoreComments = () => {
-        return getComments(props.postId, 10, comments.length, props.postType)
-        .then(async res => { 
-            let obj = await res.json();
-            if(obj.length>0){
-                setComments(prevState => ([...prevState, ...obj]));
-            }
-            else{
-                setHasMore(false);
-            }
-        })
+    const loadMoreCommentsEvent = () => {
+        return loadMoreComments(props.postId, props.comments.length, props.postType, props.setComments, setHasMore);
     }
 
     useEffect(() => {
@@ -87,7 +53,7 @@ const FeedFooter = (props) => {
             textarea.addEventListener('input', autoResize, false);
             $(textarea).keypress(function (e){
                 if(e.which === 13 && !e.shiftKey) {
-                    addComment(e);
+                    addCommentEvent(e);
                 }
             })
             function autoResize() {
@@ -100,11 +66,11 @@ const FeedFooter = (props) => {
 
     useEffect(() => {
         if(showComments){
-            getComments(props.postId, 10, 0, props.postType) 
+            getComments(props.postId, 10, props.comments.length, props.postType) 
                 .then(async res => {
                     let obj = await (res.json());
                     if(obj.length>0){
-                        setComments(obj);
+                        props.setComments(obj);
                     }
                     else{
                         setHasMore(false);
@@ -120,20 +86,20 @@ return(
                     {showPeopleLiked ? 
                             <PeopleListPopUp 
                                 title="Likes"
-                                count={likes}
+                                count={props.likes}
                                 loadPeople={loadLikes}
                                 closePopUp={closePopUp}
                             /> : ''}
                     <span>
                         <button onClick={showPeopleLikes} href="/">
-                            {likes} likes
+                            {props.likes} likes
                         </button>
                     </span>
                 </div>
                 <div className="comments-reposts">
                     <span>
                         <button onClick={showCommentsClickEvent}>
-                            {commentsCount} comments
+                            {props.commentsCount} comments
                         </button>
                     </span>
                     <span>
@@ -146,11 +112,11 @@ return(
             
             {showComments ? 
             <div className="comments">
-                <div className={"infinite-scroll "+ (comments.length == 0 ? 'display-none' : '')}>
+                <div className={"infinite-scroll "+ (props.comments.length == 0 ? 'display-none' : '')}>
                 <InfiniteScroll
                     className={"comments-section"}
-                    dataLength={comments.length}
-                    next={loadMoreComments}
+                    dataLength={props.comments.length}
+                    next={loadMoreCommentsEvent}
                     height={300}
                     // inverse={true}
                     hasMore={hasMore}
@@ -162,7 +128,7 @@ return(
                         </p>
                       }
                     ref={scrollRef}>
-                    {comments.map(c => <PostComment comment={c} key={c.id}/>)}
+                    {props.comments.map(c => <PostComment comment={c} key={c.id}/>)}
                 </InfiniteScroll>
                 </div>
 
@@ -175,13 +141,13 @@ return(
                         ref={commentRef}
                         placeholder="What do you think?"
                         />
-                    <FontAwesomeIcon className="comment-send" icon={faComment} onClick={addComment}/>
+                    <FontAwesomeIcon className="comment-send" icon={faComment} onClick={addCommentEvent}/>
                 </div>
             </div> 
             : ""}
             {/* Make the comments show here */}
             <div className="bottom-footer">
-                <div className={"feed-like " + (isLiked ? "liked" : "")} onClick={likeButtonClickEvent}>
+                <div className={"feed-like " + (props.isLiked ? "liked" : "")} onClick={likeButtonClickEvent}>
                 <FontAwesomeIcon className="post-button like-button" icon={faThumbsUp} />
                     <span>Like</span>
                 </div>

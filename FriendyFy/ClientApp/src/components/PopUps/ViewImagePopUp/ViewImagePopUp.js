@@ -5,13 +5,13 @@ import ViewImagePopUpRightSide from "./ViewImagePopUpRightSide";
 
 import useScrollBlock from "../../../hooks/useScrollBlock";
 
-const ViewImagePopUp = ({post, closePopUp}) => {
+const ViewImagePopUp = (props) => {
 
     const [blockScroll, allowScroll] = useScrollBlock();
 
     const closePopUpEvent = () => {
         allowScroll();
-        closePopUp();
+        props.closePopUp();
     }
 
     const escPressed = (e) => {
@@ -33,9 +33,9 @@ const ViewImagePopUp = ({post, closePopUp}) => {
         <div className="popup-inner image-popup">
             <button onClick={closePopUpEvent} className="close-popup">x</button>
             <div className="picture">
-                <img src={post.postImage} alt="" />
+                <img src={props.post.postImage} alt="" />
             </div>
-            <ViewImagePopUpRightSide post={post}></ViewImagePopUpRightSide>
+            <ViewImagePopUpRightSide props={props}></ViewImagePopUpRightSide>
         </div>
     </div>)
 

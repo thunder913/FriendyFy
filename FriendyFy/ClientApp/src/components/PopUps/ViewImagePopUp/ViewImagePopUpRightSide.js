@@ -6,75 +6,44 @@ import InfiniteScroll from "react-infinite-scroll-component";
 import PostComment from "../../PostComment/PostComment";
 import {useLoggedIn} from '../../../contexts/LoggedInContext.js'
 import { getComments } from "../../../services/commentService";
-import { makeComment } from "../../../services/commentService";
-import { likePost } from "../../../services/postService";
-import { likeEvent } from "../../../services/eventService";
+import { loadMoreComments, addComment, likedButtonClicked } from "../../../services/postRequests";
 import $ from 'jquery';
 import '../../FeedFooter/FeedFooter.css'
-const ViewImagePopUpRightSide = ({post}) => {
-    const [isLiked, setIsLiked] = useState(post.isLikedByUser);
+const ViewImagePopUpRightSide = ({props}) => {
+    const post = props.post;
+
     const [hasMore, setHasMore] = useState(true);
     const {loggedIn} = useLoggedIn();
-    const [comments, setComments] = useState([]);
-    const [likes, setLikes] = useState(post.likesCount);
-    const [commentsCount, setCommentsCount] = useState(post.commentsCount)
     const scrollRef = useRef();
     const commentRef = useRef()
 
-    const loadMoreComments = () => {
-        return getComments(post.postId, 10, comments.length, post.postType)
-        .then(async res => { 
-            let obj = await res.json();
-            if(obj.length>0){
-                setComments(prevState => ([...prevState, ...obj]));
-            }
-            else{
-                setHasMore(false);
-            }
-        })
+    const loadMoreCommentsEvent = () => {
+        return loadMoreComments(post.postId, props.comments.length, post.postType, props.setComments, setHasMore);
     }
 
-    const addComment = (e) => {
+    const addCommentEvent = (e) => {
         e.preventDefault();
-        makeComment(commentRef.current.value, post.postId, post.postType)
-            .then(async res => 
-            {
-                commentRef.current.value = '';
-                let comment = await (res.json());
-                setComments(prevState => ([comment, ...prevState]));
-                setCommentsCount(prev => prev+1)
-                scrollRef.current.el.scrollTop = 0;
-            });
+        addComment(commentRef, post.postId, post.postType, props.setComments, props.setCommentsCount, scrollRef);
     }
 
     const likeButtonClickEvent = () => {
-        if(post.postType === "Post"){
-            likePost(post.postId)
-            .then(async res => {if(res.status==200){
-                setIsLiked(prev => !prev);
-                setLikes(await res.json())
-            }});    
-        }else if(post.postType === "Event"){
-            likeEvent(post.postId)
-            .then(async res => {if(res.status==200){
-                setIsLiked(prev => !prev);
-                setLikes(await res.json())
-            }}); 
-        }
+        likedButtonClicked(post.postType, post.postId, props.setIsLiked, props.setLikes);
     }
     
     useEffect(() => {
+        if(post){
         getComments(post.postId, 10, 0, post.postType) 
             .then(async res => {
                 let obj = await (res.json());
                 if(obj.length>0){
-                    setComments(obj);
+                    props.setComments(obj);
                 }
                 else{
                     setHasMore(false);
                 }
         })
-    }, []) 
+        }
+    }, [post]) 
 
     useEffect(() => {
         if(commentRef.current){
@@ -82,7 +51,7 @@ const ViewImagePopUpRightSide = ({post}) => {
             textarea.addEventListener('input', autoResize, false);
             $(textarea).keypress(function (e){
                 if(e.which === 13 && !e.shiftKey) {
-                    addComment(e);
+                    addCommentEvent(e);
                 }
             })
             function autoResize() {
@@ -92,7 +61,7 @@ const ViewImagePopUpRightSide = ({post}) => {
         }
 
     },[commentRef])
-
+ 
     return (<div className="right-side">
     <div className="posted-by">
         <div className="image">
@@ -103,11 +72,11 @@ const ViewImagePopUpRightSide = ({post}) => {
     <p className="description">{post.postMessage}</p>
     <p className="publshed-date">{parseTime(post.createdAgo)}</p>
     <div className="likes-comments">
-        <span>{likes} likes</span>
-        <span>{commentsCount} comments</span>
+        <span>{props.likes} likes</span>
+        <span>{props.commentsCount} comments</span>
     </div>
     <div className="actions-footer">
-        <div className={"like " + (isLiked ? "liked" : "")} onClick={likeButtonClickEvent}>
+        <div className={"like " + (props.isLiked ? "liked" : "")} onClick={likeButtonClickEvent}>
         <FontAwesomeIcon className="post-button like-button" icon={faThumbsUp} />
             <span>Like</span>
         </div>
@@ -123,11 +92,11 @@ const ViewImagePopUpRightSide = ({post}) => {
     <div className="feed-footer">
         <div className="comments">
 
-    <div className={"infinite-scroll "+ (comments.length == 0 ? 'display-none' : '')}>
+    <div className={"infinite-scroll "+ (props.comments.length == 0 ? 'display-none' : '')}>
     <InfiniteScroll
         className={"comments-section"}
-        dataLength={comments.length}
-        next={loadMoreComments}
+        dataLength={props.comments.length}
+        next={loadMoreCommentsEvent}
         height={900}
         // inverse={true}
         hasMore={hasMore}
@@ -139,7 +108,7 @@ const ViewImagePopUpRightSide = ({post}) => {
             </p>
           }
         ref={scrollRef}>
-        {comments.map(c => <PostComment comment={c} key={c.id}/>)}
+        {props.comments.map(c => <PostComment comment={c} key={c.id}/>)}
     </InfiniteScroll>
     </div>
 
@@ -152,7 +121,7 @@ const ViewImagePopUpRightSide = ({post}) => {
             ref={commentRef}
             placeholder="What do you think?"
             />
-        <FontAwesomeIcon className="comment-send" icon={faComment} onClick={addComment}/>
+        <FontAwesomeIcon className="comment-send" icon={faComment} onClick={addCommentEvent}/>
     </div>
     </div>
 </div> 
