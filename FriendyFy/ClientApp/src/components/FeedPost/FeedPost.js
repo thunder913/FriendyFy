@@ -1,14 +1,20 @@
-import React, { useEffect } from 'react';
+import React, { useEffect, useState } from 'react';
 import FeedHeader from '../FeedHeader/FeedHeader';
 import FeedFooter from '../FeedFooter/FeedFooter';
 import './FeedPost.css';
 import { parseTime } from '../../services/helperService';
-
+import ViewImagePopUp from '../PopUps/ViewImagePopUp/ViewImagePopUp';
 const FeedPost = ({post}) => {
     const defaultImage = "https://friendyfy.blob.core.windows.net/pictures";        
+    const [showImagePopUp, setShowImagePopUp] = useState(false);
+
+    const closePopUpEvent = () => {
+        setShowImagePopUp(false);
+    }
 
     return(
     <div className="feed-photo">
+        {showImagePopUp ? <ViewImagePopUp post={post} closePopUp={closePopUpEvent}></ViewImagePopUp> : ''}
         <FeedHeader 
             photo={post.creatorImage} 
             name={post.creatorName} 
@@ -24,7 +30,7 @@ const FeedPost = ({post}) => {
             <p>{post.postMessage}</p>
         </div> : ""}
         {post.postImage != defaultImage ? <div className="post-image">
-            <img src={post.postImage} alt="" />
+            <img onClick={() => setShowImagePopUp(true)} src={post.postImage} alt="" />
         </div> : ""}
         <FeedFooter 
             postId={post.postId} 

@@ -98,6 +98,7 @@ footer.feed-footer .bottom-footer > div.feed-comment.opened-comments{
     background-color: rgb(45, 46, 47);
     border-radius: 20px;
     padding: 5px 10px;
+    text-align: start;
 }
 
 .feed-footer .comments-section .inner-comment{
@@ -157,7 +158,7 @@ footer.feed-footer .bottom-footer > div.feed-comment.opened-comments{
     transition: 1s;
   }
   
-  .feed-footer .comments .add-comment textarea{
+  .feed-footer .add-comment textarea{
     width: 99%;
     background: #5d5d5d;
     color: white;

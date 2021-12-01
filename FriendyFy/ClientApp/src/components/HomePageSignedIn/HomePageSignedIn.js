@@ -89,14 +89,13 @@ const HomePageSignedIn = () => {
   },[])
 
   return (<div className="feed home-feed">
-    <ViewImagePopUp></ViewImagePopUp>
     {loggedIn.finishedFirstTimeLogin ? '' : <FirstTimePopUp checkFirstTimePopUp={checkFirstTimePopUp}></FirstTimePopUp>}
     <MakePost
       showPostImage={true}
       showCreatePost={true}
       showCreateEvent={true}/>
-    {/* {posts.map(post => <FeedPost key={post.postId} post={post} />)} */}
-    {events.map(event => <FeedEvent event={event} />)}
+    {posts.map(post => <FeedPost key={post.postId} post={post} />)}
+    {/* {events.map(event => <FeedEvent event={event} />)} */}
   </div>)
 }
 

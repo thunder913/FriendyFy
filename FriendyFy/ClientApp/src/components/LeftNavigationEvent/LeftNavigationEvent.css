@@ -139,7 +139,7 @@
     box-shadow: 0px 0px 33px 0px rgba(0,0,0,0.05);
 }
 
-.right-side{
+.event .right-side{
     height: 90px;
     flex-basis: 50%;
     display: flex;

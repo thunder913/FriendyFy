@@ -1,3 +1,7 @@
+.popup-outer.people-list-popup{
+    position: fixed;
+}
+
 .people-list-popup .inner-popup .title{
     display: flex;
     flex-direction: row;

@@ -1,18 +1,49 @@
-import React from "react";
+import React, {useEffect, useState, useRef} from "react";
 import '../PopUp.css';
-import './ViewImagePopUp.css'
+import './ViewImagePopUp.css';
+import ViewImagePopUpRightSide from "./ViewImagePopUpRightSide";
 
-const ViewImagePopUp = () => {
+import useScrollBlock from "../../../hooks/useScrollBlock";
+
+const ViewImagePopUp = ({post, closePopUp}) => {
+
+    const [blockScroll, allowScroll] = useScrollBlock();
+
+    const closePopUpEvent = () => {
+        allowScroll();
+        closePopUp();
+    }
+
+    const escPressed = (e) => {
+        if(e.keyCode === 27){
+            closePopUpEvent();
+        }
+    }
+
+    useEffect(() => {
+        blockScroll();
+        window.addEventListener("keydown", escPressed, false);
+        return () => {
+            window.removeEventListener("keydown", escPressed, false);
+          };
+    }, [])
+
+
     return(<div className="popup-outer image-outer-popup">
         <div className="popup-inner image-popup">
+            <button onClick={closePopUpEvent} className="close-popup">x</button>
             <div className="picture">
-                <img src="https://previews.123rf.com/images/blamb/blamb1407/blamb140700115/29608891-a-cartoon-man-with-really-long-legs-.jpg" alt="" />
+                <img src={post.postImage} alt="" />
             </div>
-            <div className="right-side">
-                <h1>test</h1>
-            </div>
+            <ViewImagePopUpRightSide post={post}></ViewImagePopUpRightSide>
         </div>
     </div>)
+
+    // who posted it how long ago 
+    // likes count reposts count
+    // like commend repost buttons
+    //comments with option to add 
+    // top right close button
 }
 
 export default ViewImagePopUp;

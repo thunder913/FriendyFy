@@ -1,9 +1,9 @@
 import React, { useEffect, useState } from "react";
-import './PeopleListPopUp.css'
 import InfiniteScroll from "react-infinite-scroll-component";
 import { useHistory } from 'react-router';
 import useScrollBlock from "../../../hooks/useScrollBlock";
 import '../PopUp.css';
+import './PeopleListPopUp.css'
 
 const PeopleListPopUp = ({title, count, loadPeople, closePopUp}) => {
     const [hasMore, setHasMore] = useState(true); 
