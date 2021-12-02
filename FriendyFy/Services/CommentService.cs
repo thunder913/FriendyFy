@@ -70,7 +70,9 @@ namespace FriendyFy.Services
             }
             else if (postType == PostType.Event)
             {
-                var currEvent = this.eventRepositry.AllAsNoTracking().FirstOrDefault(x => x.Id == postId);
+                var currEvent = this.eventPostRepository
+                    .AllAsNoTracking()
+                    .FirstOrDefault(x => x.EventId == postId);
                 if (currEvent == null)
                 {
                     return null;
@@ -80,7 +82,7 @@ namespace FriendyFy.Services
                 {
                     CommentedBy = user,
                     CreatedOn = DateTime.UtcNow,
-                    EventPostId = postId,
+                    EventPostId = currEvent.Id,
                     Text = comment,
                 };
 
@@ -149,7 +151,7 @@ namespace FriendyFy.Services
                     .ThenInclude(x => x.ProfileImage)
                     .Include(x => x.Comments)
                     .ThenInclude(x => x.CommentLikes)
-                    .FirstOrDefault(x => x.Id == postId)?
+                    .FirstOrDefault(x => x.EventId == postId)?
                     .Comments
                     .OrderByDescending(x => x.CreatedOn)
                     .Skip(skip)

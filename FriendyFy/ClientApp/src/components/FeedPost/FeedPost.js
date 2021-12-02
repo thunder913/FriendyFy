@@ -4,6 +4,7 @@ import FeedFooter from '../FeedFooter/FeedFooter';
 import './FeedPost.css';
 import { parseTime } from '../../services/helperService';
 import ViewImagePopUp from '../PopUps/ViewImagePopUp/ViewImagePopUp';
+
 const FeedPost = ({post}) => {
     const defaultImage = "https://friendyfy.blob.core.windows.net/pictures";        
     const [showImagePopUp, setShowImagePopUp] = useState(false);

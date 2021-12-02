@@ -9,7 +9,7 @@
     width: 260px;
 }
 
-.search-form > form > input{
+.search-form form input{
     background-color: rgb(104, 102, 102);
     padding: 0px 20px 0px 10px;
     border: 3px solid rgb(92, 91, 90, 0.4);
@@ -20,7 +20,7 @@
     width: 100%;
 }
 
-.search-form > form > input::placeholder{
+.search-form form input::placeholder{
     color: rgba(170, 170, 170, 0.856);
     font-family: Arial, Helvetica, sans-serif;
     text-align: left;
@@ -60,6 +60,10 @@
     padding: 5px;
 }
 
+.search-form .search-suggestions.hide{
+    display: none;
+}
+
 .search-suggestions .result-image{
     width: 40px;
     height: 40px;
@@ -85,3 +89,39 @@
     cursor: pointer;
     background-color: rgb(75, 75, 75);
 }
+
+.chat-history {
+	padding: 0px 6px 8px 6px;
+    overflow-x: overlay;
+    overflow-y: overlay;
+    height: 300px;
+    scroll-behavior:smooth;
+    display: flex;
+    flex-direction: column-reverse;
+}
+
+.search::-webkit-scrollbar {
+    width: 5px;
+  }
+  
+  /* Track */
+  .search::-webkit-scrollbar-track {
+    background: transparent;
+  }
+  
+  /* Handle */
+  .search::-webkit-scrollbar-thumb {
+    background: transparent;
+    border-radius: 24px;
+  }
+  
+  /* Handle on hover */
+  .search::-webkit-scrollbar-thumb:hover {
+    background: rgb(61, 61, 61);
+    transition: 1s;
+  }
+
+  .search::-webkit-scrollbar-thumb{
+    background: rgb(168, 161, 161);
+    transition: 1s;
+  }

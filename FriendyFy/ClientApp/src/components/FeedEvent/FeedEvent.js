@@ -11,6 +11,11 @@ const FeedEvent = ({ event }) => {
     const history = useHistory();
     const [localTime, setLocalTime] = useState(event.eventTime);
     const [showLocation, setShowLocation] = useState(false);
+    const [isLiked, setIsLiked] = useState(event.isLikedByUser);
+    const [likes, setLikes] = useState(event.likesCount)
+    const [reposts, setReposts] = useState(event.repostsCount)
+    const [comments, setComments] = useState([]);
+    const [commentsCount, setCommentsCount] = useState(event.commentsCount);
 
     const closeLocationPopUp = () => {
         setShowLocation(false);
@@ -65,12 +70,18 @@ const FeedEvent = ({ event }) => {
             <span>{localTime}</span>
         </div>
         <FeedFooter 
-            likes={event.likesCount}
-            comments={event.commentsCount}
-            reposts={event.repostsCount}
-            postType={event.postType}
-            isLiked={event.isLikedByUser}
             postId={event.postId}
+            postType={event.postType}
+            isLiked={isLiked}
+            setIsLiked={setIsLiked}
+            likes={likes}
+            setLikes={setLikes}
+            comments={comments}
+            setComments={setComments}
+            commentsCount={commentsCount}
+            setCommentsCount={setCommentsCount}
+            reposts={reposts} 
+            setReposts={setReposts}
             />
     </div>)
 }

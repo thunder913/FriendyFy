@@ -102,7 +102,7 @@ border-radius: 5px;
     margin-top: 10px;
 }
 
-.event-popup .reocurring-checkbox{
+/* .event-popup .reocurring-checkbox{
     display: flex;
 }
 
@@ -122,7 +122,7 @@ border-radius: 5px;
       font-size: 20px;
       font-weight: 400;
       margin-left: 10px;
-  }
+  } */
 
   .event-popup .create-event{
     background-color: rgb(35, 87, 155);

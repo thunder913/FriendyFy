@@ -183,7 +183,7 @@ namespace FriendyFy.Services
             var currEvent = this.eventPostRepository
                 .All()
                 .Include(x => x.Likes)
-                .FirstOrDefault(x => x.Id == eventId);
+                .FirstOrDefault(x => x.EventId == eventId);
 
             if (currEvent == null)
             {
@@ -216,9 +216,10 @@ namespace FriendyFy.Services
         {
             var peopleLiked = this.eventLikeRepository
                 .AllAsNoTracking()
+                .Include(x => x.EventPost)
                 .Include(x => x.LikedBy)
                 .ThenInclude(x => x.ProfileImage)
-                .Where(x => x.EventPostId == eventId)
+                .Where(x => x.EventPost.EventId == eventId)
                 .OrderByDescending(x => x.CreatedOn)
                 .Skip(skip)
                 .Take(take)
@@ -500,27 +501,31 @@ namespace FriendyFy.Services
         public List<SearchResultViewModel> GetEventSearchViewModel(string search, int take, int skip)
         {
             var searchWord = search.ToLower();
+
             var events = this.eventRepository
                 .AllAsNoTracking()
                 .Include(x => x.Interests)
                 .Include(x => x.ProfileImage)
                 .Where(x => x.Name.ToLower().Contains(searchWord)
-                || x.Interests.Any(y => y.Name.ToLower().Contains(searchWord)))
+                || x.Interests.Any(y => y.Name.ToLower().Contains(searchWord))
+                || string.IsNullOrWhiteSpace(search))
                 .OrderBy(x => x.Name)
-                .Take(take)
                 .Skip(skip)
+                .Take(take)
                 .Select(x => new
                 {
                     Id = x.Id,
                     Image = x.ProfileImage.Id + x.ProfileImage.ImageExtension,
                     Name = x.Name,
-                });
+                })
+                .ToList();
 
             var toReturn = events.Select(x => new SearchResultViewModel()
             {
                 Id = x.Id,
                 ImageUrl = this.blobService.GetBlobUrlAsync(x.Image, GlobalConstants.BlobPictures).GetAwaiter().GetResult(),
                 Name = x.Name,
+                Type = SearchResultType.@event.ToString()
             }).ToList();
 
             return toReturn;

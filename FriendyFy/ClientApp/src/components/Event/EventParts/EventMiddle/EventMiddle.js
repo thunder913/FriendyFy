@@ -5,7 +5,7 @@ import { useHistory } from 'react-router';
 import 'react-notifications/lib/notifications.css';
 import './EventMiddle.css'
 
-const EventMiddle = ({eventId, title, privacy, isReocurring, reocurringTime, interests=[], organizerName, organizerUsername, isInEvent, isOrganizer, setIsInEvent}) => {
+const EventMiddle = ({eventId, title, privacy, interests=[], organizerName, organizerUsername, isInEvent, isOrganizer, setIsInEvent}) => {
     const [isUserInEvent, setIsUserInEvent] = useState(isInEvent);
     const history = useHistory();
     const joinEventHandler = () => {
@@ -54,7 +54,7 @@ const EventMiddle = ({eventId, title, privacy, isReocurring, reocurringTime, int
                     <h2 className="event-title">{title}</h2>
                     <div className="other-info">
                     <p className="event-privacy">{privacy}</p>
-                    <p className="reocurring">{isReocurring ? reocurringTime : ''}</p>
+                    {/* <p className="reocurring">{isReocurring ? reocurringTime : ''}</p> */}
                     </div>
                 </div>
                 <div className="middle">

@@ -5,8 +5,10 @@ import EventDetails from "./EventParts/EventDetails/EventDetails";
 import EventMiddle from "./EventParts/EventMiddle/EventMiddle";
 import './EventParts/EventTop/EventTop'
 import EventTop from "./EventParts/EventTop/EventTop";
+import { useHistory } from "react-router";
 
 const Event = () => {
+    const history = useHistory();
     const eventId = decodeURI(window.location.href.substring(window.location.href.lastIndexOf('/')+1));
     const [event, setEvent] = useState({});
     const [isInEvent, setIsInEvent] = useState(event.isInEvent);
@@ -17,7 +19,7 @@ const Event = () => {
                 setEvent(obj);
                 setIsInEvent(obj.isInEvent);
             });
-    }, [])
+    }, [history.location])
 
     return(
         <article className="event-page">
@@ -38,8 +40,8 @@ const Event = () => {
                 eventId = {eventId}
                 title={event.title}
                 privacy={event.privacy}
-                isReocurring={event.isReocurring}
-                reocurringTime={event.reocurringTime}
+                // isReocurring={event.isReocurring}
+                // reocurringTime={event.reocurringTime}
                 interests={event.interests}
                 organizerName={event.organizer}
                 organizerUsername={event.organizerUsername}

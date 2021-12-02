@@ -145,7 +145,7 @@ namespace FriendyFy.Services
                 .AllAsNoTracking()
                 .Include(x => x.Interests)
                 .Include(x => x.ProfileImage)
-                .Where(x => ((x.FirstName + " " + x.LastName).ToLower().Contains(searchWord)
+                .Where(x => (string.IsNullOrWhiteSpace(search) || (x.FirstName + " " + x.LastName).ToLower().Contains(searchWord)
                 || x.Interests.Any(y => y.Name.ToLower().Contains(searchWord)))
                 && x.Id != userId)
                 .OrderBy(x => x.UserName)
@@ -163,7 +163,8 @@ namespace FriendyFy.Services
             {
                 Id = x.Id,
                 ImageUrl = this.blobService.GetBlobUrlAsync(x.Image, GlobalConstants.BlobPictures).GetAwaiter().GetResult(),
-                Name = x.Name
+                Name = x.Name,
+                Type = SearchResultType.profile.ToString()
             }).ToList();
 
 
