@@ -79,6 +79,7 @@ namespace FriendyFy
             services.AddTransient<IMessageService, MessageService>();
             services.AddTransient<ICommentService, CommentService>();
             services.AddTransient<IEventService, EventService>();
+            services.AddTransient<ISearchService, SearchService>();
 
 
             services.AddControllersWithViews();

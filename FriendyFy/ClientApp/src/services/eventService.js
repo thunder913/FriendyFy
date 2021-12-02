@@ -1,8 +1,8 @@
-export function createEvent(name, date, interests, privacyOptions, latitude, longitude, description, image, isReocurring, reocurringFrequency = null){
+export function createEvent(name, date, interests, privacyOptions, latitude, longitude, description, image, isReocurring = null, reocurringFrequency = null){
     return fetch('/event/create', {
         method: 'POST',
         headers: {'Content-Type': 'application/json'},
-        body: JSON.stringify({name, date, interests, privacyOptions, latitude, longitude, description, image, isReocurring, reocurringFrequency})
+        body: JSON.stringify({name, date, interests, privacyOptions, latitude, longitude, description, image})
     });
 }
 

@@ -37,7 +37,7 @@ namespace FriendyFy.Controllers
             }
             var interests = JsonConvert.DeserializeObject<List<InterestDto>>(dto.Interests);
             var privacySettingsParsed = Enum.TryParse(dto.PrivacyOptions, out PrivacySettings privacySettings);
-            var reocurringTypeParsed = Enum.TryParse(dto.ReocurringFrequency, out ReocurringType reocurringType);
+            //var reocurringTypeParsed = Enum.TryParse(dto.ReocurringFrequency, out ReocurringType reocurringType);
             var dateParsed = DateTime.TryParseExact(dto.Date, "dd/MM/yyyy HH:mm",
                 CultureInfo.InvariantCulture, DateTimeStyles.AdjustToUniversal, out var date);
 
@@ -66,10 +66,10 @@ namespace FriendyFy.Controllers
             {
                 return BadRequest("The privacy must be either private or public!");
             }
-            else if (dto.IsReocurring && !reocurringTypeParsed)
-            {
-                return BadRequest("You have entered an invalid reocurring type!");
-            }
+            //else if (dto.IsReocurring && !reocurringTypeParsed)
+            //{
+            //    return BadRequest("You have entered an invalid reocurring type!");
+            //}
             else if (string.IsNullOrWhiteSpace(dto.Image))
             {
                 return BadRequest("The profile image is empty!");
@@ -81,7 +81,7 @@ namespace FriendyFy.Controllers
 
 
             var allInterests = await this.interestService.AddNewInterestsAsync(interests);
-            await this.eventService.CreateEventAsync(dto.Name, date, allInterests, privacySettings, (decimal) dto.Latitude,(decimal) dto.Longitude, dto.IsReocurring, reocurringType, dto.Description, dto.Image, user.Id);
+            await this.eventService.CreateEventAsync(dto.Name, date, allInterests, privacySettings, (decimal) dto.Latitude,(decimal) dto.Longitude, dto.Description, dto.Image, user.Id);
             return Ok();
             //return Ok(await this.chatService.SeeMessagesAsync(dto.ChatId, user));
         }

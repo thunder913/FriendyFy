@@ -39,7 +39,7 @@ namespace FriendyFy.Services
             this.eventPostRepository = eventPostRepository;
         }
 
-        public async Task CreateEventAsync(string name, DateTime date, List<Interest> interests, PrivacySettings privacySettings, decimal latitude, decimal longitude, bool isReocurring, ReocurringType reocurringType, string description, string profileImage, string organizerId)
+        public async Task CreateEventAsync(string name, DateTime date, List<Interest> interests, PrivacySettings privacySettings, decimal latitude, decimal longitude, string description, string profileImage, string organizerId)
         {
             var newEvent = new Event()
             {
@@ -59,11 +59,11 @@ namespace FriendyFy.Services
                 newEvent.ProfileImage = await imageService.AddImageAsync(ImageType.NormalImage);
                 await blobService.UploadBase64StringAsync(profileImage, newEvent.ProfileImage?.Id + newEvent.ProfileImage?.ImageExtension, GlobalConstants.BlobPictures);
             }
-            if (isReocurring)
-            {
-                newEvent.IsReocurring = true;
-                newEvent.ReocurringType = reocurringType;
-            }
+            //if (isReocurring)
+            //{
+            //    newEvent.IsReocurring = true;
+            //    newEvent.ReocurringType = reocurringType;
+            //}
 
             await this.eventRepository.AddAsync(newEvent);
 
@@ -495,6 +495,35 @@ namespace FriendyFy.Services
             this.eventRepository.Delete(currEvent);
             var removed = await this.eventRepository.SaveChangesAsync();
             return removed > 0;
+        }
+
+        public List<SearchResultViewModel> GetEventSearchViewModel(string search, int take, int skip)
+        {
+            var searchWord = search.ToLower();
+            var events = this.eventRepository
+                .AllAsNoTracking()
+                .Include(x => x.Interests)
+                .Include(x => x.ProfileImage)
+                .Where(x => x.Name.ToLower().Contains(searchWord)
+                || x.Interests.Any(y => y.Name.ToLower().Contains(searchWord)))
+                .OrderBy(x => x.Name)
+                .Take(take)
+                .Skip(skip)
+                .Select(x => new
+                {
+                    Id = x.Id,
+                    Image = x.ProfileImage.Id + x.ProfileImage.ImageExtension,
+                    Name = x.Name,
+                });
+
+            var toReturn = events.Select(x => new SearchResultViewModel()
+            {
+                Id = x.Id,
+                ImageUrl = this.blobService.GetBlobUrlAsync(x.Image, GlobalConstants.BlobPictures).GetAwaiter().GetResult(),
+                Name = x.Name,
+            }).ToList();
+
+            return toReturn;
         }
     }
 }

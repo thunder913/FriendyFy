@@ -15,14 +15,14 @@ import '../PopUp.css';
 
 const CreateEventPopUp = ({ closePopUp }) => {
     const [privacySettings, setPrivacySettings] = useState('Private');
-    const [reocurringTime, setReocurringTime] = useState('daily');
+    // const [reocurringTime, setReocurringTime] = useState('daily');
     const [description, setDescription] = useState('');
     const [location, setLocation] = useState('');
     const [interests, setInterests] = useState([]);
     const [name, setName] = useState('');
     const [momentDate, setMomentDate] = useState('');
     const [utcDate, setUtcDate] = useState('');
-    const [isReocurring, setIsReocurring] = useState(false);
+    // const [isReocurring, setIsReocurring] = useState(false);
     const { loggedIn } = useLoggedIn();
     const [eventError, setEventError] = useState('');
     const [image, setImage] = useState('');
@@ -59,7 +59,7 @@ const CreateEventPopUp = ({ closePopUp }) => {
             setEventError('You must upload an image for the event!');
         }else{
             let intereststString = JSON.stringify(interests.map(x => ({label: x.label, id: Number.isInteger(x.value) ? x.value : 0, isNew: x.__isNew__ ?? false})));
-            createEvent(name, utcDate, intereststString, privacySettings, location.lat, location.lng, description, image, isReocurring, (isReocurring ? reocurringTime : null))
+            createEvent(name, utcDate, intereststString, privacySettings, location.lat, location.lng, description, image)
                 .then((res) => {
                     if(res.status === 200){
                         closePopUp()
@@ -124,7 +124,7 @@ const CreateEventPopUp = ({ closePopUp }) => {
                         setCroppedImg={setImage}
                         imageClass="user-profile-photo"/>
                 </div>
-                <div className="reocurring-checkbox">
+                {/* <div className="reocurring-checkbox">
                     <input type="checkbox" id="reocurring" onChange={() => setIsReocurring(prev => !prev)} />
                     <label htmlFor="reocurring">Reocurring event</label>         
                     {isReocurring ? <Select
@@ -147,7 +147,7 @@ const CreateEventPopUp = ({ closePopUp }) => {
                             defaultValue={{ value: reocurringTime, label: 'Daily' }}
                             onChange={(e) => setReocurringTime(e.value)}
                         /> : ''}
-                </div>
+                </div> */}
                 <TextareaAutosize 
                 onChange={(e) => setDescription(e.target.value)} 
                 placeholder="What is the event about?" 

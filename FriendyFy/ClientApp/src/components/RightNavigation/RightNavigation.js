@@ -57,7 +57,7 @@ const RightNavigation = () =>{
                     <p className="right-nav-button">Events</p>
                 </li>
                 <li>
-                    <p className="right-nav-button">Chatter</p>
+                    <p className="right-nav-button">Search Page</p>
                 </li>
                 <li>
                     <p className="right-nav-button">Random Match</p>

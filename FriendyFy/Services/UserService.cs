@@ -9,6 +9,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using ViewModels;
 using ViewModels.ViewModels;
 
 namespace FriendyFy.Services
@@ -133,6 +134,38 @@ namespace FriendyFy.Services
                 ImageId = x.ImageId,
                 ImageUrl = this.blobService.GetBlobUrlAsync(x.ImageInUrl, GlobalConstants.BlobPictures).GetAwaiter().GetResult(),
             }).ToList();
+
+            return toReturn;
+        }
+
+        public List<SearchResultViewModel> GetUserSearchViewModel(string search, string userId, int take, int skip)
+        {
+            var searchWord = search.ToLower();
+            var users = this.userRepository
+                .AllAsNoTracking()
+                .Include(x => x.Interests)
+                .Include(x => x.ProfileImage)
+                .Where(x => ((x.FirstName + " " + x.LastName).ToLower().Contains(searchWord)
+                || x.Interests.Any(y => y.Name.ToLower().Contains(searchWord)))
+                && x.Id != userId)
+                .OrderBy(x => x.UserName)
+                .Skip(skip)
+                .Take(take)
+                .Select(x => new
+                {
+                    Id = x.UserName,
+                    Name = x.FirstName + " " + x.LastName,
+                    Image = x.ProfileImage.Id + x.ProfileImage.ImageExtension,
+                })
+                .ToList();
+
+            var toReturn = users.Select(x => new SearchResultViewModel()
+            {
+                Id = x.Id,
+                ImageUrl = this.blobService.GetBlobUrlAsync(x.Image, GlobalConstants.BlobPictures).GetAwaiter().GetResult(),
+                Name = x.Name
+            }).ToList();
+
 
             return toReturn;
         }
