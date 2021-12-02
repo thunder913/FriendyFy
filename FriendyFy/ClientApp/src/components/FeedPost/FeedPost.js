@@ -38,7 +38,7 @@ const FeedPost = ({post}) => {
             setCommentsCount={setCommentsCount}
             reposts={reposts} 
             setReposts={setReposts}
-            showRightSection={false}
+            showRightSection={true}
             ></ViewImagePopUp> : ''}
         <FeedHeader 
             photo={post.creatorImage} 

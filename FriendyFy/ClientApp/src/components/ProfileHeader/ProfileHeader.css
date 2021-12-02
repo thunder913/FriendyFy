@@ -16,6 +16,7 @@ header.profile-header{
     align-items: center;
     background-color: transparent;
     border-radius: 20px;
+    cursor: pointer;
 }
 
 .profile-picture > img{
@@ -31,6 +32,7 @@ header.profile-header{
 
 .cover-photo{
     width: 100%;
+    cursor: pointer;
 }
 
 

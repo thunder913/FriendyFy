@@ -194,5 +194,45 @@ namespace FriendyFy.Services
                 })
                 .ToList();
         }
+
+        public PostDetailsViewModel GetPostByImageId(string imageId, string userId)
+        {
+            var post = this.postRepository.AllAsNoTracking()
+                .Include(x => x.Creator)
+                .ThenInclude(x => x.ProfileImage)
+                .Include(x => x.Image)
+                .Include(x => x.Likes)
+                .Include(x => x.Comments)
+                .Include(x => x.Reposts)
+                .Include(x => x.TaggedPeople)
+                .FirstOrDefault(x => x.Image.Id == imageId);
+
+            if (post == null)
+            {
+                return null;
+            }
+
+            var postDetailsViewModel = new PostDetailsViewModel()
+            {
+                PostId = post.Id,
+                CommentsCount = post.Comments.Count(),
+                CreatedAgo = (int)((DateTime.UtcNow - post.CreatedOn).TotalMinutes),
+                CreatorImage = this.blobService.GetBlobUrlAsync(post.Creator.ProfileImage?.Id + post.Creator.ProfileImage?.ImageExtension, GlobalConstants.BlobPictures).GetAwaiter().GetResult(),
+                CreatorName = post.Creator.FirstName + " " + post.Creator.LastName,
+                LikesCount = post.Likes.Count(),
+                PostMessage = post.Text,
+                RepostsCount = post.Reposts.Count(),
+                PostImage = this.blobService.GetBlobUrlAsync(post.Image?.Id + post.Image?.ImageExtension, GlobalConstants.BlobPictures).GetAwaiter().GetResult(),
+                IsLikedByUser = post.Likes.Any(x => x.LikedById == userId),
+                Username = post.Creator.UserName,
+                Latitude = post.Latitude ?? post.Latitude,
+                Longitude = post.Longitude ?? post.Longitude,
+                LocationCity = post.LocationCity,
+                TaggedPeopleCount = post.TaggedPeople.Count(),
+                PostType = PostType.Post.ToString(),
+            };
+
+            return postDetailsViewModel;
+        }
     }
 }

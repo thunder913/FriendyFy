@@ -2,6 +2,7 @@ import axios from 'axios';
 import React, { useEffect, useState } from 'react';
 import { useHistory, useLocation } from 'react-router';
 import UserFriendButton from '../UserFriendButton/UserFriendButton';
+import ViewImagePopUp from '../PopUps/ViewImagePopUp/ViewImagePopUp';
 import './ProfileHeader.css';
 const ProfileHeader = ({selected}) =>{
     const [profilePicture, setProfilePicture] = useState(''); 
@@ -9,11 +10,14 @@ const ProfileHeader = ({selected}) =>{
     const [name, setName] = useState(''); 
     const [interests, setInterests] = useState([]); 
     const [quote, setQuote] = useState(''); 
+    const [imagePopUpUrl, setImagePopUpUrl] = useState('');
+    const [showImagePopUp, setShowImagePopUp] = useState(false);
     const userId = decodeURI(window.location.href.substring(window.location.href.lastIndexOf('/')+1));
     const location = useLocation().pathname;
     const history = useHistory();
 
     const goToPhotos = (e) => {
+        e.preventDefault();
         if(!location.includes("photos")){
             history.push('/photos/' + userId);
         }
@@ -33,6 +37,21 @@ const ProfileHeader = ({selected}) =>{
         }
     }
 
+    const showProfileImage = () => {
+        setImagePopUpUrl({postImage: profilePicture})
+        setShowImagePopUp(true);
+    }
+
+    const showCoverImage = () => {
+        setImagePopUpUrl({postImage: coverPicture})
+        setShowImagePopUp(true);
+    }
+
+    const closeImagePopUpEvent = () => {
+        setShowImagePopUp(false);
+        setImagePopUpUrl(null);
+    }
+
     useEffect(() => {
         axios.get("api/getUserInformation/" + userId)
         .then(async (res) => {
@@ -48,12 +67,15 @@ const ProfileHeader = ({selected}) =>{
 
     return (
     <header className="profile-header">
-    <div className="cover-photo">
+    {showImagePopUp ? <ViewImagePopUp closePopUp={closeImagePopUpEvent} 
+    showRightSection={false} 
+    post={imagePopUpUrl}></ViewImagePopUp> : ''}
+    <div className="cover-photo" onClick={showCoverImage}>
         <img src={coverPicture} alt="" />
     </div>
     <div className="below-cover-photo">
         <span className="quote">{quote}</span>
-        <div className="profile-picture">
+        <div className="profile-picture" onClick={showProfileImage}>
             <img src={profilePicture} alt="" />
         </div>
         <div className="user-interests">

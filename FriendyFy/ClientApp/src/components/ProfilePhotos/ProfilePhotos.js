@@ -5,13 +5,19 @@ import ProfileHeader from '../ProfileHeader/ProfileHeader';
 import ProfilePhoto from '../ProfilePhoto/ProfilePhoto';
 import { getUserImages } from '../../services/userService';
 import InfiniteScroll from 'react-infinite-scroll-component';
-
-
+import ViewImagePopUp from '../PopUps/ViewImagePopUp/ViewImagePopUp';
+import { getPostByImageId } from '../../services/postService';
 const ProfilePhotos = () => {
     const [photos, setPhotos] = useState([]);
     const [hasMore, setHasMore] = useState(true);
     const userId = decodeURI(window.location.href.substring(window.location.href.lastIndexOf('/')+1));
-    
+    const [showImagePopUp, setShowImagePopUp] = useState(false);
+    const [isLiked, setIsLiked] = useState(false);
+    const [likes, setLikes] = useState('');
+    const [reposts, setReposts] = useState('');
+    const [comments, setComments] = useState([]);
+    const [commentsCount, setCommentsCount] = useState('');
+    const [post, setPost] = useState('');
     const loadMorePhotos = () => {
         return getUserImages(userId, 10, photos.length)
         .then(async res => { 
@@ -23,6 +29,24 @@ const ProfilePhotos = () => {
                 setHasMore(false);
             }
         })
+    }
+
+    const closeImagePopUpEvent = () => {
+        setShowImagePopUp(false);
+    }
+    
+    const showImagePopUpEvent = (id) => {
+        getPostByImageId(id)
+            .then(async res => {
+                let post = await res.json();
+                setIsLiked(post.isLikedByUser);
+                setLikes(post.likesCount)
+                setReposts(post.repostsCount);
+                setComments([]);
+                setCommentsCount(post.commentsCount);
+                setPost(post);
+            })
+        setShowImagePopUp(true);
     }
 
     useEffect(() => {
@@ -40,6 +64,20 @@ const ProfilePhotos = () => {
 
     return(
             <main className="photos-main">
+                    {showImagePopUp ? <ViewImagePopUp 
+                        post={post} 
+                        closePopUp={closeImagePopUpEvent}
+                        isLiked={isLiked}
+                        setIsLiked={setIsLiked}
+                        likes={likes}
+                        setLikes={setLikes}
+                        comments={comments}
+                        setComments={setComments}
+                        commentsCount={commentsCount}
+                        setCommentsCount={setCommentsCount}
+                        reposts={reposts} 
+                        setReposts={setReposts}
+                        showRightSection={true}/> : ''}
                 <header className="photos-header">
                     <h2>Photos</h2>
                 </header>
@@ -55,7 +93,7 @@ const ProfilePhotos = () => {
                           <b>No more images available</b>
                         </p>
                       }>
-                    {photos.map(photo => <ProfilePhoto image={photo.imageUrl}/>)}
+                    {photos.map(photo => <ProfilePhoto key={photo.imageId} showImagePopUpEvent={showImagePopUpEvent} image={photo.imageUrl} id={photo.imageId}/>)}
                 </InfiniteScroll>
             </main>)
 }

@@ -65,7 +65,7 @@ namespace FriendyFy.Controllers
             {
                 likes = await this.postService.LikePostAsync(likePostDto.PostId, user);
             }
-            catch (Exception ex)
+            catch (Exception)
             {
                 return BadRequest("There was an error saving your like!");
             }
@@ -90,6 +90,18 @@ namespace FriendyFy.Controllers
         public List<PersonListPopupViewModel> GetTaggedPeople(GetPostLikesCount dto)
         {
             return this.postService.GetTaggedPeople(dto.PostId, dto.Take, dto.Skip);
+        }
+
+        [HttpPost("getByImageId")]
+        public IActionResult GetPostByImageId(GetByImageIdDto dto)
+        {
+            var user = this.GetUserByToken();
+            var post = this.postService.GetPostByImageId(dto.ImageId, user.Id);
+            if (post == null)
+            {
+                return BadRequest();
+            }
+            return Ok(post);
         }
 
     }

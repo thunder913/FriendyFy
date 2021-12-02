@@ -1,6 +1,7 @@
 .user-photo{
     width: 19%;
     margin: 0px 1.001% 1% 0px;
+    cursor:pointer;
 }
 
 .user-photo > img{

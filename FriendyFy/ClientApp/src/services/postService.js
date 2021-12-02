@@ -36,3 +36,11 @@ export function makePost(privacySetting, postMessage, locationLat, locationLng, 
         body: JSON.stringify({postId, take, skip})
     });
   }
+
+  export function getPostByImageId(imageId) {
+    return fetch('/post/getByImageId', {
+        method: 'POST',
+        headers: {'Content-Type': 'application/json'},
+        body: JSON.stringify({imageId})
+    });
+  }
