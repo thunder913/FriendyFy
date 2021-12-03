@@ -14,10 +14,13 @@ namespace FriendyFy.Controllers
     public class PostController : BaseController
     {
         private readonly IPostService postService;
+        private readonly IEventService eventService;
 
-        public PostController(IPostService postService)
+        public PostController(IPostService postService,
+            IEventService eventService)
         {
             this.postService = postService;
+            this.eventService = eventService;
         }
 
         [HttpPost("make")]
@@ -102,6 +105,31 @@ namespace FriendyFy.Controllers
                 return BadRequest();
             }
             return Ok(post);
+        }
+
+        [HttpPost("repost")]
+        public async Task <IActionResult> Repost(RepostDto dto)
+        {
+            var parsed = Enum.TryParse(dto.Type, out PostType postType);
+            if (!parsed)
+            {
+                return BadRequest("There was something wrong with the request!");
+            }
+            var user = this.GetUserByToken();
+            if (user == null)
+            {
+                return Unauthorized("You are not logged in!");
+            }
+
+            if (postType == PostType.Event)
+            {
+                var result = await this.eventService.RepostEventAsync(dto.PostId, dto.EventId, dto.Text, user.Id);
+                if (result)
+                {
+                    return Ok();
+                }
+            }
+            return BadRequest();
         }
 
     }

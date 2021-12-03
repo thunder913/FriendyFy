@@ -1,7 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import './ProfilePhotos.css';
 import "../Profile/Profile.css"
-import ProfileHeader from '../ProfileHeader/ProfileHeader';
 import ProfilePhoto from '../ProfilePhoto/ProfilePhoto';
 import { getUserImages } from '../../services/userService';
 import InfiniteScroll from 'react-infinite-scroll-component';

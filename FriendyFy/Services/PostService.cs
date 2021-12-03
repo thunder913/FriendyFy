@@ -205,8 +205,7 @@ namespace FriendyFy.Services
                 .Include(x => x.Comments)
                 .Include(x => x.Reposts)
                 .Include(x => x.TaggedPeople)
-                .FirstOrDefault(x => x.Image.Id == imageId);
-
+                .FirstOrDefault(x => x.Image.Id == imageId && x.IsRepost == false);
             if (post == null)
             {
                 return null;
@@ -230,6 +229,7 @@ namespace FriendyFy.Services
                 LocationCity = post.LocationCity,
                 TaggedPeopleCount = post.TaggedPeople.Count(),
                 PostType = PostType.Post.ToString(),
+                IsRepost = false,
             };
 
             return postDetailsViewModel;

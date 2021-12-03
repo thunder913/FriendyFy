@@ -10,6 +10,7 @@ import PeopleListPopUp from '../PopUps/PeopleListPopUp/PeopleListPopUp'
 import InfiniteScroll from 'react-infinite-scroll-component';
 import { likeEvent } from '../../services/eventService';
 import { loadMoreComments, addComment, likedButtonClicked } from '../../services/postRequests';
+import { repost } from '../../services/postService';
 
 const FeedFooter = (props) => {
     const [showComments, setShowComments] = useState(false);
@@ -45,6 +46,11 @@ const FeedFooter = (props) => {
 
     const loadMoreCommentsEvent = () => {
         return loadMoreComments(props.postId, props.comments.length, props.postType, props.setComments, setHasMore);
+    }
+
+    const repostClickEvent = () => {
+        repost(props.eventPostId, props.postId, '', props.postType)
+            .then(res => console.log(res));
     }
 
     useEffect(() => {
@@ -155,7 +161,7 @@ return(
                     <FontAwesomeIcon className="post-button like-button" icon={faComments} />
                     <span>Comment</span>
                 </div>
-                <div className="feed-repost">
+                <div className="feed-repost" onClick={repostClickEvent}>
                     <FontAwesomeIcon className="post-button like-button" icon={faShare} />
                     <span>Repost</span>
                 </div>

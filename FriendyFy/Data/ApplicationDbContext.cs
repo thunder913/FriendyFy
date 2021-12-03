@@ -86,7 +86,11 @@ namespace FriendyFy.Data
 
             builder.Entity<EventPost>()
                 .HasMany(x => x.Reposts)
-                .WithOne(x => x.EventPost);
+                .WithOne(x => x.Repost);
+
+            builder.Entity<Post>()
+                .HasMany(x => x.Reposts)
+                .WithOne(x => x.Repost);
         }
     }
 }

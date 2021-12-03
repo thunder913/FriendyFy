@@ -29,5 +29,10 @@ namespace ViewModels.ViewModels
         public bool EventIsReocurring { get; set; }
         public string EventReocurring { get; set; }
         public DateTime EventTime { get; set; }
+        public string EventPostId { get; set; }
+
+        //Repost functionality
+        public bool IsRepost { get; set; }
+        public PostDetailsViewModel Repost { get; set; }
     }
 }

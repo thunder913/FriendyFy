@@ -148,6 +148,22 @@ namespace FriendyFy.Services
                 .Include(x => x.Reposts)
                 .Include(x => x.Event)
                 .ThenInclude(x => x.Interests)
+                .Include(x => x.Repost)
+                .ThenInclude(x => x.Creator)
+                .ThenInclude(x => x.ProfileImage)
+                .Include(x => x.Repost)
+                .ThenInclude(x => x.Event)
+                .ThenInclude(x => x.Users)
+                .ThenInclude(x => x.ProfileImage)
+                .Include(x => x.Repost)
+                .ThenInclude(x => x.Likes)
+                .Include(x => x.Repost)
+                .ThenInclude(x => x.Comments)
+                .Include(x => x.Repost)
+                .ThenInclude(x => x.Repost )
+                .Include(x => x.Repost)
+                .ThenInclude(x => x.Event)
+                .ThenInclude(x => x.Interests)
                 .ToList()
                 .Select(x => new PostDetailsViewModel()
                 {
@@ -173,7 +189,37 @@ namespace FriendyFy.Services
                     EventReocurring = x.Event.ReocurringType.ToString(),
                     IsLikedByUser = x.Likes.Any(x => x.LikedById == userId),
                     PostId = x.EventId,
+                    // get the id of the eventpost ^^
                     PostType = PostType.Event.ToString(),
+                    IsRepost = x.IsRepost,
+                    EventPostId = x.Id,
+                    Repost = !x.IsRepost ? null : new PostDetailsViewModel()
+                    {
+                        Username = x.Repost.Creator.UserName,
+                        CreatorName = x.Repost.Creator.FirstName + " " + x.Repost.Creator.LastName,
+                        CreatedAgo = (int)((DateTime.UtcNow - x.Repost.CreatedOn).TotalMinutes),
+                        CreatorImage = this.blobService.GetBlobUrlAsync(x.Repost.Creator.ProfileImage?.Id + x.Repost.Creator.ProfileImage?.ImageExtension, GlobalConstants.BlobPictures).GetAwaiter().GetResult(),
+                        EventGoing = x.Repost.Event.Users.Select(y => this.blobService.GetBlobUrlAsync(y.ProfileImage?.Id + y.ProfileImage?.ImageExtension, GlobalConstants.BlobPictures).GetAwaiter().GetResult()).ToList(),
+                        EventTitle = x.Repost.Event.Name,
+                        EventInterests = x.Repost.Event.Interests.Select(y => new InterestViewModel()
+                        {
+                            Id = y.Id,
+                            Label = y.Name,
+                        }).ToList(),
+                        LocationCity = x.Repost.Event.LocationCity,
+                        Latitude = x.Repost.Event.Latitude,
+                        Longitude = x.Repost.Event.Longitude,
+                        EventTime = x.Repost.Event.Time,
+                        LikesCount = x.Repost.Likes.Count(),
+                        RepostsCount = x.Repost.Reposts.Count(),
+                        CommentsCount = x.Repost.Comments.Count(),
+                        EventIsReocurring = x.Repost.Event.IsReocurring,
+                        EventReocurring = x.Repost.Event.ReocurringType.ToString(),
+                        IsLikedByUser = x.Repost.Likes.Any(y => y.LikedById == userId),
+                        PostId = x.Repost.EventId,
+                        PostType = PostType.Event.ToString(),
+                        EventPostId = x.Id,
+                    }
                 })
                 .ToList();
         }
@@ -183,8 +229,8 @@ namespace FriendyFy.Services
             var currEvent = this.eventPostRepository
                 .All()
                 .Include(x => x.Likes)
-                .FirstOrDefault(x => x.EventId == eventId);
-
+                .FirstOrDefault(x => x.EventId == eventId && x.IsRepost == false);
+            //eventrepost should get them another way, maybe use the id of the event EVERYWHERE
             if (currEvent == null)
             {
                 return null;
@@ -220,6 +266,7 @@ namespace FriendyFy.Services
                 .Include(x => x.LikedBy)
                 .ThenInclude(x => x.ProfileImage)
                 .Where(x => x.EventPost.EventId == eventId)
+                // maybe get everything by ID of the eventpost
                 .OrderByDescending(x => x.CreatedOn)
                 .Skip(skip)
                 .Take(take)
@@ -483,7 +530,6 @@ namespace FriendyFy.Services
                 .All()
                 .Include(x => x.EventPosts)
                 .FirstOrDefault(x => x.Id == eventId && x.OrganizerId == userId);
-
             if (currEvent == null)
             {
                 return false;
@@ -529,6 +575,23 @@ namespace FriendyFy.Services
             }).ToList();
 
             return toReturn;
+        }
+
+        public async Task<bool> RepostEventAsync(string id, string eventId,string text, string userId)
+        {
+            var eventPost = new EventPost()
+            {
+                CreatedOn = DateTime.UtcNow,
+                CreatorId = userId,
+                EventId = eventId,
+                Text = text,
+                IsRepost = true,
+                RepostId = id
+            };
+
+            await this.eventPostRepository.AddAsync(eventPost);
+            var added = await this.eventPostRepository.SaveChangesAsync();
+            return added > 0;
         }
     }
 }

@@ -25,7 +25,7 @@ namespace FriendyFy.Models
         public ICollection<UserFriend> Friends { get; set; } = new HashSet<UserFriend>();
         public ICollection<Group> Groups { get; set; } = new HashSet<Group>();
         public ICollection<PostLike> Likes { get; set; } = new HashSet<PostLike>();
-        public ICollection<PostRepost> Reposts { get; set; } = new HashSet<PostRepost>();
+        public ICollection<Post> Reposts { get; set; } = new HashSet<Post>();
         public ICollection<PostComment> Comments { get; set; } = new HashSet<PostComment>();
         public Image ProfileImage { get; set; }
         public Image CoverImage { get; set; }

@@ -41,7 +41,7 @@ const FeedPost = ({post}) => {
             setReposts={setReposts}
             showRightSection={true}
             ></ViewImagePopUp> : ''}
-        <FeedHeader 
+        <FeedHeader
             photo={post.creatorImage} 
             name={post.creatorName} 
             time={parseTime(post.createdAgo)}

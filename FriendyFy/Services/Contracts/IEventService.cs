@@ -24,5 +24,6 @@ namespace FriendyFy.Services.Contracts
         Task<bool> LeaveEventAsync(string eventId, string userId);
         Task<bool> DeleteEventAsync(string eventId, string userId);
         List<SearchResultViewModel> GetEventSearchViewModel(string search, int take, int skip);
+        Task<bool> RepostEventAsync(string id, string eventId, string text, string userId);
     }
 }

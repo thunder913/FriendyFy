@@ -70,6 +70,7 @@ const FeedEvent = ({ event }) => {
             <span>{localTime}</span>
         </div>
         <FeedFooter 
+            eventPostId={event.eventPostId}
             postId={event.postId}
             postType={event.postType}
             isLiked={isLiked}

@@ -44,3 +44,11 @@ export function makePost(privacySetting, postMessage, locationLat, locationLng, 
         body: JSON.stringify({imageId})
     });
   }
+
+  export function repost(postId, eventId, text, type) {
+    return fetch('/post/repost', {
+        method: 'POST',
+        headers: {'Content-Type': 'application/json'},
+        body: JSON.stringify({postId, eventId, text, type})
+    });
+  }

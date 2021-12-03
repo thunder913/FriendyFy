@@ -23,5 +23,8 @@ namespace FriendyFy.Models
         public decimal? Longitude { get; set; }
         public string LocationCity { get; set; }
         public PrivacySettings Privacy { get; set; }
+        public bool IsRepost { get; set; }
+        public Post Repost { get; set; }
+        public string RepostId { get; set; }
     }
 }

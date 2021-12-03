@@ -15,6 +15,10 @@ namespace FriendyFy.Models
         public ApplicationUser Creator { get; set; }
         public ICollection<EventLike> Likes { get; set; } = new HashSet<EventLike>();
         public ICollection<EventComment> Comments { get; set; } = new HashSet<EventComment>();
-        public ICollection<EventRepost> Reposts { get; set; } = new HashSet<EventRepost>();
+        public ICollection<EventPost> Reposts { get; set; } = new HashSet<EventPost>();
+        public bool IsRepost { get; set; }
+        public string Text { get; set; }
+        public EventPost Repost { get; set; }
+        public string RepostId { get; set; }
     }
 }
