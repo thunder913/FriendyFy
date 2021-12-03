@@ -507,7 +507,7 @@ namespace FriendyFy.Services
                 .Include(x => x.Interests)
                 .Include(x => x.ProfileImage)
                 .Where(x => x.Name.ToLower().Contains(searchWord)
-                || x.Interests.Any(y => y.Name.ToLower().Contains(searchWord))
+                //|| x.Interests.Any(y => y.Name.ToLower().Contains(searchWord))
                 || string.IsNullOrWhiteSpace(search))
                 .OrderBy(x => x.Name)
                 .Skip(skip)

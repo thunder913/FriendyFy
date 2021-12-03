@@ -6,6 +6,7 @@ import { searchUsersAndEvents } from '../../services/searchService';
 import InfiniteScroll from 'react-infinite-scroll-component';
 import { useHistory } from 'react-router';
 import OutsideClickHandler from 'react-outside-click-handler';
+import { useDebounce } from 'use-debounce';
 const SearchBar = () =>{
     const [peopleCount, setPeopleCount] = useState(0);
     const [eventsCount, setEventsCount] = useState(0);
@@ -15,6 +16,7 @@ const SearchBar = () =>{
     const [search, setSearch] = useState('');
     const [showSearchResults, setShowSearchResults] = useState(false);
     const history = useHistory();
+    const [value] = useDebounce(search, 500);
     const searchResultsEvent = (e) => {
         e.preventDefault();
         setShowSearchResults(true);
@@ -55,6 +57,23 @@ const SearchBar = () =>{
         history.push('/'+type+'/' + id);
     }
 
+    useEffect(() => {
+        if(value){
+            setShowSearchResults(true);
+            searchUsersAndEvents(search, 10, 0, 0)
+                    .then(async res => {
+                        let obj = await res.json();
+                        setSearchResults(obj.searchResults);
+                        setPeopleCount(obj.peopleCount);
+                        setEventsCount(obj.eventsCount);
+                        setHasMoreEvents(obj.hasMoreEvents);
+                        setHasMorePeople(obj.hasMorePeople);
+                    })
+        }else{
+            setShowSearchResults(false);
+        }
+    }, [value])
+
     return(
         <div className="search-form" >
     <OutsideClickHandler
@@ -81,7 +100,7 @@ const SearchBar = () =>{
                     scrollableTarget="scrollableDiv"
                     endMessage={
                         <p style={{ textAlign: 'center' }}>
-                          <b>Nothing else to show</b>
+                          {searchResults.length ? <b>Nothing else to show</b> : <b>Nothing matched your search</b>}
                         </p>
                       }
                 >
