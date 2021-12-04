@@ -193,6 +193,7 @@ namespace FriendyFy.Services
                     PostType = PostType.Event.ToString(),
                     IsRepost = x.IsRepost,
                     EventPostId = x.Id,
+                    PostMessage = x.Text,
                     Repost = !x.IsRepost ? null : new PostDetailsViewModel()
                     {
                         Username = x.Repost.Creator.UserName,
@@ -575,8 +576,13 @@ namespace FriendyFy.Services
             return toReturn;
         }
 
-        public async Task<bool> RepostEventAsync(string id, string eventId, string text, string userId)
+        public async Task<bool> RepostEventAsync(string id, string text, string userId)
         {
+            var eventId = this.eventPostRepository
+                .All()
+                .FirstOrDefault(x => x.Id == id)
+                .EventId;
+
             var eventPost = new EventPost()
             {
                 CreatedOn = DateTime.UtcNow,

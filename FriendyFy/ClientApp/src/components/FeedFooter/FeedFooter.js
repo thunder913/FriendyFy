@@ -49,7 +49,7 @@ const FeedFooter = (props) => {
     }
 
     const repostClickEvent = () => {
-        repost(props.postId, props.postId, '', props.postType)
+        repost(props.repostId, '', props.postType)
             .then(res => console.log(res));
     }
 

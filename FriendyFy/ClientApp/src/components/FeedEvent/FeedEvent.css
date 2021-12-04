@@ -125,3 +125,7 @@
     margin: 6px 12px;
     border: 1px solid rgba(0, 0, 0, 0.25);
 }
+
+.feed-event.repost .repost-text{
+    margin: 0px 12px;
+}

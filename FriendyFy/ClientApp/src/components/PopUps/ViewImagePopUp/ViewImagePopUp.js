@@ -35,7 +35,7 @@ const ViewImagePopUp = (props) => {
             <div className={"picture " + (!props.showRightSection ? 'full-width' : '')}>
                 <img src={props.post.postImage} alt="" />
             </div>
-            {props.showRightSection ? <ViewImagePopUpRightSide props={props}></ViewImagePopUpRightSide> : ''}
+            {props.showRightSection ? <ViewImagePopUpRightSide props={props} escPressed={escPressed}></ViewImagePopUpRightSide> : ''}
         </div>
     </div>)
 

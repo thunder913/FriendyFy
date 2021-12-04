@@ -5,6 +5,7 @@ import FeedEvent from '../FeedEvent/FeedEvent';
 import MakePost from '../MakePost/MakePost'
 import { getPosts } from "../../services/postService";
 import { useLoggedIn } from "../../contexts/LoggedInContext";
+import FeedPostRepost from "../FeedPost/FeedPostRepost";
 
 const ProfileTimeline = () => {
     const { loggedIn, resetUser } = useLoggedIn();
@@ -28,7 +29,7 @@ const ProfileTimeline = () => {
             showCreateEvent={false}
             />
            {/* {events.map(event => <FeedEvent eventData={event} />)} */}
-           {posts.map(post => <FeedPost key={post.postId} post={post} />)}
+           {posts.map(post => (!post.isRepost ? <FeedPost key={post.postId} post={post} /> : <FeedPostRepost key={post.postId} post={post}/>))}
            </div>
        </div>
    </main>)

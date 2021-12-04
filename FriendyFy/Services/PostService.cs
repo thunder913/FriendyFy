@@ -96,6 +96,19 @@ namespace FriendyFy.Services
                 .Include(x => x.Comments)
                 .Include(x => x.Reposts)
                 .Include(x => x.TaggedPeople)
+                .Include(x => x.Repost)
+                .ThenInclude(x => x.Creator)
+                .ThenInclude(x => x.ProfileImage)
+                .Include(x => x.Repost)
+                .ThenInclude(x => x.Image)
+                .Include(x => x.Repost)
+                .ThenInclude(x => x.Likes)
+                .Include(x => x.Repost)
+                .ThenInclude(x => x.Comments)
+                .Include(x => x.Repost)
+                .ThenInclude(x => x.Reposts)
+                .Include(x => x.Repost)
+                .ThenInclude(x => x.TaggedPeople)
                 .ToList()
                 .Select(x => new PostDetailsViewModel()
                 {
@@ -115,6 +128,26 @@ namespace FriendyFy.Services
                     LocationCity = x.LocationCity,
                     TaggedPeopleCount = x.TaggedPeople.Count(),
                     PostType = PostType.Post.ToString(),
+                    IsRepost = x.IsRepost,
+                    Repost = !x.IsRepost ? null : new PostDetailsViewModel()
+                    {
+                        PostId = x.Repost.Id,
+                        CommentsCount = x.Repost.Comments.Count(),
+                        CreatedAgo = (int)((DateTime.UtcNow - x.Repost.CreatedOn).TotalMinutes),
+                        CreatorImage = this.blobService.GetBlobUrlAsync(x.Repost.Creator.ProfileImage?.Id + x.Repost.Creator.ProfileImage?.ImageExtension, GlobalConstants.BlobPictures).GetAwaiter().GetResult(),
+                        CreatorName = x.Repost.Creator.FirstName + " " + x.Repost.Creator.LastName,
+                        LikesCount = x.Repost.Likes.Count(),
+                        PostMessage = x.Repost.Text,
+                        RepostsCount = x.Reposts.Count(),
+                        PostImage = this.blobService.GetBlobUrlAsync(x.Repost.Image?.Id + x.Repost.Image?.ImageExtension, GlobalConstants.BlobPictures).GetAwaiter().GetResult(),
+                        IsLikedByUser = x.Repost.Likes.Any(y => y.LikedById == userId),
+                        Username = x.Repost.Creator.UserName,
+                        Latitude = x.Repost.Latitude ?? x.Repost.Latitude,
+                        Longitude = x.Repost.Longitude ?? x.Repost.Longitude,
+                        LocationCity = x.Repost.LocationCity,
+                        TaggedPeopleCount = x.Repost.TaggedPeople.Count(),
+                        PostType = PostType.Post.ToString(),
+                    }
                 })
                 .ToList();
         }
@@ -233,6 +266,22 @@ namespace FriendyFy.Services
             };
 
             return postDetailsViewModel;
+        }
+
+        public async Task<bool> RepostAsync(string id, string text, string userId)
+        {
+            var eventPost = new Post()
+            {
+                CreatedOn = DateTime.UtcNow,
+                CreatorId = userId,
+                Text = text,
+                IsRepost = true,
+                RepostId = id
+            };
+
+            await this.postRepository.AddAsync(eventPost);
+            var added = await this.postRepository.SaveChangesAsync();
+            return added > 0;
         }
     }
 }

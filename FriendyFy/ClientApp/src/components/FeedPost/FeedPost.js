@@ -13,7 +13,7 @@ const FeedPost = ({post}) => {
     const [reposts, setReposts] = useState(post.repostsCount)
     const [comments, setComments] = useState([]);
     const [commentsCount, setCommentsCount] = useState(post.comments);
-    
+
     const closePopUpEvent = () => {
         setShowImagePopUp(false);
     }
@@ -58,7 +58,8 @@ const FeedPost = ({post}) => {
         {post.postImage != defaultImage ? <div className="post-image">
             <img onClick={() => setShowImagePopUp(true)} src={post.postImage} alt="" />
         </div> : ""}
-        <FeedFooter 
+        <FeedFooter
+            repostId={post.postId}
             postId={post.postId} 
             postType={post.postType}
             isLiked={isLiked}
@@ -71,6 +72,7 @@ const FeedPost = ({post}) => {
             setCommentsCount={setCommentsCount}
             reposts={reposts} 
             setReposts={setReposts}
+            isRepost={true}
             />
     </div>)
 }

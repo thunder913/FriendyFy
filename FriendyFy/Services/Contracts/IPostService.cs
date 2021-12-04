@@ -15,5 +15,6 @@ namespace FriendyFy.Services.Contracts
         List<PersonListPopupViewModel> GetPeopleLikes(string postId, int take, int skip);
         List<PersonListPopupViewModel> GetTaggedPeople(string postId, int take, int skip);
         PostDetailsViewModel GetPostByImageId(string imageId, string userId);
+        Task<bool> RepostAsync(string id, string text, string userId);
     }
 }

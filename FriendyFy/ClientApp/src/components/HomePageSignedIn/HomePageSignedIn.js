@@ -8,6 +8,7 @@ import useScrollBlock from "../../hooks/useScrollBlock";
 import MakePost from "../MakePost/MakePost.js"
 import { getPosts } from "../../services/postService";
 import { getEvents } from "../../services/eventService";
+import FeedPostRepost from "../FeedPost/FeedPostRepost";
 const events = [
   {
     name: "Event_Name1",
@@ -93,8 +94,8 @@ const HomePageSignedIn = () => {
       showPostImage={true}
       showCreatePost={true}
       showCreateEvent={true}/>
-    {/* {posts.map(post => <FeedPost key={post.postId} post={post} />)} */}
-    {events.map(event => <FeedEvent eventData={event} />)}
+    {posts.map(post => (!post.isRepost ? <FeedPost key={post.postId} post={post} /> : <FeedPostRepost key={post.postId} post={post}/>))}
+    {/* {events.map(event => <FeedEvent eventData={event} />)} */}
   </div>)
 }
 

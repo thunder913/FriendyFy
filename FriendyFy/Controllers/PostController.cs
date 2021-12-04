@@ -135,7 +135,15 @@ namespace FriendyFy.Controllers
 
             if (postType == PostType.Event)
             {
-                var result = await this.eventService.RepostEventAsync(dto.PostId, dto.EventId, dto.Text, user.Id);
+                var result = await this.eventService.RepostEventAsync(dto.PostId, dto.Text, user.Id);
+                if (result)
+                {
+                    return Ok();
+                }
+            }
+            else if(postType == PostType.Post)
+            {
+                var result = await this.postService.RepostAsync(dto.PostId, dto.Text, user.Id);
                 if (result)
                 {
                     return Ok();

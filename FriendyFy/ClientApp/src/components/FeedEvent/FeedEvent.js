@@ -58,6 +58,7 @@ const FeedEvent = ({ eventData }) => {
             username={eventData.username}
             postId={eventData.postId}
         /> : ''}
+        {(eventData.isRepost && eventData.postMessage) ? <span className="repost-text">{eventData.postMessage}</span> : ''}
         <div className='inner-post'>
         <FeedHeader 
             photo={event.creatorImage} 
@@ -88,6 +89,7 @@ const FeedEvent = ({ eventData }) => {
         </div>
         </div>
         <FeedFooter
+            repostId={eventData.postId}
             postId={eventData.eventPostId}
             postType={eventData.postType}
             isLiked={isLiked}

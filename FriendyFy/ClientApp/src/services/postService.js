@@ -45,10 +45,10 @@ export function makePost(privacySetting, postMessage, locationLat, locationLng, 
     });
   }
 
-  export function repost(postId, eventId, text, type) {
+  export function repost(postId, text, type) {
     return fetch('/post/repost', {
         method: 'POST',
         headers: {'Content-Type': 'application/json'},
-        body: JSON.stringify({postId, eventId, text, type})
+        body: JSON.stringify({postId, text, type})
     });
   }
