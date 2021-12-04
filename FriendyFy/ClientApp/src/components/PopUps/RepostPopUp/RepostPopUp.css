@@ -1,0 +1,31 @@
+.popup-outer.repost-popup{
+        position: fixed;
+}
+
+.repost-popup #repost-message{
+    background-color: #424040;;
+    border-radius: 5px;
+    color: white;
+    padding: 2px 5px;
+    min-height: 100px;
+}
+
+.repost-popup #repost-message:focus{
+    outline: #aaaaaa;
+    border-color: #aaaaaa;
+}
+
+.repost-popup .repost{
+    background-color: rgb(35, 87, 155);
+    font-size: 20px;
+    font-weight: 500;
+    padding: 5px;
+    border: 2px solid rgba(19, 60, 114, 0.2);
+    color: white;
+    transition: 0.3s;
+    border-radius: 5px;
+}
+
+.repost-popup .repost:hover{
+    background-color: rgb(22, 100, 202);
+}

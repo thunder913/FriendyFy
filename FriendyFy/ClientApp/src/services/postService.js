@@ -52,3 +52,11 @@ export function makePost(privacySetting, postMessage, locationLat, locationLng, 
         body: JSON.stringify({postId, text, type})
     });
   }
+
+  export function getPostReposts(postId, postType, skip, take) {
+    return fetch('/post/getReposts', {
+        method: 'POST',
+        headers: {'Content-Type': 'application/json'},
+        body: JSON.stringify({postId, postType, take, skip})
+    });
+  }

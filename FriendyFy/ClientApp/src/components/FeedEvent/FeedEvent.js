@@ -89,7 +89,7 @@ const FeedEvent = ({ eventData }) => {
         </div>
         </div>
         <FeedFooter
-            repostId={eventData.postId}
+            repostId={eventData.eventPostId}
             postId={eventData.eventPostId}
             postType={eventData.postType}
             isLiked={isLiked}

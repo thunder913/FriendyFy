@@ -25,7 +25,6 @@ const MakePostPopUp = ({hasImage, closePopUp}) =>{
 
     const onPostButtonClick = async () => {
         let peopleIds = people.map(x => x.value)
-        console.log(image);
         if(postMessage.length == 0 && !image){
             return;
         }

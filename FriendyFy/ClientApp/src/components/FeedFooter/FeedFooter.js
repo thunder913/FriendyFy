@@ -2,7 +2,7 @@ import React, {useState, useRef, useEffect} from 'react';
 import './FeedFooter.css';
 import { faComment, faComments, faShare, faThumbsUp } from '@fortawesome/free-solid-svg-icons';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { getPostLikes, likePost } from '../../services/postService';
+import { getPostLikes, getPostReposts, likePost } from '../../services/postService';
 import $ from 'jquery';
 import { getComments, makeComment } from '../../services/commentService';
 import PostComment from '../PostComment/PostComment';
@@ -11,11 +11,14 @@ import InfiniteScroll from 'react-infinite-scroll-component';
 import { likeEvent } from '../../services/eventService';
 import { loadMoreComments, addComment, likedButtonClicked } from '../../services/postRequests';
 import { repost } from '../../services/postService';
+import RepostPopUp from '../PopUps/RepostPopUp/RepostPopUp';
 
 const FeedFooter = (props) => {
     const [showComments, setShowComments] = useState(false);
     const [showPeopleLiked, setShowPeopleLiked] = useState(false);
     const [hasMore, setHasMore] = useState(true);
+    const [showRepostPopUp, setShowRepostPopUp] = useState(false);
+    const [showPeopleReposts, setShowPeopleReposts] = useState(false);
     const commentRef = useRef()
     const scrollRef = useRef();
 
@@ -49,8 +52,23 @@ const FeedFooter = (props) => {
     }
 
     const repostClickEvent = () => {
-        repost(props.repostId, '', props.postType)
-            .then(res => console.log(res));
+        setShowRepostPopUp(true);
+    }
+
+    const closeRepostPopUp = () => {
+        setShowRepostPopUp(false);
+    }
+
+    const showPeopleRepostsEvent = () => {
+        setShowPeopleReposts(true);
+    }
+
+    const closePeopleRepostsEvent = () => {
+        setShowPeopleReposts(false);
+    }
+
+    const loadReposts = (skip) => {
+        return getPostReposts(props.postId, props.postType, skip, 10);
     }
 
     useEffect(() => {
@@ -96,6 +114,13 @@ return(
                                 loadPeople={loadLikes}
                                 closePopUp={closePopUp}
                             /> : ''}
+                    {showPeopleReposts ? 
+                            <PeopleListPopUp 
+                                title="Reposts"
+                                count={props.reposts}
+                                loadPeople={loadReposts}
+                                closePopUp={closePeopleRepostsEvent}
+                            /> : ''}
                     <span>
                         <button onClick={showPeopleLikes} href="/">
                             {props.likes} likes
@@ -109,7 +134,7 @@ return(
                         </button>
                     </span>
                     <span>
-                        <button>
+                        <button onClick={showPeopleRepostsEvent}>
                             {props.reposts} reposts
                         </button>
                     </span>
@@ -151,7 +176,7 @@ return(
                 </div>
             </div> 
             : ""}
-            {/* Make the comments show here */}
+                {showRepostPopUp ? <RepostPopUp repostType={props.postType} id={props.repostId} closePopUp={closeRepostPopUp}/> : ''}
             <div className="bottom-footer">
                 <div className={"feed-like " + (props.isLiked ? "liked" : "")} onClick={likeButtonClickEvent}>
                 <FontAwesomeIcon className="post-button like-button" icon={faThumbsUp} />

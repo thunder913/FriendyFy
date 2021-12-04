@@ -119,7 +119,7 @@ namespace FriendyFy.Services
                     CreatorName = x.Creator.FirstName + " " + x.Creator.LastName,
                     LikesCount = x.Likes.Count(),
                     PostMessage = x.Text,
-                    RepostsCount = x.Reposts.Count(),
+                    RepostsCount = x.Reposts.GroupBy(x => x.CreatorId).Count(),
                     PostImage = this.blobService.GetBlobUrlAsync(x.Image?.Id + x.Image?.ImageExtension, GlobalConstants.BlobPictures).GetAwaiter().GetResult(),
                     IsLikedByUser = x.Likes.Any(x => x.LikedById == userId),
                     Username = x.Creator.UserName,
@@ -138,7 +138,7 @@ namespace FriendyFy.Services
                         CreatorName = x.Repost.Creator.FirstName + " " + x.Repost.Creator.LastName,
                         LikesCount = x.Repost.Likes.Count(),
                         PostMessage = x.Repost.Text,
-                        RepostsCount = x.Reposts.Count(),
+                        RepostsCount = x.Reposts.GroupBy(x => x.CreatorId).Count(),
                         PostImage = this.blobService.GetBlobUrlAsync(x.Repost.Image?.Id + x.Repost.Image?.ImageExtension, GlobalConstants.BlobPictures).GetAwaiter().GetResult(),
                         IsLikedByUser = x.Repost.Likes.Any(y => y.LikedById == userId),
                         Username = x.Repost.Creator.UserName,
@@ -282,6 +282,30 @@ namespace FriendyFy.Services
             await this.postRepository.AddAsync(eventPost);
             var added = await this.postRepository.SaveChangesAsync();
             return added > 0;
+        }
+
+        public List<PersonListPopupViewModel> GetPeopleReposts(string postId, int take, int skip)
+        {
+            return this.postRepository
+                .AllAsNoTracking()
+                .Include(x => x.Reposts)
+                .ThenInclude(x => x.Creator)
+                .ThenInclude(x => x.ProfileImage)
+                .FirstOrDefault(x => x.Id == postId)
+                .Reposts
+                .GroupBy(x => x.CreatorId)
+                .Select(x => x.First())
+                .OrderByDescending(x => x.CreatedOn)
+                .Skip(skip)
+                .Take(take)
+                .ToList()
+                .Select(x => new PersonListPopupViewModel()
+                {
+                    Name = x.Repost.Creator.FirstName + " " + x.Repost.Creator.LastName,
+                    Username = x.Repost.Creator.UserName,
+                    ProfileImage = this.blobService.GetBlobUrlAsync(x.Repost.Creator?.ProfileImage?.Id + x.Repost.Creator?.ProfileImage?.ImageExtension, GlobalConstants.BlobPictures).GetAwaiter().GetResult(),
+                })
+                .ToList();
         }
     }
 }

@@ -74,6 +74,21 @@ const SearchBar = () =>{
         }
     }, [value])
 
+    const onSearchInputClick = () => {
+        if(search){
+            setShowSearchResults(true);
+            searchUsersAndEvents(search, 10, 0, 0)
+            .then(async res => {
+                let obj = await res.json();
+                setSearchResults(obj.searchResults);
+                setPeopleCount(obj.peopleCount);
+                setEventsCount(obj.eventsCount);
+                setHasMoreEvents(obj.hasMoreEvents);
+                setHasMorePeople(obj.hasMorePeople);
+            })
+        }
+    }
+
     return(
         <div className="search-form" >
     <OutsideClickHandler
@@ -88,6 +103,7 @@ const SearchBar = () =>{
             name="s" 
             onChange={e => setSearch(e.target.value)}
             autoComplete="off"
+            onClick={onSearchInputClick}
         />
         <div className={"search-suggestions "+ (!showSearchResults ? 'hide' : '')} onBlur={hideSearchResults}>
             {showSearchResults ? <InfiniteScroll

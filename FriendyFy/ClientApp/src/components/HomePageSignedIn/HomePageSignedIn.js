@@ -94,8 +94,8 @@ const HomePageSignedIn = () => {
       showPostImage={true}
       showCreatePost={true}
       showCreateEvent={true}/>
-    {posts.map(post => (!post.isRepost ? <FeedPost key={post.postId} post={post} /> : <FeedPostRepost key={post.postId} post={post}/>))}
-    {/* {events.map(event => <FeedEvent eventData={event} />)} */}
+    {/* {posts.map(post => (!post.isRepost ? <FeedPost key={post.postId} post={post} /> : <FeedPostRepost key={post.postId} post={post}/>))} */}
+    {events.map(event => <FeedEvent eventData={event} />)}
   </div>)
 }
 

@@ -183,7 +183,7 @@ namespace FriendyFy.Services
                     Longitude = x.Event.Longitude,
                     EventTime = x.Event.Time,
                     LikesCount = x.Likes.Count(),
-                    RepostsCount = x.Reposts.Count(),
+                    RepostsCount = x.Reposts.GroupBy(x => x.CreatorId).Count(),
                     CommentsCount = x.Comments.Count(),
                     EventIsReocurring = x.Event.IsReocurring,
                     EventReocurring = x.Event.ReocurringType.ToString(),
@@ -212,7 +212,7 @@ namespace FriendyFy.Services
                         Longitude = x.Repost.Event.Longitude,
                         EventTime = x.Repost.Event.Time,
                         LikesCount = x.Repost.Likes.Count(),
-                        RepostsCount = x.Repost.Reposts.Count(),
+                        RepostsCount = x.Repost.Reposts.GroupBy(x => x.CreatorId).Count(),
                         CommentsCount = x.Repost.Comments.Count(),
                         EventIsReocurring = x.Repost.Event.IsReocurring,
                         EventReocurring = x.Repost.Event.ReocurringType.ToString(),
@@ -596,6 +596,30 @@ namespace FriendyFy.Services
             await this.eventPostRepository.AddAsync(eventPost);
             var added = await this.eventPostRepository.SaveChangesAsync();
             return added > 0;
+        }
+
+        public List<PersonListPopupViewModel> GetPostReposts(string eventId, int take, int skip)
+        {
+            return this.eventPostRepository
+                .AllAsNoTracking()
+                .Include(x => x.Reposts)
+                .ThenInclude(x => x.Creator)
+                .ThenInclude(x => x.ProfileImage)
+                .FirstOrDefault(x => x.Id == eventId)
+                .Reposts
+                .GroupBy(x => x.CreatorId)
+                .Select(x => x.First())
+                .OrderByDescending(x => x.CreatedOn)
+                .Skip(skip)
+                .Take(take)
+                .ToList()
+                .Select(x =>  new PersonListPopupViewModel()
+                {
+                    Name = x.Creator.FirstName + " " + x.Creator.LastName,
+                    Username = x.Creator.UserName,
+                    ProfileImage = this.blobService.GetBlobUrlAsync(x.Creator?.ProfileImage?.Id + x.Creator?.ProfileImage?.ImageExtension, GlobalConstants.BlobPictures).GetAwaiter().GetResult(),
+                })
+                .ToList();
         }
     }
 }
