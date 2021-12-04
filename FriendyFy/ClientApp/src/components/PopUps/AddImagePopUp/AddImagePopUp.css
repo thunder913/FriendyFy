@@ -1,4 +1,4 @@
-.image-popup button.add-image{
+.add-image-outer-popup button.add-image{
     padding: 5px 15px;
     border: 0px;
     background-color: rgb(29, 90, 170);
@@ -7,10 +7,10 @@
     transition: 0.3s;
 }
 
-.image-popup button.add-image:hover{
+.add-image-outer-popup button.add-image:hover{
     background-color: rgb(45, 109, 194);
 }
 
-.image-popup .add-event-image{
+.add-image-outer-popup .add-event-image{
     width: 100%;
 }

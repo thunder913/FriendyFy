@@ -146,5 +146,16 @@ namespace FriendyFy.Controllers
             return Ok();
         }
 
+        [HttpPost("getRightNavSuggestions")]
+        public IActionResult GetRightNavRecommendations()
+        {
+            var user = this.GetUserByToken();
+            if (user == null)
+            {
+                return BadRequest();
+            }
+
+            return Ok(this.UserService.GetEventUserRecommendations(user.Id));
+        }
     }
 }

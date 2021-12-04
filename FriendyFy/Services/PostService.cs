@@ -301,9 +301,9 @@ namespace FriendyFy.Services
                 .ToList()
                 .Select(x => new PersonListPopupViewModel()
                 {
-                    Name = x.Repost.Creator.FirstName + " " + x.Repost.Creator.LastName,
-                    Username = x.Repost.Creator.UserName,
-                    ProfileImage = this.blobService.GetBlobUrlAsync(x.Repost.Creator?.ProfileImage?.Id + x.Repost.Creator?.ProfileImage?.ImageExtension, GlobalConstants.BlobPictures).GetAwaiter().GetResult(),
+                    Name = x.Creator.FirstName + " " + x.Creator.LastName,
+                    Username = x.Creator.UserName,
+                    ProfileImage = this.blobService.GetBlobUrlAsync(x.Creator?.ProfileImage?.Id + x.Creator?.ProfileImage?.ImageExtension, GlobalConstants.BlobPictures).GetAwaiter().GetResult(),
                 })
                 .ToList();
         }

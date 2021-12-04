@@ -22,5 +22,6 @@ namespace FriendyFy.Services.Contracts
         int GetUserEventsCount(string username);
         List<DisplayImageViewModel> GetUserImages(string username, int take, int skip);
         List<SearchResultViewModel> GetUserSearchViewModel(string search, string userId, int take, int skip);
+        List<RightNavigationRecommendationViewModel> GetEventUserRecommendations(string userId);
     }
 }

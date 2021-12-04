@@ -47,9 +47,9 @@ const AddImagePopUp = ({closePopUp, eventId, setImages}) => {
           };
     }, [])
 
-    return(<div className="popup-outer add-image-popup">
+    return(<div className="popup-outer add-image-outer-popup">
         <NotificationContainer/>
-    <div className="popup-inner image-popup popup-flex-center">
+    <div className="popup-inner add-image-inner-popup popup-flex-center">
         <PopUpHeader title="Add an image to your event" closePopUp={closePopUpEvent}></PopUpHeader>
         <div className="add-event-image">
             <ImgDropAndCrop 

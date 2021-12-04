@@ -2,6 +2,8 @@ import React from 'react';
 import PersonYouProbablyMet from '../PersonYouProbablyMet/PersonYouProbablyMet';
 import './RightNavigation.css';
 import { useLocation } from 'react-router';
+import { useEffect } from 'react/cjs/react.development';
+import { getRightNavigationSuggestions } from '../../services/friendService';
 const people = [
     {
         name: "Ivan Petrov",
@@ -31,6 +33,14 @@ const people = [
 
 const RightNavigation = () =>{
     let location = useLocation();
+    
+    useEffect(() => {
+        getRightNavigationSuggestions()
+            .then(async res => {
+                console.log(await res.json())
+            })
+    }, [])
+
     if (location.pathname.match("/profile") || location.pathname.match("/event") || location.pathname.match("/friends") || location.pathname.match("/photos")) {
         return null;
     }
@@ -54,13 +64,10 @@ const RightNavigation = () =>{
                     <p className="right-nav-button">Friends</p>
                 </li>
                 <li>
-                    <p className="right-nav-button">Events</p>
-                </li>
-                <li>
                     <p className="right-nav-button">Search Page</p>
                 </li>
                 <li>
-                    <p className="right-nav-button">Random Match</p>
+                    <p className="right-nav-button">Random Event</p>
                 </li>
                 <li>
                     <p className="right-nav-button">Contact Us</p>

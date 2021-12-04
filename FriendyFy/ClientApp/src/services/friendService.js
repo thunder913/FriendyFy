@@ -60,6 +60,11 @@ function removeFriendSuggestion(data){
     });
 }
 
+function getRightNavigationSuggestions(){
+    return fetch('/friend/getRightNavSuggestions', {
+        method: 'POST'
+    });
+}
 
 export {
     addFriend,
@@ -69,5 +74,6 @@ export {
     removeFriend,
     getFriends,
     getRecommendedFriends,
-    removeFriendSuggestion
+    removeFriendSuggestion,
+    getRightNavigationSuggestions
 }
