@@ -21,11 +21,11 @@ export function makePost(privacySetting, postMessage, locationLat, locationLng, 
   }
 
   
-  export function getPostLikes(postId, skip, take) {
+  export function getPostLikes(postId, postType, skip, take) {
     return fetch('/post/getLikes', {
         method: 'POST',
         headers: {'Content-Type': 'application/json'},
-        body: JSON.stringify({postId, take, skip})
+        body: JSON.stringify({postId, postType, take, skip})
     });
   }
 

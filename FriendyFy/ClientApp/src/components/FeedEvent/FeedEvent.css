@@ -120,3 +120,8 @@
 .join{
     color: white;
 }
+
+.feed-event.repost .inner-post{
+    margin: 6px 12px;
+    border: 1px solid rgba(0, 0, 0, 0.25);
+}

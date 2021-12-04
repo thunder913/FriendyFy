@@ -27,7 +27,7 @@ const ProfileTimeline = () => {
             showCreatePost={true}
             showCreateEvent={false}
             />
-           {/* {events.map(event => <FeedEvent event={event} />)} */}
+           {/* {events.map(event => <FeedEvent eventData={event} />)} */}
            {posts.map(post => <FeedPost key={post.postId} post={post} />)}
            </div>
        </div>

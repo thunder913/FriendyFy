@@ -24,7 +24,7 @@ const FeedFooter = (props) => {
     }
 
     const loadLikes = (skip) => {
-        return getPostLikes(props.postId, skip, 10);
+        return getPostLikes(props.postId, props.postType, skip, 10);
     }
 
     const likeButtonClickEvent = () => {
@@ -49,7 +49,7 @@ const FeedFooter = (props) => {
     }
 
     const repostClickEvent = () => {
-        repost(props.eventPostId, props.postId, '', props.postType)
+        repost(props.postId, props.postId, '', props.postType)
             .then(res => console.log(res));
     }
 

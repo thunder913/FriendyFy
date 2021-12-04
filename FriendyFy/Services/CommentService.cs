@@ -72,7 +72,7 @@ namespace FriendyFy.Services
             {
                 var currEvent = this.eventPostRepository
                     .AllAsNoTracking()
-                    .FirstOrDefault(x => x.EventId == postId);
+                    .FirstOrDefault(x => x.Id == postId);
                 if (currEvent == null)
                 {
                     return null;
@@ -151,7 +151,7 @@ namespace FriendyFy.Services
                     .ThenInclude(x => x.ProfileImage)
                     .Include(x => x.Comments)
                     .ThenInclude(x => x.CommentLikes)
-                    .FirstOrDefault(x => x.EventId == postId)?
+                    .FirstOrDefault(x => x.Id == postId)?
                     .Comments
                     .OrderByDescending(x => x.CreatedOn)
                     .Skip(skip)

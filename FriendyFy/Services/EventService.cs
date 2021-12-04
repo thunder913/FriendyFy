@@ -218,7 +218,7 @@ namespace FriendyFy.Services
                         IsLikedByUser = x.Repost.Likes.Any(y => y.LikedById == userId),
                         PostId = x.Repost.EventId,
                         PostType = PostType.Event.ToString(),
-                        EventPostId = x.Id,
+                        EventPostId = x.RepostId,
                     }
                 })
                 .ToList();
@@ -229,8 +229,7 @@ namespace FriendyFy.Services
             var currEvent = this.eventPostRepository
                 .All()
                 .Include(x => x.Likes)
-                .FirstOrDefault(x => x.EventId == eventId && x.IsRepost == false);
-            //eventrepost should get them another way, maybe use the id of the event EVERYWHERE
+                .FirstOrDefault(x => x.Id == eventId);
             if (currEvent == null)
             {
                 return null;
@@ -265,8 +264,7 @@ namespace FriendyFy.Services
                 .Include(x => x.EventPost)
                 .Include(x => x.LikedBy)
                 .ThenInclude(x => x.ProfileImage)
-                .Where(x => x.EventPost.EventId == eventId)
-                // maybe get everything by ID of the eventpost
+                .Where(x => x.EventPost.Id == eventId)
                 .OrderByDescending(x => x.CreatedOn)
                 .Skip(skip)
                 .Take(take)
@@ -577,7 +575,7 @@ namespace FriendyFy.Services
             return toReturn;
         }
 
-        public async Task<bool> RepostEventAsync(string id, string eventId,string text, string userId)
+        public async Task<bool> RepostEventAsync(string id, string eventId, string text, string userId)
         {
             var eventPost = new EventPost()
             {

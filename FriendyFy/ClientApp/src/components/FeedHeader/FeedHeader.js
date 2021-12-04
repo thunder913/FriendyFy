@@ -7,7 +7,7 @@ import PeopleListPopUp from '../PopUps/PeopleListPopUp/PeopleListPopUp'
 import { getTaggedPeople } from '../../services/postService';
 import MapPopUp from '../PopUps/MapPopUp/MapPopUp'
 
-function FeedHeader({photo, name, time, username, city, lat, long, taggedPeople, postId}){
+function FeedHeader({photo, name, time, username, city, lat, long, taggedPeople, postId, isRepost}){
     const history = useHistory();
     const [showPostLocation, setShowPostLocation] = useState(false);
     const [showTaggedPeople, setShowTaggedPeople] = useState(false);
@@ -69,9 +69,10 @@ function FeedHeader({photo, name, time, username, city, lat, long, taggedPeople,
             <span>{time}</span>
         </div>
     </div>
-    <div className="header-right">
+    {!isRepost ? <div className="header-right">
         <FontAwesomeIcon className="header-elipsis" icon={faEllipsisH} />
-    </div>
+    </div> : ''}
+
 </header>)
 }
 

@@ -84,9 +84,21 @@ namespace FriendyFy.Controllers
         }
 
         [HttpPost("getLikes")]
-        public List<PersonListPopupViewModel> GetLikes(GetPostLikesCount dto)
+        public IActionResult GetLikes(GetPostLikesCount dto)
         {
-            return this.postService.GetPeopleLikes(dto.PostId, dto.Take, dto.Skip);
+            var parsed = Enum.TryParse(dto.PostType, out PostType postType);
+            if (!parsed)
+            {
+                return BadRequest();
+            }
+            if (postType == PostType.Post)
+            {
+                return Ok(this.postService.GetPeopleLikes(dto.PostId, dto.Take, dto.Skip));
+            }
+            else
+            {
+                return Ok(this.eventService.GetPeopleLikes(dto.PostId, dto.Take, dto.Skip));
+            }
         }
 
         [HttpPost("getTaggedPeople")]

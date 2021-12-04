@@ -7,16 +7,16 @@ import { useHistory } from 'react-router';
 import moment from 'moment';
 import MapPopUp from '../PopUps/MapPopUp/MapPopUp';
 
-const FeedEvent = ({ event }) => {
+const FeedEvent = ({ eventData }) => {
     const history = useHistory();
-    const [localTime, setLocalTime] = useState(event.eventTime);
+    const [localTime, setLocalTime] = useState(eventData.eventTime);
     const [showLocation, setShowLocation] = useState(false);
-    const [isLiked, setIsLiked] = useState(event.isLikedByUser);
-    const [likes, setLikes] = useState(event.likesCount)
-    const [reposts, setReposts] = useState(event.repostsCount)
+    const [isLiked, setIsLiked] = useState(eventData.isLikedByUser);
+    const [likes, setLikes] = useState(eventData.likesCount)
+    const [reposts, setReposts] = useState(eventData.repostsCount)
     const [comments, setComments] = useState([]);
-    const [commentsCount, setCommentsCount] = useState(event.commentsCount);
-
+    const [commentsCount, setCommentsCount] = useState(eventData.commentsCount);
+    const [event, setEvent] = useState(eventData);
     const closeLocationPopUp = () => {
         setShowLocation(false);
     }
@@ -33,7 +33,15 @@ const FeedEvent = ({ event }) => {
         history.push('/event/' + event.postId);
     }
 
-    return (<div className="feed feed-event" >
+    useEffect(() => {
+        if(eventData){
+            if(eventData.isRepost){
+                setEvent(eventData.repost);
+            }
+        }
+    }, [eventData])
+
+    return (<div className={"feed feed-event " + (eventData.isRepost ? 'repost' : '')} >
             {showLocation ? 
         <MapPopUp 
             title="Event Location" 
@@ -43,12 +51,21 @@ const FeedEvent = ({ event }) => {
             closePopUp={closeLocationPopUp}
             blockPageScroll={true}/>
             : ''}
+        {eventData.isRepost ? <FeedHeader
+            photo={eventData.creatorImage}
+            name={eventData.creatorName}
+            time={parseTime(eventData.createdAgo)}
+            username={eventData.username}
+            postId={eventData.postId}
+        /> : ''}
+        <div className='inner-post'>
         <FeedHeader 
             photo={event.creatorImage} 
             name={event.creatorName}
             time={parseTime(event.createdAgo)}
             username={event.username}
-            postId={event.postId}/>
+            postId={event.postId}
+            isRepost={eventData.isRepost}/>
         <p className="going-text">Going:</p>
         <div className="event-images">
             <div className="user-photo">
@@ -69,10 +86,10 @@ const FeedEvent = ({ event }) => {
             <span className="location" onClick={() => setShowLocation(true)}>Location: {event.locationCity}</span>
             <span>{localTime}</span>
         </div>
-        <FeedFooter 
-            eventPostId={event.eventPostId}
-            postId={event.postId}
-            postType={event.postType}
+        </div>
+        <FeedFooter
+            postId={eventData.eventPostId}
+            postType={eventData.postType}
             isLiked={isLiked}
             setIsLiked={setIsLiked}
             likes={likes}
