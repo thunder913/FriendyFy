@@ -12,3 +12,7 @@
 .approve-popup .approve-button:hover{
     background-color: rgb(177, 12, 12);
 }
+
+.popup-outer.approve-popup{
+    position: fixed;
+}

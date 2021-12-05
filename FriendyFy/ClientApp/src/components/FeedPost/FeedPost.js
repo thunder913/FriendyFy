@@ -61,6 +61,7 @@ const FeedPost = ({post}) => {
             postId={post.postId}
             postType={post.postType}
             setHidePost={setHidePost}
+            isCreator={post.isUserCreator}
             />
         {post.postMessage ? <div className="post-text">
             <p>{post.postMessage}</p>
@@ -82,7 +83,7 @@ const FeedPost = ({post}) => {
             setCommentsCount={setCommentsCount}
             reposts={reposts} 
             setReposts={setReposts}
-            isRepost={true}
+            isRepost={false}
             />
     </div>
     </CSSTransition>)

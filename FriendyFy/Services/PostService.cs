@@ -119,7 +119,7 @@ namespace FriendyFy.Services
                     CreatorName = x.Creator.FirstName + " " + x.Creator.LastName,
                     LikesCount = x.Likes.Count(),
                     PostMessage = x.Text,
-                    RepostsCount = x.Reposts.GroupBy(x => x.CreatorId).Count(),
+                    RepostsCount = x.Reposts.Where(x => !x.IsDeleted).GroupBy(x => x.CreatorId).Count(),
                     PostImage = this.blobService.GetBlobUrlAsync(x.Image?.Id + x.Image?.ImageExtension, GlobalConstants.BlobPictures).GetAwaiter().GetResult(),
                     IsLikedByUser = x.Likes.Any(x => x.LikedById == userId),
                     Username = x.Creator.UserName,
@@ -129,6 +129,7 @@ namespace FriendyFy.Services
                     TaggedPeopleCount = x.TaggedPeople.Count(),
                     PostType = PostType.Post.ToString(),
                     IsRepost = x.IsRepost,
+                    IsUserCreator = x.CreatorId == userId,
                     Repost = !x.IsRepost ? null : new PostDetailsViewModel()
                     {
                         PostId = x.Repost.Id,
@@ -138,7 +139,7 @@ namespace FriendyFy.Services
                         CreatorName = x.Repost.Creator.FirstName + " " + x.Repost.Creator.LastName,
                         LikesCount = x.Repost.Likes.Count(),
                         PostMessage = x.Repost.Text,
-                        RepostsCount = x.Reposts.GroupBy(x => x.CreatorId).Count(),
+                        RepostsCount = x.Reposts.Where(x => !x.IsDeleted).GroupBy(x => x.CreatorId).Count(),
                         PostImage = this.blobService.GetBlobUrlAsync(x.Repost.Image?.Id + x.Repost.Image?.ImageExtension, GlobalConstants.BlobPictures).GetAwaiter().GetResult(),
                         IsLikedByUser = x.Repost.Likes.Any(y => y.LikedById == userId),
                         Username = x.Repost.Creator.UserName,
@@ -253,7 +254,7 @@ namespace FriendyFy.Services
                 CreatorName = post.Creator.FirstName + " " + post.Creator.LastName,
                 LikesCount = post.Likes.Count(),
                 PostMessage = post.Text,
-                RepostsCount = post.Reposts.Count(),
+                RepostsCount = post.Reposts.Where(x => !x.IsDeleted).Count(),
                 PostImage = this.blobService.GetBlobUrlAsync(post.Image?.Id + post.Image?.ImageExtension, GlobalConstants.BlobPictures).GetAwaiter().GetResult(),
                 IsLikedByUser = post.Likes.Any(x => x.LikedById == userId),
                 Username = post.Creator.UserName,
@@ -293,6 +294,7 @@ namespace FriendyFy.Services
                 .ThenInclude(x => x.ProfileImage)
                 .FirstOrDefault(x => x.Id == postId)
                 .Reposts
+                .Where(x => !x.IsDeleted)
                 .GroupBy(x => x.CreatorId)
                 .Select(x => x.First())
                 .OrderByDescending(x => x.CreatedOn)

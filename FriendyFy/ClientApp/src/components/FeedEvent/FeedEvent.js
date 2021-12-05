@@ -78,7 +78,8 @@ const FeedEvent = ({ eventData }) => {
             postId={event.eventPostId}
             postType={event.postType}
             isRepost={eventData.isRepost}
-            setHidePost={setHidePost}/>
+            setHidePost={setHidePost}
+            isCreator={eventData.isUserCreator}/>
         <p className="going-text">Going:</p>
         <div className="event-images">
             <div className="user-photo">
@@ -114,6 +115,7 @@ const FeedEvent = ({ eventData }) => {
             setCommentsCount={setCommentsCount}
             reposts={reposts} 
             setReposts={setReposts}
+            isRepost={eventData.isRepost}
             />
     </div>
     </CSSTransition>)

@@ -200,6 +200,7 @@ namespace FriendyFy.Services
                     IsRepost = x.IsRepost,
                     EventPostId = x.Id,
                     PostMessage = x.Text,
+                    IsUserCreator = x.CreatorId == userId,
                     Repost = !x.IsRepost ? null : new PostDetailsViewModel()
                     {
                         Username = x.Repost.Creator.UserName,

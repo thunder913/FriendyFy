@@ -10,7 +10,7 @@ import FeedHeaderOptions from '../FeedHeaderOptions/FeedHeaderOptions';
 import NotificationManager from "react-notifications/lib/NotificationManager";
 import { NotificationContainer } from "react-notifications";
 
-function FeedHeader({photo, name, time, username, city, lat, long, taggedPeople, postId, postType, isRepost, setHidePost}){
+function FeedHeader({photo, name, time, username, city, lat, long, taggedPeople, postId, postType, isRepost, setHidePost, isCreator}){
     const history = useHistory();
     const [showPostLocation, setShowPostLocation] = useState(false);
     const [showTaggedPeople, setShowTaggedPeople] = useState(false);
@@ -91,7 +91,7 @@ function FeedHeader({photo, name, time, username, city, lat, long, taggedPeople,
             <span>{time}</span>
         </div>
     </div>
-    {!isRepost ? <div className="header-right">
+    {(!isRepost&&isCreator) ? <div className="header-right">
         <FontAwesomeIcon className="header-elipsis" icon={faEllipsisH} onClick={showHeaderOptionsEvent}/>
         <FeedHeaderOptions
             showOptions={showOptions} 

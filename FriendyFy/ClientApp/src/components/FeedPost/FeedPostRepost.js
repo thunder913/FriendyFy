@@ -69,6 +69,7 @@ const FeedPostRepost = ({post}) => {
                 postId={post.postId}
                 postType={post.postType}
                 setHidePost={setHidePost}
+                isCreator={post.isUserCreator}
                 />
                 <div className="inner-post">
             {post.postMessage ? <span className="repost-text">{post.postMessage}</span> : ''}
@@ -106,6 +107,7 @@ const FeedPostRepost = ({post}) => {
                 setCommentsCount={setCommentsCount}
                 reposts={reposts} 
                 setReposts={setReposts}
+                isRepost={true}
                 />
         </div>
         </CSSTransition>)

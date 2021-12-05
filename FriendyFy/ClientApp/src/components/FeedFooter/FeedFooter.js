@@ -134,9 +134,9 @@ return(
                         </button>
                     </span>
                     <span>
-                        <button onClick={showPeopleRepostsEvent}>
+                        {!props.isRepost ? <button onClick={showPeopleRepostsEvent}>
                             {props.reposts} reposts
-                        </button>
+                        </button> : ''}
                     </span>
                 </div>
             </div>
