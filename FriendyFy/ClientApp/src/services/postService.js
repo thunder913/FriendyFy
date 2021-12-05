@@ -60,3 +60,11 @@ export function makePost(privacySetting, postMessage, locationLat, locationLng, 
         body: JSON.stringify({postId, postType, take, skip})
     });
   }
+
+  export function deletePost(postId, postType) {
+    return fetch('/post/deletePost', {
+        method: 'POST',
+        headers: {'Content-Type': 'application/json'},
+        body: JSON.stringify({postId, postType})
+    });
+  }

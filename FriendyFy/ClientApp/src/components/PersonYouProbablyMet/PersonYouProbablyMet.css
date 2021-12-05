@@ -1,5 +1,7 @@
 .person-you-met .person-image{
     width: 60px;
+    padding-bottom: 20px;
+    cursor: pointer;
 }
 
 .person-you-met .person-image > img{
@@ -39,6 +41,11 @@
 .person-you-met .person-name{
     font-size: 18px;
     padding-left: 10px;
+    cursor: pointer;
+}
+
+.person-you-met .person-name:hover{
+    text-decoration: underline;
 }
 
 .person-you-met .add-friend, .person-you-met .remove-suggestion{

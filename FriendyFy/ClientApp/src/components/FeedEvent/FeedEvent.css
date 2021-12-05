@@ -129,3 +129,23 @@
 .feed-event.repost .repost-text{
     margin: 0px 12px;
 }
+
+
+
+.feed-post-animation-enter{
+    opacity: 0;
+}
+
+.feed-post-animation-enter-active{
+    opacity: 1;
+    transition: opacity 800ms;
+}
+
+.feed-post-animation-exit{
+    opacity: 1;
+}
+
+.feed-post-animation-exit-active{
+    opacity: 0;
+    transition: opacity 800ms;
+}

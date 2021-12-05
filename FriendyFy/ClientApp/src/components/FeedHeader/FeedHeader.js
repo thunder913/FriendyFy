@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import './FeedHeader.css';
 import { faEllipsisH } from '@fortawesome/free-solid-svg-icons';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
@@ -6,12 +6,17 @@ import { useHistory } from 'react-router';
 import PeopleListPopUp from '../PopUps/PeopleListPopUp/PeopleListPopUp'
 import { getTaggedPeople } from '../../services/postService';
 import MapPopUp from '../PopUps/MapPopUp/MapPopUp'
+import FeedHeaderOptions from '../FeedHeaderOptions/FeedHeaderOptions';
+import NotificationManager from "react-notifications/lib/NotificationManager";
+import { NotificationContainer } from "react-notifications";
 
-function FeedHeader({photo, name, time, username, city, lat, long, taggedPeople, postId, isRepost}){
+function FeedHeader({photo, name, time, username, city, lat, long, taggedPeople, postId, isRepost, setHidePost}){
     const history = useHistory();
     const [showPostLocation, setShowPostLocation] = useState(false);
     const [showTaggedPeople, setShowTaggedPeople] = useState(false);
-
+    const [showOptions, setShowOptions] = useState(false);
+    const [isDeleted, setIsDeleted] = useState(false);
+    const [hasError, setHasError] = useState(false);
     const closePostLocationPopUp = () => {
         setShowPostLocation(false);
     }
@@ -35,9 +40,26 @@ function FeedHeader({photo, name, time, username, city, lat, long, taggedPeople,
     const redirectToUserProfile = () => {
         history.push('/profile/' + username);
     }
+
+    const showHeaderOptionsEvent = () => {
+        setShowOptions(true);
+    }
     
+    useEffect(() => {
+        if(isDeleted){
+            if(hasError){
+                setHasError(false);
+                setIsDeleted(false);
+                NotificationManager.error('There was an error deleting the post!', '', 200000);
+            }else{
+                setHidePost(true);
+            }
+        }
+    }, [isDeleted])
+
     return(
     <header className="feed-header">
+    <NotificationContainer/>
     {showTaggedPeople ? 
     <PeopleListPopUp 
         title="Tagged People"
@@ -70,7 +92,12 @@ function FeedHeader({photo, name, time, username, city, lat, long, taggedPeople,
         </div>
     </div>
     {!isRepost ? <div className="header-right">
-        <FontAwesomeIcon className="header-elipsis" icon={faEllipsisH} />
+        <FontAwesomeIcon className="header-elipsis" icon={faEllipsisH} onClick={showHeaderOptionsEvent}/>
+        <FeedHeaderOptions
+            showOptions={showOptions} 
+            setIsDeleted={setIsDeleted}
+            setShowOptions={setShowOptions}
+            setHasError={setHasError}/>
     </div> : ''}
 
 </header>)

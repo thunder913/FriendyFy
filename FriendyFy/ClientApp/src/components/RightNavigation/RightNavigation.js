@@ -2,7 +2,7 @@ import React from 'react';
 import PersonYouProbablyMet from '../PersonYouProbablyMet/PersonYouProbablyMet';
 import './RightNavigation.css';
 import { useLocation } from 'react-router';
-import { useEffect } from 'react/cjs/react.development';
+import { useEffect, useState } from 'react/cjs/react.development';
 import { getRightNavigationSuggestions } from '../../services/friendService';
 const people = [
     {
@@ -33,11 +33,12 @@ const people = [
 
 const RightNavigation = () =>{
     let location = useLocation();
-    
+    const [recommendations, setRecommendation] = useState([]);
     useEffect(() => {
         getRightNavigationSuggestions()
             .then(async res => {
-                console.log(await res.json())
+                let obj = await res.json();
+                setRecommendation(obj);
             })
     }, [])
 
@@ -76,7 +77,7 @@ const RightNavigation = () =>{
         </div>
         <div className="bottom-half">
             <h2 className="people-you-met-title">People You Probably Met</h2>
-            {people.map(person => <PersonYouProbablyMet person={person} />)}
+            {recommendations.map(person => <PersonYouProbablyMet person={person} />)}
             <h3 className="see-more-text">See more...</h3>
         </div>
     </aside>)

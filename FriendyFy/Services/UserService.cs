@@ -175,35 +175,29 @@ namespace FriendyFy.Services
         public List<RightNavigationRecommendationViewModel> GetEventUserRecommendations(string userId)
         {
             var user = this.userRepository.All()
-                .Include(x => x.Friends)
                 .Include(x => x.Interests)
-                .Include(x => x.Events)
-                .ThenInclude(x => x.Users)
                 .Include(x => x.RemoveSuggestionFriends)
                 .FirstOrDefault(x => x.Id == userId);
 
-            var userEvents = user.Events.Select(y => y.Id).ToArray();
             var blocked = user.RemoveSuggestionFriends.Select(y => y.BlockedUserId).ToArray();
-            var userFriends = user.Friends.Select(y => y.Id).ToArray();
             var userInterests = user.Interests.Select(y => y.Id).ToArray();
 
-            // fix the queries
             return this.userRepository
                 .AllAsNoTracking()
                 .Include(x => x.Interests)
                 .Include(x => x.ProfileImage)
                 .Include(x => x.Friends)
-                .Where(x => !userFriends.Any(y => y == x.Id)
-                && !blocked.Any(y => y == x.Id))
-                .OrderByDescending(x => x.Events * 15)
-                //x.Friends.Count(y => y.Id == userId) * 2 +
-                //x.Interests.Count(y => userInterests.Any(z => z == y.Id)) * 5)
+                .Where(x => x.Id != userId && !blocked.Any(y => y == x.Id)
+                && !(x.Friends.Any(y => y.FriendId == x.Id && y.CurrentUserId == userId) || x.Friends.Any(y => y.CurrentUserId == x.Id && y.FriendId == userId)))
+                .OrderByDescending(x => x.Events.Count(y => y.Users.Any(z => z.Id == userId)) + 
+                x.Friends.Count(y => y.Id == userId) * 2 +
+                x.Interests.Count(y => userInterests.Any(z => z == y.Id)))
                 .Take(3)
                 .ToList()
                 .Select(x => new RightNavigationRecommendationViewModel()
                 {
                     CommonInterests = x.Interests.Count(y => user.Interests.Any(z => z.Id == y.Id)),
-                    EventsTogether = userEvents.Count(y => y == x.Id) * 15,
+                    EventsTogether = x.Events.Count(y => y.Users.Any(z => z.Id == userId)),
                     MutualFriends = x.Friends.Count(y => y.Id == userId) * 2,
                     Name = x.FirstName + " " + x.LastName,
                     ProfilePhoto = this.blobService.GetBlobUrlAsync(x.ProfileImage?.Id + x.ProfileImage?.ImageExtension, GlobalConstants.BlobPictures).GetAwaiter().GetResult(),

@@ -6,7 +6,7 @@ import { parseTime } from '../../services/helperService';
 import { useHistory } from 'react-router';
 import moment from 'moment';
 import MapPopUp from '../PopUps/MapPopUp/MapPopUp';
-
+import { CSSTransition } from 'react-transition-group';
 const FeedEvent = ({ eventData }) => {
     const history = useHistory();
     const [localTime, setLocalTime] = useState(eventData.eventTime);
@@ -17,6 +17,7 @@ const FeedEvent = ({ eventData }) => {
     const [comments, setComments] = useState([]);
     const [commentsCount, setCommentsCount] = useState(eventData.commentsCount);
     const [event, setEvent] = useState(eventData);
+    const [hidePost, setHidePost] = useState(false);
     const closeLocationPopUp = () => {
         setShowLocation(false);
     }
@@ -41,7 +42,14 @@ const FeedEvent = ({ eventData }) => {
         }
     }, [eventData])
 
-    return (<div className={"feed feed-event " + (eventData.isRepost ? 'repost' : '')} >
+    return (<CSSTransition 
+        in={!hidePost} 
+        timeout={800} 
+        classNames={"feed-post-animation"}
+        unmountOnExit
+        onEnter={() => setHidePost(false)}
+        onExited={() => setHidePost(true)}>
+            <div className={"feed feed-event " + (eventData.isRepost ? 'repost' : '')} >
             {showLocation ? 
         <MapPopUp 
             title="Event Location" 
@@ -66,7 +74,8 @@ const FeedEvent = ({ eventData }) => {
             time={parseTime(event.createdAgo)}
             username={event.username}
             postId={event.postId}
-            isRepost={eventData.isRepost}/>
+            isRepost={eventData.isRepost}
+            setHidePost={setHidePost}/>
         <p className="going-text">Going:</p>
         <div className="event-images">
             <div className="user-photo">
@@ -103,7 +112,8 @@ const FeedEvent = ({ eventData }) => {
             reposts={reposts} 
             setReposts={setReposts}
             />
-    </div>)
+    </div>
+    </CSSTransition>)
 }
 
 export default FeedEvent;

@@ -1,0 +1,48 @@
+header.feed-header .header-options{
+    position: absolute;
+}
+
+header.feed-header .header-options .inner-options{
+    position: relative;
+    left: -1px;
+    background-color: red;
+    bottom: 10px;
+    width: 100px;
+    background-color: rgb(92, 92, 92);
+    padding: 5px 0px;
+    border-radius: 3px;
+}
+
+header.feed-header .header-options .delete-button{
+    background-color: transparent;
+    border: 0px;
+    width: 100%;
+    text-align: left;
+    color: white;
+    transition: 0.3s;
+    padding: 5px 10px 5px 5px;
+    font-weight: 400;
+    border-radius: 5px;
+}
+
+header.feed-header .header-options .delete-button:hover{
+    background-color: rgb(116, 113, 113);
+}
+
+.animation-options-enter{
+    opacity: 0;
+}
+
+.animation-options-enter-active{
+    opacity: 1;
+    transition: opacity 400ms;
+}
+
+.animation-options-exit{
+    opacity: 1;
+}
+
+.animation-options-exit-active{
+    opacity: 0;
+    transition: opacity 400ms;
+}
