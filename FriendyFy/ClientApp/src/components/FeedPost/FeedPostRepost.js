@@ -4,6 +4,8 @@ import FeedFooter from '../FeedFooter/FeedFooter';
 import './FeedPost.css';
 import { parseTime } from '../../services/helperService';
 import ViewImagePopUp from '../PopUps/ViewImagePopUp/ViewImagePopUp';
+import { CSSTransition } from 'react-transition-group';
+
 const FeedPostRepost = ({post}) => {
 
     const defaultImage = "https://friendyfy.blob.core.windows.net/pictures";        
@@ -20,6 +22,8 @@ const FeedPostRepost = ({post}) => {
     const [originalReposts, setOriginalReposts] = useState(post.repost.repostsCount);
     const [originalComments, setOriginalComments] = useState([]);
     const [originalCommentsCount, setOriginalCommentsCount] = useState(post.repost.commentsCount);
+    
+    const [hidePost, setHidePost] = useState(false)
     const closePopUpEvent = () => {
         setShowImagePopUp(false);
     }
@@ -34,6 +38,13 @@ const FeedPostRepost = ({post}) => {
         setOriginalCommentsCount(post.repost.commentsCount)
     }, [post])
     return(
+        <CSSTransition 
+        in={!hidePost} 
+        timeout={800} 
+        classNames={"feed-post-animation"}
+        unmountOnExit
+        onEnter={() => setHidePost(false)}
+        onExited={() => setHidePost(true)}>
         <div className={"feed-photo " + (post.isRepost ? 'repost' : '')}>
             {showImagePopUp ? <ViewImagePopUp 
                 post={post.repost} 
@@ -56,6 +67,8 @@ const FeedPostRepost = ({post}) => {
                 time={parseTime(post.createdAgo)}
                 username={post.username}
                 postId={post.postId}
+                postType={post.postType}
+                setHidePost={setHidePost}
                 />
                 <div className="inner-post">
             {post.postMessage ? <span className="repost-text">{post.postMessage}</span> : ''}
@@ -70,6 +83,7 @@ const FeedPostRepost = ({post}) => {
                 taggedPeople={post.repost.taggedPeopleCount}
                 postId={post.repost.postId}
                 isRepost={true}
+                postType={post.repost.postType}
                 />
             {post.repost.postMessage ? <div className="post-text">
                 <p>{post.repost.postMessage}</p>
@@ -93,7 +107,8 @@ const FeedPostRepost = ({post}) => {
                 reposts={reposts} 
                 setReposts={setReposts}
                 />
-        </div>)
+        </div>
+        </CSSTransition>)
 }
 
 export default FeedPostRepost;

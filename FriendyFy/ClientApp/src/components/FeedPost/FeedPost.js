@@ -4,6 +4,7 @@ import FeedFooter from '../FeedFooter/FeedFooter';
 import './FeedPost.css';
 import { parseTime } from '../../services/helperService';
 import ViewImagePopUp from '../PopUps/ViewImagePopUp/ViewImagePopUp';
+import { CSSTransition } from 'react-transition-group';
 
 const FeedPost = ({post}) => {
     const defaultImage = "https://friendyfy.blob.core.windows.net/pictures";        
@@ -13,6 +14,7 @@ const FeedPost = ({post}) => {
     const [reposts, setReposts] = useState(post.repostsCount)
     const [comments, setComments] = useState([]);
     const [commentsCount, setCommentsCount] = useState(post.comments);
+    const [hidePost, setHidePost] = useState(false)
 
     const closePopUpEvent = () => {
         setShowImagePopUp(false);
@@ -24,7 +26,13 @@ const FeedPost = ({post}) => {
         setCommentsCount(post.commentsCount)
     }, [post])
 
-    return(
+    return(<CSSTransition 
+        in={!hidePost} 
+        timeout={800} 
+        classNames={"feed-post-animation"}
+        unmountOnExit
+        onEnter={() => setHidePost(false)}
+        onExited={() => setHidePost(true)}>
     <div className="feed-photo">
         {showImagePopUp ? <ViewImagePopUp 
             post={post} 
@@ -51,6 +59,8 @@ const FeedPost = ({post}) => {
             long={post.longitude}
             taggedPeople={post.taggedPeopleCount}
             postId={post.postId}
+            postType={post.postType}
+            setHidePost={setHidePost}
             />
         {post.postMessage ? <div className="post-text">
             <p>{post.postMessage}</p>
@@ -74,7 +84,8 @@ const FeedPost = ({post}) => {
             setReposts={setReposts}
             isRepost={true}
             />
-    </div>)
+    </div>
+    </CSSTransition>)
 }
 
 export default FeedPost;

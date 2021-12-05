@@ -3,8 +3,10 @@ import { CSSTransition } from 'react-transition-group';
 import OutsideClickHandler from 'react-outside-click-handler';
 import './FeedHeaderOptions.css'
 import { deletePost } from "../../services/postService";
+import ApproveEventPopUp from '../PopUps/ApprovePopUp/ApprovePopUp';
 
 const FeedHeaderOptions = ({showOptions, setShowOptions, postId, postType, setIsDeleted, setHasError}) => {
+    const [showLeaveEventPopUp, setShowLeaveEventPopUp] = useState(false);
 
     const onDeleteButtonClicked = () => {
         deletePost(postId, postType)
@@ -23,6 +25,10 @@ const FeedHeaderOptions = ({showOptions, setShowOptions, postId, postType, setIs
         onOutsideClick={() => {
           setShowOptions(false);
         }}>
+        {showLeaveEventPopUp ? <ApproveEventPopUp
+                text={"Are you sure you want to delete the "+ postType + ". If you click the Approve button, it will be gone permanently!"}
+                acceptEvent={onDeleteButtonClicked}
+                closePopUp={() => setShowLeaveEventPopUp(false)}/> : ''}
         <CSSTransition 
             in={showOptions} 
             timeout={200} 
@@ -32,7 +38,7 @@ const FeedHeaderOptions = ({showOptions, setShowOptions, postId, postType, setIs
             onExited={() => setShowOptions(false)}>
             <div className="header-options">
                 <div className="inner-options">
-                    <button className="delete-button" onClick={onDeleteButtonClicked}>Delete</button>
+                    <button className="delete-button" onClick={() => setShowLeaveEventPopUp(true)}>Delete</button>
                 </div>
             </div>
         </CSSTransition>

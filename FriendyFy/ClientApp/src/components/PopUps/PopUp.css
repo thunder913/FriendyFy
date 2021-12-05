@@ -12,6 +12,7 @@
     width: 100%;
     background: transparent;
     backdrop-filter: blur(5px);
+    transition: opacity 800ms;
 }
 
 .popup-outer .popup-inner{

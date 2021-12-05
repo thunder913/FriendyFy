@@ -18,6 +18,11 @@ const ApproveEventPopUp = ({text, acceptEvent, closePopUp}) => {
         }
     } 
 
+    const approveEvent = () => {
+        allowScroll();
+        acceptEvent();
+    }
+
     useEffect(() => {
         blockScroll();
         window.addEventListener("keydown", escPressed, false);
@@ -30,7 +35,7 @@ const ApproveEventPopUp = ({text, acceptEvent, closePopUp}) => {
     return(<div className="popup-outer approve-popup">
     <div className="popup-inner approve-inner popup-flex-center">
         <PopUpHeader title={text} closePopUp={closePopUpEvent}></PopUpHeader>
-        <button className="approve-button" onClick={acceptEvent}>Approve</button>
+        <button className="approve-button" onClick={approveEvent}>Approve</button>
     </div>
 </div>)
 }

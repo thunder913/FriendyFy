@@ -16,16 +16,19 @@ export function loadMoreComments(postId, skip, postType, setComments, setHasMore
   }
 
 export function addComment(commentRef, postId, postType, setComments, setCommentsCount, scrollRef){
+    if(commentRef.current.value){
     makeComment(commentRef.current.value, postId, postType)
         .then(async res => 
         {
+            if(res.status === 200){
             commentRef.current.value = '';
             let comment = await (res.json());
-            console.log(comment);
             setComments(prevState => ([comment, ...prevState]));
             setCommentsCount(prev => prev+1)
             scrollRef.current.el.scrollTop = 0;
+            }
         });
+    }
 }
 
 export function likedButtonClicked(postType, postId, setIsLiked, setLikes){
