@@ -32,7 +32,7 @@ namespace FriendyFy.Controllers
                 return BadRequest("The user hasn't set his location!");
             }
 
-            return Ok(new { Location = this.geolocationService.GetUserLocation(Decimal.ToDouble((decimal)user.Latitude), Decimal.ToDouble((decimal)user.Longitude)) });
+            return Ok(new { Location = this.geolocationService.GetUserLocation(Decimal.ToDouble((decimal)user.Latitude), Decimal.ToDouble((decimal)user.Longitude)), Latitude = user.Latitude, Longitude = user.Longitude });
         }
 
         [HttpPost("getEventsCount")]
