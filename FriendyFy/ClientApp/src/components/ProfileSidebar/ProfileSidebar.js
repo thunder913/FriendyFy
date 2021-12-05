@@ -51,8 +51,9 @@ const showImagePopUpEvent = (id) => {
             setComments([]);
             setCommentsCount(post.commentsCount);
             setPost(post);
+            setShowImagePopUp(true);
         })
-    setShowImagePopUp(true);
+    
 }
 
 return(

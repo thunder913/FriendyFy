@@ -44,8 +44,8 @@ const ProfilePhotos = () => {
                 setComments([]);
                 setCommentsCount(post.commentsCount);
                 setPost(post);
-            })
-        setShowImagePopUp(true);
+            setShowImagePopUp(true);
+        })
     }
 
     useEffect(() => {
