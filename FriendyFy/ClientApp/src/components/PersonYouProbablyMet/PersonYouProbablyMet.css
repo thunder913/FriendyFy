@@ -42,6 +42,8 @@
     font-size: 18px;
     padding-left: 10px;
     cursor: pointer;
+    color: white;
+    text-decoration: none;
 }
 
 .person-you-met .person-name:hover{

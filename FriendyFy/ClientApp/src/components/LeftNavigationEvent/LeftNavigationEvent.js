@@ -1,12 +1,12 @@
 import React, { useState } from 'react';
 import './LeftNavigationEvent.css';
 import MapPopUp from '../PopUps/MapPopUp/MapPopUp';
-import { useHistory } from 'react-router';
 import moment from 'moment';
+import { Link } from 'react-router-dom';
 const LeftNavigationEvent = ({data, setBlockNavScroll}) =>{
     const [showMap, setShowMap] = useState(false);
     const [parsedTime, setParsedTime] = useState('');
-    const history = useHistory();
+
     const closeLocationPopUp = () => {
         setShowMap(false);
         setBlockNavScroll(false);
@@ -15,10 +15,6 @@ const LeftNavigationEvent = ({data, setBlockNavScroll}) =>{
     const showLocationPopUp = () => {
         setShowMap(true);
         setBlockNavScroll(true);
-    }
-
-    const viewEventHandler = () => {
-        history.push('/event/' + data.id);
     }
 
     useState(() => {
@@ -65,7 +61,7 @@ const LeftNavigationEvent = ({data, setBlockNavScroll}) =>{
                     </div>
                 )): ''}
             </div>
-            <button className="view-button" onClick={viewEventHandler}>View</button>
+            <Link to={'/event/' + data.id} className="view-button">View</Link>
             </div>
             </main>
         </div>)

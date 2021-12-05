@@ -17,6 +17,7 @@
     border-radius: 25px;
     align-items: center;
     transition: 0.3s;
+    color: white;
 }
 
 .user-name{

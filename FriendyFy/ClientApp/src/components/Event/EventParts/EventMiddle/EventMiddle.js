@@ -1,13 +1,12 @@
 import React, { useEffect, useState } from 'react'
 import { joinEvent, shareEvent } from '../../../../services/eventService'
 import {NotificationContainer, NotificationManager} from 'react-notifications';
-import { useHistory } from 'react-router';
 import 'react-notifications/lib/notifications.css';
 import './EventMiddle.css'
-
+import { Link } from 'react-router-dom';
 const EventMiddle = ({eventId, title, privacy, interests=[], organizerName, organizerUsername, isInEvent, isOrganizer, setIsInEvent}) => {
     const [isUserInEvent, setIsUserInEvent] = useState(isInEvent);
-    const history = useHistory();
+
     const joinEventHandler = () => {
         joinEvent(eventId)
             .then(res => {
@@ -39,10 +38,6 @@ const EventMiddle = ({eventId, title, privacy, interests=[], organizerName, orga
             })
     }
 
-    const goToOrganizerProfil = () => {
-        history.push('/profile/' + organizerUsername);
-    }
-
     useEffect(() => {
         setIsUserInEvent(isInEvent);
     }, [isInEvent])
@@ -64,7 +59,7 @@ const EventMiddle = ({eventId, title, privacy, interests=[], organizerName, orga
                 </div>
                 <div className="right-side">
                     <p className="organized-text">organized by:</p>
-                    <h3 className="organizer-name" onClick={goToOrganizerProfil}>{isOrganizer ? 'you' : organizerName}</h3>
+                    <Link to={'/profile/' + organizerUsername}><h3 className="organizer-name">{isOrganizer ? 'you' : organizerName}</h3></Link>
                     <div className="buttons">
                         {!isUserInEvent ? 
                         <button className="join" onClick={joinEventHandler}>Join</button> :

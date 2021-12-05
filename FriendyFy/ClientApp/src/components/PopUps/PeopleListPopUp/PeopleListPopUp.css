@@ -73,3 +73,12 @@
 .display-none{
     display: none !important;
 }
+
+.people-list-popup .person .name{
+    text-decoration: none;
+    color: white;
+}
+
+.people-list-popup .people-section > a{
+    text-decoration: none;
+}

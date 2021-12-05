@@ -1,18 +1,13 @@
 import React from 'react';
 import './PersonYouProbablyMet.css';
-import { useHistory } from 'react-router';
 import { removeFriendSuggestion } from '../../services/friendService';
 import { useState } from 'react/cjs/react.development';
 import { addFriend } from '../../services/friendService';
+import { Link } from 'react-router-dom';
 
 
 const PersonYouProbablyMet = ({person}) =>{
-    const history = useHistory();
     const [show, setShow] = useState(true);
-
-    const redirectToUserProfile = () => {
-        history.push('/profile/' + person.username);
-    }
 
     const removeFriendEvent = () => {
         removeFriendSuggestion({userId: person.username})
@@ -34,7 +29,7 @@ const PersonYouProbablyMet = ({person}) =>{
     
     return(<div className="person-you-met">
             {show ? <div className="left-side">
-            <span className="person-name" onClick={redirectToUserProfile}>{person.name}</span>
+            <Link to={'/profile/' + person.username}><span className="person-name">{person.name}</span></Link>
                 <div className="main-suggestion-body">
                     <div className="common-stuff">
                         <span className="friend-friends">You were together at {person.eventsTogether} event{person.eventsTogether > 1 ? "s" : ""}.</span>
@@ -46,9 +41,11 @@ const PersonYouProbablyMet = ({person}) =>{
                 </div>
             </div> : ''}
             {show ? <div className="right-side">
-                <div className="person-image" onClick={redirectToUserProfile}>
+                <Link to={'/profile/' + person.username}>
+                <div className="person-image">
                     <img src={person.profilePhoto} alt="" />
                 </div>
+                </Link>
             </div> : ''}
         </div>)
 }

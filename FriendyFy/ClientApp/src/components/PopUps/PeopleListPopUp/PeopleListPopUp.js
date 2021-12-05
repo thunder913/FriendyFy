@@ -1,15 +1,13 @@
 import React, { useEffect, useState } from "react";
 import InfiniteScroll from "react-infinite-scroll-component";
-import { useHistory } from 'react-router';
 import useScrollBlock from "../../../hooks/useScrollBlock";
 import '../PopUp.css';
 import './PeopleListPopUp.css'
-
+import { Link } from "react-router-dom";
 const PeopleListPopUp = ({title, count, loadPeople, closePopUp}) => {
     const [hasMore, setHasMore] = useState(true); 
     const [people, setPeople] = useState([]); 
     const [blockScroll, allowScroll] = useScrollBlock();
-    const history = useHistory();
     const escPressed = (e) => {
         if(e.keyCode === 27){
             closePopUpEvent();
@@ -19,10 +17,6 @@ const PeopleListPopUp = ({title, count, loadPeople, closePopUp}) => {
     const closePopUpEvent = () => {
         allowScroll();
         closePopUp();
-    }
-
-    const redirectToUserProfile = (username) => {
-        history.push('/profile/' + username);
     }
     
     useEffect(() => {
@@ -69,7 +63,7 @@ const PeopleListPopUp = ({title, count, loadPeople, closePopUp}) => {
                 </header>
                 <section className={"people " + (people.length === 0 ? 'display-none' : '')}>
                 <InfiniteScroll
-                        className="comments-section"
+                        className="people-section"
                         dataLength={people.length}
                         next={loadMorePeople}
                         height={300}
@@ -78,14 +72,15 @@ const PeopleListPopUp = ({title, count, loadPeople, closePopUp}) => {
                         loader={<h4 className="loading-text">Loading...</h4>}
                         scrollableTarget="scrollableDiv"
                         >
-                        {people.map(p => <article className="person" onClick={() => redirectToUserProfile(p.username)}>
+                        {people.map(p => <Link to={'/profile/' + p.username}><article className="person">
                         <div className="person-image">
                             <img src={p.profileImage} alt="" />
                         </div>
                         <div className="name">
                             {p.name}
                         </div>
-                    </article>)}
+                    </article>
+                    </Link>)}
                     </InfiniteScroll>
                 </section>
             </div>

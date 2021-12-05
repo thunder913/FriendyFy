@@ -3,15 +3,15 @@ import { parseTime } from '../../services/helperService';
 import { faThumbsUp } from '@fortawesome/free-solid-svg-icons';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { likeComment } from "../../services/commentService";
-import { useHistory } from 'react-router';
 import "./PostComment.css"
 import PeopleListPopUp from '../PopUps/PeopleListPopUp/PeopleListPopUp';
 import { getCommentLikes } from "../../services/commentService";
+import { Link } from 'react-router-dom'
+
 const PostComment = ({comment}) => {
     const [likedByYou, setLikedByYou] = useState(comment.isLikedByUser);
     const [likesCount, setLikesCount] = useState(comment.likesCount)
     const [showPeopleLikesPopUp, setShowPeopleLiekdPopUp] = useState(false);
-    const history = useHistory();
 
     const loadLikes = (skip) => {
         return getCommentLikes(comment.id, skip, 10);
@@ -34,10 +34,6 @@ const PostComment = ({comment}) => {
                 });
     }
 
-    const redirectToUserProfile = () => {
-        history.push('/profile/' + comment.commentorUsername);
-    }
-
     return (<div key={comment.id} className="comment">
                                 {showPeopleLikesPopUp ? 
                             <PeopleListPopUp 
@@ -46,13 +42,17 @@ const PostComment = ({comment}) => {
                                 loadPeople={loadLikes}
                                 closePopUp={closePopUp}
                             /> : ''}
-                    <div className="user-picture" onClick={redirectToUserProfile}>
-                        <img src={comment.commentorPicture} alt="" />
-                    </div>
+                    <Link to={'/profile/' + comment.commentorUsername}>
+                        <div className="user-picture">
+                            <img src={comment.commentorPicture} alt="" />
+                        </div>
+                    </Link>
                     <div className="inner-comment">
-                        <div className="top-comment-half" onClick={redirectToUserProfile}>
+                    <Link to={'/profile/' + comment.commentorUsername}>
+                        <div className="top-comment-half">
                             {comment.commentorName}
                         </div>
+                    </Link>
                     <p>{comment.commentText}</p>
                     <footer className="comment-footer">
                         <button className={likedByYou ? 'liked' : ''} onClick={commentLikeEvent}>Like</button>
