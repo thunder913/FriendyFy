@@ -21,6 +21,7 @@ export function addComment(commentRef, postId, postType, setComments, setComment
         {
             commentRef.current.value = '';
             let comment = await (res.json());
+            console.log(comment);
             setComments(prevState => ([comment, ...prevState]));
             setCommentsCount(prev => prev+1)
             scrollRef.current.el.scrollTop = 0;

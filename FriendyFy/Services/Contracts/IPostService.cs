@@ -17,5 +17,6 @@ namespace FriendyFy.Services.Contracts
         PostDetailsViewModel GetPostByImageId(string imageId, string userId);
         Task<bool> RepostAsync(string id, string text, string userId);
         List<PersonListPopupViewModel> GetPeopleReposts(string postId, int take, int skip);
+        Task<bool> DeletePostAsync(string postId, string userId);
     }
 }

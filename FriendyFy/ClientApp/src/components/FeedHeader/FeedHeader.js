@@ -10,7 +10,7 @@ import FeedHeaderOptions from '../FeedHeaderOptions/FeedHeaderOptions';
 import NotificationManager from "react-notifications/lib/NotificationManager";
 import { NotificationContainer } from "react-notifications";
 
-function FeedHeader({photo, name, time, username, city, lat, long, taggedPeople, postId, isRepost, setHidePost}){
+function FeedHeader({photo, name, time, username, city, lat, long, taggedPeople, postId, postType, isRepost, setHidePost}){
     const history = useHistory();
     const [showPostLocation, setShowPostLocation] = useState(false);
     const [showTaggedPeople, setShowTaggedPeople] = useState(false);
@@ -97,7 +97,9 @@ function FeedHeader({photo, name, time, username, city, lat, long, taggedPeople,
             showOptions={showOptions} 
             setIsDeleted={setIsDeleted}
             setShowOptions={setShowOptions}
-            setHasError={setHasError}/>
+            setHasError={setHasError}
+            postId={postId}
+            postType={postType}/>
     </div> : ''}
 
 </header>)

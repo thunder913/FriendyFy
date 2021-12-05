@@ -307,5 +307,26 @@ namespace FriendyFy.Services
                 })
                 .ToList();
         }
+
+        public async Task<bool> DeletePostAsync(string postId, string userId)
+        {
+            var post = this.postRepository
+                .All()
+                .Include(x => x.Reposts)
+                .FirstOrDefault(x => x.Id == postId && x.CreatorId == userId);
+            if (post == null)
+            {
+                return false;
+            }
+            var reposts = post.Reposts;
+            foreach (var eventPost in reposts)
+            {
+                this.postRepository.Delete(eventPost);
+            }
+            this.postRepository.Delete(post);
+            var removed = await this.postRepository.SaveChangesAsync();
+            return removed > 0;
+        }
+
     }
 }

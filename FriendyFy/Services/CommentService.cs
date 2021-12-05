@@ -273,7 +273,8 @@ namespace FriendyFy.Services
                         CreatedAgo = (int)((DateTime.UtcNow - x.CreatedOn).TotalMinutes),
                         IsLikedByUser = false,
                         LikesCount = x.CommentLikes.Count(),
-                        Id = x.Id
+                        Id = x.Id,
+                        PostType = postType.ToString()
                     })
                     .FirstOrDefault();
             }
@@ -294,7 +295,8 @@ namespace FriendyFy.Services
                         CreatedAgo = (int)((DateTime.UtcNow - x.CreatedOn).TotalMinutes),
                         IsLikedByUser = false,
                         LikesCount = x.CommentLikes.Count(),
-                        Id = x.Id
+                        Id = x.Id,
+                        PostType = postType.ToString()
                     })
                     .FirstOrDefault();
             }

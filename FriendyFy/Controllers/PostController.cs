@@ -170,5 +170,36 @@ namespace FriendyFy.Controllers
             return BadRequest();
         }
 
+        [HttpPost("deletePost")]
+        public async Task<IActionResult> DeletePost(DeletePostDto dto)
+        {
+            var parsed = Enum.TryParse(dto.PostType, out PostType postType);
+            if (!parsed)
+            {
+                return BadRequest("There was something wrong with the request!");
+            }
+
+            var user = this.GetUserByToken();
+            if (user == null)
+            {
+                return Unauthorized("You are not logged in!");
+            }
+
+            bool deleted = false;
+            if (postType == PostType.Post)
+            {
+                deleted = await this.postService.DeletePostAsync(dto.PostId, user.Id);
+
+            }
+            else if (postType == PostType.Event)
+            {
+                deleted = await this.eventService.DeleteEventPostAsync(dto.PostId, user.Id);
+            }
+            if (deleted)
+                return Ok(deleted);
+
+            return BadRequest();
+        }
+
     }
 }

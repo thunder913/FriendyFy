@@ -64,7 +64,9 @@ const FeedEvent = ({ eventData }) => {
             name={eventData.creatorName}
             time={parseTime(eventData.createdAgo)}
             username={eventData.username}
-            postId={eventData.postId}
+            postId={eventData.eventPostId}
+            postType={eventData.postType}
+            setHidePost={setHidePost}
         /> : ''}
         {(eventData.isRepost && eventData.postMessage) ? <span className="repost-text">{eventData.postMessage}</span> : ''}
         <div className='inner-post'>
@@ -73,7 +75,8 @@ const FeedEvent = ({ eventData }) => {
             name={event.creatorName}
             time={parseTime(event.createdAgo)}
             username={event.username}
-            postId={event.postId}
+            postId={event.eventPostId}
+            postType={event.postType}
             isRepost={eventData.isRepost}
             setHidePost={setHidePost}/>
         <p className="going-text">Going:</p>
@@ -98,7 +101,7 @@ const FeedEvent = ({ eventData }) => {
         </div>
         </div>
         <FeedFooter
-            repostId={eventData.eventPostId}
+            repostId={event.eventPostId}
             postId={eventData.eventPostId}
             postType={eventData.postType}
             isLiked={isLiked}

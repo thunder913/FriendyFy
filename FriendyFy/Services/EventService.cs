@@ -23,13 +23,17 @@ namespace FriendyFy.Services
         private readonly IImageService imageService;
         private readonly IRepository<EventLike> eventLikeRepository;
         private readonly IRepository<EventPost> eventPostRepository;
+        private readonly IRepository<EventComment> eventCommentRepository;
+        private readonly IRepository<CommentLike> commentLikeRepository;
 
         public EventService(IGeolocationService geolocationService,
             IDeletableEntityRepository<Event> eventRepository,
             IBlobService blobService,
             IImageService imageService,
             IRepository<EventLike> eventLikeRepository,
-            IRepository<EventPost> eventPostRepository)
+            IRepository<EventPost> eventPostRepository,
+            IRepository<EventComment> eventCommentRepository,
+            IRepository<CommentLike> commentLikeRepository)
         {
             this.geolocationService = geolocationService;
             this.eventRepository = eventRepository;
@@ -37,6 +41,8 @@ namespace FriendyFy.Services
             this.imageService = imageService;
             this.eventLikeRepository = eventLikeRepository;
             this.eventPostRepository = eventPostRepository;
+            this.eventCommentRepository = eventCommentRepository;
+            this.commentLikeRepository = commentLikeRepository;
         }
 
         public async Task CreateEventAsync(string name, DateTime date, List<Interest> interests, PrivacySettings privacySettings, decimal latitude, decimal longitude, string description, string profileImage, string organizerId)
@@ -620,6 +626,58 @@ namespace FriendyFy.Services
                     ProfileImage = this.blobService.GetBlobUrlAsync(x.Creator?.ProfileImage?.Id + x.Creator?.ProfileImage?.ImageExtension, GlobalConstants.BlobPictures).GetAwaiter().GetResult(),
                 })
                 .ToList();
+        }
+
+        public async Task<bool> DeleteEventPostAsync(string postId, string userId)
+        {
+            var post = this.eventPostRepository
+                .All()
+                .Include(x => x.Comments)
+                .ThenInclude(x => x.CommentLikes)
+                .Include(x => x.Likes)
+                .Include(x => x.Reposts)
+                .ThenInclude(x => x.Comments)
+                .ThenInclude(x => x.CommentLikes)
+                .Include(x => x.Reposts)
+                .ThenInclude(x => x.Likes)
+                .FirstOrDefault(x => x.Id == postId && x.CreatorId == userId);
+            if (post == null)
+            {
+                return false;
+            }
+            var reposts = post.Reposts;
+            foreach (var eventPost in reposts)
+            {
+                foreach (var like in eventPost.Likes)
+                {
+                    this.eventLikeRepository.Delete(like);
+                }
+                foreach (var comment in eventPost.Comments)
+                {
+                    foreach (var like in comment.CommentLikes)
+                    {
+                        this.commentLikeRepository.Delete(like);
+                    }
+                    this.eventCommentRepository.Delete(comment);
+                }
+                this.eventPostRepository.Delete(eventPost);
+            }
+            foreach (var like in post.Likes)
+            {
+                this.eventLikeRepository.Delete(like);
+            }
+            foreach (var comment in post.Comments)
+            {
+                foreach (var like in comment.CommentLikes)
+                {
+                    this.commentLikeRepository.Delete(like);
+                }
+                this.eventCommentRepository.Delete(comment);
+            }
+
+            this.eventPostRepository.Delete(post);
+            var removed = await this.eventPostRepository.SaveChangesAsync();
+            return removed > 0;
         }
     }
 }
