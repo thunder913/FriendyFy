@@ -10,11 +10,6 @@
     flex-wrap: wrap;
 }
 
-.create-event{
-    display: flex;
-    flex-direction: row;
-}
-
 .make-post-image > .image-icon{
     width: 30px;
     height: 30px;
@@ -45,4 +40,16 @@
 .make-post-text{
     height: 100%;
     background-color: rgba(55, 56, 58, 0.8);
+}
+
+@media only screen and (max-width: 776px){
+    .home-feed .make-post{
+        flex-direction: column;
+        gap: 20px;
+    }
+
+    .home-feed .make-post > article{
+        width: 100%;
+        text-align: center;
+    }
 }

@@ -1,3 +1,36 @@
 .home-feed{
     width: 630px;
 }
+
+@media only screen and (max-width: 1333px) {
+    aside.right-navigation{
+        display: none;
+    }
+
+    aside.events .left-navigation{
+        width: 33%;
+    }
+    .main-content .home-page{
+        float: right;
+    }
+
+    .site .main-content{
+        margin: 0px
+    }
+}
+
+@media only screen and (max-width: 1000px){
+    .events{
+        display: none;
+    }
+
+    .feed.home-feed{
+        width: 100%;
+    }
+}
+
+@media only screen and (max-width: 366px){
+    .main-content .container{
+        padding: 0px;
+    }
+}
