@@ -7,12 +7,12 @@ import PopUp from "../PopUp";
 const ViewImagePopUp = (props) => {
 
     return (
-        <PopUp show={props.show} setShow={props.setShow}>
+        <PopUp show={props.show} setShow={props.setShow} escClose={true}>
             <div className="popup-outer image-outer-popup">
                 <div className="popup-inner image-popup">
                     <button onClick={() => props.setShow(false)} className="close-popup">x</button>
                     <div className={"picture " + (!props.showRightSection ? 'full-width' : '')}>
-                        <img src={props.post.postImage} alt="" />
+                        <img src={props.post ? props.post.postImage : ''} alt="" />
                     </div>
                     {props.showRightSection ? <ViewImagePopUpRightSide props={props}></ViewImagePopUpRightSide> : ''}
                 </div>

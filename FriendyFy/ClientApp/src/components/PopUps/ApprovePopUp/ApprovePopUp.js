@@ -1,5 +1,4 @@
-import React, { useEffect } from "react";
-import useScrollBlock from "../../../hooks/useScrollBlock";
+import React from "react";
 import PopUpHeader from "../PopUpHeader/PopUpHeader";
 import PopUp from "../PopUp";
 import './ApprovePopUp.css'
@@ -10,7 +9,7 @@ const ApprovePopUp = ({ text, acceptEvent, show, setShow }) => {
     }
 
     return (
-        <PopUp show={show} setShow={setShow}>
+        <PopUp show={show} setShow={setShow} escClose={true}>
             <div className="popup-outer approve-popup">
                 <div className="popup-inner approve-inner popup-flex-center">
                     <PopUpHeader title={text} closePopUp={() => setShow(false)}></PopUpHeader>

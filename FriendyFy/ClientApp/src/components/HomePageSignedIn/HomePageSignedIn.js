@@ -1,5 +1,4 @@
 import React, { useEffect, useState } from "react";
-import FeedPost from '../FeedPost/FeedPost';
 import FeedEvent from '../FeedEvent/FeedEvent';
 import { useLoggedIn } from "../../contexts/LoggedInContext";
 import './HomePageSignedIn.css'
@@ -7,7 +6,6 @@ import FirstTimePopUp from '../PopUps/FirstTimePopUp/FirstTimePopUp.js'
 import MakePost from "../MakePost/MakePost.js"
 import { getPosts } from "../../services/postService";
 import { getEvents } from "../../services/eventService";
-import FeedPostRepost from "../FeedPost/FeedPostRepost";
 
 const HomePageSignedIn = () => {
   const { loggedIn, resetUser } = useLoggedIn();

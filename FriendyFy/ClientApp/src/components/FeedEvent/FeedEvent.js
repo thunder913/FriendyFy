@@ -18,9 +18,7 @@ const FeedEvent = ({ eventData }) => {
     const [commentsCount, setCommentsCount] = useState(eventData.commentsCount);
     const [event, setEvent] = useState(eventData);
     const [hidePost, setHidePost] = useState(false);
-    const closeLocationPopUp = () => {
-        setShowLocation(false);
-    }
+
 
     useEffect(() => {
         let localization = window.navigator.userLanguage || window.navigator.language;
@@ -55,7 +53,6 @@ const FeedEvent = ({ eventData }) => {
                 location={event.locationCity}
                 lat={event.latitude}
                 long={event.longitude}
-                closePopUp={closeLocationPopUp}
                 blockPageScroll={true}
                 show={showLocation}
                 setShow={setShowLocation} />

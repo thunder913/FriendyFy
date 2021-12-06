@@ -22,20 +22,12 @@ const FeedFooter = (props) => {
     const commentRef = useRef()
     const scrollRef = useRef();
 
-    const closePopUp = () => {
-        setShowPeopleLiked(false);
-    }
-
     const loadLikes = (skip) => {
         return getPostLikes(props.postId, props.postType, skip, 10);
     }
 
     const likeButtonClickEvent = () => {
         likedButtonClicked(props.postType, props.postId, props.setIsLiked, props.setLikes);
-    }
-
-    const showPeopleLikes = () => {
-        setShowPeopleLiked(true);
     }
 
     const showCommentsClickEvent = () => {
@@ -49,14 +41,6 @@ const FeedFooter = (props) => {
 
     const loadMoreCommentsEvent = () => {
         return loadMoreComments(props.postId, props.comments.length, props.postType, props.setComments, setHasMore);
-    }
-
-    const showPeopleRepostsEvent = () => {
-        setShowPeopleReposts(true);
-    }
-
-    const closePeopleRepostsEvent = () => {
-        setShowPeopleReposts(false);
     }
 
     const loadReposts = (skip) => {
@@ -99,23 +83,22 @@ const FeedFooter = (props) => {
         <footer className="feed-footer">
             <div className="top-footer">
                 <div className="likes">
+                    <RepostPopUp repostType={props.postType} id={props.repostId} show={showRepostPopUp} setShow={setShowRepostPopUp} />
                     <PeopleListPopUp
                         title="Likes"
                         count={props.likes}
                         loadPeople={loadLikes}
-                        closePopUp={closePopUp}
                         show={showPeopleLiked}
                         setShow={setShowPeopleLiked} />
                     <PeopleListPopUp
                         title="Reposts"
                         count={props.reposts}
                         loadPeople={loadReposts}
-                        closePopUp={closePeopleRepostsEvent}
                         show={showPeopleReposts}
                         setShow={setShowPeopleReposts}
                     />
                     <span>
-                        <button onClick={showPeopleLikes} href="/">
+                        <button onClick={() => setShowPeopleLiked(true)} href="/">
                             {props.likes} likes
                         </button>
                     </span>
@@ -127,7 +110,7 @@ const FeedFooter = (props) => {
                         </button>
                     </span>
                     <span>
-                        {!props.isRepost ? <button onClick={showPeopleRepostsEvent}>
+                        {!props.isRepost ? <button onClick={() => setShowPeopleReposts(true)}>
                             {props.reposts} reposts
                         </button> : ''}
                     </span>
@@ -170,7 +153,6 @@ const FeedFooter = (props) => {
                 </div>
                 : ""}
             <div className="bottom-footer">
-                    <RepostPopUp repostType={props.postType} id={props.repostId} show={showRepostPopUp} setShow={setShowRepostPopUp} />
                 <div className={"feed-like " + (props.isLiked ? "liked" : "")} onClick={likeButtonClickEvent}>
                     <FontAwesomeIcon className="post-button like-button" icon={faThumbsUp} />
                     <span>Like</span>

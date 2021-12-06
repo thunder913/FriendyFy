@@ -11,19 +11,12 @@ import { Link } from 'react-router-dom'
 const PostComment = ({comment}) => {
     const [likedByYou, setLikedByYou] = useState(comment.isLikedByUser);
     const [likesCount, setLikesCount] = useState(comment.likesCount)
-    const [showPeopleLikesPopUp, setShowPeopleLiekdPopUp] = useState(false);
+    const [showPeopleLikesPopUp, setShowPeopleLikesPopUp] = useState(false);
 
     const loadLikes = (skip) => {
         return getCommentLikes(comment.id, skip, 10);
     }
     
-    const showPeopleLikes = () => {
-        setShowPeopleLiekdPopUp(true);
-    }
-    
-    const closePopUp = () => {
-        setShowPeopleLiekdPopUp(false);
-    }
     const commentLikeEvent = (e) => {
         e.preventDefault();
         likeComment(comment.id, comment.postType)
@@ -35,13 +28,13 @@ const PostComment = ({comment}) => {
     }
 
     return (<div key={comment.id} className="comment">
-                                {showPeopleLikesPopUp ? 
                             <PeopleListPopUp 
                                 title="Likes"
                                 count={likesCount}
                                 loadPeople={loadLikes}
-                                closePopUp={closePopUp}
-                            /> : ''}
+                                show={showPeopleLikesPopUp}
+                                setShow={setShowPeopleLikesPopUp}
+                            />
                     <Link to={'/profile/' + comment.commentorUsername}>
                         <div className="user-picture">
                             <img src={comment.commentorPicture} alt="" />
@@ -58,7 +51,7 @@ const PostComment = ({comment}) => {
                         <button className={likedByYou ? 'liked' : ''} onClick={commentLikeEvent}>Like</button>
                         <p>{parseTime(comment.createdAgo)}</p>
                         {likesCount > 0 ? 
-                        <div className="comment-likes" onClick={showPeopleLikes}>
+                        <div className="comment-likes" onClick={() => setShowPeopleLikesPopUp(true)}>
                         <FontAwesomeIcon className="comment-like-button" icon={faThumbsUp} />
                         <p className="comment-likes-count">{likesCount}</p></div> : ''}
                     </footer>

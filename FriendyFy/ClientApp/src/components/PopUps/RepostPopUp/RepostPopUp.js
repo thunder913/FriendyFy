@@ -4,7 +4,6 @@ import './RepostPopUp.css';
 import PopUpHeader from "../PopUpHeader/PopUpHeader";
 import PopUp from "../PopUp";
 import { repost } from "../../../services/postService";
-import '../PopUp.css'
 const RepostPopUp = ({ id, repostType, show, setShow }) => {
     const [text, setText] = useState('');
 

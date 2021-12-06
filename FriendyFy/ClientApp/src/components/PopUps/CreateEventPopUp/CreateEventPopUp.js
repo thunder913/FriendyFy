@@ -73,7 +73,7 @@ const CreateEventPopUp = ({ show, setShow }) => {
     }
 
     return (
-        <PopUp show={show} setShow={setShow}>
+        <PopUp show={show} setShow={setShow} escClose={true}>
             <div className="popup-outer create-event-popup">
                 <div className="popup-inner event-popup">
                     <PopUpHeader title="Create An Event" closePopUp={() => setShow(false)}></PopUpHeader>

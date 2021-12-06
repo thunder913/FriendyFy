@@ -24,9 +24,6 @@ const FeedPostRepost = ({post}) => {
     const [originalCommentsCount, setOriginalCommentsCount] = useState(post.repost.commentsCount);
     
     const [hidePost, setHidePost] = useState(false)
-    const closePopUpEvent = () => {
-        setShowImagePopUp(false);
-    }
 
     useEffect(() => {
         setIsLiked(post.isLikedByUser);
@@ -46,9 +43,8 @@ const FeedPostRepost = ({post}) => {
         onEnter={() => setHidePost(false)}
         onExited={() => setHidePost(true)}>
         <div className={"feed-photo " + (post.isRepost ? 'repost' : '')}>
-            {showImagePopUp ? <ViewImagePopUp 
+            <ViewImagePopUp 
                 post={post.repost} 
-                closePopUp={closePopUpEvent}
                 isLiked={originalIsLiked}
                 setIsLiked={setOriginalIsLiked}
                 likes={originalLikes}
@@ -60,7 +56,9 @@ const FeedPostRepost = ({post}) => {
                 reposts={originalReposts} 
                 setReposts={setOriginalReposts}
                 showRightSection={true}
-                ></ViewImagePopUp> : ''}
+                show={showImagePopUp}
+                setShow={setShowImagePopUp}
+                />
             <FeedHeader
                 photo={post.creatorImage} 
                 name={post.creatorName} 

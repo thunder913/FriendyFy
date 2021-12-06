@@ -45,7 +45,7 @@ const FeedPost = ({post}) => {
             showRightSection={true}
             show={showImagePopUp}
             setShow={setShowImagePopUp}
-            ></ViewImagePopUp>
+            />
         <FeedHeader
             photo={post.creatorImage} 
             name={post.creatorName} 

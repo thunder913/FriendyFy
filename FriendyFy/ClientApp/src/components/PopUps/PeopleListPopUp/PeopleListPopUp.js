@@ -8,17 +8,21 @@ const PeopleListPopUp = ({ title, count, loadPeople, show, setShow }) => {
     const [people, setPeople] = useState([]);
 
     useEffect(() => {
-        loadPeople(0)
-            .then(async res => {
-                let obj = await (res.json());
-                if (obj.length > 0) {
-                    setPeople(obj);
-                }
-                else {
-                    setHasMore(false);
-                }
-            })
-    }, [])
+        if (show) {
+            loadPeople(0)
+                .then(async res => {
+                    let obj = await (res.json());
+                    if (obj.length > 0) {
+                        setPeople(obj);
+                    }
+                    else {
+                        setHasMore(false);
+                    }
+                })
+        }else{
+            setPeople([]);
+        }
+    }, [show])
 
     const loadMorePeople = () => {
         return loadPeople(people.length)

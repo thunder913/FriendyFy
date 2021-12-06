@@ -46,12 +46,7 @@ const ProfileHeader = ({selected}) =>{
         setImagePopUpUrl({postImage: coverPicture})
         setShowImagePopUp(true);
     }
-
-    const closeImagePopUpEvent = () => {
-        setShowImagePopUp(false);
-        setImagePopUpUrl(null);
-    }
-
+    
     useEffect(() => {
         axios.get("api/getUserInformation/" + userId)
         .then(async (res) => {
@@ -67,9 +62,11 @@ const ProfileHeader = ({selected}) =>{
 
     return (
     <header className="profile-header">
-    {showImagePopUp ? <ViewImagePopUp closePopUp={closeImagePopUpEvent} 
+    <ViewImagePopUp
     showRightSection={false} 
-    post={imagePopUpUrl}></ViewImagePopUp> : ''}
+    post={imagePopUpUrl}
+    show={showImagePopUp}
+    setShow={setShowImagePopUp}/> 
     <div className="cover-photo" onClick={showCoverImage}>
         <img src={coverPicture} alt="" />
     </div>

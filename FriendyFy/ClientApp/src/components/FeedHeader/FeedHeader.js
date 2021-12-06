@@ -16,28 +16,9 @@ function FeedHeader({ photo, name, time, username, city, lat, long, taggedPeople
     const [showOptions, setShowOptions] = useState(false);
     const [isDeleted, setIsDeleted] = useState(false);
     const [hasError, setHasError] = useState(false);
-    const closePostLocationPopUp = () => {
-        setShowPostLocation(false);
-    }
-
-    const showPostLocationPopUp = () => {
-        setShowPostLocation(true);
-    }
-
-    const closeTaggedPeoplePopUp = () => {
-        setShowTaggedPeople(false);
-    }
-
-    const showTaggedPeopleEvent = () => {
-        setShowTaggedPeople(true);
-    }
 
     const loadTaggedPeople = (skip) => {
         return getTaggedPeople(postId, skip, 10);
-    }
-
-    const showHeaderOptionsEvent = () => {
-        setShowOptions(true);
     }
 
     useEffect(() => {
@@ -55,22 +36,21 @@ function FeedHeader({ photo, name, time, username, city, lat, long, taggedPeople
     return (
         <header className="feed-header">
             <NotificationContainer />
-            {showTaggedPeople ?
-                <PeopleListPopUp
-                    title="Tagged People"
-                    count={taggedPeople}
-                    loadPeople={loadTaggedPeople}
-                    closePopUp={closeTaggedPeoplePopUp}
-                /> : ''}
-            {showPostLocation ?
-                <MapPopUp
-                    title="Map"
-                    location={city}
-                    lat={lat}
-                    long={long}
-                    closePopUp={closePostLocationPopUp}
-                    blockPageScroll={true} />
-                : ''}
+            <PeopleListPopUp
+                title="Tagged People"
+                count={taggedPeople}
+                loadPeople={loadTaggedPeople}
+                show={showTaggedPeople}
+                setShow={setShowTaggedPeople}
+            />
+            <MapPopUp
+                title="Map"
+                location={city}
+                lat={lat}
+                long={long}
+                blockPageScroll={true}
+                show={showPostLocation}
+                setShow={setShowPostLocation} />
 
             <div className="header-left">
                 <Link to={'/profile/' + username}>
@@ -83,15 +63,15 @@ function FeedHeader({ photo, name, time, username, city, lat, long, taggedPeople
                         <Link to={'/profile/' + username}>
                             <h3>{name}</h3>
                         </Link>
-                        {city != null ? <p className="post-location"> is at <button onClick={showPostLocationPopUp}>{city}</button></p> : ''}
-                        {taggedPeople && taggedPeople != 0 ? <p>with <button onClick={showTaggedPeopleEvent}> {taggedPeople} {taggedPeople == 1 ? 'person' : 'people'} </button></p> : ''}
+                        {city != null ? <p className="post-location"> is at <button onClick={() => setShowPostLocation(true)}>{city}</button></p> : ''}
+                        {taggedPeople && taggedPeople != 0 ? <p>with <button onClick={() => setShowTaggedPeople(true)}> {taggedPeople} {taggedPeople == 1 ? 'person' : 'people'} </button></p> : ''}
 
                     </div>
                     <span>{time}</span>
                 </div>
             </div>
             {(!isRepost && isCreator) ? <div className="header-right">
-                <FontAwesomeIcon className="header-elipsis" icon={faEllipsisH} onClick={showHeaderOptionsEvent} />
+                <FontAwesomeIcon className="header-elipsis" icon={faEllipsisH} onClick={() => setShowOptions(true)} />
                 <FeedHeaderOptions
                     showOptions={showOptions}
                     setIsDeleted={setIsDeleted}

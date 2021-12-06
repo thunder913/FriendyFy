@@ -7,11 +7,6 @@ const LeftNavigationEvent = ({data, setBlockNavScroll}) =>{
     const [showMap, setShowMap] = useState(false);
     const [parsedTime, setParsedTime] = useState('');
 
-    const closeLocationPopUp = () => {
-        setShowMap(false);
-        setBlockNavScroll(false);
-    }
-
     const showLocationPopUp = () => {
         setShowMap(true);
         setBlockNavScroll(true);
@@ -26,15 +21,14 @@ const LeftNavigationEvent = ({data, setBlockNavScroll}) =>{
 
     return(
         <div className="event">
-        {showMap ? 
         <MapPopUp 
             title="Event Location" 
             location={data.location}
             lat={data.latitude}
             long={data.longitude}
-            closePopUp={closeLocationPopUp}
-            blockPageScroll={false}/>
-            : ''}
+            blockPageScroll={false}
+            show={showMap}
+            setShow={setShowMap}/>
             <div className="line-parent">
                 <div className="line"></div>
             </div>
