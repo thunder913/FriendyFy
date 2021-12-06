@@ -6,14 +6,14 @@ import useScrollBlock from "../../../hooks/useScrollBlock";
 import { addImageToEvent } from "../../../services/eventService";
 import NotificationManager from "react-notifications/lib/NotificationManager";
 import { NotificationContainer } from "react-notifications";
-import '../PopUp.css';
-const AddImagePopUp = ({closePopUp, eventId, setImages}) => {
+import PopUp from "../PopUp";
+const AddImagePopUp = ({eventId, setImages, show, setShow}) => {
     const [image, setImage] = useState('');
     const [blockScroll, allowScroll] = useScrollBlock();
 
     const closePopUpEvent = () => {
         allowScroll();
-        closePopUp();
+        setShow(false);
     }
 
     const escPressed = (e) => {
@@ -40,14 +40,18 @@ const AddImagePopUp = ({closePopUp, eventId, setImages}) => {
     }
 
     useEffect(() => {
-        blockScroll();
-        window.addEventListener("keydown", escPressed, false);
-        return () => {
-            window.removeEventListener("keydown", escPressed, false);
-          };
-    }, [])
+        if(show){
+            blockScroll();
+            window.addEventListener("keydown", escPressed, false);
+            return () => {
+                window.removeEventListener("keydown", escPressed, false);
+              };
+        }
+    }, [show])
 
-    return(<div className="popup-outer add-image-outer-popup">
+    return(
+        <PopUp show={show} setShow={setShow}>
+        <div className="popup-outer add-image-outer-popup">
         <NotificationContainer/>
     <div className="popup-inner add-image-inner-popup popup-flex-center">
         <PopUpHeader title="Add an image to your event" closePopUp={closePopUpEvent}></PopUpHeader>
@@ -59,7 +63,8 @@ const AddImagePopUp = ({closePopUp, eventId, setImages}) => {
         </div>
         <button className="add-image" onClick={onCreateButtonClicked}>Add image</button>
     </div>
-</div>)
+</div>
+</PopUp>)
 }
 
 export default AddImagePopUp;

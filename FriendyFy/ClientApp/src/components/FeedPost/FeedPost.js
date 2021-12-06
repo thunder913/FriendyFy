@@ -16,10 +16,6 @@ const FeedPost = ({post}) => {
     const [commentsCount, setCommentsCount] = useState(post.comments);
     const [hidePost, setHidePost] = useState(false)
 
-    const closePopUpEvent = () => {
-        setShowImagePopUp(false);
-    }
-
     useEffect(() => {
         setIsLiked(post.isLikedByUser);
         setLikes(post.likesCount);
@@ -34,9 +30,8 @@ const FeedPost = ({post}) => {
         onEnter={() => setHidePost(false)}
         onExited={() => setHidePost(true)}>
     <div className="feed-photo">
-        {showImagePopUp ? <ViewImagePopUp 
-            post={post} 
-            closePopUp={closePopUpEvent}
+        <ViewImagePopUp 
+            post={post}
             isLiked={isLiked}
             setIsLiked={setIsLiked}
             likes={likes}
@@ -48,7 +43,9 @@ const FeedPost = ({post}) => {
             reposts={reposts} 
             setReposts={setReposts}
             showRightSection={true}
-            ></ViewImagePopUp> : ''}
+            show={showImagePopUp}
+            setShow={setShowImagePopUp}
+            ></ViewImagePopUp>
         <FeedHeader
             photo={post.creatorImage} 
             name={post.creatorName} 

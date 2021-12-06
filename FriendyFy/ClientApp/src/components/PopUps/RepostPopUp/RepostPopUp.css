@@ -1,5 +1,7 @@
 .popup-outer.repost-popup{
-        position: fixed;
+    background-color: transparent !important;
+    cursor: initial !important;
+    position: fixed;
 }
 
 .repost-popup #repost-message{

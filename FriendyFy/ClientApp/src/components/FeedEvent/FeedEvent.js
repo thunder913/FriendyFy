@@ -35,89 +35,89 @@ const FeedEvent = ({ eventData }) => {
     }
 
     useEffect(() => {
-        if(eventData){
-            if(eventData.isRepost){
+        if (eventData) {
+            if (eventData.isRepost) {
                 setEvent(eventData.repost);
             }
         }
     }, [eventData])
 
-    return (<CSSTransition 
-        in={!hidePost} 
-        timeout={800} 
+    return (<CSSTransition
+        in={!hidePost}
+        timeout={800}
         classNames={"feed-post-animation"}
         unmountOnExit
         onEnter={() => setHidePost(false)}
         onExited={() => setHidePost(true)}>
-            <div className={"feed feed-event " + (eventData.isRepost ? 'repost' : '')} >
-            {showLocation ? 
-        <MapPopUp 
-            title="Event Location" 
-            location={event.locationCity}
-            lat={event.latitude}
-            long={event.longitude}
-            closePopUp={closeLocationPopUp}
-            blockPageScroll={true}/>
-            : ''}
-        {eventData.isRepost ? <FeedHeader
-            photo={eventData.creatorImage}
-            name={eventData.creatorName}
-            time={parseTime(eventData.createdAgo)}
-            username={eventData.username}
-            postId={eventData.eventPostId}
-            postType={eventData.postType}
-            setHidePost={setHidePost}
-        /> : ''}
-        {(eventData.isRepost && eventData.postMessage) ? <span className="repost-text">{eventData.postMessage}</span> : ''}
-        <div className='inner-post'>
-        <FeedHeader 
-            photo={event.creatorImage} 
-            name={event.creatorName}
-            time={parseTime(event.createdAgo)}
-            username={event.username}
-            postId={event.eventPostId}
-            postType={event.postType}
-            isRepost={eventData.isRepost}
-            setHidePost={setHidePost}
-            isCreator={eventData.isUserCreator}/>
-        <p className="going-text">Going:</p>
-        <div className="event-images">
-            <div className="user-photo">
-                <img src={event.creatorImage} alt="" />
+        <div className={"feed feed-event " + (eventData.isRepost ? 'repost' : '')} >
+            <MapPopUp
+                title="Event Location"
+                location={event.locationCity}
+                lat={event.latitude}
+                long={event.longitude}
+                closePopUp={closeLocationPopUp}
+                blockPageScroll={true}
+                show={showLocation}
+                setShow={setShowLocation} />
+            {eventData.isRepost ? <FeedHeader
+                photo={eventData.creatorImage}
+                name={eventData.creatorName}
+                time={parseTime(eventData.createdAgo)}
+                username={eventData.username}
+                postId={eventData.eventPostId}
+                postType={eventData.postType}
+                setHidePost={setHidePost}
+            /> : ''}
+            {(eventData.isRepost && eventData.postMessage) ? <span className="repost-text">{eventData.postMessage}</span> : ''}
+            <div className='inner-post'>
+                <FeedHeader
+                    photo={event.creatorImage}
+                    name={event.creatorName}
+                    time={parseTime(event.createdAgo)}
+                    username={event.username}
+                    postId={event.eventPostId}
+                    postType={event.postType}
+                    isRepost={eventData.isRepost}
+                    setHidePost={setHidePost}
+                    isCreator={eventData.isUserCreator} />
+                <p className="going-text">Going:</p>
+                <div className="event-images">
+                    <div className="user-photo">
+                        <img src={event.creatorImage} alt="" />
+                    </div>
+                    {event.eventGoing.map((photo) => <div className="user-photo">
+                        <img src={photo} alt="" />
+                    </div>)}
+                </div>
+                <div className="second-row">
+                    <h2 onClick={onViewButtonClicked}>{event.eventTitle}</h2>
+                    <button className="join" onClick={onViewButtonClicked}>View</button>
+                </div>
+                <div className="interests">
+                    {event.eventInterests.map(interest => <div key={interest.id} className="interest">{interest.label}</div>)}
+                </div>
+                <div className="third-row">
+                    <span className="location" onClick={() => setShowLocation(true)}>Location: {event.locationCity}</span>
+                    <span>{localTime}</span>
+                </div>
             </div>
-            {event.eventGoing.map((photo) => <div className="user-photo">
-                <img src={photo} alt="" />
-            </div>)}
-        </div>
-        <div className="second-row">
-            <h2 onClick={onViewButtonClicked}>{event.eventTitle}</h2>
-            <button className="join" onClick={onViewButtonClicked}>View</button>
-        </div>
-        <div className="interests">
-            {event.eventInterests.map(interest => <div key={interest.id} className="interest">{interest.label}</div>)}
-        </div>
-        <div className="third-row">
-            <span className="location" onClick={() => setShowLocation(true)}>Location: {event.locationCity}</span>
-            <span>{localTime}</span>
-        </div>
-        </div>
-        <FeedFooter
-            repostId={event.eventPostId}
-            postId={eventData.eventPostId}
-            postType={eventData.postType}
-            isLiked={isLiked}
-            setIsLiked={setIsLiked}
-            likes={likes}
-            setLikes={setLikes}
-            comments={comments}
-            setComments={setComments}
-            commentsCount={commentsCount}
-            setCommentsCount={setCommentsCount}
-            reposts={reposts} 
-            setReposts={setReposts}
-            isRepost={eventData.isRepost}
+            <FeedFooter
+                repostId={event.eventPostId}
+                postId={eventData.eventPostId}
+                postType={eventData.postType}
+                isLiked={isLiked}
+                setIsLiked={setIsLiked}
+                likes={likes}
+                setLikes={setLikes}
+                comments={comments}
+                setComments={setComments}
+                commentsCount={commentsCount}
+                setCommentsCount={setCommentsCount}
+                reposts={reposts}
+                setReposts={setReposts}
+                isRepost={eventData.isRepost}
             />
-    </div>
+        </div>
     </CSSTransition>)
 }
 

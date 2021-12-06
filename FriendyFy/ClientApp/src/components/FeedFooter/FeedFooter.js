@@ -1,4 +1,4 @@
-import React, {useState, useRef, useEffect} from 'react';
+import React, { useState, useRef, useEffect } from 'react';
 import './FeedFooter.css';
 import { faComment, faComments, faShare, faThumbsUp } from '@fortawesome/free-solid-svg-icons';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
@@ -51,14 +51,6 @@ const FeedFooter = (props) => {
         return loadMoreComments(props.postId, props.comments.length, props.postType, props.setComments, setHasMore);
     }
 
-    const repostClickEvent = () => {
-        setShowRepostPopUp(true);
-    }
-
-    const closeRepostPopUp = () => {
-        setShowRepostPopUp(false);
-    }
-
     const showPeopleRepostsEvent = () => {
         setShowPeopleReposts(true);
     }
@@ -72,11 +64,11 @@ const FeedFooter = (props) => {
     }
 
     useEffect(() => {
-        if(commentRef.current){
+        if (commentRef.current) {
             let textarea = commentRef.current;
             textarea.addEventListener('input', autoResize, false);
-            $(textarea).keypress(function (e){
-                if(e.which === 13 && !e.shiftKey) {
+            $(textarea).keypress(function (e) {
+                if (e.which === 13 && !e.shiftKey) {
                     addCommentEvent(e);
                 }
             })
@@ -86,41 +78,42 @@ const FeedFooter = (props) => {
             }
         }
 
-    },[showComments, commentRef])
+    }, [showComments, commentRef])
 
     useEffect(() => {
-        if(showComments){
-            getComments(props.postId, 10, props.comments.length, props.postType) 
+        if (showComments) {
+            getComments(props.postId, 10, props.comments.length, props.postType)
                 .then(async res => {
                     let obj = await (res.json());
-                    if(obj.length>0){
+                    if (obj.length > 0) {
                         props.setComments(prevState => ([...prevState, ...obj]));
                     }
-                    else{
+                    else {
                         setHasMore(false);
                     }
-            })
+                })
         }
-    }, [showComments]) 
+    }, [showComments])
 
-return(
-<footer className="feed-footer">
+    return (
+        <footer className="feed-footer">
             <div className="top-footer">
                 <div className="likes">
-                    {showPeopleLiked ? 
-                            <PeopleListPopUp 
-                                title="Likes"
-                                count={props.likes}
-                                loadPeople={loadLikes}
-                                closePopUp={closePopUp}
-                            /> : ''}
-                    {showPeopleReposts ? 
-                            <PeopleListPopUp 
-                                title="Reposts"
-                                count={props.reposts}
-                                loadPeople={loadReposts}
-                                closePopUp={closePeopleRepostsEvent}
-                            /> : ''}
+                    <PeopleListPopUp
+                        title="Likes"
+                        count={props.likes}
+                        loadPeople={loadLikes}
+                        closePopUp={closePopUp}
+                        show={showPeopleLiked}
+                        setShow={setShowPeopleLiked} />
+                    <PeopleListPopUp
+                        title="Reposts"
+                        count={props.reposts}
+                        loadPeople={loadReposts}
+                        closePopUp={closePeopleRepostsEvent}
+                        show={showPeopleReposts}
+                        setShow={setShowPeopleReposts}
+                    />
                     <span>
                         <button onClick={showPeopleLikes} href="/">
                             {props.likes} likes
@@ -140,53 +133,53 @@ return(
                     </span>
                 </div>
             </div>
-            
-            {showComments ? 
-            <div className="comments">
-                <div className={"infinite-scroll "+ (props.comments.length == 0 ? 'display-none' : '')}>
-                <InfiniteScroll
-                    className={"comments-section"}
-                    dataLength={props.comments.length}
-                    next={loadMoreCommentsEvent}
-                    height={300}
-                    // inverse={true}
-                    hasMore={hasMore}
-                    loader={<h4 className="loading-text">Loading...</h4>}
-                    scrollableTarget="scrollableDiv"
-                    endMessage={
-                        <p style={{ textAlign: 'center' }}>
-                          <b>No more comments available</b>
-                        </p>
-                      }
-                    ref={scrollRef}>
-                    {props.comments.map(c => <PostComment comment={c} key={c.id}/>)}
-                </InfiniteScroll>
-                </div>
 
-                <div className="add-comment">
-                    <textarea 
-                        name="" 
-                        id="comment-text" 
-                        cols="30" 
-                        rows="1" 
-                        ref={commentRef}
-                        placeholder="What do you think?"
+            {showComments ?
+                <div className="comments">
+                    <div className={"infinite-scroll " + (props.comments.length == 0 ? 'display-none' : '')}>
+                        <InfiniteScroll
+                            className={"comments-section"}
+                            dataLength={props.comments.length}
+                            next={loadMoreCommentsEvent}
+                            height={300}
+                            // inverse={true}
+                            hasMore={hasMore}
+                            loader={<h4 className="loading-text">Loading...</h4>}
+                            scrollableTarget="scrollableDiv"
+                            endMessage={
+                                <p style={{ textAlign: 'center' }}>
+                                    <b>No more comments available</b>
+                                </p>
+                            }
+                            ref={scrollRef}>
+                            {props.comments.map(c => <PostComment comment={c} key={c.id} />)}
+                        </InfiniteScroll>
+                    </div>
+
+                    <div className="add-comment">
+                        <textarea
+                            name=""
+                            id="comment-text"
+                            cols="30"
+                            rows="1"
+                            ref={commentRef}
+                            placeholder="What do you think?"
                         />
-                    <FontAwesomeIcon className="comment-send" icon={faComment} onClick={addCommentEvent}/>
+                        <FontAwesomeIcon className="comment-send" icon={faComment} onClick={addCommentEvent} />
+                    </div>
                 </div>
-            </div> 
-            : ""}
-                {showRepostPopUp ? <RepostPopUp repostType={props.postType} id={props.repostId} closePopUp={closeRepostPopUp}/> : ''}
+                : ""}
             <div className="bottom-footer">
+                    <RepostPopUp repostType={props.postType} id={props.repostId} show={showRepostPopUp} setShow={setShowRepostPopUp} />
                 <div className={"feed-like " + (props.isLiked ? "liked" : "")} onClick={likeButtonClickEvent}>
-                <FontAwesomeIcon className="post-button like-button" icon={faThumbsUp} />
+                    <FontAwesomeIcon className="post-button like-button" icon={faThumbsUp} />
                     <span>Like</span>
                 </div>
                 <div className={"feed-comment " + (showComments ? "opened-comments" : "")} onClick={showCommentsClickEvent}>
                     <FontAwesomeIcon className="post-button like-button" icon={faComments} />
                     <span>Comment</span>
                 </div>
-                <div className="feed-repost" onClick={repostClickEvent}>
+                <div className="feed-repost" onClick={() => setShowRepostPopUp(true)}>
                     <FontAwesomeIcon className="post-button like-button" icon={faShare} />
                     <span>Repost</span>
                 </div>

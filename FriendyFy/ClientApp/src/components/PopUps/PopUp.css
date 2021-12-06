@@ -39,3 +39,21 @@
     justify-content: center;
     align-items: center;
 }
+
+.main-popup-enter{
+    opacity: 0;
+}
+
+.main-popup-enter-active{
+    opacity: 1;
+    transition: opacity 400ms;
+}
+
+.main-popup-exit{
+    opacity: 1;
+}
+
+.main-popup-exit-active{
+    opacity: 0;
+    transition: opacity 400ms;
+}

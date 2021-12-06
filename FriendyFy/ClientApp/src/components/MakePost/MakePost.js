@@ -1,9 +1,8 @@
 import { faCalendarPlus, faImages,  } from '@fortawesome/free-solid-svg-icons';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import React, { useEffect, useState } from 'react';
+import React, { useState } from 'react';
 import { useLoggedIn } from '../../contexts/LoggedInContext';
 import MakePostPopUp from '../PopUps/MakePostPopUp/MakePostPopUp.js';
-import useScrollBlock from "../../hooks/useScrollBlock";
 import './MakePost.css';
 import CreateEventPopUp from '../PopUps/CreateEventPopUp/CreateEventPopUp';
 
@@ -12,7 +11,6 @@ const MakePost = ({showCreatePost ,showPostImage, showCreateEvent}) =>{
     const [showEventPopUp, setShowEventPopUp] = useState(false);
     const [showPostPopUp, setshowPostPopUp] = useState(false);
     const [postWithImage, setPostWithImage] = useState(false);
-    const [blockScroll, allowScroll] = useScrollBlock()
 
     const CreatePostWithoutImage = () => {
         setPostWithImage(false);
@@ -24,40 +22,6 @@ const MakePost = ({showCreatePost ,showPostImage, showCreateEvent}) =>{
         setPostWithImage(true);
         setshowPostPopUp(true);
     }
-
-    const CreateEvent = () => {
-        setShowEventPopUp(true);
-    }
-
-    const closePostPopUp = () => {
-        setshowPostPopUp(false);
-    }
-
-    const closeEventPopUp = () => {
-        setShowEventPopUp(false);
-    }
-
-    const escPressed = (e) => {
-        if(e.keyCode === 27){
-            closePostPopUp();
-            closeEventPopUp();
-        }
-    }
-
-    useEffect(() => {
-        if(showPostPopUp || showEventPopUp){
-            blockScroll();
-        }else{
-            allowScroll();
-        }
-    }, [showEventPopUp, showPostPopUp])
-
-    useEffect(() => {
-        window.addEventListener("keydown", escPressed, false);
-        return () => {
-            window.removeEventListener("keydown", escPressed, false);
-          };
-    }, [])
 
     return(
     <section className="make-post">
@@ -75,22 +39,22 @@ const MakePost = ({showCreatePost ,showPostImage, showCreateEvent}) =>{
                 />
         </article> : ''}
 
-        {showCreateEvent ? <article onClick={CreateEvent} className="create-event">
+        {showCreateEvent ? <article onClick={() => setShowEventPopUp(true)} className="create-event">
                 <FontAwesomeIcon 
                     title="Create an event" 
                     className="create-event-icon" 
                     icon={faCalendarPlus}
                     ></FontAwesomeIcon>
         </article> : ''}
-        {showPostPopUp ? 
         <MakePostPopUp 
+            show={showPostPopUp}
+            setShow={setshowPostPopUp}
             hasImage={postWithImage}
-            closePopUp={closePostPopUp}
-        /> : ''}
-        {showEventPopUp ?
+        />
         <CreateEventPopUp
-            closePopUp={closeEventPopUp}
-        />: ''}
+            show={showEventPopUp}
+            setShow={setShowEventPopUp}
+        />
     </section>)
 }
 

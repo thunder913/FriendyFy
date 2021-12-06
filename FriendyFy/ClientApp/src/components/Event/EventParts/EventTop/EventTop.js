@@ -8,7 +8,7 @@ import moment from "moment-timezone";
 import AddImagePopUp from "../../../PopUps/AddImagePopUp/AddImagePopUp";
 import { deleteEvent, leaveEvent } from "../../../../services/eventService";
 import {NotificationContainer, NotificationManager} from 'react-notifications';
-import ApproveEventPopUp from "../../../PopUps/ApprovePopUp/ApprovePopUp";
+import ApprovePopUp from "../../../PopUps/ApprovePopUp/ApprovePopUp";
 import { useHistory } from "react-router";
 import ViewImagePopUp from "../../../PopUps/ViewImagePopUp/ViewImagePopUp";
 
@@ -83,7 +83,7 @@ const EventTop = ({images=[], mainImage, lat, lng, city, time, userImages=[], is
 return(<section className="event-page-top">
                 {showImagePopUp ? <ViewImagePopUp closePopUp={closeImagePopUpEvent} showRightSection={false} post={imagePopUpUrl}></ViewImagePopUp> : ''}
                 <NotificationContainer/>
-                {showLeaveEventPopUp ? <ApproveEventPopUp
+                {showLeaveEventPopUp ? <ApprovePopUp
                     text="Are you sure you want to delete the event. If you click the Approve button, it will be gone permanently!"
                     acceptEvent={leaveEventAsOrganizer}
                     closePopUp={closeLeavePopUp}/> : ''}

@@ -57,6 +57,10 @@ header.feed-header{
     padding: 0px;
 }
 
+.header-user-data h3{
+    color: white;
+}
+
 .post-creator-image:hover, .header-user-data h3:hover{
     cursor: pointer;
     text-decoration: underline;
