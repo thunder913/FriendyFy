@@ -3,20 +3,27 @@ import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import { faSearch } from '@fortawesome/free-solid-svg-icons'
 import './ProfileFriendSearch.css';
 
-const ProfileFriendSearch = () =>(
-    <div className="friend-search" >
-        <form action="/" method="get">
+const ProfileFriendSearch = ({setSearch, setIsSearching}) =>{
+    
+    const changeInput = (e) => {
+        setIsSearching(false);
+        setSearch(e.target.value);
+    }
+
+    return(<div className="friend-search" >
+        <form>
         <input
             type="text"
             id="friend-search"
-            placeholder="Search FriendyFy"
+            placeholder="Search for friends"
             name="s" 
+            onChange={changeInput}
         />
-        <button className="search-button" type="submit">
+        <button className="friend-search-button" type="submit" onClick={(e) => {e.preventDefault(); setIsSearching(true)}}>
         <FontAwesomeIcon icon={faSearch} />
         </button>
     </form>
-    </div>
-    )
+    </div>)
+}
 
 export default ProfileFriendSearch;

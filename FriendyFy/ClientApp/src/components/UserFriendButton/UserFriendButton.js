@@ -81,6 +81,7 @@ function UserFriendButton({userId}){
                         setFriendText("Manage")
                         break;
                     default:
+                        setFriendText("None")
                         break;
                 }
             });
@@ -91,9 +92,12 @@ function UserFriendButton({userId}){
         renderAddFriend();
     }, [])
 
+    if(friendText == "None"){
+        return '';
+    }
+
     return(
         <div className="add-friend-nav">
-
                 {friendText === "Requested" ? 
                 <button className="request-cancel" onClick={cancelEvent}>Cancel Friend Request</button> : 
                 friendText==="Received" 

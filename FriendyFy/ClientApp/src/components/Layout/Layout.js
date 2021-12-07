@@ -12,7 +12,7 @@ export const Layout = (props) => {
 
     return (
       <div className="site">
-        {loggedIn ? <NavMenu /> : ''}
+        <NavMenu />
         {loggedIn ? <LeftNavigation/> : ''}
         <div className="main-content">
                 <Container>

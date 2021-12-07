@@ -11,7 +11,7 @@ import { useLoggedIn } from '../../contexts/LoggedInContext';
 
 function NavMenu() {
 
-  const {setLoggedIn} = useLoggedIn();
+  const { loggedIn,setLoggedIn } = useLoggedIn();
 
   const logoutUser = () => {
     logout()
@@ -24,12 +24,12 @@ function NavMenu() {
       <Navbar className="navbar-expand-sm navbar-toggleable-sm ng-white bottom-border box-shadow" light>
         <NavbarBrand tag={Link} to="/">FriendyFy</NavbarBrand>
         <SearchBar />
-        <div className="nav-right">
+        {loggedIn ? <div className="nav-right">
           <UserHeader />
           <Notifications />
           <UserOptions />
           <button onClick={logoutUser}>Logout</button>
-        </div>
+        </div> : <button>Login</button>}
 
         {/* <NavbarToggler onClick={this.toggleNavbar} className="mr-2" />
             <Collapse className="d-sm-inline-flex flex-sm-row-reverse" isOpen={!this.state.collapsed} navbar>

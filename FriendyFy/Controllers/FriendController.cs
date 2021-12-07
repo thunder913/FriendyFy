@@ -81,7 +81,7 @@ namespace FriendyFy.Controllers
                 return BadRequest("Invalid user!");
             }
 
-            var friends = this.friendService.GetUserFriends(dto.UserId, dto.Skip, dto.Count, user.Id, dto.SearchQuery);
+            var friends = this.friendService.GetUserFriends(dto.UserId, dto.Skip, dto.Count, user != null ? user.Id : null, dto.SearchQuery);
             var friendsCount = this.friendService.GetUserFriendsCount(dto.UserId);
 
             return Ok(new ProfileSidebarFriendsViewModel() 

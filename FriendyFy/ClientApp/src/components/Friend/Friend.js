@@ -11,9 +11,9 @@ const Friend = ({ friend }) => (
                 {friend.fullName}
             </span>
             <div className="bottom-section">
-                <span className="mutual-friends">
+                {friend.mutualFriends !== -1 ? <span className="mutual-friends">
                     {friend.mutualFriends} mutual friends
-                </span>
+                </span> : ''}
                 <span className="friend-status">
                     {friend.isFriend ? 'Friends' :
                     friend.hasRequested ? 'Friend Requested' :

@@ -209,18 +209,18 @@ namespace FriendyFy.Services
                 .ThenInclude(x => x.ProfileImage)
                 .Include(x => x.CurrentUser)
                 .Where(x => x.CurrentUser.UserName==userId && x.IsFriend)
+                .Where(x => string.IsNullOrEmpty(searchQuery) || (x.Friend.FirstName + " " + x.Friend.LastName).ToLower().Contains(searchQuery.ToLower()))
                 .ToList()
-                .Where(x => searchQuery == null || (x.Friend.FirstName + " " + x.Friend.LastName).ToLowerInvariant().Contains(searchQuery.ToLowerInvariant()))
                 .OrderBy(x => x.CreatedOn)
                 .Select(x => new ProfileFriendViewModel()
                 {
                     FullName = x.Friend.FirstName + " " + x.Friend.LastName,
                     ProfileImage = this.blobService.GetBlobUrlAsync(x.Friend.ProfileImage?.Id + x.Friend.ProfileImage?.ImageExtension, GlobalConstants.BlobPictures).GetAwaiter().GetResult(),
                     Username = x.Friend.UserName,
-                    HasReceived = x.Friend.Friends.Any(y => !y.IsFriend && y.FriendId==loggedIn && y.RequestSenderId==x.Id),
-                    HasRequested = x.Friend.Friends.Any(y => !y.IsFriend && y.RequestSenderId==loggedIn),
-                    IsFriend = x.Friend.Friends.Any(y => y.IsFriend && y.FriendId==loggedIn),
-                    MutualFriends = x.Friend.Friends.Count(y => y.FriendId != loggedIn && user.Friends.Any(z => z.FriendId == y.FriendId)),
+                    HasReceived = !string.IsNullOrWhiteSpace(loggedIn) && x.Friend.Friends.Any(y => !y.IsFriend && y.FriendId==loggedIn && y.RequestSenderId==x.Id),
+                    HasRequested = !string.IsNullOrWhiteSpace(loggedIn) && x.Friend.Friends.Any(y => !y.IsFriend && y.RequestSenderId==loggedIn),
+                    IsFriend = !string.IsNullOrWhiteSpace(loggedIn) && x.Friend.Friends.Any(y => y.IsFriend && y.FriendId==loggedIn),
+                    MutualFriends = !string.IsNullOrWhiteSpace(loggedIn) ? x.Friend.Friends.Count(y => y.FriendId != loggedIn && user.Friends.Any(z => z.FriendId == y.FriendId)) : -1,
                 })
                 .OrderByDescending(x => x.IsFriend)
                 .ThenByDescending(x => x.HasRequested)

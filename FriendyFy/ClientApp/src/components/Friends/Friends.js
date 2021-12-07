@@ -10,19 +10,24 @@ const Friends = () => {
     const userId = decodeURI(window.location.href.substring(window.location.href.lastIndexOf('/')+1));
     const [friends, setFriends] = useState([]);
     const [hasMore, setHasMore] = useState(true);    
+    const [search, setSearch] = useState('');
+    const [isSearching, setIsSearching] = useState(false);
 
     useEffect(() => {
-        getFriends(userId, 10, 0)
+        getFriends(userId, 10, 0, isSearching ? search : null)
             .then(async res => {
                 let friendsObj = (await res.json()).friends;
                 setTimeout(() => {
                     setFriends(friendsObj)                    
                 }, 300);
+                if(friendsObj.length === 0){
+                    setHasMore(false);
+                }
             })
-    }, [userId])
+    }, [userId, isSearching])
 
     const getMoreFriends = () => {
-        getFriends(userId, 10, friends.length)
+        getFriends(userId, 10, friends.length, isSearching ? search : null)
         .then(async res => {
             let obj = (await res.json()).friends;
             if(obj.length>0){ 
@@ -39,7 +44,7 @@ const Friends = () => {
             <main className="friends-main">
                 <header className="friends-header">
                     <h2>Friends</h2>
-                    <ProfileFriendSearch/>
+                    <ProfileFriendSearch setSearch={setSearch} setIsSearching={setIsSearching}/>
                 </header>
                 <InfiniteScroll
                     className="profile-friends"
@@ -53,7 +58,7 @@ const Friends = () => {
                         </p>
                     }
                     >
-                    {friends.map(friend => <Friend friend={friend}></Friend>)}
+                    {friends.map(friend => <Friend friend={friend}/>)}
                 </InfiniteScroll>
             </main>)
 }

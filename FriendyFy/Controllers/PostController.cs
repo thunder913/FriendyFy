@@ -130,7 +130,7 @@ namespace FriendyFy.Controllers
         public IActionResult GetPostByImageId(GetByImageIdDto dto)
         {
             var user = this.GetUserByToken();
-            var post = this.postService.GetPostByImageId(dto.ImageId, user.Id);
+            var post = this.postService.GetPostByImageId(dto.ImageId, user != null ? user.Id : null);
             if (post == null)
             {
                 return BadRequest();
