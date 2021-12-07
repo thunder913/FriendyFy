@@ -1,5 +1,5 @@
 .register-popup{
-    background-color: #3F3B3B;
+    background-color: var(--primary-second);
     position: absolute;
     left: 0;
     right: 0;

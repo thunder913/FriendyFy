@@ -11,7 +11,7 @@ footer.feed-footer .bottom-footer > div{
 }
 
 footer.feed-footer .bottom-footer > div:hover{
-    background-color: #5d5c5c;
+    background-color: var(--hover-gray);
     cursor: pointer;
 }
 
@@ -95,7 +95,7 @@ footer.feed-footer .bottom-footer > div.feed-comment.opened-comments{
 }
 
 .feed-footer .comments-section .comment .inner-comment{
-    background-color: rgb(45, 46, 47);
+    background-color: var(--gray);
     border-radius: 20px;
     padding: 5px 10px;
     text-align: start;
@@ -113,7 +113,7 @@ footer.feed-footer .bottom-footer > div.feed-comment.opened-comments{
 }
 
 .feed-footer .comments-section .comment-like-button{
-    background: rgb(29, 90, 170);
+    background: var(--like-option-hover);
     font-size: 24px;
     padding: 4px;
     border-radius: 50%;
@@ -160,7 +160,7 @@ footer.feed-footer .bottom-footer > div.feed-comment.opened-comments{
   
   .feed-footer .add-comment textarea{
     width: 99%;
-    background: #5d5d5d;
+    background: var(--primary-second);
     color: white;
     border: 0px;
     margin: 3px;
@@ -177,7 +177,7 @@ footer.feed-footer .bottom-footer > div.feed-comment.opened-comments{
   .feed-footer .comments .comment-send{
       margin-left: -25px;
       margin-left: -35px;
-      background: #5d5d5d;
+      background: var(--primary-second);
       font-size: 30px;
       padding: 5px;
       border-radius: 50%;

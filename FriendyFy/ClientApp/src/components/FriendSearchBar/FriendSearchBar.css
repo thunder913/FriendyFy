@@ -3,7 +3,7 @@
 }
 
 .friend-search-form > form > input{
-    background-color: rgb(104, 102, 102);
+    background-color: var(--light);
     padding: 0px 20px 0px 10px;
     border: 3px solid rgb(92, 91, 90, 0.4);
     border-radius: 20px;
@@ -24,7 +24,7 @@
     padding: 0px 7px;
     border-radius: 0px 20px 20px 0px;
     border: 0px;
-    background-color: rgb(73, 71, 71);
+    background-color: var(--primary-second);
     font-size: 16px;
     transition: 0.5s;
     color: rgba(170, 170, 170, 0.856);
@@ -32,7 +32,7 @@
 }
 
 .friend-search-button:hover{
-    background-color: rgb(128, 128, 128);
+    background-color: var(--gray);
     color: rgb(221, 221, 221);
     border: 3px solid rgb(92, 91, 90, 0.1);
 }

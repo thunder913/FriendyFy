@@ -31,7 +31,7 @@
 }
 
 .close-popup:hover{
-    background-color: #5c5858;
+    background-color: var(--hover-gray);
     color: black;
 }
 
@@ -60,7 +60,7 @@
 }
 
 .people-list-popup .person:hover{
-    background-color: #555252;
+    background-color: var(--hover-gray);
 }
 
 .people-list-popup .people{

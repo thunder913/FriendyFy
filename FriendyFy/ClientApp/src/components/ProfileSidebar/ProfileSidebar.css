@@ -86,11 +86,11 @@ header.headline > h2, header.headline > p{
 }
 
 .see-all-photos a:hover{
-    background-color: #5d5c5c;
+    background-color: var(--hover-gray);
 }
 
 .rounded-side{
-    background-color: #2A2A2A;
+    background-color: var(--primary);
     border-radius: 10px;
 }
 

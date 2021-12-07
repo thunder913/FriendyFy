@@ -6,7 +6,7 @@ header.feed-header{
     justify-content: space-between;
     padding: 5px 15px;
     border-radius: 5px 5px 0px 0px;
-    background-color: rgba(32, 33, 34, 1);
+    background-color: var(--primary);
 }
 
 .header-left{
@@ -29,7 +29,7 @@ header.feed-header{
 
 .header-elipsis:hover{
     cursor: pointer;
-    background-color: #5d5c5c;
+    background-color: var(--slightly-light);
 }
 
 .header-user-data h3{

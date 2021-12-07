@@ -30,7 +30,7 @@
 
 .profile-friend:hover{
     cursor: pointer;
-    background-color: #5d5c5c;
+    background-color: var(--hover-gray);
 }
 
 .bottom-section{

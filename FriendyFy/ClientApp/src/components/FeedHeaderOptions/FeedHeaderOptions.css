@@ -5,10 +5,9 @@ header.feed-header .header-options{
 header.feed-header .header-options .inner-options{
     position: relative;
     left: -1px;
-    background-color: red;
     bottom: 10px;
     width: 100px;
-    background-color: rgb(92, 92, 92);
+    background-color: var(--slightly-light);
     padding: 5px 0px;
     border-radius: 3px;
 }
@@ -26,7 +25,7 @@ header.feed-header .header-options .delete-button{
 }
 
 header.feed-header .header-options .delete-button:hover{
-    background-color: rgb(116, 113, 113);
+    background-color: var(--light);
 }
 
 .animation-options-enter{

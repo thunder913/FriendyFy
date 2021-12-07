@@ -17,7 +17,7 @@
 .popup-outer .popup-inner{
     width: 540px;
     text-align: center;
-    background-color: #3F3B3B;
+    background-color: var(--primary-second);
     position: absolute;
     top: 50%;
     left: 50%;

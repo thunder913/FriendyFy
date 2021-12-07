@@ -81,7 +81,7 @@
 /* Middle right side */
 
 .event-page .event-page-middle .right-side .invite, .event-page .event-page-middle .right-side .join{
-    background-color: rgb(29, 90, 170);
+    background-color: var(--like-option-hover);
     color: white;
     padding: 5px 20px;
     border-radius: 10px;
@@ -94,7 +94,7 @@
 }
 
 .event-page .event-page-middle .right-side .share{
-    background-color: rgb(49, 164, 218);;
+    background-color: var(--repost-option-hover);
     color: white;
     padding: 5px 20px;
     border-radius: 10px;

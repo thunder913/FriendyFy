@@ -51,11 +51,11 @@
     position: relative;
     right: 0px;
     margin-left: auto;
-    background-color: #3F3B3B;
+    background-color: var(--primary-second);
 }
 
 #post-message{
-    background-color: #424040;;
+    background-color: var(--slightly-light);
     border-radius: 5px;
     color: white;
     padding: 2px 5px;
@@ -97,7 +97,7 @@
 }
 
 .close-make-post:hover{
-    background-color: #5c5858;
+    background-color: var(--hover-gray);
     color: black;
 }
 
@@ -106,7 +106,7 @@
 }
 
 .make-post-popup .post{
-    background-color: rgb(35, 87, 155);
+    background-color: var(--like-option-hover);
     font-size: 20px;
     font-weight: 500;
     padding: 5px;
@@ -137,10 +137,10 @@
 }
 
 .create-post-buttons > .post-button-icon:hover{
-    background-color: rgb(83, 80, 80, 0.8);
+    background-color: var(--hover-gray);
 }
 
 
 .create-post-buttons > .post-button-icon.active{
-    background-color: rgba(104, 104, 104, 0.8);
+    background-color: var(--hover-gray);
 }

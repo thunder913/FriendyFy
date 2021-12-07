@@ -5,7 +5,7 @@
 }
 
 .repost-popup #repost-message{
-    background-color: #424040;;
+    background-color: var(--slightly-light);
     border-radius: 5px;
     color: white;
     padding: 2px 5px;
@@ -18,7 +18,7 @@
 }
 
 .repost-popup .repost{
-    background-color: rgb(35, 87, 155);
+    background-color: var(--like-option-hover);
     font-size: 20px;
     font-weight: 500;
     padding: 5px;

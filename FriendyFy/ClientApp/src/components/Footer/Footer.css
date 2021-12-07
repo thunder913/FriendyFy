@@ -1,6 +1,6 @@
 .site-footer{
     position: fixed;
-    background-color: rgb(92, 92, 92);
+    background-color: var(--slightly-light);
     width: 100%;
     padding: 5px 0px 5px 0px;
     display: flex;
@@ -40,7 +40,7 @@
   footer.feed-footer{
     display: flex;
     flex-direction: column;
-    background-color: rgba(32, 33, 34, 1);
+    background-color: var(--secondary);
     border-radius: 0px 0px 5px 5px;
 }
 
@@ -59,7 +59,7 @@
 .site-footer-wrapper{
   overflow: visible;
   display: flex;
-  background-color: rgb(92, 92, 92);
+  background-color: var(--slightly-light);
   width: 100%;
   padding: 5px 0px 5px 0px;
   flex-wrap: nowrap;

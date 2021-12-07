@@ -3,7 +3,7 @@
     flex-direction: row;
     justify-content: space-between;
     padding: 20px 30px;
-    background-color: rgba(36, 37, 38, 0.8);
+    background-color: var(--primary);
     align-items: center;
     border-radius: 5px;
     margin-bottom: 15px;
@@ -21,7 +21,7 @@
 }
 
 .make-post-image, .make-post-text, .create-event{
-    background-color: rgba(55, 56, 58, 0.8);
+    background-color: var(--gray);
     padding: 20px;
     transition: 0.3s;
     cursor: pointer;
@@ -29,7 +29,7 @@
 }
 
 .make-post-image:hover, .make-post-text:hover, .create-event:hover{
-    background-color: rgba(91, 91, 92, 0.8);
+    background-color: var(--hover-gray);
     color:rgb(212, 211, 211);
 }
 
@@ -39,7 +39,7 @@
 
 .make-post-text{
     height: 100%;
-    background-color: rgba(55, 56, 58, 0.8);
+    background-color: var(--gray);
 }
 
 @media only screen and (max-width: 776px){

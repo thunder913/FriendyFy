@@ -1,5 +1,5 @@
 .approve-popup .approve-button{
-    background-color: rgb(148, 9, 9);
+    background-color: var(--red-button);
     padding: 5px 15px;
     font-weight: 500;
     font-size: 16px;

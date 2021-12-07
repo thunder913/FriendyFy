@@ -1,5 +1,5 @@
 .right-navigation{
-    background-color: #2f2c2c0c;
+    background-color: var(--background);
     width: 20%;
     position: fixed;
     right: 0px;
@@ -24,7 +24,7 @@
 }
 
 .right-nav-button:hover, .right-user:hover{
-    background-color: #686868fd;
+    background-color: var(--hover-gray);
     cursor: pointer;
     padding-right: 30px;
     font-weight: 600;
@@ -91,6 +91,6 @@
 }
 
 .see-more-text:hover{
-    background-color: #686868fd;
+    background-color: var(--hover-gray);
     cursor: pointer;
 }

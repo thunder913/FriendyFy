@@ -8,7 +8,7 @@
     border-radius: 2px;
     border-color: #363535;
     border-style: dashed;
-    background-color: #5C5C5C;
+    background-color: var(--slightly-light);
     color: #bdbdbd;
     outline: none;
     transition: border .24s ease-in-out;
@@ -17,7 +17,7 @@
 }
 
 .dropzone:hover{
-  background-color: #726f6f;
+  background-color: var(--hover-gray);
 
 }
 

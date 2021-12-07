@@ -62,7 +62,7 @@
   }
 
   #quote{
-    background-color: #3F3B3B;
+    background-color: var(--primary-second);
     border-radius: 10px;
     color: white;
     margin-top: 20px;
@@ -79,7 +79,7 @@
 }
 
 .create-account-button{
-    background: rgb(35, 87, 155);
+    background: var(--like-option-hover);
     border-radius: 10px;
     border: 0px;
     font-size: 24px;

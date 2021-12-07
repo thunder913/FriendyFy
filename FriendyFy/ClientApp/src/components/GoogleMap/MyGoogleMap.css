@@ -35,12 +35,12 @@ code {
     padding: 0.5rem;
     font-size: 1.5rem;
     width: 100%;
-    background-color: #3F3B3B !important;
+    background-color: var(--primary-second) !important;
     transition: 0.3s;
   }
   
 .search-suggestion li:hover{
-  background-color: #585454 !important;
+  background-color: var(--hover-gray) !important;
 }
 
   .locate {

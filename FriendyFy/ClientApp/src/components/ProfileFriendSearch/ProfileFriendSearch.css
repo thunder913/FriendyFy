@@ -1,5 +1,5 @@
 .friend-search > form > input{
-    background-color: rgb(104, 102, 102);
+    background-color: var(--slightly-light);
     padding: 0px 20px 2px 10px;
     border: 3px solid rgb(92, 91, 90, 0.4);
     border-radius: 20px;
@@ -21,7 +21,7 @@
     padding: 1px 7px;
     border-radius: 0px 20px 20px 0px;
     border: 0px;
-    background-color: rgb(85, 85, 85);
+    background-color: var(--slightly-light);
     font-size: 16px;
     transition: 0.5s;
     color: rgba(170, 170, 170, 0.856);
@@ -29,7 +29,7 @@
 }
 
 .search-button:hover{
-    background-color: rgb(128, 128, 128);
+    background-color: var(--hover-gray);
     color: rgb(221, 221, 221);
     border: 3px solid rgb(92, 91, 90, 0.1);
 }

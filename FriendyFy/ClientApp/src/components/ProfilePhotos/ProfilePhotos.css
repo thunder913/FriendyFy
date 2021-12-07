@@ -6,7 +6,7 @@
 }
 
 .photos-main{
-    background-color: rgba(36, 37, 38, 0.8);
+    background-color: var(--primary);
     padding: 10px 20px;
     margin-top: 12px;
     border-radius: 10px;

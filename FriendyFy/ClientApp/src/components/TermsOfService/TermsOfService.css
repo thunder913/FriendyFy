@@ -20,7 +20,7 @@ ul.terms-of-service button:hover{
     margin-top: 15px;
     height: 42px;
     border: 2px solid rgb(32, 32, 32, 0.5);
-    background-color: #5C5C5C;
+    background-color: var(--primary-second);
 }
 
 .tos{

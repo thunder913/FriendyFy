@@ -5,10 +5,10 @@ import './HomePageSignedIn.css'
 import FirstTimePopUp from '../PopUps/FirstTimePopUp/FirstTimePopUp.js'
 import MakePost from "../MakePost/MakePost.js"
 import { getFeed, getPosts } from "../../services/postService";
-import { getEvents } from "../../services/eventService";
 import FeedPost from '../FeedPost/FeedPost';
 import FeedPostRepost from '../FeedPost/FeedPostRepost';
 import InfiniteScroll from "react-infinite-scroll-component";
+import Loader from "react-loader-spinner";
 
 const HomePageSignedIn = () => {
   const { loggedIn, resetUser } = useLoggedIn();
@@ -57,6 +57,13 @@ const HomePageSignedIn = () => {
   }, [])
 
   return (<div className="feed home-feed">
+          <Loader
+        type="Puff"
+        color="#00BFFF"
+        height={100}
+        width={100}
+        timeout={3000} //3 secs
+      />
     <FirstTimePopUp show={showFirstTimePopUp} setShow={setShowFirstTimePopUp} />
     <MakePost
       showPostImage={true}

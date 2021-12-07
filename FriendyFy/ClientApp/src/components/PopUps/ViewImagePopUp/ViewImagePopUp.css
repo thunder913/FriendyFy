@@ -18,7 +18,7 @@
     padding: 10px;
     min-height: 70%;
     min-width: 70%;
-    background-color: rgb(51, 48, 48);
+    background-color: var(--primary-second)
 }
 
 .image-popup .picture.full-width{
@@ -135,14 +135,14 @@
 }
 
 .image-popup > .close-popup:hover{
-    background-color: #5c5858;
+    background-color: var(--hover-gray);
     color: black;
 }
 
 .image-popup .right-side .comment-send{
     margin-left: -25px;
     margin-left: -35px;
-    background: #5d5d5d;
+    background: var(--slightly-light);
     font-size: 30px;
     padding: 5px;
     border-radius: 50%;

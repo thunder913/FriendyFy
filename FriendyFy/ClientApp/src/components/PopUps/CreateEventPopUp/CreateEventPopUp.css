@@ -51,7 +51,7 @@
     position: relative;
     right: 0px;
     margin-left: auto;
-    background-color: #3F3B3B;
+    background-color: var(--primary-second);
 }
 
 #datetime::placeholder{
@@ -77,15 +77,15 @@ border-radius: 5px;
     margin-bottom: 0px;
     border: 2px;
     border-radius: 5px;
-    background-color: #424040;
+    background-color: var(--slightly-light);
 
 }
 .rdtOpen > input{
-    background-color: #424040 !important;
+    background-color: var(--slightly-light) !important;
 }
 
 #post-description, .event-popup .event-name{
-    background-color: #424040;
+    background-color: var(--slightly-light);
     color: white;
 }
 
@@ -125,7 +125,7 @@ border-radius: 5px;
   } */
 
   .event-popup .create-event{
-    background-color: rgb(35, 87, 155);
+    background-color: var(--like-option-hover);
     font-size: 20px;
     font-weight: 500;
     padding: 5px;

@@ -66,9 +66,13 @@ header.profile-header{
     text-align: center;
 }
 
+.user-info:hover{
+    text-decoration: none;
+}
+
 .user-interest{    
     margin: 2px;
-    background-color: #575151;
+    background-color: var(--gray);
     color: rgba(255, 255, 255, 0.856);
     -webkit-user-select: none;
     user-select: none;
@@ -81,7 +85,7 @@ header.profile-header{
 
 .user-interest:hover{
     cursor: pointer;
-    background-color: #252424;
+    background-color: var(--hover-gray);
 }
 
 .profile-navigation{
@@ -90,7 +94,7 @@ header.profile-header{
     justify-content: space-between;
     width: 100%;
     padding: 9px 20px;
-    background-color: rgba(32, 33, 34, 1);
+    background-color: var(--secondary);
     border-radius: 5px;
     margin-top: 2px;
     transition: 0.3s;
@@ -107,12 +111,12 @@ header.profile-header{
 }
 
 .profile-navigation > div button:hover{
-    background-color: rgb(104, 104, 104, 0.8);
+    background-color: var(--hover-gray);
     cursor: pointer;
 }
 
 .profile-navigation .selected{
-    background-color: rgb(83, 80, 80, 0.8);
+    background-color: var(--hover-gray);
 }
 
 .user-interests{
@@ -124,7 +128,7 @@ header.profile-header{
 }
 
 .add-friend{
-    background-color: rgb(35, 87, 155) !important;
+    background-color: var(--like-option-hover) !important;
 }
 
 .add-friend-nav > .add-friend:hover{

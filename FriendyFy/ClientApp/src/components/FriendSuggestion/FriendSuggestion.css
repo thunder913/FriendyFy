@@ -24,11 +24,10 @@
 
 .friend-suggestion{
     display: flex;
-    background-color: white;
     flex-grow: 1;
     flex-basis: 49%;
     margin-bottom: 1px;
-    background-color: #5C5C5C;
+    background-color: var(--slightly-light);
     margin-right: 1px;
 }
 
@@ -91,7 +90,7 @@
 }
 
 .friend-buttons .add-friend{
-    background-color: rgb(35, 87, 155);
+    background-color: var(--like-option-hover);
     border: 2px solid rgba(19, 60, 114, 0.2);
 }
 
@@ -101,11 +100,11 @@
 }
 
 .friend-buttons .remove-suggestion{
-    background-color: #807b7b;
+    background-color: var(--light);
     border: 2px solid rgba(90, 86, 86, 0.3);
 }
 
 .friend-buttons .remove-suggestion:hover{
-    background-color: rgb(158, 149, 149);
+    background-color: var(--hover-gray);
     border: 2px solid rgba(141, 133, 133, 0.3);
 }

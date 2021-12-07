@@ -71,7 +71,7 @@ function FeedHeader({ photo, name, time, username, city, lat, long, taggedPeople
                 </div>
             </div>
             {(!isRepost && isCreator) ? <div className="header-right">
-                <FontAwesomeIcon className="header-elipsis" icon={faEllipsisH} onClick={() => setShowOptions(true)} />
+                <FontAwesomeIcon className="header-elipsis" icon={faEllipsisH} onClick={() => setShowOptions(prev => !prev)} />
                 <FeedHeaderOptions
                     showOptions={showOptions}
                     setIsDeleted={setIsDeleted}

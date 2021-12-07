@@ -1,7 +1,7 @@
 .add-image-outer-popup button.add-image{
     padding: 5px 15px;
     border: 0px;
-    background-color: rgb(29, 90, 170);
+    background-color: var(--like-option-hover);
     border-radius: 15px;
     color: white;
     transition: 0.3s;

@@ -12,7 +12,7 @@
     top: 55px;
     padding: 5px 15px;
     border: 0px;
-    background-color: rgb(148, 0, 0);
+    background-color: var(--red-button);
     color: white;
     transition: 0.3s;
     border-radius: 20px;
@@ -36,7 +36,7 @@
     background-color: transparent;
     border: 0px;
     color: white;
-    background-color: #575151;
+    background-color: var(--slightly-light);
     transition: 0.3s;
 }
 
@@ -62,7 +62,7 @@
 
 .event-page-top .photos .add-event-image:hover, .event-page-top .photos .big-add-image:hover{
     cursor: pointer;
-    background-color: #252424;
+    background-color: var(--option-gray);
 }
 
 .event-page .event-page-top .middle{

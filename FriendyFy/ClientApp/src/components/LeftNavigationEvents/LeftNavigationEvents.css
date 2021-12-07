@@ -24,7 +24,7 @@
     font-size: 28px;
     height: 166px;
     text-align: center;
-    background-color: #5C5C5C;
+    background-color: var(--slightly-light);
     border-radius: 0px 10px 10px 0px;
     margin-right: 10px;
     padding-left: 8px;
@@ -53,6 +53,7 @@
     border-left: 0px;
     height: 100%;
     flex-wrap: nowrap;
+    gap: 2px;
 }
 
 .line-parent{

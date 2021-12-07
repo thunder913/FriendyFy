@@ -31,7 +31,7 @@
     padding: 10px;
     border-radius: 5px;
     border-radius: 5px;
-    background-color: rgba(143, 143, 143, 0.678);
+    background-color: var(--light);
     border: 0px solid transparent;
 }
 

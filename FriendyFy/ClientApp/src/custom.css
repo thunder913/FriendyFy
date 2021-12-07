@@ -14,13 +14,8 @@ code {
 }
 
 body{
-  background-color: rgb(63, 59, 59);
+  background-color: var(--background)
 }
-/* 
-input:-webkit-autofill,
-input:-webkit-autofill:focus {
-    transition: background-color 600000s 0s, color 600000s 0s;
-} */
 
 .notification{
   box-shadow: none !important;
@@ -29,4 +24,31 @@ input:-webkit-autofill:focus {
 
 .notification-error:hover{
   background-color: #a31f18;
+}
+
+:root{
+  --red23: rgb(128, 73, 73);
+}
+
+[dark-theme="dark"]{
+  --background: rgb(59, 59, 59);
+  --light: #807b7b;
+  --slightly-light: rgb(92, 92, 92);
+  --primary: rgba(36, 37, 38, 0.8);
+  --secondary: rgba(32, 33, 34, 1);
+  --gray: rgba(55, 56, 58, 0.8);
+  --text-main: white;
+  --text-dimmed: rgb(165, 162, 162);
+  --option-gray: #4d4b4b;
+  --hover-gray: #5d5c5c;
+  --like-option-hover: rgb(35, 87, 155);
+  --comment-option-hover: rgb(204, 127, 40);
+  --repost-option-hover: rgb(74, 198, 255);
+  --primary-second: #3F3B3B;
+  --red-button: rgb(148,0,0);
+}
+
+
+a:hover{
+  text-decoration: none;
 }
