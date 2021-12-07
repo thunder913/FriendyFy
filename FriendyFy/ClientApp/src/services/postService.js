@@ -68,3 +68,11 @@ export function makePost(privacySetting, postMessage, locationLat, locationLng, 
         body: JSON.stringify({postId, postType})
     });
   }
+
+  export function getFeed(eventIds, postIds, isProfile, take, username, hasPosts, hasEvents) {
+    return fetch('/post/getFeedPosts', {
+        method: 'POST',
+        headers: {'Content-Type': 'application/json'},
+        body: JSON.stringify({eventIds, postIds, isProfile, take, username, hasPosts, hasEvents})
+    });
+  }

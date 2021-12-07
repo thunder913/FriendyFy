@@ -680,5 +680,111 @@ namespace FriendyFy.Services
             var removed = await this.eventPostRepository.SaveChangesAsync();
             return removed > 0;
         }
+
+        public List<PostDetailsViewModel> GetFeedEvents(ApplicationUser user, bool isProfile, string userName, int take, int skip, List<string> ids)
+        {
+            var interests = new List<int>();
+            if (user != null)
+            {
+                interests = user.Interests.Select(x => x.Id).ToList();
+            }
+
+            return this.eventPostRepository
+                .AllAsNoTracking()
+                .OrderByDescending(x => x.CreatedOn)
+                .Include(x => x.Creator)
+                .ThenInclude(x => x.ProfileImage)
+                .Include(x => x.Event)
+                .ThenInclude(x => x.Users)
+                .ThenInclude(x => x.ProfileImage)
+                .Include(x => x.Likes)
+                .Include(x => x.Comments)
+                .Include(x => x.Reposts)
+                .Include(x => x.Event)
+                .ThenInclude(x => x.Interests)
+                .Include(x => x.Repost)
+                .ThenInclude(x => x.Creator)
+                .ThenInclude(x => x.ProfileImage)
+                .Include(x => x.Repost)
+                .ThenInclude(x => x.Event)
+                .ThenInclude(x => x.Users)
+                .ThenInclude(x => x.ProfileImage)
+                .Include(x => x.Repost)
+                .ThenInclude(x => x.Likes)
+                .Include(x => x.Repost)
+                .ThenInclude(x => x.Comments)
+                .Include(x => x.Repost)
+                .ThenInclude(x => x.Repost)
+                .Include(x => x.Repost)
+                .ThenInclude(x => x.Event)
+                .ThenInclude(x => x.Interests)
+                .Where(x => (isProfile && x.Creator.UserName == userName) || (!isProfile && (user == null || x.CreatorId != user.Id)))
+                .OrderByDescending(x => EF.Functions.DateDiffSecond(DateTime.UtcNow, x.CreatedOn)/1000.0 + 
+                (user != null ? x.Event.Users.Count(y => y.Id == user.Id)*1000 : 0) +
+                (user != null ? x.Event.Interests.Count(y => interests.Contains(y.Id))*1000 : 0))
+                .Where(x => !ids.Contains(x.Id))
+                .Skip(skip)
+                .Take(take)
+                // these queries can be a lot more optimal
+                .ToList()
+                .Select(x => new PostDetailsViewModel()
+                {
+                    Username = x.Creator.UserName,
+                    CreatorName = x.Creator.FirstName + " " + x.Creator.LastName,
+                    CreatedAgo = (int)((DateTime.UtcNow - x.CreatedOn).TotalMinutes),
+                    CreatorImage = this.blobService.GetBlobUrlAsync(x.Creator.ProfileImage?.Id + x.Creator.ProfileImage?.ImageExtension, GlobalConstants.BlobPictures).GetAwaiter().GetResult(),
+                    EventGoing = x.Event.Users.Select(y => this.blobService.GetBlobUrlAsync(y.ProfileImage?.Id + y.ProfileImage?.ImageExtension, GlobalConstants.BlobPictures).GetAwaiter().GetResult()).ToList(),
+                    EventTitle = x.Event.Name,
+                    EventInterests = x.Event.Interests.Select(y => new InterestViewModel()
+                    {
+                        Id = y.Id,
+                        Label = y.Name,
+                    }).ToList(),
+                    LocationCity = x.Event.LocationCity,
+                    Latitude = x.Event.Latitude,
+                    Longitude = x.Event.Longitude,
+                    EventTime = x.Event.Time,
+                    LikesCount = x.Likes.Count(),
+                    RepostsCount = x.Reposts.GroupBy(x => x.CreatorId).Count(),
+                    CommentsCount = x.Comments.Count(),
+                    EventIsReocurring = x.Event.IsReocurring,
+                    EventReocurring = x.Event.ReocurringType.ToString(),
+                    IsLikedByUser = x.Likes.Any(x => x.LikedById == user.Id),
+                    PostId = x.EventId,
+                    PostType = PostType.Event.ToString(),
+                    IsRepost = x.IsRepost,
+                    EventPostId = x.Id,
+                    PostMessage = x.Text,
+                    IsUserCreator = x.CreatorId == user.Id,
+                    Repost = !x.IsRepost ? null : new PostDetailsViewModel()
+                    {
+                        Username = x.Repost.Creator.UserName,
+                        CreatorName = x.Repost.Creator.FirstName + " " + x.Repost.Creator.LastName,
+                        CreatedAgo = (int)((DateTime.UtcNow - x.Repost.CreatedOn).TotalMinutes),
+                        CreatorImage = this.blobService.GetBlobUrlAsync(x.Repost.Creator.ProfileImage?.Id + x.Repost.Creator.ProfileImage?.ImageExtension, GlobalConstants.BlobPictures).GetAwaiter().GetResult(),
+                        EventGoing = x.Repost.Event.Users.Select(y => this.blobService.GetBlobUrlAsync(y.ProfileImage?.Id + y.ProfileImage?.ImageExtension, GlobalConstants.BlobPictures).GetAwaiter().GetResult()).ToList(),
+                        EventTitle = x.Repost.Event.Name,
+                        EventInterests = x.Repost.Event.Interests.Select(y => new InterestViewModel()
+                        {
+                            Id = y.Id,
+                            Label = y.Name,
+                        }).ToList(),
+                        LocationCity = x.Repost.Event.LocationCity,
+                        Latitude = x.Repost.Event.Latitude,
+                        Longitude = x.Repost.Event.Longitude,
+                        EventTime = x.Repost.Event.Time,
+                        LikesCount = x.Repost.Likes.Count(),
+                        RepostsCount = x.Repost.Reposts.GroupBy(x => x.CreatorId).Count(),
+                        CommentsCount = x.Repost.Comments.Count(),
+                        EventIsReocurring = x.Repost.Event.IsReocurring,
+                        EventReocurring = x.Repost.Event.ReocurringType.ToString(),
+                        IsLikedByUser = x.Repost.Likes.Any(y => y.LikedById == user.Id),
+                        PostId = x.Repost.EventId,
+                        PostType = PostType.Event.ToString(),
+                        EventPostId = x.RepostId,
+                    }
+                })
+                .ToList();
+        }
     }
 }

@@ -15,23 +15,32 @@ const SearchBar = () =>{
     const [searchResults, setSearchResults] = useState([]);
     const [search, setSearch] = useState('');
     const [showSearchResults, setShowSearchResults] = useState(false);
+    const [isSearching, setIsSearching] = useState(false);
     const history = useHistory();
     const [value] = useDebounce(search, 500);
+
+    const performSearch = () => {
+        return searchUsersAndEvents(search, 10, 0, 0)
+        .then(async res => {
+            let obj = await res.json();
+            setSearchResults(obj.searchResults);
+            setPeopleCount(obj.peopleCount);
+            setEventsCount(obj.eventsCount);
+            setHasMoreEvents(obj.hasMoreEvents);
+            setHasMorePeople(obj.hasMorePeople);
+            setIsSearching(false);
+        })
+    }
+
     const searchResultsEvent = (e) => {
         e.preventDefault();
+        setIsSearching(true);
         setShowSearchResults(true);
-        searchUsersAndEvents(search, 10, 0, 0)
-                .then(async res => {
-                    let obj = await res.json();
-                    setSearchResults(obj.searchResults);
-                    setPeopleCount(obj.peopleCount);
-                    setEventsCount(obj.eventsCount);
-                    setHasMoreEvents(obj.hasMoreEvents);
-                    setHasMorePeople(obj.hasMorePeople);
-                })
+        performSearch();
     }
 
     const loadMoreResults = () => {
+        setIsSearching(true);
         return searchUsersAndEvents(search, 10, peopleCount, eventsCount)
         .then(async res => { 
             let obj = await res.json();
@@ -40,6 +49,7 @@ const SearchBar = () =>{
             setEventsCount(obj.eventsCount);
             setHasMoreEvents(obj.hasMoreEvents);
             setHasMorePeople(obj.hasMorePeople);
+            setIsSearching(false);
         })
     }
 
@@ -58,17 +68,9 @@ const SearchBar = () =>{
     }
 
     useEffect(() => {
-        if(value){
+        if(value && !isSearching){
             setShowSearchResults(true);
-            searchUsersAndEvents(search, 10, 0, 0)
-                    .then(async res => {
-                        let obj = await res.json();
-                        setSearchResults(obj.searchResults);
-                        setPeopleCount(obj.peopleCount);
-                        setEventsCount(obj.eventsCount);
-                        setHasMoreEvents(obj.hasMoreEvents);
-                        setHasMorePeople(obj.hasMorePeople);
-                    })
+            performSearch();
         }else{
             setShowSearchResults(false);
         }
@@ -77,15 +79,7 @@ const SearchBar = () =>{
     const onSearchInputClick = () => {
         if(search){
             setShowSearchResults(true);
-            searchUsersAndEvents(search, 10, 0, 0)
-            .then(async res => {
-                let obj = await res.json();
-                setSearchResults(obj.searchResults);
-                setPeopleCount(obj.peopleCount);
-                setEventsCount(obj.eventsCount);
-                setHasMoreEvents(obj.hasMoreEvents);
-                setHasMorePeople(obj.hasMorePeople);
-            })
+            performSearch();
         }
     }
 

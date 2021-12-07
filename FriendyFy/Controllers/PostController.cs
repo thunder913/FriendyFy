@@ -6,6 +6,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using ViewModels;
+using ViewModels.ViewModels;
 
 namespace FriendyFy.Controllers
 {
@@ -201,5 +202,43 @@ namespace FriendyFy.Controllers
             return BadRequest();
         }
 
+        [HttpPost("getFeedPosts")]
+        public IActionResult GetFeedPosts(GetFeedData dto)
+        {
+            var user = this.GetUserByToken();
+
+            var data = new List<PostDetailsViewModel>();
+            var events = new List<PostDetailsViewModel>();
+            var posts = new List<PostDetailsViewModel>();
+            var toTake = dto.Take / 2;
+            if (dto.HasEvents)
+            {
+                events = this.eventService.GetFeedEvents(user, dto.isProfile, dto.Username, toTake, dto.EventIds.Count(), dto.EventIds);
+            }
+            if (dto.HasPosts)
+            {
+                posts = this.postService.GetFeedPosts(user, dto.isProfile, dto.Username, toTake, dto.PostIds.Count(), dto.PostIds);
+            }
+            bool hasPosts = false, hasEvents = false;
+
+            if (events.Count() == toTake)
+            {
+                hasEvents = true;
+            }
+            if (posts.Count() == toTake)
+            {
+                hasPosts = true;
+            }
+
+            data.AddRange(events);
+            data.AddRange(posts);
+            data = data.OrderBy(x => Guid.NewGuid()).ToList();
+            return Ok(new FeedViewModel() 
+            {
+                Posts = data,
+                HasEvents = hasEvents,
+                HasPosts = hasPosts
+            });
+        }
     }
 }

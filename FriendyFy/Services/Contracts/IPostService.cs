@@ -18,5 +18,6 @@ namespace FriendyFy.Services.Contracts
         Task<bool> RepostAsync(string id, string text, string userId);
         List<PersonListPopupViewModel> GetPeopleReposts(string postId, int take, int skip);
         Task<bool> DeletePostAsync(string postId, string userId);
+        List<PostDetailsViewModel> GetFeedPosts(ApplicationUser user, bool isProfile, string userName, int take, int skip, List<string> ids);
     }
 }
