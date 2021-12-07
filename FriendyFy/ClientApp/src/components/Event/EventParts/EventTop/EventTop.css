@@ -135,3 +135,18 @@
 .event-page .location-time .info-text{
     align-self: center;
 }
+
+@media only screen and (max-width: 576px){
+    .event-page-top{
+        flex-direction: column;
+        height: initial;
+    }
+
+    .event-page .event-page-top .photos, .event-page .event-page-top .location-time, .event-page .event-page-top .middle{
+        width: 100%;
+    }
+
+    .event-page-middle .interests .user-interest{
+        width: initial;
+    }
+}

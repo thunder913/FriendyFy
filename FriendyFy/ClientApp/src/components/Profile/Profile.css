@@ -31,3 +31,20 @@
 .feed{
     margin-top: 12px;
 }
+
+@media only screen and (max-width: 1366px){
+    .main-content .container{
+        padding: 0px;
+        margin: 0px;
+        max-width: none;
+        padding: 0px 20px;
+    }
+
+    .main-content{
+        margin: 0px 0px;
+    }
+
+    .profile-feed .make-post{
+        flex-direction: column;
+    }
+}

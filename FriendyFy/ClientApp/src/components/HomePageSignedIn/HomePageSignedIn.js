@@ -20,7 +20,7 @@ const HomePageSignedIn = () => {
   const [hasEvents, setHasEvents] = useState(true);
 
   const loadMorePosts = () => {
-    return getFeed(events, posts, false, 10, loggedIn ? loggedIn.userName : null, hasPosts, hasEvents)
+    return getFeed(events, posts, false, 10, null, hasPosts, hasEvents)
         .then(async res => {
             let obj = await res.json();
             obj.posts.forEach(el => {

@@ -24,3 +24,16 @@
 .loading-text{
     text-align: center;
 }
+
+@media only screen and (max-width: 576px){
+    .profile-feed{
+        flex-basis: 100%;
+    }
+}
+
+
+@media only screen and (max-width: 550px){
+    .popup-outer .popup-inner{
+        width: 300px;
+    }
+}

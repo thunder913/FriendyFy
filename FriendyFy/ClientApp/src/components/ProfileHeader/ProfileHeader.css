@@ -130,3 +130,19 @@ header.profile-header{
 .add-friend-nav > .add-friend:hover{
     background-color: rgb(73, 113, 165);
 }
+
+@media only screen and (max-width: 776px){
+    .profile-navigation > div button{
+        padding: 1px 10px;
+    }
+    .profile-picture{
+        bottom: 30px;
+        width: 300px;
+    }
+}
+
+@media only screen and (max-width: 350px){
+    .profile-navigation{
+        width: initial;
+    }
+}

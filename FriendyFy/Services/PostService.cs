@@ -359,9 +359,9 @@ namespace FriendyFy.Services
                 .ThenInclude(x => x.Friends)
                 .Where(x => (isProfile && x.Creator.UserName == userName) || (!isProfile && (user == null || x.CreatorId != user.Id)))
                 .Where(x => !ids.Contains(x.Id))
-                .OrderByDescending(x => EF.Functions.DateDiffSecond(DateTime.UtcNow, x.CreatedOn) / 1000.0 +
-                (user != null ? x.Creator.Friends.Count(y => y.Id == user.Id) * 1000 : 0) +
-                (user != null ? x.Creator.Friends.Count(y => y.Id == user.Id) * 100000 : 0))
+                .OrderByDescending(x => EF.Functions.DateDiffSecond(DateTime.UtcNow, x.CreatedOn) / 1000.0 + (isProfile ? 0 : 1) *
+                ((user != null ? x.Creator.Friends.Count(y => y.Id == user.Id) * 1000 : 0) +
+                (user != null ? x.Creator.Friends.Count(y => y.Id == user.Id) * 100000 : 0)))
                 .Skip(skip)
                 .Take(take)
                 .ToList()

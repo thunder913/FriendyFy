@@ -154,3 +154,17 @@
 .image-popup .feed-footer .comments-section{
     max-height: 560px;
 }
+
+@media only screen and (max-width: 1337px){
+    .popup-outer .popup-inner.image-popup{
+        flex-direction: column;
+    }
+
+    .image-popup .right-side{
+        width: initial;
+    }
+
+    .feed-footer .comments-section .comment .inner-comment{
+        width: 100%;
+    }
+}

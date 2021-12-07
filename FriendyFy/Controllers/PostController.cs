@@ -211,9 +211,12 @@ namespace FriendyFy.Controllers
             var events = new List<PostDetailsViewModel>();
             var posts = new List<PostDetailsViewModel>();
             var toTake = dto.Take / 2;
-            if (dto.HasEvents)
+            if (!dto.isProfile)
             {
-                events = this.eventService.GetFeedEvents(user, dto.isProfile, dto.Username, toTake, dto.EventIds.Count(), dto.EventIds);
+                if (dto.HasEvents)
+                {
+                    events = this.eventService.GetFeedEvents(user, dto.isProfile, dto.Username, toTake, dto.EventIds.Count(), dto.EventIds);
+                }
             }
             if (dto.HasPosts)
             {
@@ -232,7 +235,14 @@ namespace FriendyFy.Controllers
 
             data.AddRange(events);
             data.AddRange(posts);
-            data = data.OrderBy(x => Guid.NewGuid()).ToList();
+            if (!dto.isProfile)
+            {
+                data = data.OrderBy(x => Guid.NewGuid()).ToList();
+            }
+            else
+            {
+                data = data.OrderBy(x => x.CreatedAgo).ToList();
+            }
             return Ok(new FeedViewModel() 
             {
                 Posts = data,

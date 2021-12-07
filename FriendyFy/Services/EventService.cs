@@ -719,9 +719,9 @@ namespace FriendyFy.Services
                 .ThenInclude(x => x.Event)
                 .ThenInclude(x => x.Interests)
                 .Where(x => (isProfile && x.Creator.UserName == userName) || (!isProfile && (user == null || x.CreatorId != user.Id)))
-                .OrderByDescending(x => EF.Functions.DateDiffSecond(DateTime.UtcNow, x.CreatedOn)/1000.0 + 
-                (user != null ? x.Event.Users.Count(y => y.Id == user.Id)*1000 : 0) +
-                (user != null ? x.Event.Interests.Count(y => interests.Contains(y.Id))*1000 : 0))
+                .OrderByDescending(x => EF.Functions.DateDiffSecond(DateTime.UtcNow, x.CreatedOn)/1000.0 + (isProfile ? 0 : 1) *
+                ((user != null ? x.Event.Users.Count(y => y.Id == user.Id)*1000 : 0) +
+                (user != null ? x.Event.Interests.Count(y => interests.Contains(y.Id))*1000 : 0)))
                 .Where(x => !ids.Contains(x.Id))
                 .Skip(skip)
                 .Take(take)
