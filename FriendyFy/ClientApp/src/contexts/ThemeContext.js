@@ -34,7 +34,8 @@ const ThemeProvider = ({children}) => {
 
     const value = {
         checkTheme,
-        changeTheme
+        changeTheme,
+        theme
     };
 
     return (<ThemeContext.Provider value={value}>{children}</ThemeContext.Provider>)

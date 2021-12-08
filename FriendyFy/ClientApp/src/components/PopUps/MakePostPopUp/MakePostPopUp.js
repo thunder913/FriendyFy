@@ -12,6 +12,7 @@ import './MakePostPopUp.css';
 import '../PopUp.css';
 import PopUpHeader from "../PopUpHeader/PopUpHeader";
 import PopUp from '../PopUp';
+import { useThemeContext } from '../../../contexts/ThemeContext';
 const MakePostPopUp = ({ hasImage, show, setShow }) => {
     const [showImage, setShowImage] = useState(hasImage);
     const [showPeople, setShowPeople] = useState(false);
@@ -23,6 +24,7 @@ const MakePostPopUp = ({ hasImage, show, setShow }) => {
     const [image, setImage] = useState('');
     const [people, setPeople] = useState([]);
     const { loggedIn } = useLoggedIn();
+    const {theme} = useThemeContext();
 
     const onPostButtonClick = async () => {
         let peopleIds = people.map(x => x.value)
@@ -53,7 +55,7 @@ const MakePostPopUp = ({ hasImage, show, setShow }) => {
                         <Select
                             theme={(theme) => ({
                                 ...theme,
-                                colors: {
+                                colors: (theme==='dark' ? {
                                     ...theme.colors,
                                     primary25: '#595757',
                                     primary: 'rgb(212, 212, 212)',
@@ -62,7 +64,7 @@ const MakePostPopUp = ({ hasImage, show, setShow }) => {
                                     neutral60: '#aaaaaa',
                                     neutral10: '#595757',
                                     dangerLight: '#523737',
-                                }
+                                } : {...theme.colors})
                             })}
                             className="privacy-picker"
                             isSearchable={false}

@@ -1,7 +1,9 @@
 import React, { Component } from 'react'
 import './InterestsDropdown.css'
 import CreatableSelect from 'react-select/creatable';
-import {getAllInterests} from '../../services/interestService.js'
+import { getAllInterests } from '../../services/interestService.js'
+import { useThemeContext } from '../../contexts/ThemeContext';
+import { useEffect, useState } from 'react/cjs/react.development';
 
 const customStyles = {
   singleValue: (provided, state) => {
@@ -11,67 +13,52 @@ const customStyles = {
   }
 }
 
-export default class InterestsDropdown extends Component {
-
-  constructor(props){
-    super(props)
-    this.state = {
-      dropDownOpt : [],
-      setInterests: props.setInterests,
-      placeholder: props.placeholder
-    }
-  }
-
- async renderData(){
-    // const API = await axios.get('https://jsonplaceholder.typicode.com/comments')
-    // const serverResponse = API.data
-
-    // const dropDownValue = serverResponse.map((response) => ({
-    //   "value" : response.id,
-    //   "label" : response.email
-
+const InterestsDropdown = () => {
+  const [interests, setInterests] = useState([]);
+  const [placeholder, setPlaceHolder] = useState('');
+  const [dropDownOpt, setDropDownOpt] = useState([]);
+  const [styles, setStyles] = useState({});
+  const {theme} = useThemeContext();
+  const renderData = async () => {
     let interests = await getAllInterests().then(async res => await res.json());
-    let stateInterests = interests.map(x => ({label: x.label, value: x.id}));
-
-    this.setState(
-      {
-        dropDownOpt: stateInterests
-      }
-    )
+    let stateInterests = interests.map(x => ({ label: x.label, value: x.id }));
+    setDropDownOpt(stateInterests);
   }
 
-  onChange(event){
-    this.state.setInterests(event);
+  const onChange = (event) => {
+    setInterests(event);
   }
 
-  componentDidMount(){
-      this.renderData()
-  }
+  useEffect(() => {
+    if(theme === 'dark'){
+      setStyles({
+        ...theme.colors,
+        primary25: '#595757',
+        primary: 'black',
+        neutral0: '#3F3B3B',
+        neutral80: 'white',
+        neutral60: 'black',
+        neutral10: '#595757',
+        dangerLight: '#523737'});
+    }
+    renderData();
+  }, [])
 
-  render() {
-    return (
-      <div className="interests-input">
-        <CreatableSelect 
-           options={this.state.dropDownOpt} 
-           onChange={this.onChange.bind(this)}
-           isMulti
-           placeholder={this.state.placeholder}
-           theme={(theme) => ({
-             ...theme,
-             colors: {
-               ...theme.colors,
-               primary25: '#595757',
-               primary: 'black',
-               neutral0: '#3F3B3B',
-               neutral80: 'white',
-               neutral60: 'black',
-               neutral10: '#595757',
-               dangerLight: '#523737'
-             }
-           })}
-           styles={customStyles}
-        />
-      </div>
-    )
-  }
+  return (
+    <div className="interests-input">
+      <CreatableSelect
+        options={dropDownOpt}
+        onChange={onChange}
+        isMulti
+        placeholder={placeholder}
+        theme={(theme) => ({
+          ...theme,
+          colors: (styles.legth ? styles : {...theme.colors})
+        })}
+        styles={customStyles}
+      />
+    </div>
+  )
 }
+
+export default InterestsDropdown;

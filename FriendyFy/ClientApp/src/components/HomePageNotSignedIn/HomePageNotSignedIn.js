@@ -82,11 +82,8 @@ const HomePageNotSignedIn = () =>{
                     </button>
                 </div>
             </div>
-            {/* <input type="submit" onClick={() => setShowRegister(!showRegister)}/> */}
         </div>
-        {showRegister ? 
-                <RegisterPopUp setShowRegister={setShowRegister}/>
- : ''}
+        <RegisterPopUp show={showRegister} setShow={setShowRegister}/>
     </div>);
 }
 

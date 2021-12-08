@@ -13,6 +13,7 @@ import ImgDropAndCrop from "../../ImgDropAndCrop/ImgDropAndCrop";
 import PopUpHeader from "../PopUpHeader/PopUpHeader";
 import '../PopUp.css';
 import PopUp from "../PopUp";
+import { useThemeContext } from "../../../contexts/ThemeContext";
 
 const CreateEventPopUp = ({ show, setShow }) => {
     const [privacySettings, setPrivacySettings] = useState('Private');
@@ -27,6 +28,7 @@ const CreateEventPopUp = ({ show, setShow }) => {
     const { loggedIn } = useLoggedIn();
     const [eventError, setEventError] = useState('');
     const [image, setImage] = useState('');
+    const {theme} = useThemeContext();
 
     function getCurrentLocalization() {
         let localization = window.navigator.userLanguage || window.navigator.language;
@@ -86,7 +88,7 @@ const CreateEventPopUp = ({ show, setShow }) => {
                         <Select
                             theme={(theme) => ({
                                 ...theme,
-                                colors: {
+                                colors: (theme === 'dark' ? {
                                     ...theme.colors,
                                     primary25: '#595757',
                                     primary: 'rgb(212, 212, 212)',
@@ -95,7 +97,7 @@ const CreateEventPopUp = ({ show, setShow }) => {
                                     neutral60: '#aaaaaa',
                                     neutral10: '#595757',
                                     dangerLight: '#523737',
-                                }
+                                } : {...theme.colors})
                             })}
                             className="privacy-picker"
                             isSearchable={false}
