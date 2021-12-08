@@ -54,6 +54,7 @@
     user-select: none;
     padding: 2px 5px;
     height: 28px;
+    transition: 0.3s;
 }
 
 .event .interest:hover{
@@ -127,7 +128,7 @@
 
 .location > button:hover{
     text-decoration: none;
-    background-color: var(--gray);
+    background-color: var(--hover-gray);
     box-shadow: 0px 0px 33px 0px rgba(0,0,0,0.05);
 }
 
@@ -146,7 +147,7 @@
 }
 
 .event-card .view-button{
-    background-color: var(--like-option-hover);
+    background-color: var(--like-option);
     border: 0px;
     padding: 5px 15px;
     margin: 5px 0px;
@@ -157,5 +158,5 @@
 }
 
 .event-card .view-button:hover{
-    background-color: rgb(45, 109, 194);
+    background-color: var(--like-option-hover);
 }

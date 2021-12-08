@@ -30,7 +30,6 @@
 
 .make-post-image:hover, .make-post-text:hover, .create-event:hover{
     background-color: var(--hover-gray);
-    color:rgb(212, 211, 211);
 }
 
 .make-post-text{

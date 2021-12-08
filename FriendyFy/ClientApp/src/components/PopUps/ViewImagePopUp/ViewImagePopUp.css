@@ -18,7 +18,7 @@
     padding: 10px;
     min-height: 70%;
     min-width: 70%;
-    background-color: var(--primary-second)
+    background-color: var(--secondary)
 }
 
 .image-popup .picture.full-width{
@@ -105,15 +105,15 @@
 }
 
 .image-popup .actions-footer .like:hover{
-    color:rgb(20, 76, 149);
+    color:var(--like-option-hover)
 }
 
 .image-popup .actions-footer .comment:hover{
-    color:rgb(204, 127, 40);
+    color:var(--comment-option)
 }
 
 .image-popup .actions-footer .repost:hover{
-    color:rgb(74, 198, 255);
+    color:var(--repost-option)
 }
 
 .image-popup > .close-popup{
@@ -136,7 +136,7 @@
 
 .image-popup > .close-popup:hover{
     background-color: var(--hover-gray);
-    color: black;
+    color: var(--oposite-color);
 }
 
 .image-popup .right-side .comment-send{

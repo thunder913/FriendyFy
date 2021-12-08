@@ -41,7 +41,7 @@
 
 .search-button:hover{
     background-color: var(--hover-gray);
-    color: rgb(221, 221, 221);
+    color: var(--text-dimmed);
     border: 3px solid rgb(92, 91, 90, 0.1);
 }
 

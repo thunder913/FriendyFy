@@ -72,7 +72,7 @@ header.profile-header{
 
 .user-interest{    
     margin: 2px;
-    background-color: var(--gray);
+    background-color: var(--primary);
     color: rgba(255, 255, 255, 0.856);
     -webkit-user-select: none;
     user-select: none;
@@ -94,7 +94,7 @@ header.profile-header{
     justify-content: space-between;
     width: 100%;
     padding: 9px 20px;
-    background-color: var(--secondary);
+    background-color: var(--primary);
     border-radius: 5px;
     margin-top: 2px;
     transition: 0.3s;
@@ -128,11 +128,11 @@ header.profile-header{
 }
 
 .add-friend{
-    background-color: var(--like-option-hover) !important;
+    background-color: var(--like-option) !important;
 }
 
 .add-friend-nav > .add-friend:hover{
-    background-color: rgb(73, 113, 165);
+    background-color: var((--like-option-hover))
 }
 
 @media only screen and (max-width: 776px){

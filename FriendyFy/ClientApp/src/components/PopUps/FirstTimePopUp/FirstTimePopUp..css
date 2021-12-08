@@ -62,7 +62,7 @@
   }
 
   #quote{
-    background-color: var(--primary-second);
+    background-color: var(--secondary);
     border-radius: 10px;
     color: white;
     margin-top: 20px;

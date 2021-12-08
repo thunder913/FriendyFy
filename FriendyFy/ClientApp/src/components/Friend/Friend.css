@@ -39,10 +39,10 @@
 }
 
 .friend-info .friend-name,.friend-info .mutual-friends, .friend-status{
-    color: white;
+    color: var(--text-main);
 }
 
 .friend-info:hover{
-    color: white;
-    text-decoration: underline white;
+    color: var(--text-main);
+    text-decoration: underline var(--text-main);
 }

@@ -19,7 +19,7 @@
 }
 
 .event-page-top .leave-button:hover{
-    background-color: rgb(177, 6, 6);
+    background-color: var(--red-button-hover);
 }
 
 .event-page .event-page-top .photos, .event-page .event-page-top .location-time{

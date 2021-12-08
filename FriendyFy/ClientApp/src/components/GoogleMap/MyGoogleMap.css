@@ -35,7 +35,7 @@ code {
     padding: 0.5rem;
     font-size: 1.5rem;
     width: 100%;
-    background-color: var(--primary-second) !important;
+    background-color: var(--secondary) !important;
     transition: 0.3s;
   }
   

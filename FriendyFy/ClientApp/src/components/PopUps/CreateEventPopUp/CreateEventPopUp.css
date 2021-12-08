@@ -51,7 +51,7 @@
     position: relative;
     right: 0px;
     margin-left: auto;
-    background-color: var(--primary-second);
+    background-color: var(--secondary);
 }
 
 #datetime::placeholder{
@@ -125,7 +125,7 @@ border-radius: 5px;
   } */
 
   .event-popup .create-event{
-    background-color: var(--like-option-hover);
+    background-color: var(--like-option);
     font-size: 20px;
     font-weight: 500;
     padding: 5px;
@@ -139,7 +139,7 @@ border-radius: 5px;
 
 
  .event-popup .create-event:hover{
-    background-color: rgb(58, 108, 173);
+    background-color: var(--like-option-hover);
     border: 2px solid rgba(54, 101, 163, 0.2);
 }
 

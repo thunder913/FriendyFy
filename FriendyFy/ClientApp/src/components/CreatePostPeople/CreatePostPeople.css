@@ -1,5 +1,5 @@
 .people-picker{
-    background-color: var(--primary-second);
+    background-color: var(--secondary);
     z-index: 3;
     border: 5px;
 }

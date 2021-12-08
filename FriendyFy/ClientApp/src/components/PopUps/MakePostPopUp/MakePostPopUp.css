@@ -1,3 +1,7 @@
+.make-post-popup{
+    position: fixed;
+}
+
 .make-post-popup .post-popup::-webkit-scrollbar {
     width: 5px;
   }
@@ -51,11 +55,11 @@
     position: relative;
     right: 0px;
     margin-left: auto;
-    background-color: var(--primary-second);
+    background-color: var(--secondary);
 }
 
 #post-message{
-    background-color: var(--slightly-light);
+    background-color: var(--secondary);
     border-radius: 5px;
     color: white;
     padding: 2px 5px;
@@ -106,7 +110,7 @@
 }
 
 .make-post-popup .post{
-    background-color: var(--like-option-hover);
+    background-color: var(--like-option);
     font-size: 20px;
     font-weight: 500;
     padding: 5px;
@@ -118,7 +122,7 @@
 
 
 .make-post-popup .post:hover{
-    background-color: rgb(58, 108, 173);
+    background-color: var(--like-option-hover);
     border: 2px solid rgba(54, 101, 163, 0.2);
 }
 
@@ -137,10 +141,10 @@
 }
 
 .create-post-buttons > .post-button-icon:hover{
-    background-color: var(--hover-gray);
+    background-color: var(--hover-gray) !important;
 }
 
 
 .create-post-buttons > .post-button-icon.active{
-    background-color: var(--hover-gray);
+    background-color: var(--hover-dark);
 }

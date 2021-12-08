@@ -145,12 +145,8 @@ header.headline > h2, header.headline > p{
     text-decoration: underline;
 }
 
-.tab-title{
-    color: white;
-}
-
-.tab-title:hover{
-    color: white;
+.tab-title,.tab-title:hover{
+    color: var(--text-main);
 }
 
 @media only screen and (max-width: 576px){

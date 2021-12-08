@@ -2,7 +2,7 @@
     width: 40px;
     margin-right: 6px;
     border: 1px solid rgba(92, 91, 90, 0.2);
-    box-shadow: 0px 0px 33px 0px rgba(0,0,0,0.8);
+    box-shadow: 0px 0px 33px 0px rgba(0,0,0,0.3);
     border-radius: 50%;
 }
 
@@ -26,7 +26,7 @@
 }
 
 .user-info:hover{
-    background-color: var(--slightly-light);
+    background-color: var(--hover-gray);
     box-shadow: 0px 0px 33px 0px rgba(0,0,0,0.2);
     cursor: pointer;
 }

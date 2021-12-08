@@ -10,7 +10,7 @@
 }
 
 .approve-popup .approve-button:hover{
-    background-color: rgb(177, 12, 12);
+    background-color: var(--red-button-hover);
 }
 
 .popup-outer.approve-popup{

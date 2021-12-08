@@ -40,7 +40,7 @@
   footer.feed-footer{
     display: flex;
     flex-direction: column;
-    background-color: var(--secondary);
+    background-color: var(--primary);
     border-radius: 0px 0px 5px 5px;
 }
 

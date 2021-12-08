@@ -32,20 +32,24 @@ body{
 
 [dark-theme="dark"]{
   --background: rgb(59, 59, 59);
-  --light: #807b7b;
-  --slightly-light: rgb(92, 92, 92);
-  --primary: rgba(36, 37, 38, 0.8);
-  --secondary: rgba(32, 33, 34, 1);
-  --gray: rgba(55, 56, 58, 0.8);
+  --light: rgb(100, 100, 100);
+  --slightly-light: rgb(80, 80, 80);
+  --primary: rgb(37, 37, 37);
+  --secondary: rgb(63, 59, 59);
+  --slightly-dark: rgb(49, 49, 49);
+  --gray: rgb(55, 56, 58);
   --text-main: white;
   --text-dimmed: rgb(165, 162, 162);
   --option-gray: #4d4b4b;
-  --hover-gray: #5d5c5c;
-  --like-option-hover: rgb(35, 87, 155);
-  --comment-option-hover: rgb(204, 127, 40);
-  --repost-option-hover: rgb(74, 198, 255);
-  --primary-second: #3F3B3B;
+  --hover-gray: rgb(120, 120, 120);
+  --hover-dark: rgb(80, 80, 80);
+  --like-option: rgb(35, 87, 155);
+  --like-option-hover: rgb(45, 109, 194);
+  --comment-option: rgb(204, 127, 40);
+  --repost-option: rgb(74, 198, 255);
   --red-button: rgb(148,0,0);
+  --red-button-hover: rgb(168, 5, 5);
+  --oposite-color: black;
 }
 
 

@@ -81,7 +81,7 @@
 /* Middle right side */
 
 .event-page .event-page-middle .right-side .invite, .event-page .event-page-middle .right-side .join{
-    background-color: var(--like-option-hover);
+    background-color: var(--like-option);
     color: white;
     padding: 5px 20px;
     border-radius: 10px;
@@ -90,11 +90,11 @@
 }
 
 .event-page .event-page-middle .right-side .invite:hover, .event-page .event-page-middle .right-side .join:hover{
-    background-color: rgb(45, 109, 194);
+    background-color: var(--like-option-hover);
 }
 
 .event-page .event-page-middle .right-side .share{
-    background-color: var(--repost-option-hover);
+    background-color: var(--repost-option);
     color: white;
     padding: 5px 20px;
     border-radius: 10px;
@@ -103,7 +103,7 @@
 }
 
 .event-page .event-page-middle .right-side .share:hover{
-    background-color: rgb(74, 198, 255);;
+    background-color: var(--repost-option)
 }
 
 .event-page .event-page-middle .buttons{

@@ -16,19 +16,19 @@ footer.feed-footer .bottom-footer > div:hover{
 }
 
 footer.feed-footer .bottom-footer > div.feed-like:hover{
-    color:rgb(20, 76, 149);
+    color:var(--like-option-hover);
 }
 
 footer.feed-footer .bottom-footer > div.feed-comment:hover{
-    color:rgb(204, 127, 40);
+    color:var(--comment-option);
 }
 
 footer.feed-footer .bottom-footer > div.feed-repost:hover{
-    color:rgb(74, 198, 255);
+    color:var(--repost-option);
 }
 
 .likes button, .comments-reposts button{
-    color: rgb(184, 179, 179);
+    color: var(--text-main);
     transition: 0.3s;
 }
 .likes button, .comments-reposts button{
@@ -113,7 +113,7 @@ footer.feed-footer .bottom-footer > div.feed-comment.opened-comments{
 }
 
 .feed-footer .comments-section .comment-like-button{
-    background: var(--like-option-hover);
+    background: var(--like-option);
     font-size: 24px;
     padding: 4px;
     border-radius: 50%;
@@ -160,7 +160,7 @@ footer.feed-footer .bottom-footer > div.feed-comment.opened-comments{
   
   .feed-footer .add-comment textarea{
     width: 99%;
-    background: var(--primary-second);
+    background: var(--slightly-light);
     color: white;
     border: 0px;
     margin: 3px;
@@ -177,7 +177,7 @@ footer.feed-footer .bottom-footer > div.feed-comment.opened-comments{
   .feed-footer .comments .comment-send{
       margin-left: -25px;
       margin-left: -35px;
-      background: var(--primary-second);
+      background: var(--slightly-light);
       font-size: 30px;
       padding: 5px;
       border-radius: 50%;

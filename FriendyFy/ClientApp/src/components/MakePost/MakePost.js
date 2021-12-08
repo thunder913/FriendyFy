@@ -15,7 +15,6 @@ const MakePost = ({showCreatePost ,showPostImage, showCreateEvent}) =>{
     const CreatePostWithoutImage = () => {
         setPostWithImage(false);
         setshowPostPopUp(true);
-        window.scrollTo(0,0);
     }
 
     const CreatePostWithImage = () => {

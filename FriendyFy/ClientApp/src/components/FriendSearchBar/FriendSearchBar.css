@@ -24,7 +24,7 @@
     padding: 0px 7px;
     border-radius: 0px 20px 20px 0px;
     border: 0px;
-    background-color: var(--primary-second);
+    background-color: var(--secondary);
     font-size: 16px;
     transition: 0.5s;
     color: rgba(170, 170, 170, 0.856);
@@ -33,7 +33,7 @@
 
 .friend-search-button:hover{
     background-color: var(--gray);
-    color: rgb(221, 221, 221);
+    color: var(--hover-gray);
     border: 3px solid rgb(92, 91, 90, 0.1);
 }
 

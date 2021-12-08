@@ -1,14 +1,14 @@
 .add-image-outer-popup button.add-image{
     padding: 5px 15px;
     border: 0px;
-    background-color: var(--like-option-hover);
+    background-color: var(--like-option);
     border-radius: 15px;
     color: white;
     transition: 0.3s;
 }
 
 .add-image-outer-popup button.add-image:hover{
-    background-color: rgb(45, 109, 194);
+    background-color: var(--like-option-hover);
 }
 
 .add-image-outer-popup .add-event-image{
