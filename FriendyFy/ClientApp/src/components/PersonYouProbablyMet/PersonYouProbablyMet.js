@@ -27,8 +27,11 @@ const PersonYouProbablyMet = ({person}) =>{
         });
     }
     
+    if(!show){
+        return '';
+    }
     return(<div className="person-you-met">
-            {show ? <div className="left-side">
+            <div className="left-side">
             <Link to={'/profile/' + person.username}><span className="person-name">{person.name}</span></Link>
                 <div className="main-suggestion-body">
                     <div className="common-stuff">
@@ -39,14 +42,14 @@ const PersonYouProbablyMet = ({person}) =>{
                         <button className="remove-suggestion" onClick={removeFriendEvent}>Remove</button>
                     </div>
                 </div>
-            </div> : ''}
-            {show ? <div className="right-side">
+            </div>
+            <div className="right-side">
                 <Link to={'/profile/' + person.username}>
                 <div className="person-image">
                     <img src={person.profilePhoto} alt="" />
                 </div>
                 </Link>
-            </div> : ''}
+            </div>
         </div>)
 }
 

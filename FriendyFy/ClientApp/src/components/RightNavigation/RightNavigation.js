@@ -4,34 +4,10 @@ import './RightNavigation.css';
 import { useLocation } from 'react-router';
 import { useEffect, useState } from 'react/cjs/react.development';
 import { getRightNavigationSuggestions } from '../../services/friendService';
-const people = [
-    {
-        name: "Ivan Petrov",
-        image: "https://scontent.fsof8-1.fna.fbcdn.net/v/t1.6435-9/194957949_4334439429940720_5542816028295677772_n.jpg?_nc_cat=108&ccb=1-5&_nc_sid=09cbfe&_nc_ohc=YeTxne8hWKoAX9bbJvR&_nc_ht=scontent.fsof8-1.fna&oh=51a6dbebf71ee668c34d7292be94abf0&oe=6192F854",
-        events: [{
-            name: "Disko Partay"
-        },
-        {name: "Netflix n Chill"}],
-    },
-    {
-        name: "Ivan Petrov",
-        image: "https://scontent.fsof8-1.fna.fbcdn.net/v/t1.6435-9/194957949_4334439429940720_5542816028295677772_n.jpg?_nc_cat=108&ccb=1-5&_nc_sid=09cbfe&_nc_ohc=YeTxne8hWKoAX9bbJvR&_nc_ht=scontent.fsof8-1.fna&oh=51a6dbebf71ee668c34d7292be94abf0&oe=6192F854",
-        events: [{
-            name: "Disko Partay"
-        },
-        {name: "Netflix n Chill"}],
-    },
-    {
-        name: "Ivan Petrov",
-        image: "https://scontent.fsof8-1.fna.fbcdn.net/v/t1.6435-9/194957949_4334439429940720_5542816028295677772_n.jpg?_nc_cat=108&ccb=1-5&_nc_sid=09cbfe&_nc_ohc=YeTxne8hWKoAX9bbJvR&_nc_ht=scontent.fsof8-1.fna&oh=51a6dbebf71ee668c34d7292be94abf0&oe=6192F854",
-        events: [{
-            name: "Disko Partay"
-        },
-        {name: "Netflix n Chill"}],
-    },
-]
-
-const RightNavigation = () =>{
+import { useLoggedIn } from '../../contexts/LoggedInContext';
+import { Link } from 'react-router-dom';
+const RightNavigation = () => {
+    const { loggedIn } = useLoggedIn();
     let location = useLocation();
     const [recommendations, setRecommendation] = useState([]);
     useEffect(() => {
@@ -46,40 +22,48 @@ const RightNavigation = () =>{
         return null;
     }
 
-    return(
-    <aside className="right-navigation">
-        <div className="top-half">
-            <ul className="right-navigation-list">
-                <li className="right-user">
-                    <div className="right-user-photo">
-                        <img src="https://scontent.fsof8-1.fna.fbcdn.net/v/t1.6435-9/194957949_4334439429940720_5542816028295677772_n.jpg?_nc_cat=108&ccb=1-5&_nc_sid=09cbfe&_nc_ohc=YeTxne8hWKoAX9bbJvR&_nc_ht=scontent.fsof8-1.fna&oh=51a6dbebf71ee668c34d7292be94abf0&oe=6192F854" alt="" />
-                    </div>
-                    <p className="right-user-name">Andon Gorchov</p>
-                </li>
-                <li>
-                    <p className="right-nav-button">
-                        Profile
-                    </p>
-                </li>
-                <li>
-                    <p className="right-nav-button">Friends</p>
-                </li>
-                <li>
-                    <p className="right-nav-button">Search Page</p>
-                </li>
-                <li>
-                    <p className="right-nav-button">Random Event</p>
-                </li>
-                <li>
-                    <p className="right-nav-button">Contact Us</p>
-                </li>
-            </ul>
-        </div>
-        <div className="bottom-half">
-            <h2 className="people-you-met-title">People You Probably Met</h2>
-            {recommendations.map(person => <PersonYouProbablyMet person={person} />)}
-        </div>
-    </aside>)
+    return (
+        <aside className="right-navigation">
+            <div className="top-half">
+                <ul className="right-navigation-list">
+                    <li className="right-user right-user-name right-nav-button">
+                        <div className="right-user-photo">
+                            <img src={loggedIn.profilePhoto} alt="" />
+                        </div>
+                        <Link to={"/profile/" + loggedIn.userName}>{loggedIn.firstName} {loggedIn.lastName}</Link>
+                    </li>
+                    <li className="right-nav-button">
+                    <Link to={"/profile/" + loggedIn.userName} >
+                            Profile
+                        </Link>
+                    </li>
+                    <li className="right-nav-button">
+                    <Link to={"/profile/" + loggedIn.userName} >
+                            Friends
+                        </Link>
+                    </li>
+                    <li className="right-nav-button">
+                    <Link to={"/profile/" + loggedIn.userName} >
+                            Search Page
+                        </Link>
+                    </li>
+                    <li className="right-nav-button">
+                    <Link to={"/profile/" + loggedIn.userName} >
+                            Random Event
+                        </Link>
+                    </li>
+                    <li className="right-nav-button">
+                    <Link to={"/profile/" + loggedIn.userName} >
+                            Contact Us
+                        </Link>
+                    </li>
+                </ul>
+            </div>
+            <div className="bottom-half">
+                <h2 className="people-you-met-title">People You Probably Met</h2>
+                {recommendations.map(person => <PersonYouProbablyMet person={person} />)}
+            </div>
+        </aside>)
 }
 
 export default RightNavigation;

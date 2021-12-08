@@ -15,8 +15,13 @@
     margin-bottom: 0px;
 }
 
-.right-user, .right-nav-button{
+.right-nav-button a{
+    color: var(--oposite-color);
+    display: block;
     padding: 10px;
+}
+
+.right-user, .right-nav-button{
     transition: 0.3s;
     font-size: 18px;
     border-radius: 10px;
@@ -63,10 +68,6 @@
     display: flex;
     justify-content: right;
     align-items: center;
-}
-
-.right-user-name{
-    margin-bottom: 0px;
 }
 
 .people-you-met-title{

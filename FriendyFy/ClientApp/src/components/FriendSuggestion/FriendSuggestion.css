@@ -100,11 +100,10 @@
 }
 
 .friend-buttons .remove-suggestion{
-    background-color: var(--light);
-    border: 2px solid rgba(90, 86, 86, 0.3);
+    background-color: var(--remove-button);
+    border: 1px solid var(--border-separator);
 }
 
 .friend-buttons .remove-suggestion:hover{
-    background-color: var(--hover-gray);
-    border: 2px solid rgba(141, 133, 133, 0.3);
+    background-color: var(--remove-button-hover);
 }
