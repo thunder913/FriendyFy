@@ -71,7 +71,7 @@ header.profile-header{
 
 .user-interest{    
     margin: 2px;
-    background-color: var(--primary);
+    background-color: var(--secondary);
     color: var(--text-dimmed);
     -webkit-user-select: none;
     user-select: none;

@@ -1,13 +1,13 @@
-import React, { useState } from "react";
+import React from "react";
 import { AsyncPaginate } from "react-select-async-paginate";
 import { useLoggedIn } from "../../contexts/LoggedInContext";
 import { getFriends } from "../../services/friendService";
 import './CreatePostPeople.css';
+import { useThemeContext } from '../../contexts/ThemeContext';
 
 const CreatePostPeople = (props) => {
-    const [regionName, setRegionName] = useState(null);
     const {loggedIn} = useLoggedIn();
-  
+    const {theme} = useThemeContext();
     const loadOptions = async (searchQuery, loadedOptions, { page }) => {
   
       const response = await getFriends(loggedIn.userName, 10, (page-1)*10, searchQuery).then(async res => await (res.json()));
@@ -40,10 +40,10 @@ const CreatePostPeople = (props) => {
         additional={{
           page: 1,
         }}
-        theme={(theme) => ({
-          ...theme,
-          colors: {
-            ...theme.colors,
+        theme={(th) => ({
+          ...th,
+          colors: (theme==='dark' ? {
+            ...th.colors,
             primary25: '#595757',
             primary: 'rgb(212, 212, 212)',
             neutral0: '#3F3B3B',
@@ -51,7 +51,7 @@ const CreatePostPeople = (props) => {
             neutral60: '#aaaaaa',
             neutral10: '#595757',
             dangerLight: '#523737',
-          }
+          } : {...th.colors})
         })}
         className="people-picker"
       />

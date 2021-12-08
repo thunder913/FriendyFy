@@ -1,7 +1,7 @@
 .side-navigation{
     flex-basis: 30%;
     border-right: 1px solid black;
-    color: white;
+    color: var(--text-main);
 }
 
 .events{

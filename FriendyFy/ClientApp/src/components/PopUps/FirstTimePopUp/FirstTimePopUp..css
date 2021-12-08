@@ -68,10 +68,11 @@
     margin-top: 20px;
     padding-left: 10px;
     margin-bottom: 20px;
+    min-height: 56px;
   }
 
   #quote::placeholder{
-    color: white;
+    color: var(--text-main);
   }
 
 .upload-picture{

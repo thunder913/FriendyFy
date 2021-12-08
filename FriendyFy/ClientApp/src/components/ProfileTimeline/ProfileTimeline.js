@@ -35,7 +35,12 @@ const ProfileTimeline = () => {
 }
 
   useEffect(() => {
-    getFeed(events, posts, true, 10, userId, hasPosts, hasEvents)
+    setEvents([]);
+    setFeed([]);
+    setPosts([]);
+    setHasPosts(true);
+    setHasEvents(true);
+    getFeed([], [], true, 10, userId, true, true)
       .then(async res => {
         let obj = await res.json();
         obj.posts.forEach(el => {
@@ -50,7 +55,7 @@ const ProfileTimeline = () => {
         setHasPosts(obj.hasPosts);
       });
     //eslint-disable-next-line
-  }, [])
+  }, [userId])
 
 
   return (

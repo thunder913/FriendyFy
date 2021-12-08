@@ -8,7 +8,6 @@ import RegisterPasswords from "../RegisterPasswords/RegisterPasswords";
 const RegisterForm = ({onSubmitHandler, registerError, setSelectedDate}) => {
     return(
     <form className="register" onSubmit={onSubmitHandler}>
-            <h2>Register now!</h2>
             {registerError ? <span className='register-error'>{registerError}</span>: ''}
             <RegisterNameInput/>
             <RegisterEmailField/>

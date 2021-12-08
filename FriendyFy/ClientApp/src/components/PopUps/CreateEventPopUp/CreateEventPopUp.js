@@ -86,10 +86,10 @@ const CreateEventPopUp = ({ show, setShow }) => {
                         </div>
                         <span>{loggedIn.firstName} {loggedIn.lastName}</span>
                         <Select
-                            theme={(theme) => ({
-                                ...theme,
+                            theme={(th) => ({
+                                ...th,
                                 colors: (theme === 'dark' ? {
-                                    ...theme.colors,
+                                    ...th.colors,
                                     primary25: '#595757',
                                     primary: 'rgb(212, 212, 212)',
                                     neutral0: '#3F3B3B',
@@ -97,7 +97,7 @@ const CreateEventPopUp = ({ show, setShow }) => {
                                     neutral60: '#aaaaaa',
                                     neutral10: '#595757',
                                     dangerLight: '#523737',
-                                } : {...theme.colors})
+                                } : {...th.colors})
                             })}
                             className="privacy-picker"
                             isSearchable={false}

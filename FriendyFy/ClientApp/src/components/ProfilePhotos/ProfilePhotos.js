@@ -45,6 +45,7 @@ const ProfilePhotos = () => {
     }
 
     useEffect(() => {
+        setPhotos([]);
         getUserImages(userId, 10, 0)
             .then(async res => {
                 let obj = await (res.json());

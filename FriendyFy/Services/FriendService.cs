@@ -252,6 +252,7 @@ namespace FriendyFy.Services
             var recommendations = this.userRepository
                 .All()
                 .Include(x => x.Friends)
+                .Include(x => x.ProfileImage)
                 .Include(x => x.Interests)
                 .Include(x => x.RemoveSuggestionFriends)
                 .ToList()

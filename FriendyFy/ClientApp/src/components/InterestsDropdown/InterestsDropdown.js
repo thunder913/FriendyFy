@@ -13,9 +13,7 @@ const customStyles = {
   }
 }
 
-const InterestsDropdown = () => {
-  const [interests, setInterests] = useState([]);
-  const [placeholder, setPlaceHolder] = useState('');
+const InterestsDropdown = ({setInterests, placeholder}) => {
   const [dropDownOpt, setDropDownOpt] = useState([]);
   const [styles, setStyles] = useState({});
   const {theme} = useThemeContext();

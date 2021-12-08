@@ -69,8 +69,8 @@ const FeedPostRepost = ({post}) => {
                 setHidePost={setHidePost}
                 isCreator={post.isUserCreator}
                 />
-                <div className="inner-post">
             {post.postMessage ? <span className="repost-text">{post.postMessage}</span> : ''}
+                <div className="inner-post">
             <FeedHeader
                 photo={post.repost.creatorImage} 
                 name={post.repost.creatorName} 

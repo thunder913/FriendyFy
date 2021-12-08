@@ -7,7 +7,7 @@
 .repost-popup #repost-message{
     background-color: var(--slightly-light);
     border-radius: 5px;
-    color: white;
+    color: var(--text-main);
     padding: 2px 5px;
     min-height: 100px;
 }

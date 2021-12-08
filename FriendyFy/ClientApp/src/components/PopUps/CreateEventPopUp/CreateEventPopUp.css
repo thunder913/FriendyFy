@@ -55,7 +55,7 @@
 }
 
 #datetime::placeholder{
-    color: white;
+    color: var(--text-main);
     float: left;
 }
 
@@ -86,7 +86,7 @@ border-radius: 5px;
 
 #post-description, .event-popup .event-name{
     background-color: var(--slightly-light);
-    color: white;
+    color: var(--text-main);
 }
 
 #post-description{
@@ -134,7 +134,7 @@ border-radius: 5px;
     font-weight: 500;
     padding: 5px;
     border: 2px solid rgba(19, 60, 114, 0.2);
-    color: white;
+    color: var(--text-main);
     transition: 0.3s;
     border-radius: 5px;
     text-align: center;

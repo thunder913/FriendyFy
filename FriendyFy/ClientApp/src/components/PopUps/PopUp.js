@@ -30,6 +30,7 @@ const PopUp = ({ children, show, setShow, escClose }) => {
         }
     }, [show])
 
+
     return (<CSSTransition
         in={show}
         timeout={400}

@@ -78,7 +78,7 @@ header.headline > h2, header.headline > p{
 }
 
 .see-all-photos a{
-    color: white;
+    color: var(--text-main);
     text-decoration: none;
     padding: 5px;
     border-radius: 3px;
