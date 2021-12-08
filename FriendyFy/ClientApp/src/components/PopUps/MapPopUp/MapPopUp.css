@@ -33,7 +33,7 @@
     align-items: center;
     justify-content: center;
     transition: 0.3s;
-    color: rgb(206, 204, 204);
+    color: var(--text-main);
     border-radius: 20px 0px 0px 20px;
 }
 

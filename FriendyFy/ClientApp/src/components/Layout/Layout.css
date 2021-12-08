@@ -1,5 +1,5 @@
 .main-content, .right-navigation{
-    padding-top: 52px;
+    padding-top: 49px;
     padding-bottom: 65px;
     display: flex;
 }
@@ -20,5 +20,5 @@
 }
 
 body{
-    color: white;
+    color: var(--text-main);
 }

@@ -133,7 +133,7 @@ header.headline > h2, header.headline > p{
     max-width: 100px;
     display: inline-block;
     overflow-wrap: break-word;
-    color: white;
+    color: var(--text-main);
 }
 
 .friend-list > .friends-header > h2:hover, .friends-header > span:hover{

@@ -36,6 +36,7 @@ header.feed-header{
     margin-bottom: 0px;
     font-size: 24px;
     font-weight: 500;
+    color: var(--text-main);
 }
 
 .header-user-data > span{
@@ -55,10 +56,6 @@ header.feed-header{
     color: white;
     font-weight: 600;
     padding: 0px;
-}
-
-.header-user-data h3{
-    color: white;
 }
 
 .post-creator-image:hover, .header-user-data h3:hover{

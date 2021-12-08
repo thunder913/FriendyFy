@@ -50,7 +50,7 @@
     margin: 2px;
     background-color: var(--gray);
     border-radius: 10px;
-    color: rgba(255, 255, 255, 0.856);
+    color: var(--text-dimmed);
     user-select: none;
     padding: 2px 5px;
     height: 28px;
@@ -116,7 +116,7 @@
 }
 
 .location > button{
-    color: white;
+    color: var(--text-main);
     text-decoration: none;
     transition: 0.5s;
     padding: 5px 10px;

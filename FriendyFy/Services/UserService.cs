@@ -192,7 +192,7 @@ namespace FriendyFy.Services
                 .OrderByDescending(x => x.Events.Count(y => y.Users.Any(z => z.Id == userId)) + 
                 x.Friends.Count(y => y.Id == userId) * 2 +
                 x.Interests.Count(y => userInterests.Any(z => z == y.Id)))
-                .Take(3)
+                .Take(4)
                 .ToList()
                 .Select(x => new RightNavigationRecommendationViewModel()
                 {

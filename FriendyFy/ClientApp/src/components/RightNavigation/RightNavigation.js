@@ -78,7 +78,6 @@ const RightNavigation = () =>{
         <div className="bottom-half">
             <h2 className="people-you-met-title">People You Probably Met</h2>
             {recommendations.map(person => <PersonYouProbablyMet person={person} />)}
-            <h3 className="see-more-text">See more...</h3>
         </div>
     </aside>)
 }

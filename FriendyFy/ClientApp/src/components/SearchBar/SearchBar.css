@@ -10,39 +10,39 @@
 }
 
 .search-form form input{
-    background-color: var(--light);
-    padding: 0px 20px 0px 10px;
-    border: 3px solid rgb(92, 91, 90, 0.4);
+    background-color: var(--slightly-light);
+    padding: 0px 25px 0px 10px;
+    border: 2px solid var(--border-separator);
     border-radius: 20px;
-    color: rgb(221, 221, 221);
+    color: var(--text-main);
     outline: none;
-    box-shadow: 0px 0px 33px 0px rgba(0,0,0,0.4);
     width: 100%;
 }
 
 .search-form form input::placeholder{
-    color: rgba(170, 170, 170, 0.856);
+    color: var(--text-dimmed);
     font-family: Arial, Helvetica, sans-serif;
     text-align: left;
+    opacity: 0.7;
 }
 
 .search-button{
     position: relative;
-    right: 40px;
+    right: 35px;
     padding: 0px 7px;
     border-radius: 0px 20px 20px 0px;
     background-color: var(--slightly-light);
     font-size: 16px;
     transition: 0.5s;
     color: rgba(170, 170, 170, 0.856);
-    border: 3px solid rgb(92, 91, 90, 0.4);
+    border: 2px solid var(--border-separator);
+    border-left: 0px;
     position: absolute !important;
 }
 
 .search-button:hover{
     background-color: var(--hover-gray);
     color: var(--text-dimmed);
-    border: 3px solid rgb(92, 91, 90, 0.1);
 }
 
 .search-form{

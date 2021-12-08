@@ -30,6 +30,15 @@ body{
   --red23: rgb(128, 73, 73);
 }
 
+:root{
+  --like-option: rgb(35, 87, 155);
+  --like-option-hover: rgb(57, 125, 214);
+  --comment-option: rgb(204, 127, 40);
+  --repost-option: rgb(74, 198, 255);
+  --red-button: rgb(148,0,0);
+  --red-button-hover: rgb(168, 5, 5);
+}
+
 [dark-theme="dark"]{
   --background: rgb(59, 59, 59);
   --light: rgb(100, 100, 100);
@@ -39,17 +48,27 @@ body{
   --slightly-dark: rgb(49, 49, 49);
   --gray: rgb(55, 56, 58);
   --text-main: white;
-  --text-dimmed: rgb(165, 162, 162);
-  --option-gray: #4d4b4b;
+  --text-dimmed: rgb(215, 215, 215);
   --hover-gray: rgb(120, 120, 120);
   --hover-dark: rgb(80, 80, 80);
-  --like-option: rgb(35, 87, 155);
-  --like-option-hover: rgb(45, 109, 194);
-  --comment-option: rgb(204, 127, 40);
-  --repost-option: rgb(74, 198, 255);
-  --red-button: rgb(148,0,0);
-  --red-button-hover: rgb(168, 5, 5);
   --oposite-color: black;
+  --border-separator:rgb(95, 95, 95);
+}
+
+[dark-theme="light"]{
+  --background: rgb(240, 240, 240);
+  --light: rgb(225, 225, 225);
+  --slightly-light: rgb(255, 255, 255);
+  --primary: rgb(245, 245, 245);
+  --secondary: rgb(230,230,230);
+  --slightly-dark: rgb(255,255,255);
+  --gray: rgb(235,235,235);
+  --text-main: black;
+  --text-dimmed: rgb(44, 44, 44);
+  --hover-gray: rgb(200, 200, 200);
+  --hover-dark: rgb(170, 170, 170);
+  --oposite-color: white;
+  --border-separator: rgb(204, 204, 204);
 }
 
 

@@ -24,6 +24,7 @@
 }
 
 .close-event:hover{
+    text-decoration: none !important;
     background-color: var(--hover-gray);
     color: black;
 }

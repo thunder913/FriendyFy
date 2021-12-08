@@ -42,7 +42,7 @@
     font-size: 18px;
     padding-left: 10px;
     cursor: pointer;
-    color: white;
+    color: var(--text-main);
     text-decoration: none;
 }
 
@@ -58,11 +58,12 @@
 
 .person-you-met{
     margin: 5px 0px;
-    border-bottom: 2px solid rgba(128, 128, 128, 0.541);
+    border-bottom: 2px solid var(--border-separator);
 }
 
 .person-you-met .friend-buttons .remove-suggestion{
     margin-top: 0px;
+    color: var(--text-main)
 }
 
 .person-you-met .friend-buttons{

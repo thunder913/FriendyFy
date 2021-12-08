@@ -20,7 +20,7 @@
     border-radius: 25px;
     align-items: center;
     user-select: none;
-    color: rgb(207, 202, 202);
+    color: var(--text-dimmed);
     font-weight: 500;
 }
 

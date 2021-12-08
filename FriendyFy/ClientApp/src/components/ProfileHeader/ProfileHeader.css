@@ -73,7 +73,7 @@ header.profile-header{
 .user-interest{    
     margin: 2px;
     background-color: var(--primary);
-    color: rgba(255, 255, 255, 0.856);
+    color: var(--text-dimmed);
     -webkit-user-select: none;
     user-select: none;
     padding: 2px 5px;
@@ -102,7 +102,7 @@ header.profile-header{
 
 .profile-navigation > div button{
     text-decoration: none;
-    color: #FFF;
+    color: var(--text-main);
     padding: 6.5px 50px;
     border-radius: 10px;
     transition: 0.3s;
@@ -127,7 +127,8 @@ header.profile-header{
     overflow-y: hidden;
 }
 
-.add-friend{
+.add-friend-nav .add-friend{
+    color: white;
     background-color: var(--like-option) !important;
 }
 

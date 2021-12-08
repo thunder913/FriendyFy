@@ -3,7 +3,7 @@
 }
 
 .comment .inner-comment .top-comment-half{
-    color: white;
+    color: var(--text-main);
 }
 
 .comment .inner-comment .top-comment-half:hover{

@@ -1,11 +1,11 @@
 .friend-search > form > input{
     background-color: var(--slightly-light);
-    padding: 0px 20px 2px 10px;
-    border: 3px solid rgb(92, 91, 90, 0.4);
+    padding: 0px 30px 2px 10px;
+    border: 1px solid var(--border-separator);
     border-radius: 20px;
-    color: rgb(221, 221, 221);
+    color: var(--text-main);
     outline: none;
-    box-shadow: 0px 0px 33px 0px rgba(0,0,0,0.4);
+    box-shadow: 0px 0px 33px 0px rgba(0,0,0,0.1);
 }
 
 .friend-search > form > input::placeholder{
@@ -14,9 +14,9 @@
     text-align: left;
 }
 
-.friend-search-button{
+.friend-search .friend-search-button{
     position: relative;
-    right: 25px;
+    right: 31px;
     top: 1px;
     padding: 1px 7px;
     border-radius: 0px 20px 20px 0px;
@@ -25,11 +25,17 @@
     font-size: 16px;
     transition: 0.5s;
     color: rgba(170, 170, 170, 0.856);
-    border: 3px solid rgb(92, 91, 90, 0.4);
+    border: 1px solid var(--border-separator);
+    border-left: 0px;
 }
+
+.friend-search .friend-search-button:hover{
+    background-color: var(--gray);
+    color: var(--hover-gray);
+}
+
 
 .search-button:hover{
     background-color: var(--hover-gray);
     color: var(--text-dimmed);
-    border: 3px solid rgb(92, 91, 90, 0.1);
 }

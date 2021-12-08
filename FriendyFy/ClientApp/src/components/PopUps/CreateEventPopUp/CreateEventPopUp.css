@@ -67,7 +67,7 @@
 
 .event-popup .top-inputs input, .event-popup .top-inputs div.rdt{
 flex-grow: 1;
-color: white;
+color: var(--text-main);
 border: 2px solid rgb(133, 133, 133);
 border-radius: 5px;
 }

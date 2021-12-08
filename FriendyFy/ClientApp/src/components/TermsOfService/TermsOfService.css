@@ -9,7 +9,7 @@ ul.terms-of-service{
 ul.terms-of-service button{
     background-color: transparent;
     border: 0px;
-    color: white;
+    color: var(--text-main);
 }
 
 ul.terms-of-service button:hover{
@@ -19,7 +19,7 @@ ul.terms-of-service button:hover{
 .terms-of-service{
     margin-top: 15px;
     height: 42px;
-    border: 2px solid rgb(32, 32, 32, 0.5);
+    border: 2px solid var(--border-separator);
     background-color: var(--secondary);
 }
 

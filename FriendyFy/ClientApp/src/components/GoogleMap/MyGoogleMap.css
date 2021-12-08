@@ -18,7 +18,7 @@ code {
   
   .search {
     z-index: 10;
-    color: white;
+    color: var(--text-main));
     transition: 0.3s;
   }
 
@@ -61,9 +61,9 @@ code {
   }
 
   .map-search{
-    color: white;
+    color: var(--text-main);
   }
 
   .map-user-search input {
-    color: white;
+    color: var(--text-main);
   }

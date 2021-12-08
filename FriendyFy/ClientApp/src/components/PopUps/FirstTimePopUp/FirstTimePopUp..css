@@ -64,7 +64,7 @@
   #quote{
     background-color: var(--secondary);
     border-radius: 10px;
-    color: white;
+    color: var(--text-dimmed);
     margin-top: 20px;
     padding-left: 10px;
     margin-bottom: 20px;

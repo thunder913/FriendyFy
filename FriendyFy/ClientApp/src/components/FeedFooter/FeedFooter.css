@@ -2,6 +2,7 @@ footer.feed-footer .bottom-footer{
     display: flex;
     justify-content: space-between;
     margin: 0.3% 4%;
+    color: var(--text-dimmed)
 }
 
 footer.feed-footer .bottom-footer > div{
@@ -95,7 +96,7 @@ footer.feed-footer .bottom-footer > div.feed-comment.opened-comments{
 }
 
 .feed-footer .comments-section .comment .inner-comment{
-    background-color: var(--gray);
+    background-color: var(--slightly-dark);
     border-radius: 20px;
     padding: 5px 10px;
     text-align: start;
@@ -161,7 +162,7 @@ footer.feed-footer .bottom-footer > div.feed-comment.opened-comments{
   .feed-footer .add-comment textarea{
     width: 99%;
     background: var(--slightly-light);
-    color: white;
+    color: var(--text-main);
     border: 0px;
     margin: 3px;
     border-radius: 20px;

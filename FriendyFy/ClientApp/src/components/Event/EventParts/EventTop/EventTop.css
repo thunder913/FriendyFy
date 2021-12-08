@@ -62,7 +62,7 @@
 
 .event-page-top .photos .add-event-image:hover, .event-page-top .photos .big-add-image:hover{
     cursor: pointer;
-    background-color: var(--option-gray);
+    background-color: var(--slightly-light);
 }
 
 .event-page .event-page-top .middle{

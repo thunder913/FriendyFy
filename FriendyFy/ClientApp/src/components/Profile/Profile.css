@@ -3,7 +3,7 @@
     align-items: center;
     flex-direction: column;
     justify-content: center;
-    color: white;
+    color: var(--text-main);
 }
 
 .profile-container{

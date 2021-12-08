@@ -1,4 +1,4 @@
 .user-options{
-    color: rgb(241, 240, 240);
+    color: var(--text-dimmed);
     font-size: 20px;
 }
