@@ -19,17 +19,22 @@ const ThemeProvider = ({children}) => {
         }else{
             currTheme = 'light';
         }
-        setTheme(currTheme);
-        window.localStorage.setItem('theme', currTheme);
-        document.querySelector('html').dataset.theme = currTheme;
+        setThemeEvent(currTheme);
     }
 
     useEffect(() => {
         checkTheme();
     }, [loggedIn])
 
-    const changeTheme = () => {
+    const changeTheme = (theme) => {
+        setTheme(theme);
+        setThemeEvent(theme);
+    }
 
+    const setThemeEvent = (current) => {
+        setTheme(current);
+        window.localStorage.setItem('theme', current);
+        document.querySelector('html').dataset.theme = current;
     }
 
     const value = {

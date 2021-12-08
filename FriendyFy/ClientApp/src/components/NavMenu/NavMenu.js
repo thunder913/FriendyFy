@@ -6,19 +6,12 @@ import SearchBar from '../SearchBar/SearchBar';
 import UserOptions from '../UserOptions/UserOptions';
 import Notifications from '../Notifications/Notifications';
 import UserHeader from '../UserHeader/UserHeader';
-import { logout } from '../../services/userService'
 import { useLoggedIn } from '../../contexts/LoggedInContext';
 
 function NavMenu() {
 
-  const { loggedIn,setLoggedIn } = useLoggedIn();
+  const { loggedIn } = useLoggedIn();
 
-  const logoutUser = () => {
-    logout()
-      .then(async () => {
-          await setLoggedIn(false);
-      });
-  }
   return (
     <header className="site-header">
       <Navbar className="navbar-expand-sm navbar-toggleable-sm ng-white bottom-border box-shadow" light>
@@ -28,7 +21,6 @@ function NavMenu() {
           <UserHeader />
           <Notifications />
           <UserOptions />
-          <button onClick={logoutUser}>Logout</button>
         </div> : <button>Login</button>}
 
         {/* <NavbarToggler onClick={this.toggleNavbar} className="mr-2" />

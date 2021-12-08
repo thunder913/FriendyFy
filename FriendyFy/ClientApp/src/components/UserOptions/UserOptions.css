@@ -1,4 +1,38 @@
-.user-options{
+.navigation-settings{
     color: var(--text-dimmed);
     font-size: 20px;
+}
+
+.user-options{
+    position: absolute;
+    right: 0px;
+    display: flex;
+    flex-direction: column;
+    background-color: var(--light);
+    width: 130px;
+    padding: 10px 0px;
+    gap: 5px;
+    border-radius: 10px 0px 0px 10px;
+    border: 2px solid var(--border-separator);
+}
+
+.user-options .user-option-button{
+    background-color: transparent;
+    border: 0px;
+    color: var(--text-main);
+    text-align: left;
+    transition: 0.3s;
+    font-size: 18px;
+    font-weight: 400;
+    padding: 5px 0px;
+    padding-left: 10px;
+}
+
+.user-options .user-option-button:hover{
+    background-color: var(--hover-gray);
+    padding-left: 20px;
+}
+
+.user-options .toggle-mode{
+    align-self: center;
 }
