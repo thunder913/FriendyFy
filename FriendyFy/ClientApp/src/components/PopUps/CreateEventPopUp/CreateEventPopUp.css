@@ -124,6 +124,10 @@ border-radius: 5px;
       margin-left: 10px;
   } */
 
+  #birthday{
+      background-color: var(--hover-gray);
+  }
+
   .event-popup .create-event{
     background-color: var(--like-option);
     font-size: 20px;

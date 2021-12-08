@@ -178,7 +178,8 @@ namespace FriendyFy.Controllers
                     LastName = user.LastName,
                     UserName = user.UserName,
                     CoverPhoto = await this.blobService.GetBlobUrlAsync(user.CoverImage?.Id + user.CoverImage?.ImageExtension, GlobalConstants.BlobPictures),
-                    ProfilePhoto = await this.blobService.GetBlobUrlAsync(user.ProfileImage?.Id + user.ProfileImage?.ImageExtension, GlobalConstants.BlobPictures)
+                    ProfilePhoto = await this.blobService.GetBlobUrlAsync(user.ProfileImage?.Id + user.ProfileImage?.ImageExtension, GlobalConstants.BlobPictures),
+                    IsDark = user.ThemePreference == ThemePreference.Dark,
                 };
 
                 return Ok(viewModel);

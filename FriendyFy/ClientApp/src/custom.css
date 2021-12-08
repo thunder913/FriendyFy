@@ -39,7 +39,7 @@ body{
   --red-button-hover: rgb(168, 5, 5);
 }
 
-[dark-theme="dark"]{
+[data-theme="dark"]{
   --background: rgb(59, 59, 59);
   --light: rgb(100, 100, 100);
   --slightly-light: rgb(80, 80, 80);
@@ -55,7 +55,7 @@ body{
   --border-separator:rgb(95, 95, 95);
 }
 
-[dark-theme="light"]{
+[data-theme="light"]{
   --background: rgb(240, 240, 240);
   --light: rgb(225, 225, 225);
   --slightly-light: rgb(255, 255, 255);

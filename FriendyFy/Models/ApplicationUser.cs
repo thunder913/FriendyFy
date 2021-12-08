@@ -42,5 +42,6 @@ namespace FriendyFy.Models
         public decimal? Latitude { get; set; }
         [Column(TypeName = "decimal(11, 8)")]
         public decimal? Longitude { get; set; }
+        public ThemePreference ThemePreference { get; set; }
     }
 }

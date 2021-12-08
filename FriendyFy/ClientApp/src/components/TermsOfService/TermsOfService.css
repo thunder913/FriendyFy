@@ -21,6 +21,8 @@ ul.terms-of-service button:hover{
     height: 42px;
     border: 2px solid var(--border-separator);
     background-color: var(--secondary);
+    border-left: 0px;
+    border-right: 0px;
 }
 
 .tos{

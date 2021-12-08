@@ -13,5 +13,6 @@ namespace ViewModels
         public string UserName { get; set; }
         public string Id { get; set; }
         public bool FinishedFirstTimeLogin { get; set; }
+        public bool IsDark { get; set; }
     }
 }
