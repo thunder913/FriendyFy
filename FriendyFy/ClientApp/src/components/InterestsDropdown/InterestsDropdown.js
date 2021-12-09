@@ -15,7 +15,6 @@ const customStyles = {
 
 const InterestsDropdown = ({setInterests, placeholder}) => {
   const [dropDownOpt, setDropDownOpt] = useState([]);
-  const [styles, setStyles] = useState({});
   const {theme} = useThemeContext();
   const renderData = async () => {
     let interests = await getAllInterests().then(async res => await res.json());
@@ -28,17 +27,6 @@ const InterestsDropdown = ({setInterests, placeholder}) => {
   }
 
   useEffect(() => {
-    if(theme === 'dark'){
-      setStyles({
-        ...theme.colors,
-        primary25: '#595757',
-        primary: 'black',
-        neutral0: '#3F3B3B',
-        neutral80: 'white',
-        neutral60: 'black',
-        neutral10: '#595757',
-        dangerLight: '#523737'});
-    }
     renderData();
   }, [])
 
@@ -49,10 +37,19 @@ const InterestsDropdown = ({setInterests, placeholder}) => {
         onChange={onChange}
         isMulti
         placeholder={placeholder}
-        theme={(theme) => ({
-          ...theme,
-          colors: (styles.legth ? styles : {...theme.colors})
-        })}
+        theme={(th) => ({
+          ...th,
+          colors: (theme === 'dark' ? {
+              ...th.colors,
+              primary25: '#595757',
+              primary: 'rgb(212, 212, 212)',
+              neutral0: '#3F3B3B',
+              neutral80: 'white',
+              neutral60: '#aaaaaa',
+              neutral10: '#595757',
+              dangerLight: '#523737',
+          } : {...th.colors})
+      })}
         styles={customStyles}
       />
     </div>

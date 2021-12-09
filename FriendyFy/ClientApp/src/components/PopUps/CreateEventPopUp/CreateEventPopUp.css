@@ -77,7 +77,7 @@ border-radius: 5px;
     margin-bottom: 0px;
     border: 2px;
     border-radius: 5px;
-    background-color: var(--slightly-light);
+    background-color: var(--input-background);
 
 }
 .rdtOpen > input{
@@ -85,7 +85,7 @@ border-radius: 5px;
 }
 
 #post-description, .event-popup .event-name{
-    background-color: var(--slightly-light);
+    background-color: var(--input-background);
     color: var(--text-main);
 }
 

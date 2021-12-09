@@ -7,7 +7,6 @@ import UserOptions from '../UserOptions/UserOptions';
 import Notifications from '../Notifications/Notifications';
 import UserHeader from '../UserHeader/UserHeader';
 import { useLoggedIn } from '../../contexts/LoggedInContext';
-
 function NavMenu() {
 
   const { loggedIn } = useLoggedIn();
@@ -15,7 +14,19 @@ function NavMenu() {
   return (
     <header className="site-header">
       <Navbar className="navbar-expand-sm navbar-toggleable-sm ng-white bottom-border box-shadow" light>
-        <NavbarBrand tag={Link} to="/">FriendyFy</NavbarBrand>
+
+        <div className="logo">
+          {/* <Link to="/">
+            <div className="logo-image">
+              <img src={require('../../static/logo.png')} alt="" />
+            </div>
+          </Link> */}
+          <Link to="/">
+            <div className="logo-text">
+              <img src={require('../../static/text.png')} alt="" />
+            </div>
+          </Link>
+        </div>
         <SearchBar />
         {loggedIn ? <div className="nav-right">
           <UserHeader />

@@ -57,7 +57,12 @@ const HomePageNotSignedIn = () =>{
     <div className="home-page" >
         <div className="page" style={{ filter: showRegister ? 'blur(5px)' : '' }}>
             <div className="register-top">
-                <h1 className="title">FRIENDYFY</h1>
+                <div className="top-logo">
+                    <img src={require('../../static/logo.png')} alt="" />
+                </div>
+                <div className="logo-text">
+                    <img src={require('../../static/text.png')} alt="" />
+                </div>
                 <h2 className="home-quote">Connect with people on FriendFy. Meet new people and have the best time of your life!</h2>
             </div>
             <div className="register-bottom">

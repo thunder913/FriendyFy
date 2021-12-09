@@ -18,7 +18,7 @@ code {
   
   .search {
     z-index: 10;
-    color: var(--text-main));
+    color: var(--text-main);
     transition: 0.3s;
   }
 
@@ -35,7 +35,7 @@ code {
     padding: 0.5rem;
     font-size: 1.5rem;
     width: 100%;
-    background-color: var(--secondary) !important;
+    background-color: var(--input-background) !important;
     transition: 0.3s;
   }
   

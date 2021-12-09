@@ -58,7 +58,7 @@
 }
 
 #post-message{
-    background-color: var(--secondary);
+    background-color: var(--input-background);
     border-radius: 5px;
     color: var(--text-main);
     padding: 2px 5px;

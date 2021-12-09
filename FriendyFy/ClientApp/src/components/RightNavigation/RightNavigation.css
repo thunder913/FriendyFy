@@ -16,7 +16,7 @@
 }
 
 .right-nav-button a{
-    color: var(--oposite-color);
+    color: var(--text-main);
     display: block;
     padding: 10px;
 }

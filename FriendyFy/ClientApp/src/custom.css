@@ -55,6 +55,7 @@ body{
   --border-separator:rgb(95, 95, 95);
   --remove-button: rgb(90, 90, 90);
   --remove-button-hover: rgb(120, 120, 120);
+  --input-background: #3F3B3B;
 }
 
 [data-theme="light"]{
@@ -69,10 +70,11 @@ body{
   --text-dimmed: rgb(44, 44, 44);
   --hover-gray: rgb(200, 200, 200);
   --hover-dark: rgb(170, 170, 170);
-  --oposite-color: white;
+  --oposite-color: black;
   --border-separator: rgb(204, 204, 204);
   --remove-button: rgb(200, 200, 200);
   --remove-button-hover: rgb(170, 170, 170);
+  --input-background: hsl(0, 0%, 100%)
 }
 
 

@@ -55,3 +55,28 @@ html {
 .nav-right{
   display: flex;
 }
+
+.site-header .logo{
+  height: 100%;
+  width: 100%;
+  display: flex;
+  flex-direction: row;
+  align-self: center;
+  gap: 15px;
+}
+
+.site-header .logo-text{
+  height: 40px;
+  width: 120px;
+}
+
+.site-header .logo-image{
+  height: 15px;
+  width: 43px;
+  margin-top: 3px;
+}
+
+.site-header .logo-text > img,.site-header .logo-image > img{
+  width: 100%;
+  height: 100%;
+}

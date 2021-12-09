@@ -19,7 +19,7 @@ ul.terms-of-service button:hover{
 .terms-of-service{
     margin-top: 15px;
     height: 42px;
-    border: 2px solid var(--border-separator);
+    border: 1px solid var(--border-separator);
     background-color: var(--secondary);
     border-left: 0px;
     border-right: 0px;

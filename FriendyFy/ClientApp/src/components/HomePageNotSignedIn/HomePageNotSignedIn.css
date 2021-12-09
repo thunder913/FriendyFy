@@ -11,7 +11,7 @@
 
 .home-quote{
     margin-bottom: 0px;
-    color: rgb(38, 175, 185);
+    color: rgb(0 126 222);
     font-size: 22px;
 }
 
@@ -136,4 +136,17 @@
     font-size: 18px;
     color: red;
     text-align: center;
+}
+
+.home-page .register-top .top-logo{
+    height: 40px;
+    margin-bottom: 20px;
+}
+
+.home-page .register-top .logo-text{
+    height: 80px;
+}
+
+.top-logo > img, .logo-text > img{
+    height: 100%;
 }

@@ -191,7 +191,7 @@ fieldset {
 }
 
 .send-message{
-	background: var(--slightly-light);
+	background: var(--input-background);
     color: var(--text-main);
     border: 0px solid transparent;
 }
