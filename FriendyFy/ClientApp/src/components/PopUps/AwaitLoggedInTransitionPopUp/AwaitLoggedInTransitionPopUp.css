@@ -1,0 +1,30 @@
+.popup-outer.await-transition{
+    width: 100%;
+    height: 100%;
+    background-color: rgb(80,80,80);
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    padding-bottom: 150px;
+}
+
+.popup-outer.await-transition .loading-logo{
+    height: 200px;
+}
+
+.popup-outer.await-transition .loading-logo > img{
+    height: 100%;
+}
+
+.loading-text{
+    font: revert;
+    font-size: 30px;
+    margin-top: 50px;
+    font-weight: 500;
+    color: white;
+}
+
+.await-transition.main-popup-enter{
+    opacity: 1;
+}

@@ -1,11 +1,10 @@
-import React from "react";
-import { useEffect } from "react/cjs/react.development";
+import React, {useState, useEffect} from "react";
 import { useLoggedIn } from "./LoggedInContext";
 
 const ThemeContext = React.createContext({})
 
 const ThemeProvider = ({children}) => {
-    const [theme, setTheme] = React.useState(window.localStorage.getItem('theme'));
+    const [theme, setTheme] = useState(window.localStorage.getItem('theme'));
     const {loggedIn} = useLoggedIn();
     
     const checkTheme = () => {
@@ -16,7 +15,7 @@ const ThemeProvider = ({children}) => {
             }else if(!loggedIn.isDark && currTheme!='light'){
                 currTheme = 'light';
             }
-        }else{
+        }else if(!currTheme){
             currTheme = 'light';
         }
         setThemeEvent(currTheme);

@@ -15,9 +15,9 @@ import { useLocation } from 'react-router';
 import AwaitLoggedInTransitionPopUp from './components/PopUps/AwaitLoggedInTransitionPopUp/AwaitLoggedInTransitionPopUp';
 function App() {
   const { loggedIn, resetUser } = useLoggedIn();
-  const [showLoader, setShowLoader] = useState(false);
+  const [showLoader, setShowLoader] = useState(true);
   const location = useLocation();
-  // Make this async if anything fails anywhere
+
   useEffect(() => {
     setShowLoader(true);
     resetUser()
@@ -28,7 +28,7 @@ function App() {
 
   return (
     <Layout>
-      {showLoader ? <AwaitLoggedInTransitionPopUp show={showLoader} setShow={setShowLoader}/> : ''}
+      <AwaitLoggedInTransitionPopUp show={showLoader} setShow={setShowLoader}/>
       <AnimatePresence exitBeforeEnter>
         <Switch location={location} key={location.pathname} className="app">
           <Route path={["/profile", "/friends", "/photos"]} component={Profile}></Route>
