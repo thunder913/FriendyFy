@@ -6,6 +6,7 @@ import ProfilePhotos from '../ProfilePhotos/ProfilePhotos';
 import Friends from '../Friends/Friends';
 import ProfileTimeline from '../ProfileTimeline/ProfileTimeline';
 import { motion } from "framer-motion/dist/es/index.js";
+import PageLoading from '../PageLoading/PageLoading';
 
 const Profile = () => {
     const history = useHistory();
@@ -24,11 +25,7 @@ const Profile = () => {
     }, [history.location])
 
     return (
-        <motion.div 
-        initial={{ opacity: 0 }} 
-        animate={{ opacity: 1 }} 
-        exit={{ opacity: 0 }}
-        transition={{duration: 0.2}}>
+        <PageLoading>
                 <div className="profile-top">
                 <div className="profile-container">
                     <ProfileHeader selected={pageToShow} />
@@ -37,7 +34,8 @@ const Profile = () => {
                             pageToShow === "friends" ? <Friends /> : ''}
                 </div>
             </div>
-        </motion.div>)
+            </PageLoading>
+            )
 }
 
 export default Profile;

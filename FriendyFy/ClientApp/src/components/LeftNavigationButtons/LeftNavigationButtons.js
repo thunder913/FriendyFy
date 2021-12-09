@@ -7,6 +7,7 @@ import { useLocation } from 'react-router';
 import { useEffect, useState } from 'react/cjs/react.development';
 import { getRecommendedFriends } from '../../services/friendService';
 import { getNavigationEvents } from '../../services/eventService';
+import PageLoading from '../PageLoading/PageLoading';
 
 const LeftNavigationButtons = () => {
     const [friends, setFriends] = useState([]);
@@ -14,7 +15,7 @@ const LeftNavigationButtons = () => {
     const [blockNavScroll, setBlockNavScroll] = useState(false);
     useEffect(() => {
         getRecommendedFriends()
-        .then(async res => setFriends(await res.json()));   
+            .then(async res => setFriends(await res.json()));
     }, [])
 
     useEffect(() => {
@@ -23,20 +24,23 @@ const LeftNavigationButtons = () => {
     }, [])
 
     let location = useLocation();
-    if (location.pathname.match("/profile") || location.pathname.match("/event")  || location.pathname.match("/friends") || location.pathname.match("/photos")) {
+    if (location.pathname.match("/profile") || location.pathname.match("/event") || location.pathname.match("/friends") || location.pathname.match("/photos")) {
         return null;
     }
-    return (<div className={"left-navigation " + (blockNavScroll ? 'scroll-blocked' : '')}>
-        <LeftNavigationEvents events={events} setBlockNavScroll={setBlockNavScroll}/>
-        <div className="people-you-may-know">
-            <div className="friend-suggestions">
-                {friends.map(friend => <FriendSuggestion key={friend.username} friend={friend} />)}
+    return (
+        <PageLoading>
+            <div className={"left-navigation " + (blockNavScroll ? 'scroll-blocked' : '')}>
+                <LeftNavigationEvents events={events} setBlockNavScroll={setBlockNavScroll} />
+                <div className="people-you-may-know">
+                    <div className="friend-suggestions">
+                        {friends.map(friend => <FriendSuggestion key={friend.username} friend={friend} />)}
+                    </div>
+                </div>
+                <div className="tos">
+                    <TermsOfService />
+                </div>
             </div>
-        </div>
-        <div className="tos">
-            <TermsOfService/>
-        </div>
-    </div>)
+        </PageLoading>)
 }
 
 export default LeftNavigationButtons;

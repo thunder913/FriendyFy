@@ -11,6 +11,12 @@
     color: var(--text-main);
 }
 
+.right-navigation > div{
+    display: flex;
+    flex-direction: column;
+    text-align: right;
+}
+
 .right-nav-button{
     margin-bottom: 0px;
 }

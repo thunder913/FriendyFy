@@ -6,6 +6,7 @@ import EventMiddle from "./EventParts/EventMiddle/EventMiddle";
 import './EventParts/EventTop/EventTop'
 import EventTop from "./EventParts/EventTop/EventTop";
 import { useHistory } from "react-router";
+import PageLoading from "../PageLoading/PageLoading";
 
 const Event = () => {
     const history = useHistory();
@@ -22,6 +23,7 @@ const Event = () => {
     }, [history.location])
 
     return(
+        <PageLoading>
         <article className="event-page">
             <EventTop 
                 images={event.photos}
@@ -56,6 +58,7 @@ const Event = () => {
                 isOrganizer={event.isOrganizer}
             />
         </article>
+        </PageLoading>
     )
 }
 

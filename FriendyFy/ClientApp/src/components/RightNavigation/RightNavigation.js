@@ -6,6 +6,7 @@ import { useEffect, useState } from 'react/cjs/react.development';
 import { getRightNavigationSuggestions } from '../../services/friendService';
 import { useLoggedIn } from '../../contexts/LoggedInContext';
 import { Link } from 'react-router-dom';
+import PageLoading from '../PageLoading/PageLoading';
 const RightNavigation = () => {
     const { loggedIn } = useLoggedIn();
     let location = useLocation();
@@ -22,8 +23,8 @@ const RightNavigation = () => {
         return null;
     }
 
-    return (
-        <aside className="right-navigation">
+    return (<aside className="right-navigation">
+        <PageLoading>
             <div className="top-half">
                 <ul className="right-navigation-list">
                     <li className="right-user right-user-name right-nav-button">
@@ -33,27 +34,27 @@ const RightNavigation = () => {
                         <Link to={"/profile/" + loggedIn.userName}>{loggedIn.firstName} {loggedIn.lastName}</Link>
                     </li>
                     <li className="right-nav-button">
-                    <Link to={"/profile/" + loggedIn.userName} >
+                        <Link to={"/profile/" + loggedIn.userName} >
                             Profile
                         </Link>
                     </li>
                     <li className="right-nav-button">
-                    <Link to={"/profile/" + loggedIn.userName} >
+                        <Link to={"/profile/" + loggedIn.userName} >
                             Friends
                         </Link>
                     </li>
                     <li className="right-nav-button">
-                    <Link to={"/profile/" + loggedIn.userName} >
+                        <Link to={"/profile/" + loggedIn.userName} >
                             Search Page
                         </Link>
                     </li>
                     <li className="right-nav-button">
-                    <Link to={"/profile/" + loggedIn.userName} >
+                        <Link to={"/profile/" + loggedIn.userName} >
                             Random Event
                         </Link>
                     </li>
                     <li className="right-nav-button">
-                    <Link to={"/profile/" + loggedIn.userName} >
+                        <Link to={"/profile/" + loggedIn.userName} >
                             Contact Us
                         </Link>
                     </li>
@@ -63,7 +64,9 @@ const RightNavigation = () => {
                 <h2 className="people-you-met-title">People You Probably Met</h2>
                 {recommendations.map(person => <PersonYouProbablyMet person={person} />)}
             </div>
-        </aside>)
+        </PageLoading>
+    </aside>
+    )
 }
 
 export default RightNavigation;

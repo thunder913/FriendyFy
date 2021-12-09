@@ -4,12 +4,11 @@ import { useLoggedIn } from "../../contexts/LoggedInContext";
 import './HomePageSignedIn.css'
 import FirstTimePopUp from '../PopUps/FirstTimePopUp/FirstTimePopUp.js'
 import MakePost from "../MakePost/MakePost.js"
-import { getFeed, getPosts } from "../../services/postService";
+import { getFeed } from "../../services/postService";
 import FeedPost from '../FeedPost/FeedPost';
 import FeedPostRepost from '../FeedPost/FeedPostRepost';
 import InfiniteScroll from "react-infinite-scroll-component";
 import Loader from "react-loader-spinner";
-import { motion } from "framer-motion/dist/es/index.js";
 
 const HomePageSignedIn = () => {
   const { loggedIn, resetUser } = useLoggedIn();
@@ -58,11 +57,6 @@ const HomePageSignedIn = () => {
   }, [])
 
   return (
-    <motion.div 
-      initial={{ opacity: 0 }} 
-      animate={{ opacity: 1 }} 
-      exit={{ opacity: 0 }}
-      transition={{duration: 0.2}}>
       <div className="feed home-feed">
         <FirstTimePopUp show={showFirstTimePopUp} setShow={setShowFirstTimePopUp} />
         {!showFirstTimePopUp ? <div className="main-feed">  <MakePost
@@ -92,8 +86,7 @@ const HomePageSignedIn = () => {
               !el.isRepost ? <FeedPost key={el.postId} post={el} /> : <FeedPostRepost key={el.postId} post={el} />))}
           </InfiniteScroll> </div>
           : ''}
-      </div>
-    </motion.div>)
+      </div>)
 }
 
 export default HomePageSignedIn;
