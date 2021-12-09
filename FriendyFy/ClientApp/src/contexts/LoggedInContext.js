@@ -7,10 +7,13 @@ const LoggedInProvider = ({children}) => {
     const [loggedIn, setLoggedIn] = React.useState(false);
 
     const resetUser = async () => {
-        let response = await getLoggedInUser();
-        if(response.ok){
-            setLoggedIn(await response.json())
-        }
+        return getLoggedInUser()
+            .then(async res => {
+                let obj = await res.json();
+                if(res.ok){
+                    setLoggedIn(await obj);
+                }
+            });
     }
 
     const value = {

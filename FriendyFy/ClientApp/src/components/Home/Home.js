@@ -5,7 +5,9 @@ import HomePageNotSignedIn from '../HomePageNotSignedIn/HomePageNotSignedIn';
 import { useLoggedIn } from '../../contexts/LoggedInContext';
 const Home = () => {
   const {loggedIn} = useLoggedIn();
-  return !loggedIn ? (<HomePageNotSignedIn />) : (
+  return !loggedIn ? (
+  <HomePageNotSignedIn />) : (
+    
       <div className="home-page">
         <HomePageSignedIn />
       </div>

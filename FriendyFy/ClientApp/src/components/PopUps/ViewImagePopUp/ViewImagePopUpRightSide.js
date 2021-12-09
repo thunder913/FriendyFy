@@ -103,7 +103,6 @@ const ViewImagePopUpRightSide = ({comments, setComments, setCommentsCount, setIs
                         dataLength={comments.length}
                         next={loadMoreCommentsEvent}
                         height={900}
-                        // inverse={true}
                         hasMore={hasMore}
                         loader={<Loader
                             type="TailSpin"

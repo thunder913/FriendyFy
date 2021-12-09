@@ -9,6 +9,9 @@
 
 .home-page .main-feed .loader{
     align-self: center !important;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
 }
 
 .home-page .main-feed > div{

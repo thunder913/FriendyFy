@@ -9,6 +9,7 @@ import FeedPost from '../FeedPost/FeedPost';
 import FeedPostRepost from '../FeedPost/FeedPostRepost';
 import InfiniteScroll from "react-infinite-scroll-component";
 import Loader from "react-loader-spinner";
+import { motion } from "framer-motion/dist/es/index.js";
 
 const HomePageSignedIn = () => {
   const { loggedIn, resetUser } = useLoggedIn();
@@ -56,36 +57,43 @@ const HomePageSignedIn = () => {
     //eslint-disable-next-line
   }, [])
 
-  return (<div className="feed home-feed">
-    <FirstTimePopUp show={showFirstTimePopUp} setShow={setShowFirstTimePopUp} />
-    {!showFirstTimePopUp ? <div className="main-feed">  <MakePost
-      showPostImage={true}
-      showCreatePost={true}
-      showCreateEvent={true} />
-      <InfiniteScroll
-        className={"feed-posts"}
-        dataLength={posts.length}
-        next={loadMorePosts}
-        hasMore={(hasPosts || hasEvents)}
-        loader={<Loader
-          type="MutatingDots"
-          color="#50A6FA"
-          secondaryColor="#3779CF"
-          height={100}
-          width={100}
-          className="loader"
-        />}
-        scrollableTarget="scrollableDiv"
-        endMessage={
-          <p style={{ textAlign: 'center' }}>
-            <b>You reached the final post</b>
-          </p>
-        }>
-        {feed.map(el => (el.postType == 'Event' ? <FeedEvent eventData={el} /> :
-          !el.isRepost ? <FeedPost key={el.postId} post={el} /> : <FeedPostRepost key={el.postId} post={el} />))}
-      </InfiniteScroll> </div>
-      : ''}
-  </div>)
+  return (
+    <motion.div 
+      initial={{ opacity: 0 }} 
+      animate={{ opacity: 1 }} 
+      exit={{ opacity: 0 }}
+      transition={{duration: 0.2}}>
+      <div className="feed home-feed">
+        <FirstTimePopUp show={showFirstTimePopUp} setShow={setShowFirstTimePopUp} />
+        {!showFirstTimePopUp ? <div className="main-feed">  <MakePost
+          showPostImage={true}
+          showCreatePost={true}
+          showCreateEvent={true} />
+          <InfiniteScroll
+            className={"feed-posts"}
+            dataLength={posts.length}
+            next={loadMorePosts}
+            hasMore={(hasPosts || hasEvents)}
+            loader={<Loader
+              type="MutatingDots"
+              color="#50A6FA"
+              secondaryColor="#3779CF"
+              height={100}
+              width={100}
+              className="loader"
+            />}
+            scrollableTarget="scrollableDiv"
+            endMessage={
+              <p style={{ textAlign: 'center' }}>
+                <b>You reached the final post</b>
+              </p>
+            }>
+            {feed.map(el => (el.postType == 'Event' ? <FeedEvent eventData={el} /> :
+              !el.isRepost ? <FeedPost key={el.postId} post={el} /> : <FeedPostRepost key={el.postId} post={el} />))}
+          </InfiniteScroll> </div>
+          : ''}
+      </div>
+    </motion.div>)
 }
 
 export default HomePageSignedIn;

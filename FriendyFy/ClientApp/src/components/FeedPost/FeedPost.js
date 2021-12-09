@@ -30,7 +30,7 @@ const FeedPost = ({post}) => {
         onEnter={() => setHidePost(false)}
         onExited={() => setHidePost(true)}>
     <div className="feed-photo">
-        {showImagePopUp ? <ViewImagePopUp 
+        <ViewImagePopUp 
             post={post}
             isLiked={isLiked}
             setIsLiked={setIsLiked}
@@ -45,7 +45,7 @@ const FeedPost = ({post}) => {
             showRightSection={true}
             show={showImagePopUp}
             setShow={setShowImagePopUp}
-            /> : ''}
+            />
         <FeedHeader
             photo={post.creatorImage} 
             name={post.creatorName} 

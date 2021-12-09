@@ -203,4 +203,7 @@ footer.feed-footer .bottom-footer > div.feed-comment.opened-comments{
 
 .comments .loader{
     margin: auto;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
 }

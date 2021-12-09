@@ -3,11 +3,12 @@ import ProfileSidebar from '../ProfileSidebar/ProfileSidebar';
 import FeedPost from '../FeedPost/FeedPost';
 import FeedEvent from '../FeedEvent/FeedEvent';
 import MakePost from '../MakePost/MakePost'
-import { getPosts } from "../../services/postService";
 import { useLoggedIn } from "../../contexts/LoggedInContext";
 import FeedPostRepost from "../FeedPost/FeedPostRepost";
 import { getFeed } from "../../services/postService";
 import InfiniteScroll from "react-infinite-scroll-component";
+import Loader from 'react-loader-spinner';
+
 const ProfileTimeline = () => {
   const { loggedIn, resetUser } = useLoggedIn();
   const [events, setEvents] = useState([]);
@@ -73,7 +74,13 @@ const ProfileTimeline = () => {
             dataLength={posts.length}
             next={loadMorePosts}
             hasMore={(hasPosts || hasEvents)}
-            loader={<h4 className="loading-text">Loading...</h4>}
+            loader={<Loader
+              type="TailSpin"
+              color="#50A6FA"
+              height={100}
+              width={100}
+              className="loader"
+            />}
             scrollableTarget="scrollableDiv"
             endMessage={
               <p style={{ textAlign: 'center' }}>

@@ -41,4 +41,7 @@
 .profile-friends .loader{
     align-self: center;
     margin: auto;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
 }

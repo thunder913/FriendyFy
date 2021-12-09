@@ -297,3 +297,9 @@ header > .other-user-chat-image{
 .loading-text{
     text-align: center;
 }
+
+.chat .loader{
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}

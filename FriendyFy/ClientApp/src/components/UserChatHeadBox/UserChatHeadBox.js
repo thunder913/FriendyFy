@@ -6,6 +6,7 @@ import { faPaperPlane } from '@fortawesome/free-solid-svg-icons';
 import FadeIn from 'react-fade-in'
 import ChatMessage from '../ChatMessage/ChatMessage';
 import InfiniteScroll from 'react-infinite-scroll-component';
+import Loader from 'react-loader-spinner';
 
 function UserChatHeadBox({changeChatBox, chat, sendMessageEvent, loadMoreMessages, hasMore}) {
 
@@ -55,7 +56,13 @@ function UserChatHeadBox({changeChatBox, chat, sendMessageEvent, loadMoreMessage
                     height={300}
                     inverse={true}
                     hasMore={hasMore}
-                    loader={<h4 className="loading-text">Loading...</h4>}
+                    loader={<Loader
+                        type="TailSpin"
+                        color="#50A6FA"
+                        height={50}
+                        width={50}
+                        className="loader"
+                      />}
                     scrollableTarget="scrollableDiv"
                     endMessage={
                         <p style={{ textAlign: 'center' }}>

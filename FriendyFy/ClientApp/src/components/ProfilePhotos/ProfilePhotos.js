@@ -6,6 +6,8 @@ import { getUserImages } from '../../services/userService';
 import InfiniteScroll from 'react-infinite-scroll-component';
 import ViewImagePopUp from '../PopUps/ViewImagePopUp/ViewImagePopUp';
 import { getPostByImageId } from '../../services/postService';
+import Loader from 'react-loader-spinner';
+
 const ProfilePhotos = () => {
     const [photos, setPhotos] = useState([]);
     const [hasMore, setHasMore] = useState(true);
@@ -83,12 +85,18 @@ const ProfilePhotos = () => {
                 dataLength={photos.length}
                 next={loadMorePhotos}
                 hasMore={hasMore}
-                loader={<h4 className="loading-text">Loading...</h4>}
+                loader={<Loader
+                    type="TailSpin"
+                    color="#50A6FA"
+                    height={100}
+                    width={100}
+                    className="loader"
+                  />}
                 scrollableTarget="scrollableDiv"
                 endMessage={
-                    <p style={{ textAlign: 'center' }}>
-                        <b>No more images available</b>
-                    </p>
+                    !photos.length ? <p style={{ textAlign: 'center' }}>
+                        <b>There are no images!</b>
+                    </p> : ''
                 }>
                 {photos.map(photo => <ProfilePhoto key={photo.id} showImagePopUpEvent={showImagePopUpEvent} image={photo.imageUrl} id={photo.imageId} />)}
             </InfiniteScroll>

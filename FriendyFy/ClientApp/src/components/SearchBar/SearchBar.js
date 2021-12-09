@@ -7,6 +7,8 @@ import InfiniteScroll from 'react-infinite-scroll-component';
 import { useHistory } from 'react-router';
 import OutsideClickHandler from 'react-outside-click-handler';
 import { useDebounce } from 'use-debounce';
+import Loader from 'react-loader-spinner';
+
 const SearchBar = () =>{
     const [peopleCount, setPeopleCount] = useState(0);
     const [eventsCount, setEventsCount] = useState(0);
@@ -17,7 +19,7 @@ const SearchBar = () =>{
     const [showSearchResults, setShowSearchResults] = useState(false);
     const [isSearching, setIsSearching] = useState(false);
     const history = useHistory();
-    const [value] = useDebounce(search, 500);
+    // const [value] = useDebounce(search, 500);
 
     const performSearch = () => {
         return searchUsersAndEvents(search, 10, 0, 0)
@@ -67,14 +69,14 @@ const SearchBar = () =>{
         history.push('/'+type+'/' + id);
     }
 
-    useEffect(() => {
-        if(value && !isSearching){
-            setShowSearchResults(true);
-            performSearch();
-        }else{
-            setShowSearchResults(false);
-        }
-    }, [value])
+    // useEffect(() => {
+    //     if(value && !isSearching){
+    //         setShowSearchResults(true);
+    //         performSearch();
+    //     }else{
+    //         setShowSearchResults(false);
+    //     }
+    // }, [value])
 
     const onSearchInputClick = () => {
         if(search){
@@ -106,7 +108,13 @@ const SearchBar = () =>{
                     next={loadMoreResults}
                     height={300}
                     hasMore={(hasMoreEvents || hasMorePeople)}
-                    loader={<h4 className="loading-text">Loading...</h4>}
+                    loader={<Loader
+                        type="TailSpin"
+                        color="#50A6FA"
+                        height={50}
+                        width={50}
+                        className="loader"
+                      />}
                     scrollableTarget="scrollableDiv"
                     endMessage={
                         <p style={{ textAlign: 'center' }}>
