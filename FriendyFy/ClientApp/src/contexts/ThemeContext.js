@@ -6,7 +6,7 @@ const ThemeContext = React.createContext({})
 const ThemeProvider = ({children}) => {
     const [theme, setTheme] = useState(window.localStorage.getItem('theme'));
     const {loggedIn} = useLoggedIn();
-    
+
     const checkTheme = () => {
         let currTheme = theme;
         if(loggedIn){

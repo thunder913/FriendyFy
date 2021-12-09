@@ -28,3 +28,9 @@
 .await-transition.main-popup-enter{
     opacity: 1;
 }
+
+@media only screen and (max-width: 676px){
+    .popup-outer.await-transition .loading-logo{
+        height: 100px;
+    }
+}
