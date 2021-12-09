@@ -28,11 +28,11 @@ function NavMenu() {
           </Link>
         </div>
         <SearchBar />
-        {loggedIn ? <div className="nav-right">
-          <UserHeader />
-          <Notifications />
+        <div className="nav-right">
+          {loggedIn ? <UserHeader /> : ''}
+          {loggedIn ? <Notifications /> : ''}
           <UserOptions />
-        </div> : <button>Login</button>}
+        </div>
 
         {/* <NavbarToggler onClick={this.toggleNavbar} className="mr-2" />
             <Collapse className="d-sm-inline-flex flex-sm-row-reverse" isOpen={!this.state.collapsed} navbar>

@@ -1,14 +1,14 @@
 import React, { useEffect, useState } from 'react';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
-import { faUserCog } from '@fortawesome/free-solid-svg-icons'
+import { faUserCog, faCog } from '@fortawesome/free-solid-svg-icons'
 import './UserOptions.css';
 import OutsideClickHandler from 'react-outside-click-handler';
 import { CSSTransition } from 'react-transition-group';
 import { DarkModeToggle } from "react-dark-mode-toggle-2";
 import { useLoggedIn } from '../../contexts/LoggedInContext';
-import { logout } from '../../services/userService'
+import { changeUserTheme, logout } from '../../services/userService'
 import { useThemeContext } from '../../contexts/ThemeContext';
-
+import { Link } from 'react-router-dom';
 const UserOptions = () => {
     const [show, setShow] = useState(false);
     const { loggedIn, setLoggedIn } = useLoggedIn();
@@ -26,6 +26,14 @@ const UserOptions = () => {
         let theme = !isDarkMode ? 'dark' : 'light';
         changeTheme(theme);
         setIsDarkMode(prev => !prev);
+        if(loggedIn){
+            changeUserTheme(loggedIn.userName, theme)
+                .then(res => {
+                    if(res.status === 200){
+                        changeTheme(theme);
+                    }
+                });
+        }
     }
 
     useEffect(() => {
@@ -34,7 +42,7 @@ const UserOptions = () => {
 
     return (<div className="navigation-settings" >
         <div className="circle-right" onClick={() => setShow(true)}>
-            <FontAwesomeIcon icon={faUserCog} />
+            <FontAwesomeIcon icon={loggedIn ? faUserCog : faCog} />
         </div>
         <OutsideClickHandler
             onOutsideClick={() => {
@@ -48,8 +56,9 @@ const UserOptions = () => {
                 onEnter={() => setShow(true)}
                 onExited={() => setShow(false)}>
                 <div className="user-options">
-                    <button className="user-option-button" onClick={() => setShow(true)}>Preferences</button>
-                    <button className="user-option-button" onClick={logoutUser}>Logout</button>
+                    {loggedIn ? <button className="user-option-button" onClick={() => setShow(true)}>Preferences</button> : ''}
+                    {loggedIn ? <button className="user-option-button" onClick={logoutUser}>Logout</button> :
+                        <Link to="/" className="user-option-button" onClick={logoutUser}>Login</Link>}
                     <DarkModeToggle
                         onChange={() => { changeThemeEvent(); }}
                         isDarkMode={isDarkMode}

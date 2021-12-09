@@ -1,4 +1,5 @@
 ﻿using FriendyFy.Models;
+using FriendyFy.Models.Enums;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -23,5 +24,6 @@ namespace FriendyFy.Services.Contracts
         List<DisplayImageViewModel> GetUserImages(string username, int take, int skip);
         List<SearchResultViewModel> GetUserSearchViewModel(string search, string userId, int take, int skip);
         List<RightNavigationRecommendationViewModel> GetEventUserRecommendations(string userId);
+        Task<bool> ChangeUserThemeAsync(ApplicationUser user, ThemePreference theme);
     }
 }

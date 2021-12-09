@@ -2,6 +2,7 @@
 using FriendyFy.Common;
 using FriendyFy.Data;
 using FriendyFy.Models;
+using FriendyFy.Models.Enums;
 using FriendyFy.Services.Contracts;
 using Microsoft.EntityFrameworkCore;
 using System;
@@ -204,6 +205,13 @@ namespace FriendyFy.Services
                     Username = x.UserName
                 })
                 .ToList();
+        }
+
+        public async Task<bool> ChangeUserThemeAsync(ApplicationUser user, ThemePreference theme)
+        {
+            user.ThemePreference = theme;
+            var result = await this.userRepository.SaveChangesAsync();
+            return result > 0;
         }
     }
 }

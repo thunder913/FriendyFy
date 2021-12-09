@@ -6,6 +6,8 @@ using FriendyFy.Data;
 using System.Net;
 using System.Runtime.Serialization.Json;
 using System.IO;
+using FriendyFy.Models.Enums;
+using System.Globalization;
 
 namespace FriendyFy.Controllers
 {
@@ -41,6 +43,32 @@ namespace FriendyFy.Controllers
             var count = this.UserService.GetUserEventsCount(userId);
 
             return Ok(new { count });
+        }
+
+        [HttpPost("changeTheme")]
+        public async Task<IActionResult> ChangerUserTheme(ChangeUserThemeDto dto)
+        {
+            TextInfo ti = CultureInfo.CurrentCulture.TextInfo;
+            var user = this.GetUserByToken();
+            if (user.UserName != dto.Username)
+            {
+                return Unauthorized("You are trying to impersonate a user!");
+            }
+
+            var parsed = Enum.TryParse(ti.ToTitleCase(dto.Theme), out ThemePreference theme);
+            
+            if (!parsed)
+            {
+                return BadRequest("There was an error switching the theme!");
+            }
+
+            var result = await this.userService.ChangeUserThemeAsync(user, theme);
+            if (result)
+            {
+                return Ok();
+            }
+
+            return BadRequest();
         }
     }
 }

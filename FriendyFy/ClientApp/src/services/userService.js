@@ -55,6 +55,14 @@ function getUserImages(username, take, skip){
     });
 }
 
+function changeUserTheme(username, theme){
+    return fetch('/user/changeTheme', {
+        method: 'POST',
+        headers: {'Content-Type': 'application/json'},
+        body: JSON.stringify({username, theme})
+    });
+}
+
 export {
     getLoggedInUser,
     logout,
@@ -62,5 +70,6 @@ export {
     finishFirstTimeSetup,
     getUserLocation,
     getUserEventsCount,
-    getUserImages
+    getUserImages,
+    changeUserTheme
 }
