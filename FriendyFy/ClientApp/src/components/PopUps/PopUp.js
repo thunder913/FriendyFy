@@ -3,7 +3,7 @@ import './PopUp.css'
 import useScrollBlock from '../../hooks/useScrollBlock'
 import { CSSTransition } from 'react-transition-group'
 
-const PopUp = ({ children, show, setShow, escClose }) => {
+const PopUp = ({ children, show, setShow, escClose, manyPopUps }) => {
     const [blockScroll, allowScroll] = useScrollBlock();
 
     const closePopUpEvent = () => {
@@ -17,16 +17,18 @@ const PopUp = ({ children, show, setShow, escClose }) => {
     }
 
     useEffect(() => {
-        if (show) {
-            blockScroll();
-            if (escClose) {
-                window.addEventListener("keydown", escPressed, false);
-                return () => {
-                    window.removeEventListener("keydown", escPressed, false);
-                };
+        if (!manyPopUps) {
+            if (show) {
+                blockScroll();
+                if (escClose) {
+                    window.addEventListener("keydown", escPressed, false);
+                    return () => {
+                        window.removeEventListener("keydown", escPressed, false);
+                    };
+                }
+            } else {
+                allowScroll();
             }
-        } else {
-            allowScroll();
         }
     }, [show])
 

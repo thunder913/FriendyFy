@@ -12,6 +12,7 @@ import { likeEvent } from '../../services/eventService';
 import { loadMoreComments, addComment, likedButtonClicked } from '../../services/postRequests';
 import { repost } from '../../services/postService';
 import RepostPopUp from '../PopUps/RepostPopUp/RepostPopUp';
+import Loader from 'react-loader-spinner';
 
 const FeedFooter = (props) => {
     const [showComments, setShowComments] = useState(false);
@@ -119,7 +120,7 @@ const FeedFooter = (props) => {
 
             {showComments ?
                 <div className="comments">
-                    <div className={"infinite-scroll " + (props.comments.length == 0 ? 'display-none' : '')}>
+                    <div className={"infinite-scroll"}>
                         <InfiniteScroll
                             className={"comments-section"}
                             dataLength={props.comments.length}
@@ -127,11 +128,17 @@ const FeedFooter = (props) => {
                             height={300}
                             // inverse={true}
                             hasMore={hasMore}
-                            loader={<h4 className="loading-text">Loading...</h4>}
+                            loader={<Loader
+                                type="TailSpin"
+                                color="#50A6FA"
+                                height={100}
+                                width={100}
+                                className="loader"
+                              />}
                             scrollableTarget="scrollableDiv"
                             endMessage={
                                 <p style={{ textAlign: 'center' }}>
-                                    <b>No more comments available</b>
+                                    <b>No {props.comments.length ? 'more ' : ''}comments available</b>
                                 </p>
                             }
                             ref={scrollRef}>

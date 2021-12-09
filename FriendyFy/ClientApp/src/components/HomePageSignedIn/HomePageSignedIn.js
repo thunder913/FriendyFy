@@ -57,15 +57,8 @@ const HomePageSignedIn = () => {
   }, [])
 
   return (<div className="feed home-feed">
-    {/* <Loader
-        type="Puff"
-        color="#00BFFF"
-        height={100}
-        width={100}
-        timeout={3000} //3 secs
-      /> */}
     <FirstTimePopUp show={showFirstTimePopUp} setShow={setShowFirstTimePopUp} />
-    {!showFirstTimePopUp ? <div>  <MakePost
+    {!showFirstTimePopUp ? <div className="main-feed">  <MakePost
       showPostImage={true}
       showCreatePost={true}
       showCreateEvent={true} />
@@ -74,7 +67,14 @@ const HomePageSignedIn = () => {
         dataLength={posts.length}
         next={loadMorePosts}
         hasMore={(hasPosts || hasEvents)}
-        loader={<h4 className="loading-text">Loading...</h4>}
+        loader={<Loader
+          type="MutatingDots"
+          color="#50A6FA"
+          secondaryColor="#3779CF"
+          height={100}
+          width={100}
+          className="loader"
+        />}
         scrollableTarget="scrollableDiv"
         endMessage={
           <p style={{ textAlign: 'center' }}>

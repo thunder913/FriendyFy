@@ -37,3 +37,8 @@
         width: 300px;
     }
 }
+
+.profile-friends .loader{
+    align-self: center;
+    margin: auto;
+}

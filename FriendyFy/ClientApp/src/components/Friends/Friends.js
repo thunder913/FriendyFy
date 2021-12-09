@@ -2,10 +2,11 @@ import React, { useEffect, useState } from 'react';
 import Friend from '../Friend/Friend';
 import './Friends.css';
 import "../Profile/Profile.css"
-import ProfileHeader from '../ProfileHeader/ProfileHeader';
 import ProfileFriendSearch from '../ProfileFriendSearch/ProfileFriendSearch';
 import { getFriends } from '../../services/friendService';
 import InfiniteScroll from 'react-infinite-scroll-component';
+import Loader from 'react-loader-spinner';
+
 const Friends = () => {
     const userId = decodeURI(window.location.href.substring(window.location.href.lastIndexOf('/')+1));
     const [friends, setFriends] = useState([]);
@@ -51,7 +52,13 @@ const Friends = () => {
                     dataLength={friends.length}
                     next={getMoreFriends}
                     hasMore={hasMore}
-                    loader={<h4 className="loading-text">Loading...</h4>}
+                    loader={<Loader
+                        type="TailSpin"
+                        color="#50A6FA"
+                        height={100}
+                        width={100}
+                        className="loader"
+                      />}
                     endMessage={
                         <p style={{ textAlign: 'center' }}>
                         <b>No more friends to show!</b>

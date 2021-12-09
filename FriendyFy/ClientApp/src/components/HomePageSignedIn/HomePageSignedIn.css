@@ -2,6 +2,19 @@
     width: 630px;
 }
 
+.home-page .main-feed{
+    display: flex;
+    flex-direction: column;
+}
+
+.home-page .main-feed .loader{
+    align-self: center !important;
+}
+
+.home-page .main-feed > div{
+    align-self: center;
+}
+
 @media only screen and (max-width: 1333px) {
     aside.right-navigation{
         display: none;

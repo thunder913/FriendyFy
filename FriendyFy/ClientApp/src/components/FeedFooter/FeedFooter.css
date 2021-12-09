@@ -200,3 +200,7 @@ footer.feed-footer .bottom-footer > div.feed-comment.opened-comments{
         padding: 1% 5%;
     }
 }
+
+.comments .loader{
+    margin: auto;
+}

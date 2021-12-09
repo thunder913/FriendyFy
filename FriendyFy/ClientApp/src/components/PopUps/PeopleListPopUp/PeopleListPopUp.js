@@ -3,7 +3,8 @@ import InfiniteScroll from "react-infinite-scroll-component";
 import './PeopleListPopUp.css'
 import { Link } from "react-router-dom";
 import PopUp from "../PopUp";
-const PeopleListPopUp = ({ title, count, loadPeople, show, setShow }) => {
+import Loader from 'react-loader-spinner';
+const PeopleListPopUp = ({ title, count, loadPeople, show, setShow, manyPopUps }) => {
     const [hasMore, setHasMore] = useState(true);
     const [people, setPeople] = useState([]);
 
@@ -38,7 +39,7 @@ const PeopleListPopUp = ({ title, count, loadPeople, show, setShow }) => {
     }
 
     return (
-        <PopUp show={show} setShow={setShow} escClose={true}>
+        <PopUp show={show} setShow={setShow} escClose={true} text='likes' manyPopUps={manyPopUps}>
             <div className="popup-outer people-list-popup">
                 <div className="popup-inner inner-popup">
                     <header className="title">
@@ -46,15 +47,20 @@ const PeopleListPopUp = ({ title, count, loadPeople, show, setShow }) => {
                         <p>{count}</p>
                         <button className="close-popup" onClick={() => setShow(false)}>x</button>
                     </header>
-                    <section className={"people " + (people.length === 0 ? 'display-none' : '')}>
+                    <section className={"people "}>
                         <InfiniteScroll
                             className="people-section"
                             dataLength={people.length}
                             next={loadMorePeople}
                             height={300}
-                            // inverse={true}
                             hasMore={hasMore}
-                            loader={<h4 className="loading-text">Loading...</h4>}
+                            loader={<Loader
+                                type="TailSpin"
+                                color="#50A6FA"
+                                height={100}
+                                width={100}
+                                className="loader"
+                              />}
                             scrollableTarget="scrollableDiv"
                         >
                             {people.map(p => <Link to={'/profile/' + p.username}><article className="person">

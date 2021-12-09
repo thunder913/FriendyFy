@@ -4,30 +4,30 @@ import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { parseTime } from "../../../services/helperService";
 import InfiniteScroll from "react-infinite-scroll-component";
 import PostComment from "../../PostComment/PostComment";
-import { useLoggedIn } from '../../../contexts/LoggedInContext.js'
 import { getComments } from "../../../services/commentService";
 import { loadMoreComments, addComment, likedButtonClicked } from "../../../services/postRequests";
 import $ from 'jquery';
 import '../../FeedFooter/FeedFooter.css'
 import RepostPopUp from "../RepostPopUp/RepostPopUp";
-const ViewImagePopUpRightSide = ({ props }) => {
-    const post = props.post;
+import Loader from "react-loader-spinner";
+
+const ViewImagePopUpRightSide = ({comments, setComments, setCommentsCount, setIsLiked, isLiked, commentsCount, setLikes, likes, post}) => {
     const [hasMore, setHasMore] = useState(true);
     const [showRepostPopUp, setShowRepostPopUp] = useState(false);
     const scrollRef = useRef();
     const commentRef = useRef()
 
     const loadMoreCommentsEvent = () => {
-        return loadMoreComments(post.postId, props.comments.length, post.postType, props.setComments, setHasMore);
+        return loadMoreComments(post.postId, comments.length, post.postType, setComments, setHasMore);
     }
 
     const addCommentEvent = (e) => {
         e.preventDefault();
-        addComment(commentRef, post.postId, post.postType, props.setComments, props.setCommentsCount, scrollRef);
+        addComment(commentRef, post.postId, post.postType, setComments, setCommentsCount, scrollRef);
     }
 
     const likeButtonClickEvent = () => {
-        likedButtonClicked(post.postType, post.postId, props.setIsLiked, props.setLikes);
+        likedButtonClicked(post.postType, post.postId, setIsLiked, setLikes);
     }
 
     const focusCommentInput = () => {
@@ -40,7 +40,7 @@ const ViewImagePopUpRightSide = ({ props }) => {
                 .then(async res => {
                     let obj = await (res.json());
                     if (obj.length > 0) {
-                        props.setComments(obj);
+                        setComments(obj);
                     }
                     else {
                         setHasMore(false);
@@ -77,11 +77,11 @@ const ViewImagePopUpRightSide = ({ props }) => {
         <p className="description">{post.postMessage}</p>
         <p className="publshed-date">{parseTime(post.createdAgo)}</p>
         <div className="likes-comments">
-            <span>{props.likes} likes</span>
-            <span>{props.commentsCount} comments</span>
+            <span>{likes} likes</span>
+            <span>{commentsCount} comments</span>
         </div>
         <div className="actions-footer">
-            <div className={"like " + (props.isLiked ? "liked" : "")} onClick={likeButtonClickEvent}>
+            <div className={"like " + (isLiked ? "liked" : "")} onClick={likeButtonClickEvent}>
                 <FontAwesomeIcon className="post-button like-button" icon={faThumbsUp} />
                 <span>Like</span>
             </div>
@@ -97,23 +97,29 @@ const ViewImagePopUpRightSide = ({ props }) => {
         <div className="feed-footer">
             <div className="comments">
 
-                <div className={"infinite-scroll " + (props.comments.length == 0 ? 'display-none' : '')}>
+                <div className={"infinite-scroll"}>
                     <InfiniteScroll
                         className={"comments-section"}
-                        dataLength={props.comments.length}
+                        dataLength={comments.length}
                         next={loadMoreCommentsEvent}
                         height={900}
                         // inverse={true}
                         hasMore={hasMore}
-                        loader={<h4 className="loading-text">Loading...</h4>}
+                        loader={<Loader
+                            type="TailSpin"
+                            color="#50A6FA"
+                            height={100}
+                            width={100}
+                            className="loader"
+                          />}
                         scrollableTarget="scrollableDiv"
                         endMessage={
                             <p style={{ textAlign: 'center' }}>
-                                <b>No more comments available</b>
+                                <b>No {comments.length ? 'more ' : ''}comments available</b>
                             </p>
                         }
                         ref={scrollRef}>
-                        {props.comments.map(c => <PostComment comment={c} key={c.id} />)}
+                        {comments.map(c => <PostComment comment={c} key={c.id} />)}
                     </InfiniteScroll>
                 </div>
 

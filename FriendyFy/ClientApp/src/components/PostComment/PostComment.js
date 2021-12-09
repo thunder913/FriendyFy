@@ -34,6 +34,7 @@ const PostComment = ({comment}) => {
                                 loadPeople={loadLikes}
                                 show={showPeopleLikesPopUp}
                                 setShow={setShowPeopleLikesPopUp}
+                                manyPopUps={true}
                             />
                     <Link to={'/profile/' + comment.commentorUsername}>
                         <div className="user-picture">
