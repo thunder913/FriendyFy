@@ -118,8 +118,8 @@ namespace FriendyFy
             app.UseCors(options => options
                 .WithOrigins(new[] { "http://localhost:3000" })
                 .AllowAnyHeader()
-                .AllowAnyMethod()
-                .AllowCredentials());
+                .AllowAnyOrigin()
+                .AllowAnyMethod());
 
             app.UseAuthentication();
             app.UseIdentityServer();

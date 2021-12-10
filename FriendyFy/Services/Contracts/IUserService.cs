@@ -25,5 +25,10 @@ namespace FriendyFy.Services.Contracts
         List<SearchResultViewModel> GetUserSearchViewModel(string search, string userId, int take, int skip);
         List<RightNavigationRecommendationViewModel> GetEventUserRecommendations(string userId);
         Task<bool> ChangeUserThemeAsync(ApplicationUser user, ThemePreference theme);
+        UserDataViewModel GetUserData(ApplicationUser user);
+
+        Task ChangeUserDataAsync(ApplicationUser user, string firstName, string lastName,
+           DateTime birthday, bool hasNewProfileImage, bool hasNewCoverImage, string description,
+           List<Interest> interests, decimal? longitude, decimal? latitude, string newProfilePicture = null, string newCoverImage = null);
     }
 }

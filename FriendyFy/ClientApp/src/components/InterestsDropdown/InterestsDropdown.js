@@ -13,7 +13,7 @@ const customStyles = {
   }
 }
 
-const InterestsDropdown = ({setInterests, placeholder}) => {
+const InterestsDropdown = ({setInterests, placeholder, defaultData}) => {
   const [dropDownOpt, setDropDownOpt] = useState([]);
   const {theme} = useThemeContext();
   const renderData = async () => {
@@ -51,6 +51,7 @@ const InterestsDropdown = ({setInterests, placeholder}) => {
           } : {...th.colors})
       })}
         styles={customStyles}
+        value={defaultData}
       />
     </div>
   )

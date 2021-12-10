@@ -63,6 +63,13 @@ function changeUserTheme(username, theme){
     });
 }
 
+function getUserData(){
+    return fetch('/api/getUserData', {
+        method: 'POST',
+        headers: {'Content-Type': 'application/json'},
+    });
+}
+
 export {
     getLoggedInUser,
     logout,
@@ -71,5 +78,6 @@ export {
     getUserLocation,
     getUserEventsCount,
     getUserImages,
-    changeUserTheme
+    changeUserTheme,
+    getUserData
 }

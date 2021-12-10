@@ -1,0 +1,102 @@
+.settings-page{
+    display: flex;
+    flex-direction: column;
+    gap: 15px;
+    padding: 10px 0px 30px 0px;
+}
+
+.settings-page .name-inputs{
+    display: flex;
+    flex-direction: row;
+    gap: 10px;
+    width: 100%;
+    padding: 0px 15px;
+}
+
+.settings-page .name-inputs > *{
+    width: 100%;
+    border-radius: 5px;
+}
+
+.settings-page .change-pictures{
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+    gap: 15px;
+    padding: 0px 15px;
+}
+
+.settings-page .change-picture{
+    width: 100%;
+}
+
+.settings-page .change-picture > *{
+    width: 100%;
+}
+
+.settings-page .change-picture.cover-picture-change{
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+}
+
+.settings-page .change-picture img{
+    width: 100%;
+    border: 1px solid var(--border-separator);
+    border-bottom: 0px;
+}
+
+.settings-page .change-picture.cover-picture-change .showCoverButton{
+    width: 100%;
+}
+
+.settings-page .settings-title{
+    align-self: center;
+    font-weight: 300;
+    font-size: 28px;
+    font-style: italic;
+}
+
+.settings-page input, .settings-page textarea{
+    background: var(--slightly-light) !important;
+    border: 1px solid var(--border-separator);
+    color: var(--text-main);
+    margin-top: 20px;
+}
+
+.settings-page .change-picture button{
+    background-color: var(--slightly-light);
+    border: 1px solid var(--border-separator);
+    color: var(--text-main);
+    border-top: 0px;
+    border-radius: 0px 0px 20px 20px;
+    padding: 5px;
+    transition: 0.3s;
+}
+
+.settings-page .change-picture button:hover{
+    background-color: var(--secondary);
+}
+
+.settings-page .container.image-input{
+    padding: 0px;
+}
+
+.settings-page .change-user-data{
+    background-color: rgb(9, 170, 23);
+    width: 200px;
+    align-self: flex-end;
+    padding: 10px;
+    border-radius: 20px;
+    border: 0px;
+    color: var(--text-main);
+    transition: 0.3s;
+}
+
+.settings-page .change-user-data:hover{
+    background-color: rgb(7, 197, 23);
+}
+
+.settings-page .interests-input{
+    z-index: 10;
+}

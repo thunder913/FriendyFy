@@ -56,7 +56,7 @@ const UserOptions = () => {
                 onEnter={() => setShow(true)}
                 onExited={() => setShow(false)}>
                 <div className="user-options">
-                    {loggedIn ? <button className="user-option-button" onClick={() => setShow(true)}>Preferences</button> : ''}
+                    {loggedIn ? <Link to="/settings" className="user-option-button">Preferences</Link> : ''}
                     {loggedIn ? <button className="user-option-button" onClick={logoutUser}>Logout</button> :
                         <Link to="/" className="user-option-button" onClick={logoutUser}>Login</Link>}
                     <DarkModeToggle

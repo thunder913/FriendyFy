@@ -319,5 +319,71 @@ namespace FriendyFy.Controllers
         {
             return Ok(this.userService.GetUserImages(dto.Username, dto.Take, dto.Skip));
         }
+
+        [HttpPost("getUserData")]
+        public IActionResult GetUserData()
+        {
+            var user = this.GetUserByToken();
+
+            if (user == null)
+            {
+                return Unauthorized();
+            }
+
+            var viewmodel = this.userService.GetUserData(user);
+
+            return Ok(viewmodel);
+        }
+
+        [HttpPost("editUserData")]
+        public async Task<IActionResult> EditUserData([FromForm] EditUserDataDto dto)
+        {
+            var user = this.GetUserByToken();
+            Regex nameValidator = new Regex(@"^[A-Za-z\u00C0-\u1FFF\u2800-\uFFFD 0-9-]+$");
+            if (user == null || user.Id != dto.UserId)
+            {
+                return Unauthorized("You are not authorized to make such changes, try logging in!");
+            }
+
+            if (dto.FirstName.Length > 50 || dto.FirstName.Length < 2 || !nameValidator.IsMatch(dto.FirstName))
+            {
+                return BadRequest("The first name is invalid!");
+            }
+            if (dto.LastName.Length > 50 || dto.LastName.Length < 2 || !nameValidator.IsMatch(dto.LastName))
+            {
+                return BadRequest("The last name is invalid!");
+            }
+            if (!DateTime.TryParseExact(dto.Date, "dd/MM/yyyy",
+                CultureInfo.InvariantCulture, DateTimeStyles.AdjustToUniversal, out var birthday) ||
+                birthday > DateTime.Now ||
+                birthday < new DateTime(1900, 1, 1))
+            {
+                return BadRequest("The birthday is invalid!");
+            };
+
+            var interests = JsonConvert.DeserializeObject<List<InterestDto>>(dto.Interests);
+
+            if (user == null)
+            {
+                return Unauthorized("You are not logged in!");
+            }
+            else if (interests.Count < 3)
+            {
+                return BadRequest("You must choose at least 3 interests!");
+            }
+            else if (string.IsNullOrWhiteSpace(dto.Description))
+            {
+                return BadRequest("You must enter a description/quote!");
+            }
+            else if (dto.Latitude == null || dto.Longitude == null)
+            {
+                return BadRequest("You must choose a location!");
+            }
+            var allInterests = await this.interestService.AddNewInterestsAsync(interests);
+
+            await this.userService.ChangeUserDataAsync(user, dto.FirstName, dto.LastName, birthday, dto.ChangedProfileImage, dto.ChangedCoverImage, dto.Description, allInterests, dto.Longitude, dto.Latitude, dto.ProfileImage, dto.CoverImage);
+
+            return Ok();
+        }
     }
 }

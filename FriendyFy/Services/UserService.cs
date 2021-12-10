@@ -20,14 +20,17 @@ namespace FriendyFy.Services
         private readonly IDeletableEntityRepository<ApplicationUser> userRepository;
         private readonly IDeletableEntityRepository<Post> postRepositry;
         private readonly IBlobService blobService;
+        private readonly IImageService imageService;
 
         public UserService(IDeletableEntityRepository<ApplicationUser> userRepository,
             IDeletableEntityRepository<Post> postRepositry,
-            IBlobService blobService)
+            IBlobService blobService,
+            IImageService imageService)
         {
             this.userRepository = userRepository;
             this.postRepositry = postRepositry;
             this.blobService = blobService;
+            this.imageService = imageService;
         }
         public async Task<ApplicationUser> CreateAsync(ApplicationUser user)
         {
@@ -81,6 +84,7 @@ namespace FriendyFy.Services
                 .Include(x => x.Friends)
                 .Include(x => x.ProfileImage)
                 .Include(x => x.CoverImage)
+                .Include(x => x.Interests)
                 .FirstOrDefault(x => x.Id == id);
         }
 
@@ -212,6 +216,68 @@ namespace FriendyFy.Services
             user.ThemePreference = theme;
             var result = await this.userRepository.SaveChangesAsync();
             return result > 0;
+        }
+
+        public UserDataViewModel GetUserData(ApplicationUser user)
+        {
+            var viewmodel = this.userRepository
+                .AllAsNoTracking()
+                .Where(x => x.Id == user.Id)
+                .Include(x => x.Interests)
+                .Include(x => x.ProfileImage)
+                .Include(x => x.CoverImage)
+                .Select(x => new UserDataViewModel()
+                {
+                    Birthday = x.BirthDate.ToString("dd/MM/yyyy"),
+                    FirstName = x.FirstName,
+                    LastName = x.LastName,
+                    Interests = x.Interests.Select(y => new InterestViewModel()
+                    {
+                        Id = y.Id,
+                        Label = y.Name,
+                    }).ToList(),
+                    Latitude = x.Latitude,
+                    Longitude = x.Longitude,
+                    Quote = x.Quote
+                })
+                .FirstOrDefault();
+
+            viewmodel.ProfilePhoto = this.blobService.GetBlobUrlAsync(user.ProfileImage?.Id + user.ProfileImage?.ImageExtension, GlobalConstants.BlobPictures).GetAwaiter().GetResult();
+            viewmodel.CoverPhoto = this.blobService.GetBlobUrlAsync(user.CoverImage?.Id + user.CoverImage?.ImageExtension, GlobalConstants.BlobPictures).GetAwaiter().GetResult();
+
+            return viewmodel;
+        }
+
+        public async Task ChangeUserDataAsync(ApplicationUser user, string firstName, string lastName, 
+            DateTime birthday, bool hasNewProfileImage, bool hasNewCoverImage, string description, 
+            List<Interest> interests, decimal? longitude, decimal? latitude, string newProfilePicture = null, string newCoverImage = null)
+        {
+            user.FirstName = firstName;
+            user.LastName = lastName;
+            user.Quote = description;
+            user.BirthDate = birthday;
+            user.Quote = description;
+            user.Interests = interests;
+            user.Longitude = longitude;
+            user.Latitude = latitude;
+
+            if (hasNewProfileImage)
+            {
+                await blobService.DeleteBlobAsync(user.ProfileImage.Id + user.ProfileImage.ImageExtension, GlobalConstants.BlobPictures);
+                var profileImage = await imageService.AddImageAsync(ImageType.ProfileImage);
+                await blobService.UploadBase64StringAsync(newProfilePicture, profileImage.Id + profileImage.ImageExtension, GlobalConstants.BlobPictures);
+                user.ProfileImage = profileImage;
+            }
+
+            if (hasNewCoverImage)
+            {
+                await blobService.DeleteBlobAsync(user.CoverImage.Id + user.CoverImage.ImageExtension, GlobalConstants.BlobPictures);
+                var coverImage = await imageService.AddImageAsync(ImageType.ProfileImage);
+                await blobService.UploadBase64StringAsync(newCoverImage, coverImage.Id + coverImage.ImageExtension, GlobalConstants.BlobPictures);
+                user.CoverImage = coverImage;
+            }
+
+            await this.userRepository.SaveChangesAsync();
         }
     }
 }
