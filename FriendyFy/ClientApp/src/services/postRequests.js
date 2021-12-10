@@ -9,7 +9,8 @@ export function loadMoreComments(postId, skip, postType, setComments, setHasMore
         if(obj.length>0){
             setComments(prevState => ([...prevState, ...obj]));
         }
-        else{
+        console.log(obj);
+        if(obj.length < 10){
             setHasMore(false);
         }
     })

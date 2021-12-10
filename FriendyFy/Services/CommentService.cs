@@ -303,5 +303,30 @@ namespace FriendyFy.Services
 
             return null;
         }
+
+        public async Task<bool> DeleteCommentAsync(string userId, string commentId, PostType postType)
+        {
+            if (postType == PostType.Event)
+            {
+                var comment = this.eventCommentRepository.All()
+                    .FirstOrDefault(x => x.Id == commentId && x.CommentedById == userId);
+                if (comment != null)
+                {
+                    this.eventCommentRepository.Delete(comment);
+                }
+            }
+            else if(postType == PostType.Post)
+            {
+                var comment = this.postCommentRepository.All()
+                    .FirstOrDefault(x => x.Id == commentId && x.CommentedById == userId);
+                if (comment != null)
+                {
+                    this.postCommentRepository.Delete(comment);
+                }
+            }
+
+            var removed = await this.postRepository.SaveChangesAsync();
+            return removed > 0;
+        }
     }
 }

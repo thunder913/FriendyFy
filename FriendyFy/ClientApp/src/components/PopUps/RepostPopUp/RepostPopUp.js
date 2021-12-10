@@ -4,7 +4,7 @@ import './RepostPopUp.css';
 import PopUpHeader from "../PopUpHeader/PopUpHeader";
 import PopUp from "../PopUp";
 import { repost } from "../../../services/postService";
-const RepostPopUp = ({ id, repostType, show, setShow }) => {
+const RepostPopUp = ({ id, repostType, show, setShow, manyPopUps }) => {
     const [text, setText] = useState('');
 
     const onPostButtonClick = () => {
@@ -17,7 +17,7 @@ const RepostPopUp = ({ id, repostType, show, setShow }) => {
     }
 
     return (
-    <PopUp show={show} setShow={setShow} escClose={true}>
+    <PopUp show={show} setShow={setShow} escClose={true} manyPopUps={manyPopUps}>
         <div className="popup-outer repost-popup">
         <div className="popup-inner">
             <PopUpHeader title="You may add a message, that will show in the repost!" closePopUp={() => setShow(false)} />

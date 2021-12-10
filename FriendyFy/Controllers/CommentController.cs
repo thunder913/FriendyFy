@@ -91,5 +91,27 @@ namespace FriendyFy.Controllers
         {
             return this.commentService.GetPeopleLikes(dto.CommentId, dto.Take, dto.Skip);
         }
+
+        [HttpPost("deleteComment")]
+        public async Task<IActionResult> DeleteComment(LikeCommentDto dto)
+        {
+            var user = this.GetUserByToken();
+            if (user == null)
+            {
+                return Unauthorized();
+            }
+            var parsed = Enum.TryParse(dto.PostType, out PostType postType);
+            if (parsed)
+            {
+                return BadRequest();
+            }
+
+            if(await this.commentService.DeleteCommentAsync(user.Id, dto.CommentId, postType))
+            {
+                return Ok();
+            }
+
+            return BadRequest();
+        }
     }
 }

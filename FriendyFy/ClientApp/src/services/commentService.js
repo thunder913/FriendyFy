@@ -29,3 +29,14 @@ export function makeComment(text, postId, postType) {
         body: JSON.stringify({commentId, take, skip})
     });
   }
+
+  export function deleteComment(commentId, postType) {
+    return fetch('/comment/deleteComment', {
+        method: 'POST',
+        headers: {'Content-Type': 'application/json'},
+        body: JSON.stringify({commentId, postType})
+    });
+  }
+
+
+  

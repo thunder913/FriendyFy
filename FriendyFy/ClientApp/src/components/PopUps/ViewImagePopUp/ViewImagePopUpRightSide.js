@@ -4,7 +4,7 @@ import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { parseTime } from "../../../services/helperService";
 import InfiniteScroll from "react-infinite-scroll-component";
 import PostComment from "../../PostComment/PostComment";
-import { getComments } from "../../../services/commentService";
+import { deleteComment, getComments } from "../../../services/commentService";
 import { loadMoreComments, addComment, likedButtonClicked } from "../../../services/postRequests";
 import $ from 'jquery';
 import '../../FeedFooter/FeedFooter.css'
@@ -16,6 +16,23 @@ const ViewImagePopUpRightSide = ({comments, setComments, setCommentsCount, setIs
     const [showRepostPopUp, setShowRepostPopUp] = useState(false);
     const scrollRef = useRef();
     const commentRef = useRef()
+
+    const deleteCommentEvent = (commentId, postType) => {
+        deleteComment(commentId, postType)
+            .then(res => {
+                if(res.status === 200){
+                    let element = comments.find(x => x.id === commentId);
+                    let index = comments.indexOf(element);
+            
+                    let array = [...comments];
+                    array.splice(index, 1);
+                    setComments(array);
+                    setCommentsCount(prev => prev-1)
+                }else{
+                    console.log("ERROR");
+                }
+            })
+    }
 
     const loadMoreCommentsEvent = () => {
         return loadMoreComments(post.postId, comments.length, post.postType, setComments, setHasMore);
@@ -67,7 +84,7 @@ const ViewImagePopUpRightSide = ({comments, setComments, setCommentsCount, setIs
     }, [commentRef])
 
     return (<div className="right-side">
-        <RepostPopUp repostType={post.postType} id={post.postId} show={showRepostPopUp} setShow={setShowRepostPopUp} />
+        <RepostPopUp manyPopUps={true} repostType={post.postType} id={post.postId} show={showRepostPopUp} setShow={setShowRepostPopUp} />
         <div className="posted-by">
             <div className="image">
                 <img src={post.creatorImage} alt="" />
@@ -118,7 +135,7 @@ const ViewImagePopUpRightSide = ({comments, setComments, setCommentsCount, setIs
                             </p>
                         }
                         ref={scrollRef}>
-                        {comments.map(c => <PostComment comment={c} key={c.id} />)}
+                        {comments.map(c => <PostComment deleteCommentEvent={deleteCommentEvent} manyPopUps={true} comment={c} key={c.id} />)}
                     </InfiniteScroll>
                 </div>
 

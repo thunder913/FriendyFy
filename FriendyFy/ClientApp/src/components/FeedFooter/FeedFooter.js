@@ -4,7 +4,7 @@ import { faComment, faComments, faShare, faThumbsUp } from '@fortawesome/free-so
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { getPostLikes, getPostReposts, likePost } from '../../services/postService';
 import $ from 'jquery';
-import { getComments, makeComment } from '../../services/commentService';
+import { deleteComment, getComments, makeComment } from '../../services/commentService';
 import PostComment from '../PostComment/PostComment';
 import PeopleListPopUp from '../PopUps/PeopleListPopUp/PeopleListPopUp'
 import InfiniteScroll from 'react-infinite-scroll-component';
@@ -48,6 +48,24 @@ const FeedFooter = (props) => {
         return getPostReposts(props.postId, props.postType, skip, 10);
     }
 
+    const deleteCommentEvent = (commentId, postType) => {
+
+        deleteComment(commentId, postType)
+            .then(res => {
+                if(res.status === 200){
+                    let element = props.comments.find(x => x.id === commentId);
+                    let index = props.comments.indexOf(element);
+            
+                    let array = [...props.comments];
+                    array.splice(index, 1);
+                    props.setComments(array);
+                    props.setCommentsCount(prev => prev-1)
+                }else{
+                    console.log("ERROR");
+                }
+            })
+    }
+
     useEffect(() => {
         if (commentRef.current) {
             let textarea = commentRef.current;
@@ -73,7 +91,7 @@ const FeedFooter = (props) => {
                     if (obj.length > 0) {
                         props.setComments(prevState => ([...prevState, ...obj]));
                     }
-                    else {
+                    if(obj.length < 10) {
                         setHasMore(false);
                     }
                 })
@@ -142,7 +160,7 @@ const FeedFooter = (props) => {
                                 </p>
                             }
                             ref={scrollRef}>
-                            {props.comments.map(c => <PostComment comment={c} key={c.id} />)}
+                            {props.comments.map(c => <PostComment deleteCommentEvent={deleteCommentEvent} comment={c} key={c.id} />)}
                         </InfiniteScroll>
                     </div>
 

@@ -10,3 +10,21 @@
     cursor: pointer;
     text-decoration: underline;
 }
+
+.comment .top-inner-comment{
+    display: flex;
+    gap: 30px;
+}
+
+.comment .top-inner-comment button{
+    background-color: transparent;
+    border: 0px;
+    color: rgb(236, 1, 1);
+    font-weight: 500;
+    transition: 0.3s;
+    border-radius: 10px;
+}
+
+.comment .top-inner-comment button:hover{
+    background-color: var(--hover-gray);
+}
