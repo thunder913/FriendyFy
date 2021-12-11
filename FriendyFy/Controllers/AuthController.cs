@@ -106,6 +106,11 @@ namespace FriendyFy.Controllers
                 return BadRequest("There is already a user with this email!");
             }
 
+            if (!Enum.TryParse(textInfo.ToTitleCase(userDto.Theme), out ThemePreference theme))
+            {
+                return BadRequest("You sent an invalid theme!");
+            }
+
             var user = new ApplicationUser()
             {
                 FirstName = userDto.FirstName,
@@ -116,6 +121,8 @@ namespace FriendyFy.Controllers
                 BirthDate = DateTime.ParseExact(userDto.Birthday, "dd/MM/yyyy", CultureInfo.InvariantCulture),
                 UserName = this.userService.GenerateUsername(userDto.FirstName, userDto.LastName),
                 CreatedOn = DateTime.UtcNow,
+                EmailConfirmed = false,
+                ThemePreference = theme
             };
 
             await this.userManager.CreateAsync(user);
@@ -138,7 +145,6 @@ namespace FriendyFy.Controllers
         }
 
         [HttpPost("login")]
-        // TODO add email confirm check
         public IActionResult Login(LoginUserDto loginUserDto)
         {
             var user = this.userService.GetByEmail(loginUserDto.Email);
@@ -147,6 +153,11 @@ namespace FriendyFy.Controllers
                 !BCrypt.Net.BCrypt.Verify(loginUserDto.Password, user.PasswordHash))
             {
                 return BadRequest("Invalid credentials!");
+            }
+
+            if (!user.EmailConfirmed)
+            {
+                return BadRequest("The email is not confirmed!");
             }
 
             var jwt = this.jwtService.Generate(user.Id, user.Email);

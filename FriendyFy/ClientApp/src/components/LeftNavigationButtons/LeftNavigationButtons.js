@@ -1,7 +1,7 @@
 import React from 'react';
 import FriendSuggestion from '../FriendSuggestion/FriendSuggestion';
 import LeftNavigationEvents from '../LeftNavigationEvents/LeftNavigationEvents';
-import TermsOfService from '../TermsOfService/TermsOfService';
+import SiteInfoButtons from '../SiteInfoButtons/SiteInfoButtons';
 import './LeftNavigationButtons.css';
 import { useLocation } from 'react-router';
 import { useEffect, useState } from 'react/cjs/react.development';
@@ -24,7 +24,8 @@ const LeftNavigationButtons = () => {
     }, [])
 
     let location = useLocation();
-    if (location.pathname.match("/profile") || location.pathname.match("/event") || location.pathname.match("/friends") || location.pathname.match("/photos") || location.pathname.match("/settings")) {
+    console.log(location);
+    if (location.pathname !== '/') {
         return null;
     }
     return (
@@ -37,7 +38,7 @@ const LeftNavigationButtons = () => {
                     </div>
                 </div>
                 <div className="tos">
-                    <TermsOfService />
+                    <SiteInfoButtons />
                 </div>
             </div>
         </PageLoading>)

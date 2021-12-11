@@ -7,14 +7,15 @@ import { ApplicationPaths } from './components/api-authorization/ApiAuthorizatio
 import Profile from './components/Profile/Profile';
 import './custom.css'
 import Event from './components/Event/Event'
-import Register from './components/register-components/Register/Register.js';
 import { useLoggedIn } from './contexts/LoggedInContext.js'
 import { useState } from 'react/cjs/react.development';
 import { AnimatePresence } from "framer-motion/dist/es/index.js";
 import { useLocation } from 'react-router';
 import AwaitLoggedInTransitionPopUp from './components/PopUps/AwaitLoggedInTransitionPopUp/AwaitLoggedInTransitionPopUp';
 import Settings from './components/Settings/Settings';
-
+import Privacy from './components/Privacy/Privacy';
+import TermsOfService from './components/TermsOfService/TermsOfService';
+import Cookies from './components/Cookies/Cookies';
 function App() {
   const { loggedIn, resetUser } = useLoggedIn();
   const [showLoader, setShowLoader] = useState(true);
@@ -36,8 +37,11 @@ function App() {
           <Route path={["/profile", "/friends", "/photos"]} component={Profile}></Route>
           <Route path="/event" component={Event}></Route>
           <Route path="/settings" component={Settings}></Route>
+          <Route path="/privacy" component={Privacy}></Route>
+          <Route path="/cookies" component={Cookies}></Route>
+          <Route path="/tos" component={TermsOfService}></Route>
           <Route path={ApplicationPaths.ApiAuthorizationPrefix} component={ApiAuthorizationRoutes} />
-          <Route exact path='/' component={Home} />
+          <Route exact path={'/' | '/Auth/Register'} component={Home} />
         </Switch>
       </AnimatePresence>
     </Layout>

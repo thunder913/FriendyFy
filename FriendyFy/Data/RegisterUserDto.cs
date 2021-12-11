@@ -16,5 +16,6 @@ namespace FriendyFy.Data
         public string Gender { get; set; }
 
         public string Birthday { get; set; }
+        public string Theme { get; set; }
     }
 }

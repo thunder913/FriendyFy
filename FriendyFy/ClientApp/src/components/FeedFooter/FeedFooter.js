@@ -49,7 +49,6 @@ const FeedFooter = (props) => {
     }
 
     const deleteCommentEvent = (commentId, postType) => {
-
         deleteComment(commentId, postType)
             .then(res => {
                 if(res.status === 200){

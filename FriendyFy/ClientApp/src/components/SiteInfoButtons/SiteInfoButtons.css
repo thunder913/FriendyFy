@@ -1,0 +1,30 @@
+ul.terms-of-service{
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    list-style: none;
+    padding: 0px 20px
+}
+
+ul.terms-of-service a{
+    background-color: transparent;
+    border: 0px;
+    color: var(--text-main);
+}
+
+ul.terms-of-service a:hover{
+    text-decoration: underline;
+}
+
+.terms-of-service{
+    margin-top: 15px;
+    height: 42px;
+    border: 1px solid var(--border-separator);
+    background-color: var(--secondary);
+    border-left: 0px;
+    border-right: 0px;
+}
+
+.tos{
+    font-size: 12px;
+}

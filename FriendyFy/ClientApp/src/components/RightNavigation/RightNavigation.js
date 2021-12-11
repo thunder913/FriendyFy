@@ -19,7 +19,7 @@ const RightNavigation = () => {
             })
     }, [])
 
-    if (location.pathname.match("/profile") || location.pathname.match("/event") || location.pathname.match("/friends") || location.pathname.match("/photos") || location.pathname.match("/settings")) {
+    if (location.pathname !== '/') {
         return null;
     }
 
@@ -55,7 +55,7 @@ const RightNavigation = () => {
                     </li>
                     <li className="right-nav-button">
                         <Link to={"/profile/" + loggedIn.userName} >
-                            Contact Us
+                            My Events
                         </Link>
                     </li>
                 </ul>
