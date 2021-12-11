@@ -19,7 +19,7 @@ const RightNavigation = () => {
             })
     }, [])
 
-    if (location.pathname !== '/') {
+    if (location.pathname !== '/' && location.pathname !== '/search-page') {
         return null;
     }
 

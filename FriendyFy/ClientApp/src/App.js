@@ -17,6 +17,7 @@ import Privacy from './components/Privacy/Privacy';
 import TermsOfService from './components/TermsOfService/TermsOfService';
 import Cookies from './components/Cookies/Cookies';
 import ResetPassword from './components/ResetPassword/ResetPassword';
+import SearchPage from './components/SearchPage/SearchPage';
 
 function App() {
   const { loggedIn, resetUser } = useLoggedIn();
@@ -42,6 +43,7 @@ function App() {
           <Route path="/privacy" component={Privacy}></Route>
           <Route path="/cookies" component={Cookies}></Route>
           <Route path="/tos" component={TermsOfService}></Route>
+          <Route path="/search-page" component={SearchPage}></Route>
           <Route path={ApplicationPaths.ApiAuthorizationPrefix} component={ApiAuthorizationRoutes} />
           <Route exact path={['/','/Auth/Register']} component={Home} />
           <Route path='/Auth/SendForgottenPasswordEmail' component={ResetPassword}/>
