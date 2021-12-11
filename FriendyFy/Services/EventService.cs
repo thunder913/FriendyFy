@@ -786,5 +786,45 @@ namespace FriendyFy.Services
                 })
                 .ToList();
         }
+
+        public List<SearchPageResultViewModel> GetSearchPageEvents(int skip, int take ,string searchWord, List<int> interestIds, bool showOnlyUserEvents, DateTime eventDate, bool hasDate, string userId)
+        {
+            searchWord = searchWord.ToLower();
+
+            var events = this.eventRepository
+                .AllAsNoTracking()
+                .Include(x => x.Interests)
+                .Include(x => x.ProfileImage)
+                .Where(x => (x.Name.ToLower().Contains(searchWord) || string.IsNullOrWhiteSpace(searchWord)))
+                .Where(x => (interestIds.Count() == 0) || (x.Interests.Count(y => interestIds.Contains(y.Id)) == interestIds.Count()))
+                .Where(x => !hasDate || (eventDate.Year == x.Time.Year && eventDate.Month == x.Time.Month && eventDate.Day == x.Time.Day))
+                .Where(x => (showOnlyUserEvents == false) || (x.OrganizerId == userId))
+                .OrderBy(x => x.Name)
+                .Skip(skip)
+                .Take(take)
+                .Select(x => new
+                {
+                    Id = x.Id,
+                    Image = x.ProfileImage.Id + x.ProfileImage.ImageExtension,
+                    Name = x.Name,
+                    Interests = x.Interests.Select(y => new InterestViewModel()
+                    {
+                        Id = y.Id,
+                        Label = y.Name,
+                    }).ToList(),
+                })
+                .ToList();
+
+            var toReturn = events.Select(x => new SearchPageResultViewModel()
+            {
+                Id = x.Id,
+                ImageUrl = this.blobService.GetBlobUrlAsync(x.Image, GlobalConstants.BlobPictures).GetAwaiter().GetResult(),
+                Name = x.Name,
+                Type = SearchResultType.@event.ToString(),
+                Interests = x.Interests
+            }).ToList();
+
+            return toReturn;
+        }
     }
 }

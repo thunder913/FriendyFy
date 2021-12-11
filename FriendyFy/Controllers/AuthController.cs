@@ -298,7 +298,7 @@ namespace FriendyFy.Controllers
         {
             var user = GetUserByToken();
             var interests = JsonConvert.DeserializeObject<List<InterestDto>>(dto.Interests);
-            
+
             if (user == null)
             {
                 return Unauthorized("You are not logged in!");

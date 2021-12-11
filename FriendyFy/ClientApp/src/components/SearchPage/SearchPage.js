@@ -1,15 +1,31 @@
-import React from "react";
+import React, { useEffect, useState } from "react";
 import PageLoading from "../PageLoading/PageLoading";
 import './SearchPage.css'
 import Datetime from 'react-datetime';
 import InterestsDropdown from "../InterestsDropdown/InterestsDropdown";
-import { useState } from "react/cjs/react.development";
 import moment from "moment";
-import { FormGroup, RadioGroup, FormControlLabel, Radio, FormControl, Checkbox } from "@mui/material";
-
+import { RadioGroup, FormControlLabel, Radio, FormControl, Checkbox } from "@mui/material";
+import { performSearchPageSearch } from "../../services/searchService";
+import SearchPageResults from "../SearchPageResults/SearchPageResults";
 const SearchPage = () => {
+    const [peopleCount, setPeopleCount] = useState(0);
+    const [eventsCount, setEventsCount] = useState(0);
+    const [feed, setFeed] = useState([]);
+    const [hasMorePeople, setHasMorePeople] = useState(false);
+    const [hasMoreEvents, setHasMoreEvents] = useState(false);
+
+    const [searchWord, setSearchWord] = useState('');
+    const [type, setType] = useState('Both');
     const [interests, setInterests] = useState([]);
+    const [onlyYourEvents, setOnlyYourEvents] = useState(false);
     const [momentDate, setMomentDate] = useState('');
+
+
+    const [currentSearchWord, setCurrentSearchWord] = useState('');
+    const [currentType, setCurrentType] = useState('Both');
+    const [currentInterests, setCurrentInterests] = useState([]);
+    const [currentOnlyYourEvents, setCurrentOnlyYourEvents] = useState(false);
+    const [currentMomentDate, setCurrentMomentDate] = useState('');
 
     function getCurrentLocalization() {
         let localization = window.navigator.userLanguage || window.navigator.language;
@@ -21,22 +37,68 @@ const SearchPage = () => {
         setMomentDate(e._d);
     }
 
+    const onButtonClick = () => {
+
+        setEventsCount(0);
+        setPeopleCount(0);
+        setHasMoreEvents(true);
+        setHasMorePeople(true);
+
+        setCurrentInterests(interests);
+        setCurrentMomentDate(momentDate);
+        setCurrentOnlyYourEvents(onlyYourEvents);
+        setCurrentType(type);
+        setCurrentSearchWord(searchWord);
+
+        performSearchPageSearch(searchWord, type,
+            JSON.stringify(interests.map(x => ({ label: x.label, id: Number.isInteger(x.value) ? x.value : 0, isNew: x.__isNew__ ?? false }))),
+            onlyYourEvents, moment(momentDate).format("DD/MM/YYYY"), 20, 0, 0)
+            .then(res => res.json())
+            .then(data => {
+                setEventsCount(data.eventsCount);
+                setPeopleCount(data.peopleCount);
+                setHasMoreEvents(data.hasMoreEvents);
+                setHasMorePeople(data.hasMorePeople);
+                setFeed(data.searchResults);
+            });
+    }
+
+    const loadMoreResults = () => {
+        return performSearchPageSearch(currentSearchWord, currentType,
+            JSON.stringify(currentInterests.map(x => ({ label: x.label, id: Number.isInteger(x.value) ? x.value : 0, isNew: x.__isNew__ ?? false }))),
+            currentOnlyYourEvents, moment(currentMomentDate).format("DD/MM/YYYY"), 20, 0, 0)
+            .then(async res => {
+                let obj = await res.json();
+                setEventsCount(obj.eventsCount);
+                setPeopleCount(obj.peopleCount);
+                setHasMoreEvents(obj.hasMoreEvents);
+                setHasMorePeople(obj.hasMorePeople);
+                setFeed(prev => ([...prev, ...obj.searchResults]));
+            })
+    }
+
+    useEffect(() => {
+        if (type === 'Person') {
+            setOnlyYourEvents(false);
+        }
+    }, [type])
 
     return (<PageLoading>
         <div className="search-page">
             <div className="search-options">
                 <h2 className="search-title">Search</h2>
-                <input type="text" placeholder="Search" />
+                <input type="text" placeholder="Search" onChange={(e) => setSearchWord(e.target.value)} />
                 <div className="event-type-radio">
                     <FormControl component="fieldset">
-                        <RadioGroup row aria-label="Peope" name="row-radio-buttons-group">
+                        <RadioGroup defaultValue="Both" row aria-label="People" name="row-radio-buttons-group" onChange={(e) => setType(e.target.value)}>
                             <FormControlLabel value="Person" control={<Radio />} label="Person" />
                             <FormControlLabel value="Event" control={<Radio />} label="Event" />
+                            <FormControlLabel value="Both" control={<Radio />} label="Both" />
                         </RadioGroup>
                     </FormControl>
                 </div>
                 <InterestsDropdown placeholder='Search by interests' setInterests={setInterests}></InterestsDropdown>
-                <FormControlLabel control={<Checkbox />} label="Only Your Events" />
+                <FormControlLabel control={<Checkbox checked={onlyYourEvents} disabled={type === 'Person'} onChange={(e) => setOnlyYourEvents(e.target.checked)} />} label="Only Your Events" />
                 <Datetime
                     input={true}
                     initialViewMode='years'
@@ -45,35 +107,16 @@ const SearchPage = () => {
                     dateFormat={moment.localeData().longDateFormat('LL')}
                     onChange={onDateChangeHandler}
                     className='birthday'
-                    inputProps={{ id: 'birthday', placeholder: 'Event date', autoComplete: "off" }}
+                    inputProps={{ id: 'birthday', placeholder: 'Event date in UTC time', autoComplete: "off" }}
                 />
-                <button className="search">Search</button>
+                <button className="search" onClick={() => onButtonClick()}>Search</button>
             </div>
             <div className="results">
-                <div className="search-result">
-                    <div className="image">
-                        <img src="https://friendyfy.blob.core.windows.net/pictures/580d125c-3190-4f41-b820-0c2dedf3b85f.jpeg" alt="" />
-                    </div>
-                    <p className="name">Name Nameov</p>
-                    <p className="mutual-friends">5 Mutual friends</p>
-                    <button className="view-button">View</button>
-                </div>
-                <div className="search-result">
-                <div className="image">
-                    <img src="https://friendyfy.blob.core.windows.net/pictures/580d125c-3190-4f41-b820-0c2dedf3b85f.jpeg" alt="" />
-                </div>
-                <p className="name">Name Nameov</p>
-                <div className="interests">
-                    <span>Swimming</span>
-                    <span>Dancing</span>
-                    <span>Volleyball</span>
-                    <span>Volleyball</span>
-                    <span>Volleyball</span>
-                    <span>Volleyball</span>
-                    <span>Volleyball</span>
-                </div>
-                <button className="view-button">View</button>
-            </div>
+                <SearchPageResults
+                    feed={feed}
+                    loadMoreResults={loadMoreResults}
+                    hasMoreEvents={hasMoreEvents}
+                    hasMorePeople={hasMorePeople} />
             </div>
         </div>
     </PageLoading>)

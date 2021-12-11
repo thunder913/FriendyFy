@@ -31,5 +31,6 @@ namespace FriendyFy.Services.Contracts
            DateTime birthday, bool hasNewProfileImage, bool hasNewCoverImage, string description,
            List<Interest> interests, decimal? longitude, decimal? latitude, string newProfilePicture = null, string newCoverImage = null);
         Task<bool> ResetPassword(ApplicationUser user, string newPasswordHash);
+        List<SearchPageResultViewModel> GetSearchPageUsers(int take, int skip, string searchWord, List<int> interestIds, string userId);
     }
 }

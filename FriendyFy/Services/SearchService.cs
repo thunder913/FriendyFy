@@ -1,7 +1,9 @@
-﻿using FriendyFy.Services.Contracts;
+﻿using FriendyFy.Models.Enums;
+using FriendyFy.Services.Contracts;
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using ViewModels;
 using ViewModels.ViewModels;
 
 namespace FriendyFy.Services
@@ -66,6 +68,59 @@ namespace FriendyFy.Services
                 HasMoreEvents = hasMoreEvents,
                 HasMorePeople = hasMoreUsers,
                 SearchResults = searchResults
+            };
+
+            return viewmodel;
+        }
+
+        public SearchPageResultsViewModel PerformSearch(int take, int skipPeople, int skipEvents, string searchWord, List<int> interestIds, SearchType searchType, 
+            bool showOnlyUserEvents, DateTime eventDate, bool hasEventDate, string userId)
+        {
+            var people = new List<SearchPageResultViewModel>();
+            var events = new List<SearchPageResultViewModel>();
+            var hasMoreUsers = true;
+            var hasMoreEvents = true;
+            if (searchType == SearchType.Person && !showOnlyUserEvents)
+            {
+                people.AddRange(this.userService.GetSearchPageUsers(take, skipPeople, searchWord, interestIds, userId));
+                hasMoreUsers = people.Count() == take;
+            }
+            else if (searchType == SearchType.Event)
+            {
+                events.AddRange(this.eventService.GetSearchPageEvents(skipEvents, take, searchWord, interestIds, showOnlyUserEvents, eventDate, hasEventDate, userId));
+                hasMoreEvents = events.Count() == take;
+            }
+            else if (searchType == SearchType.Both)
+            {
+                var takeCount = take / 2;
+                if (!showOnlyUserEvents)
+                {
+                    people.AddRange(this.userService.GetSearchPageUsers(takeCount, skipPeople, searchWord, interestIds, userId));
+                }
+                events.AddRange(this.eventService.GetSearchPageEvents(skipEvents, takeCount, searchWord, interestIds, showOnlyUserEvents, eventDate, hasEventDate, userId));
+
+
+                if (people.Count < takeCount)
+                {
+                    hasMoreUsers = false;
+                }
+                if (events.Count < takeCount)
+                {
+                    hasMoreEvents = false;
+                }
+            }
+
+            var results = new List<SearchPageResultViewModel>();
+            results.AddRange(people);
+            results.AddRange(events);
+
+            var viewmodel = new SearchPageResultsViewModel()
+            {
+                EventsCount = skipEvents + events.Count,
+                PeopleCount = skipPeople + people.Count,
+                HasMoreEvents = hasMoreEvents,
+                HasMorePeople = hasMoreUsers,
+                SearchResults = results.OrderBy(x => Guid.NewGuid()).ToList()
             };
 
             return viewmodel;

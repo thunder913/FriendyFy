@@ -28,5 +28,6 @@ namespace FriendyFy.Services.Contracts
         List<PersonListPopupViewModel> GetPostReposts(string eventId, int take, int skip);
         Task<bool> DeleteEventPostAsync(string postId, string userId);
         List<PostDetailsViewModel> GetFeedEvents(ApplicationUser user, bool isProfile, string userName, int take, int skip, List<string> ids);
+        List<SearchPageResultViewModel> GetSearchPageEvents(int skip, int take, string searchWord, List<int> interestIds, bool showOnlyUserEvents, DateTime eventDate, bool hasDate, string userId);
     }
 }

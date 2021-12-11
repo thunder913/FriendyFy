@@ -154,6 +154,7 @@ namespace FriendyFy.Services
                 //|| x.Interests.Any(y => y.Name.ToLower().Contains(searchWord))
                 )
                 && x.Id != userId)
+                .Where(x => x.FinishedFirstTimeLogin)
                 .OrderBy(x => x.UserName)
                 .Skip(skip)
                 .Take(take)
@@ -285,6 +286,42 @@ namespace FriendyFy.Services
             user.PasswordHash = newPasswordHash;
             var result = await this.userRepository.SaveChangesAsync();
             return result > 0;
+        }
+
+        public List<SearchPageResultViewModel> GetSearchPageUsers(int take, int skip, string searchWord, List<int> interestIds, string userId)
+        {
+            searchWord = searchWord.ToLower();
+            var users = this.userRepository
+                .AllAsNoTracking()
+                .Include(x => x.Interests)
+                .Include(x => x.ProfileImage)
+                .Include(x => x.Friends)
+                .Where(x => (string.IsNullOrWhiteSpace(searchWord) || (x.FirstName + " " + x.LastName).ToLower().Contains(searchWord)))
+                .Where(x => (interestIds.Count == 0) || (x.Interests.Count(y => interestIds.Contains(y.Id)) == interestIds.Count()))
+                .Where(x => x.Id != userId)
+                .Where(x => x.FinishedFirstTimeLogin)
+                .OrderBy(x => x.UserName)
+                .Skip(skip)
+                .Take(take)
+                .Select(x => new
+                {
+                    Id = x.UserName,
+                    Name = x.FirstName + " " + x.LastName,
+                    Image = x.ProfileImage.Id + x.ProfileImage.ImageExtension,
+                    MutualFriends = x.Friends.Count(y => y.FriendId == userId && y.IsFriend),
+                })
+                .ToList();
+
+            var toReturn = users.Select(x => new SearchPageResultViewModel()
+            {
+                Id = x.Id,
+                ImageUrl = this.blobService.GetBlobUrlAsync(x.Image, GlobalConstants.BlobPictures).GetAwaiter().GetResult(),
+                Name = x.Name,
+                Type = SearchResultType.profile.ToString(),
+                MutualFriends = x.MutualFriends,
+            }).ToList();
+
+            return toReturn;
         }
     }
 }
