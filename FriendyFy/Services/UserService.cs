@@ -279,5 +279,12 @@ namespace FriendyFy.Services
 
             await this.userRepository.SaveChangesAsync();
         }
+
+        public async Task<bool> ResetPassword(ApplicationUser user, string newPasswordHash)
+        {
+            user.PasswordHash = newPasswordHash;
+            var result = await this.userRepository.SaveChangesAsync();
+            return result > 0;
+        }
     }
 }

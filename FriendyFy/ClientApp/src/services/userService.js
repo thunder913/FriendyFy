@@ -86,6 +86,26 @@ function login(email, password){
     });
 }
 
+function forgotPassword(email){
+    return fetch('/api/forgotPassword', {
+        method: 'POST',
+        headers: {'Content-Type': 'application/json'},
+        body: JSON.stringify({email})
+    });
+}
+
+function resetPassword(email, password, confirmPassword, code){
+    return fetch('/api/resetPassword', {
+        method: 'POST',
+        headers: {'Content-Type': 'application/json'},
+        body: JSON.stringify({email, password, confirmPassword, code})
+    });
+}
+
+
+
+
+
 export {
     getLoggedInUser,
     logout,
@@ -97,5 +117,7 @@ export {
     changeUserTheme,
     getUserData,
     register,
-    login
+    login,
+    forgotPassword,
+    resetPassword
 }

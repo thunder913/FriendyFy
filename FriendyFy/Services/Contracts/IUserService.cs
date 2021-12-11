@@ -30,5 +30,6 @@ namespace FriendyFy.Services.Contracts
         Task ChangeUserDataAsync(ApplicationUser user, string firstName, string lastName,
            DateTime birthday, bool hasNewProfileImage, bool hasNewCoverImage, string description,
            List<Interest> interests, decimal? longitude, decimal? latitude, string newProfilePicture = null, string newCoverImage = null);
+        Task<bool> ResetPassword(ApplicationUser user, string newPasswordHash);
     }
 }

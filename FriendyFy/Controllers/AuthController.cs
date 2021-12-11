@@ -23,6 +23,7 @@ using System.Text.Encodings.Web;
 using System.Text.RegularExpressions;
 using System.Threading.Tasks;
 using ViewModels;
+using ViewModels.ViewModels;
 
 namespace FriendyFy.Controllers
 {
@@ -395,6 +396,53 @@ namespace FriendyFy.Controllers
             await this.userService.ChangeUserDataAsync(user, dto.FirstName, dto.LastName, birthday, dto.ChangedProfileImage, dto.ChangedCoverImage, dto.Description, allInterests, dto.Longitude, dto.Latitude, dto.ProfileImage, dto.CoverImage);
 
             return Ok();
+        }
+
+        [HttpPost("forgotPassword")]
+        public async Task<IActionResult> SendForgottenPasswordEmail(ForgottenPasswordDto dto)
+        {
+            var user = await userManager.FindByEmailAsync(dto.Email);
+            if (user == null || !(await userManager.IsEmailConfirmedAsync(user)))
+            {
+                return Ok();
+            }
+
+            var code = await userManager.GeneratePasswordResetTokenAsync(user);
+            code = WebEncoders.Base64UrlEncode(Encoding.UTF8.GetBytes(code));
+
+            var callbackUrl = Url.Page(
+                "/ResetPassword",
+                pageHandler: null,
+                values: new { code },
+                protocol: Request.Scheme);
+
+            await emailSender.SendEmailAsync(
+                GlobalConstants.Email,
+                "FriendyFy",
+                dto.Email,
+                "Reset Password",
+                $"Please reset your password by <a href='{HtmlEncoder.Default.Encode(callbackUrl)}'>clicking here</a>.");
+
+            return Ok();
+        }
+
+        [HttpPost("resetPassword")]
+        public async Task<IActionResult> ResetPassword(ResetPasswordDto dto)
+        {
+            var user = await userManager.FindByEmailAsync(dto.Email);
+            if (user == null)
+            {
+                return BadRequest("There was an error resetting the password!");
+            }
+            var password = BCrypt.Net.BCrypt.HashPassword(dto.Password);
+            var code = Encoding.UTF8.GetString(Convert.FromBase64String(dto.Code));
+            if (await userManager.VerifyUserTokenAsync(user, userManager.Options.Tokens.PasswordResetTokenProvider, "ResetPassword", code))
+            {
+                await this.userService.ResetPassword(user, password);
+            }
+
+
+            return BadRequest("Something went wrong, try again later!");
         }
     }
 }

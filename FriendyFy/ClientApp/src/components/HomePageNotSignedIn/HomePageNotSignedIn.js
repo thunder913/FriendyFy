@@ -1,11 +1,10 @@
 import React, { useState, useEffect } from "react";
-import { Link } from "react-router-dom";
 import { useLoggedIn } from "../../contexts/LoggedInContext";
 import RegisterPopUp from "../register-components/RegisterPopUp/RegisterPopUp";
 import { getLoggedInUser, confirmEmail, login } from '../../services/userService.js';
 import { useLocation } from "react-router";
 import './HomePageNotSignedIn.css'
-
+import ForgotPasswordPopUp from "../PopUps/ForgotPasswordPopUp/ForgotPasswordPopUp";
 const HomePageNotSignedIn = () => {
 
     const [showRegister, setShowRegister] = useState(false);
@@ -15,6 +14,7 @@ const HomePageNotSignedIn = () => {
     const params = useLocation().search;
     const userId = new URLSearchParams(params).get("userId");
     const code = new URLSearchParams(params).get("code");
+    const [show, setShow] = useState(false);
 
     useEffect(() => {
         if (userId && code) {
@@ -47,6 +47,7 @@ const HomePageNotSignedIn = () => {
 
     return (
         <div className="home-page" >
+            <ForgotPasswordPopUp show={show} setShow={setShow}/>
             <div className="page" style={{ filter: showRegister ? 'blur(5px)' : '' }}>
                 <div className="register-top">
                     <div className="top-logo">
@@ -65,8 +66,8 @@ const HomePageNotSignedIn = () => {
                             <input id="email" type="text" placeholder="Email" />
                             <input id="password" type="password" placeholder="Password" />
                             <div className="login-buttons">
-                                <Link className="forgotten-password" to="#">Forgot Password?</Link>
                                 <input className="login-button" type="submit" value="Login" />
+                                <button type="button" className="forgotten-password" onClick={(e) => {e.preventDefault(); setShow(true);}}>Forgot Password?</button>
                             </div>
                         </form>
                     </div>

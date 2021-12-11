@@ -16,6 +16,8 @@ import Settings from './components/Settings/Settings';
 import Privacy from './components/Privacy/Privacy';
 import TermsOfService from './components/TermsOfService/TermsOfService';
 import Cookies from './components/Cookies/Cookies';
+import ResetPassword from './components/ResetPassword/ResetPassword';
+
 function App() {
   const { loggedIn, resetUser } = useLoggedIn();
   const [showLoader, setShowLoader] = useState(true);
@@ -41,7 +43,8 @@ function App() {
           <Route path="/cookies" component={Cookies}></Route>
           <Route path="/tos" component={TermsOfService}></Route>
           <Route path={ApplicationPaths.ApiAuthorizationPrefix} component={ApiAuthorizationRoutes} />
-          <Route exact path={'/' | '/Auth/Register'} component={Home} />
+          <Route exact path={['/','/Auth/Register']} component={Home} />
+          <Route path='/Auth/SendForgottenPasswordEmail' component={ResetPassword}/>
         </Switch>
       </AnimatePresence>
     </Layout>

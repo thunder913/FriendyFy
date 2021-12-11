@@ -66,6 +66,7 @@
     color: white;
     text-decoration: none;
     transition: 0.3s;
+    border: 0px;
 }
 
 .forgotten-password:hover{
