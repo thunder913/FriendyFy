@@ -39,10 +39,15 @@ const MyGoogleMap = ({ location, setLocation, staticMap }) => {
     lat: location.lat ?? 43.653225,
     lng: location.lng ?? -79.383186
   });
+  const [firstLoad, setFirstLoad] = useState(true);
 
   useEffect(() => {
-    if(location){
-      setCenter({lat: location.lat, lng: location.lng})
+    console.log(process.env.REACT_APP_GOOGLE_MAPS_API_KEY)
+    if(firstLoad){
+      if(location){
+        setCenter({lat: location.lat, lng: location.lng});
+        setFirstLoad(false);
+      }
     }
   }, [location])
 
@@ -67,7 +72,7 @@ const MyGoogleMap = ({ location, setLocation, staticMap }) => {
   }, []);
 
   const { isLoaded, loadError } = useLoadScript({
-    googleMapsApiKey: "AIzaSyDG_zBAZ6lRpVgMYo2qfO9iHxek8xosU44",
+    googleMapsApiKey: process.env.REACT_APP_GOOGLE_MAPS_API_KEY,
     libraries: libraries,
   });
 
@@ -85,7 +90,7 @@ const MyGoogleMap = ({ location, setLocation, staticMap }) => {
 
     <GoogleMap
       mapContainerStyle={mapContainerStyle}
-      zoom={8}
+      zoom={location ? 8 : 2}
       center={center}
       options={options}
       onClick={onMapClick}
