@@ -55,3 +55,9 @@
     flex-direction: column;
     align-items: center;
 }
+
+@media only screen and (max-width: 767px){
+    .main-content, .right-navigation{
+        padding-top: 133px;
+    }
+}

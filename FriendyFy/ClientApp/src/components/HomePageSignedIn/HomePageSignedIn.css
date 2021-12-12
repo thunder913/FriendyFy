@@ -18,7 +18,7 @@
     align-self: center;
 }
 
-@media only screen and (max-width: 1333px) {
+@media only screen and (max-width: 1367px) {
     aside.right-navigation{
         display: none;
     }

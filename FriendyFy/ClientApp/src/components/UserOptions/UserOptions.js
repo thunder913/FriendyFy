@@ -9,7 +9,9 @@ import { useLoggedIn } from '../../contexts/LoggedInContext';
 import { changeUserTheme, logout } from '../../services/userService'
 import { useThemeContext } from '../../contexts/ThemeContext';
 import { Link } from 'react-router-dom';
+import { useHistory } from 'react-router';
 const UserOptions = () => {
+    const history = useHistory();
     const [show, setShow] = useState(false);
     const { loggedIn, setLoggedIn } = useLoggedIn();
     const { changeTheme, theme } = useThemeContext();
@@ -19,6 +21,7 @@ const UserOptions = () => {
         logout()
             .then(async () => {
                 await setLoggedIn(false);
+                history.push("/")
             });
     }
 

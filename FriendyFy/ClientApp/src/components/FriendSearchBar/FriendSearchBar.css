@@ -40,3 +40,9 @@
 .friend-search-form > form{
     display: flex;
 }
+
+@media only screen and (max-width: 767px){
+    .friend-search-form{
+        display: none;
+    }
+}

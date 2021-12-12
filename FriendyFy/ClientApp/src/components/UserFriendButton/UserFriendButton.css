@@ -10,19 +10,21 @@
     background-color: rgb(175, 26, 26);
 }
 
-.accept{
+.profile-navigation > div button.accept{
     background-color: rgb(23, 153, 23, 0.8);
+    border-radius: 10px 0px 0px 10px;
 }
 
-.decline{
+.profile-navigation > div button.decline{
     background-color: rgb(133, 33, 33);
+    border-radius: 0px 10px 10px 0px;
 }
 
 .add-friend-nav .accept,.add-friend-nav .decline{
     border-radius: 0px;
 }
 
-.add-friend-nav .accept:hover{
+.accept.add-friend-nav :hover{
     background-color: rgba(17, 192, 17, 0.8);
 }
 

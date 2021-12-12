@@ -100,7 +100,7 @@ header.profile-header{
     transition: 0.3s;
 }
 
-.profile-navigation > div button{
+.profile-navigation > div button, .profile-navigation > div a{
     text-decoration: none;
     color: var(--text-main);
     padding: 6.5px 50px;
@@ -110,7 +110,11 @@ header.profile-header{
     border: 0px;
 }
 
-.profile-navigation > div button:hover{
+.profile-navigation > div a{
+    display: block;
+}
+
+.profile-navigation > div button:hover, .profile-navigation > div a:hover{
     background-color: var(--hover-gray);
     cursor: pointer;
 }
@@ -129,25 +133,31 @@ header.profile-header{
 
 .add-friend-nav .add-friend{
     color: white;
-    background-color: var(--like-option) !important;
+    background-color: var(--like-option);
+    padding: 6px 48px;
+    transition: 0.3s;
 }
 
 .add-friend-nav > .add-friend:hover{
-    background-color: var((--like-option-hover))
+    background-color: var(--like-option-hover)
 }
 
 @media only screen and (max-width: 776px){
-    .profile-navigation > div button{
+    .profile-navigation > div button, .profile-navigation > div a{
         padding: 1px 10px;
-    }
-    .profile-picture{
-        bottom: 30px;
-        width: 300px;
     }
 }
 
 @media only screen and (max-width: 350px){
     .profile-navigation{
         width: initial;
+    }
+}
+
+@media only screen and (max-width: 576px){
+    .profile-picture{
+        width: 200px;
+        bottom: 20px;
+        height: 50px;
     }
 }

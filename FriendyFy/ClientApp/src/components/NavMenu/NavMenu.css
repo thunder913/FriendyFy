@@ -80,3 +80,38 @@ html {
   width: 100%;
   height: 100%;
 }
+
+@media only screen and (max-width: 767px){
+  .site-header > nav.navbar{
+    flex-direction: column;
+    gap: 10px;
+  }
+
+  .site-header .logo > a{
+    margin: auto;
+  }
+
+  .site-header .search-form{
+    position: initial;
+  }
+
+  .site-header .nav-right{
+    width: 100%;
+    justify-content: flex-start;
+  }
+
+  .site-header .navigation-settings{
+    position: absolute;
+    right: 0px;
+  }
+
+  .site-header .search-button{
+    right: unset;
+    margin-left: -20px;
+    font-size: 14px;
+  }
+
+  .site-header .search-form{
+    width: initial;
+  }
+}
