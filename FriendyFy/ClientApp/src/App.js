@@ -18,6 +18,7 @@ import TermsOfService from './components/TermsOfService/TermsOfService';
 import Cookies from './components/Cookies/Cookies';
 import ResetPassword from './components/ResetPassword/ResetPassword';
 import SearchPage from './components/SearchPage/SearchPage';
+import NotFound from './components/NotFound/NotFound';
 
 function App() {
   const { loggedIn, resetUser } = useLoggedIn();
@@ -47,6 +48,7 @@ function App() {
           <Route path={ApplicationPaths.ApiAuthorizationPrefix} component={ApiAuthorizationRoutes} />
           <Route exact path={['/','/Auth/Register']} component={Home} />
           <Route path='/Auth/SendForgottenPasswordEmail' component={ResetPassword}/>
+          <Route component={NotFound}></Route>
         </Switch>
       </AnimatePresence>
     </Layout>

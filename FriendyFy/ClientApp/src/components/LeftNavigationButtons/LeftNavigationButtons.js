@@ -24,7 +24,6 @@ const LeftNavigationButtons = () => {
     }, [])
 
     let location = useLocation();
-    console.log(location);
     if (location.pathname !== '/' && location.pathname !== '/search-page') {
         return null;
     }

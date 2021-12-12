@@ -7,6 +7,8 @@ import { useHistory } from 'react-router';
 import moment from 'moment';
 import MapPopUp from '../PopUps/MapPopUp/MapPopUp';
 import { CSSTransition } from 'react-transition-group';
+import { Link } from 'react-router-dom';
+
 const FeedEvent = ({ eventData }) => {
     const history = useHistory();
     const [localTime, setLocalTime] = useState(eventData.eventTime);
@@ -91,7 +93,7 @@ const FeedEvent = ({ eventData }) => {
                     <button className="join" onClick={onViewButtonClicked}>View</button>
                 </div>
                 <div className="interests">
-                    {event.eventInterests.map(interest => <div key={interest.id} className="interest">{interest.label}</div>)}
+                    {event.eventInterests.map(interest => <Link to={`/search-page?interests=[{"label":"${interest.label}","value":${interest.id}}]`} key={interest.id} className="interest">{interest.label}</Link>)}
                 </div>
                 <div className="third-row">
                     <span className="location" onClick={() => setShowLocation(true)}>Location: {event.locationCity}</span>

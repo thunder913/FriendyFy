@@ -44,7 +44,7 @@ const RightNavigation = () => {
                         </Link>
                     </li>
                     <li className="right-nav-button">
-                        <Link to={"/profile/" + loggedIn.userName} >
+                        <Link to="/search-page" >
                             Search Page
                         </Link>
                     </li>
@@ -54,7 +54,7 @@ const RightNavigation = () => {
                         </Link>
                     </li>
                     <li className="right-nav-button">
-                        <Link to={"/profile/" + loggedIn.userName} >
+                        <Link to={"/search-page?onlyUserEvents=true"} >
                             My Events
                         </Link>
                     </li>

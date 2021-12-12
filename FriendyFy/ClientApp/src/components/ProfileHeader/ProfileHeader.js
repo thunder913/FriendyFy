@@ -4,6 +4,7 @@ import { useHistory, useLocation } from 'react-router';
 import UserFriendButton from '../UserFriendButton/UserFriendButton';
 import ViewImagePopUp from '../PopUps/ViewImagePopUp/ViewImagePopUp';
 import './ProfileHeader.css';
+import { Link } from 'react-router-dom';
 const ProfileHeader = ({selected}) =>{
     const [profilePicture, setProfilePicture] = useState(''); 
     const [coverPicture, setCoverPicture] = useState(''); 
@@ -76,7 +77,7 @@ const ProfileHeader = ({selected}) =>{
             <img src={profilePicture} alt="" />
         </div>
         <div className="user-interests">
-            {interests.map(interest => <span className="user-interest" key={interest.id} data-id={interest.id}>{interest.label}</span>)}
+            {interests.map(interest => <Link to={`/search-page?interests=[{"label":"${interest.label}","value":${interest.id}}]`} className="user-interest" key={interest.id} data-id={interest.id}>{interest.label}</Link>)}
         </div>
     </div>
     <p className="user-name">{name}</p>

@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import './LeftNavigationEvent.css';
 import MapPopUp from '../PopUps/MapPopUp/MapPopUp';
 import moment from 'moment';
@@ -18,6 +18,12 @@ const LeftNavigationEvent = ({data, setBlockNavScroll}) =>{
         let utcTime = moment.utc(data.time);
         setParsedTime(utcTime.local().format('LLL'))
     }, [data.time])
+
+    useEffect(() => {
+        if(!showMap){
+            setBlockNavScroll(false);
+        }
+    }, [showMap])
 
     return(
         <div className="event">
@@ -42,7 +48,7 @@ const LeftNavigationEvent = ({data, setBlockNavScroll}) =>{
             <main className="event-card">
             <div className="left-side">
                 <section className="interests">
-                    {data.interests.map(interest => (<div key={interest.id} className="interest">{interest.label}</div>))}
+                    {data.interests.map(interest => (<Link to={`/search-page?interests=[{"label":"${interest.label}","value":${interest.id}}]`} key={interest.id} className="interest">{interest.label}</Link>))}
                 </section>
             </div>
             <div className="right-side">

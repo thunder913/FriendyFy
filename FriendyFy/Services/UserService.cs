@@ -308,7 +308,7 @@ namespace FriendyFy.Services
                     Id = x.UserName,
                     Name = x.FirstName + " " + x.LastName,
                     Image = x.ProfileImage.Id + x.ProfileImage.ImageExtension,
-                    MutualFriends = x.Friends.Count(y => y.FriendId == userId && y.IsFriend),
+                    MutualFriends = x.Friends.Count(y => y.FriendId == userId),
                 })
                 .ToList();
 
