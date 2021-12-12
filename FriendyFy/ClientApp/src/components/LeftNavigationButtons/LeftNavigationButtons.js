@@ -1,10 +1,9 @@
-import React from 'react';
+import React, { useEffect, useState } from 'react';
 import FriendSuggestion from '../FriendSuggestion/FriendSuggestion';
 import LeftNavigationEvents from '../LeftNavigationEvents/LeftNavigationEvents';
 import SiteInfoButtons from '../SiteInfoButtons/SiteInfoButtons';
 import './LeftNavigationButtons.css';
 import { useLocation } from 'react-router';
-import { useEffect, useState } from 'react/cjs/react.development';
 import { getRecommendedFriends } from '../../services/friendService';
 import { getNavigationEvents } from '../../services/eventService';
 import PageLoading from '../PageLoading/PageLoading';

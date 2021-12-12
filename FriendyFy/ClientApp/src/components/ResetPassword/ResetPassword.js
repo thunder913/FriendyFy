@@ -1,5 +1,4 @@
-import React from "react";
-import { useState } from "react/cjs/react.development";
+import React, { useState } from "react";
 import { resetPassword } from "../../services/userService";
 import PageLoading from "../PageLoading/PageLoading";
 import './ResetPassword.css'

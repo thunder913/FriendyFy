@@ -166,7 +166,7 @@ namespace FriendyFy.Services
                 .Include(x => x.Repost)
                 .ThenInclude(x => x.Comments)
                 .Include(x => x.Repost)
-                .ThenInclude(x => x.Repost )
+                .ThenInclude(x => x.Repost)
                 .Include(x => x.Repost)
                 .ThenInclude(x => x.Event)
                 .ThenInclude(x => x.Interests)
@@ -451,8 +451,8 @@ namespace FriendyFy.Services
                     Location = x.LocationCity,
                     Name = x.Name,
                     Time = x.Time,
-                    GoingPhotos = x.Users.Select(y => y.ProfileImage.Id + y.ProfileImage.ImageExtension).ToList(), 
-                    OrganizerImage = x.Organizer.ProfileImage.Id+x.Organizer.ProfileImage.ImageExtension,
+                    GoingPhotos = x.Users.Select(y => y.ProfileImage.Id + y.ProfileImage.ImageExtension).ToList(),
+                    OrganizerImage = x.Organizer.ProfileImage.Id + x.Organizer.ProfileImage.ImageExtension,
                     Latitude = x.Latitude,
                     Longitude = x.Longitude
                 })
@@ -494,7 +494,7 @@ namespace FriendyFy.Services
             string imageUrl = null;
             if (!string.IsNullOrWhiteSpace(image))
             {
-                var addedImage =  await imageService.AddImageAsync(ImageType.NormalImage);
+                var addedImage = await imageService.AddImageAsync(ImageType.NormalImage);
                 await blobService.UploadBase64StringAsync(image, addedImage?.Id + addedImage?.ImageExtension, GlobalConstants.BlobPictures);
                 currEvent.Images.Add(addedImage);
                 imageUrl = await this.blobService.GetBlobUrlAsync(addedImage?.Id + addedImage?.ImageExtension, GlobalConstants.BlobPictures);
@@ -620,7 +620,7 @@ namespace FriendyFy.Services
                 .Skip(skip)
                 .Take(take)
                 .ToList()
-                .Select(x =>  new PersonListPopupViewModel()
+                .Select(x => new PersonListPopupViewModel()
                 {
                     Name = x.Creator.FirstName + " " + x.Creator.LastName,
                     Username = x.Creator.UserName,
@@ -683,15 +683,16 @@ namespace FriendyFy.Services
 
         public List<PostDetailsViewModel> GetFeedEvents(ApplicationUser user, bool isProfile, string userName, int take, int skip, List<string> ids)
         {
+            take = 1;
+
             var interests = new List<int>();
             if (user != null)
             {
                 interests = user.Interests.Select(x => x.Id).ToList();
             }
 
-            return this.eventPostRepository
+            var events = this.eventPostRepository
                 .AllAsNoTracking()
-                .OrderByDescending(x => x.CreatedOn)
                 .Include(x => x.Creator)
                 .ThenInclude(x => x.ProfileImage)
                 .Include(x => x.Event)
@@ -718,22 +719,19 @@ namespace FriendyFy.Services
                 .Include(x => x.Repost)
                 .ThenInclude(x => x.Event)
                 .ThenInclude(x => x.Interests)
-                .Where(x => (isProfile && x.Creator.UserName == userName) || (!isProfile && (user == null || x.CreatorId != user.Id)))
-                .OrderByDescending(x => EF.Functions.DateDiffSecond(DateTime.UtcNow, x.CreatedOn)/1000.0 + (isProfile ? 0 : 1) *
-                ((user != null ? x.Event.Users.Count(y => y.Id == user.Id)*1000 : 0) +
-                (user != null ? x.Event.Interests.Count(y => interests.Contains(y.Id))*1000 : 0)))
+                .Where(x => user == null || x.CreatorId != user.Id)
+                .OrderByDescending(x => EF.Functions.DateDiffSecond(DateTime.UtcNow, x.CreatedOn) / 1000.0 +
+                ((user != null ? x.Event.Users.Count(y => y.Id == user.Id) * 1000 : 0) +
+                (user != null ? x.Event.Interests.Count(y => interests.Contains(y.Id)) * 1000 : 0)))
                 .Where(x => !ids.Contains(x.Id))
-                .Skip(skip)
                 .Take(take)
-                // these queries can be a lot more optimal
-                .ToList()
-                .Select(x => new PostDetailsViewModel()
+                .Select(x => new
                 {
                     Username = x.Creator.UserName,
                     CreatorName = x.Creator.FirstName + " " + x.Creator.LastName,
                     CreatedAgo = (int)((DateTime.UtcNow - x.CreatedOn).TotalMinutes),
-                    CreatorImage = this.blobService.GetBlobUrlAsync(x.Creator.ProfileImage?.Id + x.Creator.ProfileImage?.ImageExtension, GlobalConstants.BlobPictures).GetAwaiter().GetResult(),
-                    EventGoing = x.Event.Users.Select(y => this.blobService.GetBlobUrlAsync(y.ProfileImage?.Id + y.ProfileImage?.ImageExtension, GlobalConstants.BlobPictures).GetAwaiter().GetResult()).ToList(),
+                    CreatorImage = x.Creator.ProfileImage.Id + x.Creator.ProfileImage.ImageExtension,
+                    EventGoing = x.Event.Users.Select(y => y.ProfileImage.Id + y.ProfileImage.ImageExtension).ToList(),
                     EventTitle = x.Event.Name,
                     EventInterests = x.Event.Interests.Select(y => new InterestViewModel()
                     {
@@ -756,13 +754,13 @@ namespace FriendyFy.Services
                     EventPostId = x.Id,
                     PostMessage = x.Text,
                     IsUserCreator = x.CreatorId == user.Id,
-                    Repost = !x.IsRepost ? null : new PostDetailsViewModel()
+                    Repost = !x.IsRepost ? null : new
                     {
                         Username = x.Repost.Creator.UserName,
                         CreatorName = x.Repost.Creator.FirstName + " " + x.Repost.Creator.LastName,
                         CreatedAgo = (int)((DateTime.UtcNow - x.Repost.CreatedOn).TotalMinutes),
-                        CreatorImage = this.blobService.GetBlobUrlAsync(x.Repost.Creator.ProfileImage?.Id + x.Repost.Creator.ProfileImage?.ImageExtension, GlobalConstants.BlobPictures).GetAwaiter().GetResult(),
-                        EventGoing = x.Repost.Event.Users.Select(y => this.blobService.GetBlobUrlAsync(y.ProfileImage?.Id + y.ProfileImage?.ImageExtension, GlobalConstants.BlobPictures).GetAwaiter().GetResult()).ToList(),
+                        CreatorImage = x.Repost.Creator.ProfileImage.Id + x.Repost.Creator.ProfileImage.ImageExtension,
+                        EventGoing = x.Repost.Event.Users.Select(y => y.ProfileImage.Id + y.ProfileImage.ImageExtension).ToList(),
                         EventTitle = x.Repost.Event.Name,
                         EventInterests = x.Repost.Event.Interests.Select(y => new InterestViewModel()
                         {
@@ -785,9 +783,62 @@ namespace FriendyFy.Services
                     }
                 })
                 .ToList();
+
+            var toReturn = events.Select(x => new PostDetailsViewModel()
+            {
+                CommentsCount = x.CommentsCount,
+                CreatedAgo = x.CreatedAgo,
+                CreatorImage = this.blobService.GetBlobUrlAsync(x.CreatorImage, GlobalConstants.BlobPictures).GetAwaiter().GetResult(),
+                CreatorName = x.CreatorName,
+                EventGoing = x.EventGoing.Select(y => this.blobService.GetBlobUrlAsync(y, GlobalConstants.BlobPictures).GetAwaiter().GetResult()).ToList(),
+                EventInterests = x.EventInterests,
+                EventIsReocurring = x.EventIsReocurring,
+                EventPostId = x.EventPostId,
+                EventReocurring = x.EventReocurring,
+                EventTime = x.EventTime,
+                EventTitle = x.EventTitle,
+                IsLikedByUser = x.IsLikedByUser,
+                IsRepost = x.IsRepost,
+                IsUserCreator = x.IsUserCreator,
+                Latitude = x.Latitude,
+                LikesCount = x.LikesCount,
+                LocationCity = x.LocationCity,
+                Longitude = x.Longitude,
+                PostId = x.PostId,
+                PostMessage = x.PostMessage,
+                PostType = x.PostType,
+                RepostsCount = x.RepostsCount,
+                Username = x.Username,
+                Repost = !x.IsRepost ? null : new PostDetailsViewModel()
+                {
+                    Username = x.Repost.Username,
+                    CreatorName = x.Repost.CreatorName,
+                    CreatedAgo = x.Repost.CreatedAgo,
+                    CreatorImage = this.blobService.GetBlobUrlAsync(x.Repost.CreatorImage, GlobalConstants.BlobPictures).GetAwaiter().GetResult(),
+                    EventGoing = x.Repost.EventGoing.Select(y => this.blobService.GetBlobUrlAsync(y, GlobalConstants.BlobPictures).GetAwaiter().GetResult()).ToList(),
+                    EventTitle = x.Repost.EventTitle,
+                    EventInterests = x.Repost.EventInterests,
+                    LocationCity = x.Repost.LocationCity,
+                    Latitude = x.Repost.Latitude,
+                    Longitude = x.Repost.Longitude,
+                    EventTime = x.Repost.EventTime,
+                    LikesCount = x.Repost.LikesCount,
+                    RepostsCount = x.Repost.RepostsCount,
+                    CommentsCount = x.Repost.CommentsCount,
+                    EventIsReocurring = x.Repost.EventIsReocurring,
+                    EventReocurring = x.Repost.EventReocurring,
+                    IsLikedByUser = x.Repost.IsLikedByUser,
+                    PostId = x.Repost.PostId,
+                    PostType = PostType.Event.ToString(),
+                    EventPostId = x.Repost.EventPostId,
+                }
+            })
+                .ToList();
+
+            return toReturn;
         }
 
-        public List<SearchPageResultViewModel> GetSearchPageEvents(int skip, int take ,string searchWord, List<int> interestIds, bool showOnlyUserEvents, DateTime eventDate, bool hasDate, string userId)
+        public List<SearchPageResultViewModel> GetSearchPageEvents(int skip, int take, string searchWord, List<int> interestIds, bool showOnlyUserEvents, DateTime eventDate, bool hasDate, string userId)
         {
             searchWord = searchWord.ToLower();
 

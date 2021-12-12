@@ -1,4 +1,4 @@
-import React, { useEffect } from 'react';
+import React, { useEffect, useState } from 'react';
 import { Route, Switch } from 'react-router';
 import { Layout } from './components/Layout/Layout';
 import Home from './components/Home/Home';
@@ -8,7 +8,6 @@ import Profile from './components/Profile/Profile';
 import './custom.css'
 import Event from './components/Event/Event'
 import { useLoggedIn } from './contexts/LoggedInContext.js'
-import { useState } from 'react/cjs/react.development';
 import { AnimatePresence } from "framer-motion/dist/es/index.js";
 import { useLocation } from 'react-router';
 import AwaitLoggedInTransitionPopUp from './components/PopUps/AwaitLoggedInTransitionPopUp/AwaitLoggedInTransitionPopUp';
@@ -21,8 +20,8 @@ import SearchPage from './components/SearchPage/SearchPage';
 import NotFound from './components/NotFound/NotFound';
 
 function App() {
-  const { loggedIn, resetUser } = useLoggedIn();
   const [showLoader, setShowLoader] = useState(true);
+  const { loggedIn, resetUser } = useLoggedIn();
   const location = useLocation();
 
   useEffect(() => {

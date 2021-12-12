@@ -1,7 +1,6 @@
-import React from 'react';
+import React, { useState } from 'react';
 import './PersonYouProbablyMet.css';
 import { removeFriendSuggestion } from '../../services/friendService';
-import { useState } from 'react/cjs/react.development';
 import { addFriend } from '../../services/friendService';
 import { Link } from 'react-router-dom';
 

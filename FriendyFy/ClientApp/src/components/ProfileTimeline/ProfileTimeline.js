@@ -17,23 +17,25 @@ const ProfileTimeline = () => {
   const [hasPosts, setHasPosts] = useState(true);
   const [hasEvents, setHasEvents] = useState(true);
   const userId = decodeURI(window.location.href.substring(window.location.href.lastIndexOf('/') + 1));
-
+  const [didFirstTimeRequest, setDidFirstTimeRequest] = useState(false);
   const loadMorePosts = () => {
-    return getFeed(events, posts, true, 10, userId, hasPosts, hasEvents)
+    if (didFirstTimeRequest) {
+      return getFeed(events, posts, true, 10, userId, hasPosts, hasEvents)
         .then(async res => {
-            let obj = await res.json();
-            obj.posts.forEach(el => {
-              if (el.postType == "Event") {
-                setEvents(prev => [...prev, el.postId]);
-              } else if (el.postType == "Post") {
-                setPosts(prev => [...prev, el.postId]);
-              }
-            });
-            setHasEvents(obj.hasEvents);
-            setHasPosts(obj.hasPosts);
-            setFeed(prev => ([...prev, ...obj.posts]));
+          let obj = await res.json();
+          obj.posts.forEach(el => {
+            if (el.postType == "Event") {
+              setEvents(prev => [...prev, el.postId]);
+            } else if (el.postType == "Post") {
+              setPosts(prev => [...prev, el.postId]);
+            }
+          });
+          setHasEvents(obj.hasEvents);
+          setHasPosts(obj.hasPosts);
+          setFeed(prev => ([...prev, ...obj.posts]));
         })
-}
+    }
+  }
 
   useEffect(() => {
     setEvents([]);
@@ -54,6 +56,7 @@ const ProfileTimeline = () => {
         setFeed(obj.posts);
         setHasEvents(obj.hasEvents);
         setHasPosts(obj.hasPosts);
+        setDidFirstTimeRequest(true);
       });
     //eslint-disable-next-line
   }, [userId])

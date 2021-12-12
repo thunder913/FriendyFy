@@ -229,7 +229,7 @@ namespace FriendyFy.Services
                 .Include(x => x.CoverImage)
                 .Select(x => new UserDataViewModel()
                 {
-                    Birthday = x.BirthDate.ToString("dd/MM/yyyy"),
+                    Birthday = x.BirthDate.ToString("MM/dd/yyyy"),
                     FirstName = x.FirstName,
                     LastName = x.LastName,
                     Interests = x.Interests.Select(y => new InterestViewModel()

@@ -1,10 +1,9 @@
-import React from "react";
+import React, { useEffect } from "react";
 import { useState } from "react";
 import "./Register.css"
 import "react-datetime/css/react-datetime.css";
 import RegisterSuccess from "../RegisterSuccess/RegisterSuccess";
 import RegisterForm from "../RegisterForm/RegisterForm";
-import { useEffect } from "react/cjs/react.development";
 import { register } from "../../../services/userService";
 import { useThemeContext } from "../../../contexts/ThemeContext";
 

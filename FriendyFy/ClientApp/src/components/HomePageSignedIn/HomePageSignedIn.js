@@ -18,8 +18,9 @@ const HomePageSignedIn = () => {
   const [feed, setFeed] = useState([]);
   const [hasPosts, setHasPosts] = useState(true);
   const [hasEvents, setHasEvents] = useState(true);
-
+  const [didFirstTimeRequest, setDidFirstTimeRequest] = useState(false);
   const loadMorePosts = () => {
+    if(didFirstTimeRequest){
     return getFeed(events, posts, false, 10, null, hasPosts, hasEvents)
       .then(async res => {
         let obj = await res.json();
@@ -34,6 +35,7 @@ const HomePageSignedIn = () => {
         setHasPosts(obj.hasPosts);
         setFeed(prev => ([...prev, ...obj.posts]));
       })
+    }
   }
 
   useEffect(() => {
@@ -52,6 +54,7 @@ const HomePageSignedIn = () => {
         setFeed(obj.posts);
         setHasEvents(obj.hasEvents);
         setHasPosts(obj.hasPosts);
+        setDidFirstTimeRequest(true);
       });
     //eslint-disable-next-line
   }, [])

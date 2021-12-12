@@ -1,8 +1,7 @@
-import React from 'react';
+import React, { useEffect, useState } from 'react';
 import PersonYouProbablyMet from '../PersonYouProbablyMet/PersonYouProbablyMet';
 import './RightNavigation.css';
 import { useLocation } from 'react-router';
-import { useEffect, useState } from 'react/cjs/react.development';
 import { getRightNavigationSuggestions } from '../../services/friendService';
 import { useLoggedIn } from '../../contexts/LoggedInContext';
 import { Link } from 'react-router-dom';

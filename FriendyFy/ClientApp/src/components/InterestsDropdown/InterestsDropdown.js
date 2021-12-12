@@ -1,9 +1,8 @@
-import React, { Component } from 'react'
+import React, { useEffect, useState } from 'react'
 import './InterestsDropdown.css'
 import CreatableSelect from 'react-select/creatable';
 import { getAllInterests } from '../../services/interestService.js'
 import { useThemeContext } from '../../contexts/ThemeContext';
-import { useEffect, useState } from 'react/cjs/react.development';
 
 const customStyles = {
   singleValue: (provided, state) => {

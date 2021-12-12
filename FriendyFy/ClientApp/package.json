@@ -1,5 +1,6 @@
 {
   "name": "friendyfy",
+  "homepage": "https://friendyfy.azurewebsites.net/",
   "version": "0.1.0",
   "private": true,
   "dependencies": {

@@ -23,6 +23,7 @@ const ProfileSidebar = () => {
     const [commentsCount, setCommentsCount] = useState('');
     const [post, setPost] = useState('');
     useEffect(() => {
+        if(userId){
         getFriends(userId, 9, 0)
             .then(async res => { await setSidebarFriends(await res.json()) });
         getUserLocation(userId)
@@ -31,6 +32,7 @@ const ProfileSidebar = () => {
             .then(async res => { setEventsCount((await res.json()).count) });
         getUserImages(userId, 9, 0)
             .then(async res => setPhotos(await res.json()));
+        }
     }, [siteLocation, userId])
 
     const showImagePopUpEvent = (id) => {
