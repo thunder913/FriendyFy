@@ -694,6 +694,7 @@ namespace FriendyFy.Services
                 .Include(x => x.Creator)
                 .ThenInclude(x => x.ProfileImage)
                 .Include(x => x.Event)
+                .ThenInclude(x => x.ProfileImage)
                 .Include(x => x.Likes)
                 .Include(x => x.Comments)
                 .Include(x => x.Reposts)
@@ -729,6 +730,7 @@ namespace FriendyFy.Services
                     CreatorName = x.Creator.FirstName + " " + x.Creator.LastName,
                     CreatorImage = x.Creator.ProfileImage.Id + x.Creator.ProfileImage.ImageExtension,
                     //EventGoing = x.Event.Users.Select(y => y.ProfileImage.Id + y.ProfileImage.ImageExtension).ToList(),
+                    EventImage = x.Event.ProfileImage.Id + x.Event.ProfileImage.ImageExtension,
                     EventTitle = x.Event.Name,
                     EventInterests = x.Event.Interests.Select(y => new InterestViewModel()
                     {
@@ -772,6 +774,7 @@ namespace FriendyFy.Services
                         PostId = x.Repost.EventId,
                         PostType = PostType.Event.ToString(),
                         EventPostId = x.RepostId,
+                        EventImage = x.Event.ProfileImage.Id + x.Event.ProfileImage.ImageExtension
                     }
                 })
                 .ToList();
@@ -801,6 +804,7 @@ namespace FriendyFy.Services
                 PostType = x.PostType,
                 RepostsCount = x.RepostsCount,
                 Username = x.Username,
+                EventImage = this.blobService.GetBlobUrlAsync(x.EventImage, GlobalConstants.BlobPictures).GetAwaiter().GetResult(),
                 Repost = !x.IsRepost ? null : new PostDetailsViewModel()
                 {
                     Username = x.Repost.Username,
@@ -823,6 +827,7 @@ namespace FriendyFy.Services
                     PostId = x.Repost.PostId,
                     PostType = PostType.Event.ToString(),
                     EventPostId = x.Repost.EventPostId,
+                    EventImage = this.blobService.GetBlobUrlAsync(x.EventImage, GlobalConstants.BlobPictures).GetAwaiter().GetResult(),
                 }
             })
                 .ToList();

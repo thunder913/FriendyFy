@@ -22,6 +22,7 @@ namespace ViewModels.ViewModels
         public int TaggedPeopleCount { get; set; }
         public string PostType { get; set; }
         public bool IsUserCreator { get; set; }
+        public string EventImage { get; set; }
         // Event only properties
         public string EventTitle { get; set; }
         public List<InterestViewModel> EventInterests { get; set; } = new List<InterestViewModel>();

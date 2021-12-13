@@ -3,14 +3,12 @@ import './FeedEvent.css';
 import FeedHeader from '../FeedHeader/FeedHeader';
 import FeedFooter from '../FeedFooter/FeedFooter';
 import { parseTime } from '../../services/helperService';
-import { useHistory } from 'react-router';
 import moment from 'moment';
 import MapPopUp from '../PopUps/MapPopUp/MapPopUp';
 import { CSSTransition } from 'react-transition-group';
 import { Link } from 'react-router-dom';
 
 const FeedEvent = ({ eventData }) => {
-    const history = useHistory();
     const [localTime, setLocalTime] = useState(eventData.eventTime);
     const [showLocation, setShowLocation] = useState(false);
     const [isLiked, setIsLiked] = useState(eventData.isLikedByUser);
@@ -28,11 +26,6 @@ const FeedEvent = ({ eventData }) => {
         let utcTime = moment.utc(event.eventTime);
         setLocalTime(utcTime.local().format('LLL'))
     }, [event.eventTime])
-
-    const onViewButtonClicked = (e) => {
-        e.preventDefault();
-        history.push('/event/' + event.postId);
-    }
 
     useEffect(() => {
         if (eventData) {
@@ -79,21 +72,17 @@ const FeedEvent = ({ eventData }) => {
                     isRepost={eventData.isRepost}
                     setHidePost={setHidePost}
                     isCreator={eventData.isUserCreator} />
-                <p className="going-text">Going:</p>
-                <div className="event-images">
-                    <div className="user-photo">
-                        <img src={event.creatorImage} alt="" />
+                <div className="event-middle">
+                    <div className="event-photo">
+                        <img src={event.eventImage} alt="" />
                     </div>
-                    {event.eventGoing.map((photo) => <div className="user-photo">
-                        <img src={photo} alt="" />
-                    </div>)}
-                </div>
-                <div className="second-row">
-                    <h2 onClick={onViewButtonClicked}>{event.eventTitle}</h2>
-                    <button className="join" onClick={onViewButtonClicked}>View</button>
-                </div>
-                <div className="interests">
-                    {event.eventInterests.map(interest => <Link to={`/search-page?interests=[{"label":"${interest.label}","value":${interest.id}}]`} key={interest.id} className="interest">{interest.label}</Link>)}
+                    <div className="second-row">
+                        <Link to={'/event/' + event.postId} className='event-title'>{event.eventTitle}</Link>
+                        <div className="interests">
+                            {event.eventInterests.map(interest => <Link to={`/search-page?interests=[{"label":"${interest.label}","value":${interest.id}}]`} key={interest.id} className="interest">{interest.label}</Link>)}
+                        </div>
+                        <Link to={'/event/' + event.postId} className="join">View</Link>
+                    </div>
                 </div>
                 <div className="third-row">
                     <span className="location" onClick={() => setShowLocation(true)}>Location: {event.locationCity}</span>
