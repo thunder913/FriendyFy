@@ -28,17 +28,17 @@ Every user **must**:
 Users can:
 
 - Create posts with or without:
- - Picture
- - Location
- - Tagged People
- - Post Message
+  - Picture
+  - Location
+  - Tagged People
+  - Post Message
 
 - Create events with:
- - Name
- - Time, Date and Location
- - Up to 6 interests
- - Event Image
- - Short Event Description
+  - Name
+  - Time, Date and Location
+  - Up to 6 interests
+  - Event Image
+  - Short Event Description
  
 - View Their Profile with Friends, Posts and Photos
 - Have a Feed in their main page
@@ -71,13 +71,13 @@ Users can:
 - Context API
 - Hooks
 - Many React packages like:
- - react-router
- - fortawesome
- - microsoft/signalr
- - react-google-maps
- - react-datetime
- - react-transition-group
- - and many more
+  - react-router
+  - fortawesome
+  - microsoft/signalr
+  - react-google-maps
+  - react-datetime
+  - react-transition-group
+  - and many more
 
 ### Other Features
 - JWT authentication system
