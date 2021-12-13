@@ -4,7 +4,8 @@ import OutsideClickHandler from 'react-outside-click-handler';
 import './FeedHeaderOptions.css'
 import { deletePost } from "../../services/postService";
 import ApprovePopUp from '../PopUps/ApprovePopUp/ApprovePopUp';
-
+import { faEllipsisH } from '@fortawesome/free-solid-svg-icons';
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 const FeedHeaderOptions = ({ showOptions, setShowOptions, postId, postType, setIsDeleted, setHasError }) => {
     const [showLeaveEventPopUp, setShowLeaveEventPopUp] = useState(false);
 
@@ -20,12 +21,12 @@ const FeedHeaderOptions = ({ showOptions, setShowOptions, postId, postType, setI
                     setIsDeleted(true);
             })
     }
-
     return (
         <OutsideClickHandler
             onOutsideClick={() => {
                 setShowOptions(false);
             }}>
+                <FontAwesomeIcon className="header-elipsis" icon={faEllipsisH} onClick={() => setShowOptions(prev => !prev)} />
             <ApprovePopUp
                 text={"Are you sure you want to delete the " + postType + ". If you click the Approve button, it will be gone permanently!"}
                 acceptEvent={onDeleteButtonClicked}

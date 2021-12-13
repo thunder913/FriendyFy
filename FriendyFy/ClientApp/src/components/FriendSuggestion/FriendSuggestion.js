@@ -43,8 +43,8 @@ const FriendSuggestion = ({friend}) =>{
                 </Link>
                 <div className="main-suggestion-body">
                     <div className="common-stuff">
-                        <span className="friend-friends">{friend.mutualFriends} mutual friends</span>
-                        <span className="friend-interests">{friend.commonInterests} common interests</span>
+                        <span className="friend-friends">{friend.mutualFriends} mutual friend{friend.mutualFriends === 1 ? '' : 's'}</span>
+                        <span className="friend-interests">{friend.commonInterests} common interest{friend.commonInterests === 1 ? '' : 's'}</span>
                     </div>
                     <div className="friend-buttons">
                         <button className="add-friend" onClick={addFriendEvent}>Add</button>

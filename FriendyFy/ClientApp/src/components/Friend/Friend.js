@@ -12,7 +12,7 @@ const Friend = ({ friend }) => (
             </span>
             <div className="bottom-section">
                 {friend.mutualFriends !== -1 ? <span className="mutual-friends">
-                    {!friend.isLoggedUser ? friend.mutualFriends+' mutual friends' : 'you'}
+                    {!friend.isLoggedUser ? (friend.mutualFriends+' mutual friend'+ (friend.mutualFriends === 1 ? '' : 's')) : 'you'}
                 </span> : ''}
                 <span className="friend-status">
                     {friend.isFriend ? 'Friends' :

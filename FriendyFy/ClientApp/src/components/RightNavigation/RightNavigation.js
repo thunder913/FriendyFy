@@ -38,7 +38,7 @@ const RightNavigation = () => {
                         </Link>
                     </li>
                     <li className="right-nav-button">
-                        <Link to={"/profile/" + loggedIn.userName} >
+                        <Link to={"/friends/" + loggedIn.userName} >
                             Friends
                         </Link>
                     </li>

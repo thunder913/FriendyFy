@@ -117,19 +117,19 @@ const FeedFooter = (props) => {
                     />
                     <span>
                         <button onClick={() => setShowPeopleLiked(true)} href="/">
-                            {props.likes} likes
+                            {props.likes} like{props.likes === 1 ? '' : 's'}
                         </button>
                     </span>
                 </div>
                 <div className="comments-reposts">
                     <span>
                         <button onClick={showCommentsClickEvent}>
-                            {props.commentsCount} comments
+                            {props.commentsCount} comment{props.commentsCount === 1 ? '' : 's'}
                         </button>
                     </span>
                     <span>
                         {!props.isRepost ? <button onClick={() => setShowPeopleReposts(true)}>
-                            {props.reposts} reposts
+                            {props.reposts} repost{props.reposts === 1 ? '' : 's'}
                         </button> : ''}
                     </span>
                 </div>

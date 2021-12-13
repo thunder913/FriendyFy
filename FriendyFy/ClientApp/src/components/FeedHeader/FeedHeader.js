@@ -1,7 +1,5 @@
 import React, { useEffect, useState } from 'react';
 import './FeedHeader.css';
-import { faEllipsisH } from '@fortawesome/free-solid-svg-icons';
-import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import PeopleListPopUp from '../PopUps/PeopleListPopUp/PeopleListPopUp'
 import { getTaggedPeople } from '../../services/postService';
 import MapPopUp from '../PopUps/MapPopUp/MapPopUp'
@@ -32,6 +30,8 @@ function FeedHeader({ photo, name, time, username, city, lat, long, taggedPeople
             }
         }
     }, [isDeleted])
+
+
 
     return (
         <header className="feed-header">
@@ -71,7 +71,6 @@ function FeedHeader({ photo, name, time, username, city, lat, long, taggedPeople
                 </div>
             </div>
             {(!isRepost && isCreator) ? <div className="header-right">
-                <FontAwesomeIcon className="header-elipsis" icon={faEllipsisH} onClick={() => setShowOptions(prev => !prev)} />
                 <FeedHeaderOptions
                     showOptions={showOptions}
                     setIsDeleted={setIsDeleted}

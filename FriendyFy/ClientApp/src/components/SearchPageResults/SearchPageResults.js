@@ -28,7 +28,7 @@ const SearchPageResults = ({feed, loadMoreResults, hasMoreEvents, hasMorePeople}
                 <img src={item.imageUrl} alt="" />
             </div>
             <p className="name">{item.name}</p>
-            {item.type === 'profile' ? <p className="mutual-friends">{item.mutualFriends} Mutual friends</p> : <div className="interests">
+            {item.type === 'profile' ? <p className="mutual-friends">{item.mutualFriends} Mutual friend{item.mutualFriends === 1 ? '' : 's'}</p> : <div className="interests">
                 {item.interests.map(x => <span>{x.label}</span>)}</div>}
             <Link to={'/' + item.type + '/' + item.id} className="view-button">View</Link>
         </div>))}

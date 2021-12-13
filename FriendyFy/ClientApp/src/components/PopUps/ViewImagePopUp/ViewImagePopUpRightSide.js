@@ -94,8 +94,8 @@ const ViewImagePopUpRightSide = ({comments, setComments, setCommentsCount, setIs
         <p className="description">{post.postMessage}</p>
         <p className="publshed-date">{parseTime(post.createdAgo)}</p>
         <div className="likes-comments">
-            <span>{likes} likes</span>
-            <span>{commentsCount} comments</span>
+            <span>{likes} like{likes === 1 ? '' : 's'}</span>
+            <span>{commentsCount} comment{commentsCount === 1 ? '' : 's'}</span>
         </div>
         <div className="actions-footer">
             <div className={"like " + (isLiked ? "liked" : "")} onClick={likeButtonClickEvent}>

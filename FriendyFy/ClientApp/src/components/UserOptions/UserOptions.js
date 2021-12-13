@@ -29,10 +29,10 @@ const UserOptions = () => {
         let theme = !isDarkMode ? 'dark' : 'light';
         changeTheme(theme);
         setIsDarkMode(prev => !prev);
-        if(loggedIn){
+        if (loggedIn) {
             changeUserTheme(loggedIn.userName, theme)
                 .then(res => {
-                    if(res.status === 200){
+                    if (res.status === 200) {
                         changeTheme(theme);
                     }
                 });
@@ -44,13 +44,14 @@ const UserOptions = () => {
     }, [theme])
 
     return (<div className="navigation-settings" >
-        <div className="circle-right" onClick={() => setShow(true)}>
-            <FontAwesomeIcon icon={loggedIn ? faUserCog : faCog} />
-        </div>
         <OutsideClickHandler
             onOutsideClick={() => {
                 setShow(false);
             }}>
+            <div className="circle-right" onClick={() => setShow(prev => !prev)}>
+                <FontAwesomeIcon icon={loggedIn ? faUserCog : faCog} />
+            </div>
+
             <CSSTransition
                 in={show}
                 timeout={200}

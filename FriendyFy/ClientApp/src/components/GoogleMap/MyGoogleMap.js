@@ -36,13 +36,12 @@ const options = {
 
 const MyGoogleMap = ({ location, setLocation, staticMap }) => {  
   const [center, setCenter] = useState({
-    lat: location.lat ?? 43.653225,
-    lng: location.lng ?? -79.383186
+    lat: location.lat ?? 51.1657,
+    lng: location.lng ?? 15.4123
   });
   const [firstLoad, setFirstLoad] = useState(true);
-
+  
   useEffect(() => {
-    console.log(process.env.REACT_APP_GOOGLE_MAPS_API_KEY)
     if(firstLoad){
       if(location){
         setCenter({lat: location.lat, lng: location.lng});
