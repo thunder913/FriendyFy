@@ -4,13 +4,14 @@ import './RepostPopUp.css';
 import PopUpHeader from "../PopUpHeader/PopUpHeader";
 import PopUp from "../PopUp";
 import { repost } from "../../../services/postService";
-const RepostPopUp = ({ id, repostType, show, setShow, manyPopUps }) => {
+const RepostPopUp = ({ id, repostType, show, setShow, manyPopUps, setRepostsCount }) => {
     const [text, setText] = useState('');
 
     const onPostButtonClick = () => {
         repost(id, text, repostType)
-            .then(res => {
+            .then(async res => {
                 if (res.status === 200) {
+                    setRepostsCount((await res.json()).reposts);
                     setShow(false);
                 }
             });

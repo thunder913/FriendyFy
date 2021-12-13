@@ -221,6 +221,7 @@ namespace FriendyFy.Services
                     HasRequested = !string.IsNullOrWhiteSpace(loggedIn) && x.Friend.Friends.Any(y => !y.IsFriend && y.RequestSenderId==loggedIn),
                     IsFriend = !string.IsNullOrWhiteSpace(loggedIn) && x.Friend.Friends.Any(y => y.IsFriend && y.FriendId==loggedIn),
                     MutualFriends = !string.IsNullOrWhiteSpace(loggedIn) ? x.Friend.Friends.Count(y => y.FriendId != loggedIn && user.Friends.Any(z => z.FriendId == y.FriendId)) : -1,
+                    IsLoggedUser = x.Friend.Id == loggedIn
                 })
                 .OrderByDescending(x => x.IsFriend)
                 .ThenByDescending(x => x.HasRequested)
@@ -264,14 +265,14 @@ namespace FriendyFy.Services
                 && x.Id != user.Id)
                 )
                 .OrderByDescending(x => x.Interests.Count(y => user.Interests.Any(z => z.Id == y.Id)) * 0.5 
-                + x.Friends.Count(y => user.Friends.Any(z => z.FriendId == y.Id)) * 0.1 
-                + rand.Next((int)((-x.Friends.Count()-x.Interests.Count())*0.2), (int)((x.Friends.Count() + x.Interests.Count()) * 0.2)))
+                + x.Friends.Where(x => x.IsFriend).Count(y => user.Friends.Any(z => z.FriendId == y.Id)) * 0.1 
+                + rand.Next((int)((-x.Friends.Where(x => x.IsFriend).Count()-x.Interests.Count())*0.2), (int)((x.Friends.Where(x => x.IsFriend).Count() + x.Interests.Count()) * 0.2)))
                 .Select(x => new SidebarFriendRecommendationViewModel()
                 {
                     Name = x.FirstName + " " + x.LastName,
                     Username = x.UserName,
                     CommonInterests = x.Interests.Count(y => user.Interests.Any(z => z.Id == y.Id)),
-                    MutualFriends = x.Friends.Count(y => user.Friends.Any(z => z.FriendId == y.FriendId)),
+                    MutualFriends = x.Friends.Where(x => x.IsFriend).Count(y => user.Friends.Any(z => z.FriendId == y.FriendId)),
                     ProfilePhoto = this.blobService.GetBlobUrlAsync(x.ProfileImage?.Id + x.ProfileImage?.ImageExtension, GlobalConstants.BlobPictures).GetAwaiter().GetResult()
                 })
                 .Take(takeFriendsCount)
@@ -291,14 +292,14 @@ namespace FriendyFy.Services
                     && !user.Friends.Any(y => y.FriendId == x.Id
                     && x.Id != user.Id))
                     .OrderByDescending(x => x.Interests.Count(y => user.Interests.Any(z => z.Id == y.Id)) * 0.5
-                    + x.Friends.Count(y => user.Friends.Any(z => z.FriendId == y.Id)) * 0.1
-                    + rand.Next((int)((-x.Friends.Count() - x.Interests.Count()) * 0.2), (int)((x.Friends.Count() + x.Interests.Count()) * 0.2)))
+                    + x.Friends.Where(x => x.IsFriend).Count(y => user.Friends.Any(z => z.FriendId == y.Id)) * 0.1
+                    + rand.Next((int)((-x.Friends.Where(x => x.IsFriend).Count() - x.Interests.Count()) * 0.2), (int)((x.Friends.Where(x => x.IsFriend).Count() + x.Interests.Count()) * 0.2)))
                     .Select(x => new SidebarFriendRecommendationViewModel()
                     {
                         Name = x.FirstName + " " + x.LastName,
                         Username = x.UserName,
                         CommonInterests = x.Interests.Count(y => user.Interests.Any(z => z.Id == y.Id)),
-                        MutualFriends = x.Friends.Count(y => user.Friends.Any(z => z.FriendId == y.FriendId)),
+                        MutualFriends = x.Friends.Where(x => x.IsFriend).Count(y => user.Friends.Any(z => z.FriendId == y.FriendId)),
                         ProfilePhoto = this.blobService.GetBlobUrlAsync(x.ProfileImage?.Id + x.ProfileImage?.ImageExtension, GlobalConstants.BlobPictures).GetAwaiter().GetResult()
                     })
                     .Take(takeFriendsCount - recommendations.Count())

@@ -583,18 +583,18 @@ namespace FriendyFy.Services
             return toReturn;
         }
 
-        public async Task<bool> RepostEventAsync(string id, string text, string userId)
+        public async Task<int> RepostEventAsync(string id, string text, string userId)
         {
-            var eventId = this.eventPostRepository
+            var currEvent = this.eventPostRepository
                 .All()
-                .FirstOrDefault(x => x.Id == id)
-                .EventId;
+                .Include(x => x.Reposts)
+                .FirstOrDefault(x => x.Id == id);
 
             var eventPost = new EventPost()
             {
                 CreatedOn = DateTime.UtcNow,
                 CreatorId = userId,
-                EventId = eventId,
+                EventId = currEvent.EventId,
                 Text = text,
                 IsRepost = true,
                 RepostId = id
@@ -602,7 +602,7 @@ namespace FriendyFy.Services
 
             await this.eventPostRepository.AddAsync(eventPost);
             var added = await this.eventPostRepository.SaveChangesAsync();
-            return added > 0;
+            return currEvent.Reposts.GroupBy(x => x.CreatorId).Count();
         }
 
         public List<PersonListPopupViewModel> GetPostReposts(string eventId, int take, int skip)
@@ -683,8 +683,6 @@ namespace FriendyFy.Services
 
         public List<PostDetailsViewModel> GetFeedEvents(ApplicationUser user, bool isProfile, string userName, int take, int skip, List<string> ids)
         {
-            take = 1;
-
             var interests = new List<int>();
             if (user != null)
             {
@@ -696,8 +694,6 @@ namespace FriendyFy.Services
                 .Include(x => x.Creator)
                 .ThenInclude(x => x.ProfileImage)
                 .Include(x => x.Event)
-                .ThenInclude(x => x.Users)
-                .ThenInclude(x => x.ProfileImage)
                 .Include(x => x.Likes)
                 .Include(x => x.Comments)
                 .Include(x => x.Reposts)
@@ -707,15 +703,11 @@ namespace FriendyFy.Services
                 .ThenInclude(x => x.Creator)
                 .ThenInclude(x => x.ProfileImage)
                 .Include(x => x.Repost)
-                .ThenInclude(x => x.Event)
-                .ThenInclude(x => x.Users)
-                .ThenInclude(x => x.ProfileImage)
-                .Include(x => x.Repost)
                 .ThenInclude(x => x.Likes)
                 .Include(x => x.Repost)
                 .ThenInclude(x => x.Comments)
                 .Include(x => x.Repost)
-                .ThenInclude(x => x.Repost)
+                .ThenInclude(x => x.Reposts)
                 .Include(x => x.Repost)
                 .ThenInclude(x => x.Event)
                 .ThenInclude(x => x.Interests)
@@ -727,11 +719,16 @@ namespace FriendyFy.Services
                 .Take(take)
                 .Select(x => new
                 {
+                    CreatedAgo = (int)((DateTime.UtcNow - x.CreatedOn).TotalMinutes),
+                    PostId = x.EventId,
+                    EventPostId = x.Id,
+                    IsRepost = x.IsRepost,
+                    PostMessage = x.Text,
+                    IsUserCreator = x.CreatorId == user.Id,
                     Username = x.Creator.UserName,
                     CreatorName = x.Creator.FirstName + " " + x.Creator.LastName,
-                    CreatedAgo = (int)((DateTime.UtcNow - x.CreatedOn).TotalMinutes),
                     CreatorImage = x.Creator.ProfileImage.Id + x.Creator.ProfileImage.ImageExtension,
-                    EventGoing = x.Event.Users.Select(y => y.ProfileImage.Id + y.ProfileImage.ImageExtension).ToList(),
+                    //EventGoing = x.Event.Users.Select(y => y.ProfileImage.Id + y.ProfileImage.ImageExtension).ToList(),
                     EventTitle = x.Event.Name,
                     EventInterests = x.Event.Interests.Select(y => new InterestViewModel()
                     {
@@ -742,25 +739,20 @@ namespace FriendyFy.Services
                     Latitude = x.Event.Latitude,
                     Longitude = x.Event.Longitude,
                     EventTime = x.Event.Time,
-                    LikesCount = x.Likes.Count(),
-                    RepostsCount = x.Reposts.GroupBy(x => x.CreatorId).Count(),
-                    CommentsCount = x.Comments.Count(),
                     EventIsReocurring = x.Event.IsReocurring,
                     EventReocurring = x.Event.ReocurringType.ToString(),
                     IsLikedByUser = x.Likes.Any(x => x.LikedById == user.Id),
-                    PostId = x.EventId,
+                    RepostsCount = x.Reposts.GroupBy(x => x.CreatorId).Count(),
+                    CommentsCount = x.Comments.Count(),
+                    LikesCount = x.Likes.Count(),
                     PostType = PostType.Event.ToString(),
-                    IsRepost = x.IsRepost,
-                    EventPostId = x.Id,
-                    PostMessage = x.Text,
-                    IsUserCreator = x.CreatorId == user.Id,
                     Repost = !x.IsRepost ? null : new
                     {
                         Username = x.Repost.Creator.UserName,
                         CreatorName = x.Repost.Creator.FirstName + " " + x.Repost.Creator.LastName,
                         CreatedAgo = (int)((DateTime.UtcNow - x.Repost.CreatedOn).TotalMinutes),
                         CreatorImage = x.Repost.Creator.ProfileImage.Id + x.Repost.Creator.ProfileImage.ImageExtension,
-                        EventGoing = x.Repost.Event.Users.Select(y => y.ProfileImage.Id + y.ProfileImage.ImageExtension).ToList(),
+                        //EventGoing = x.Repost.Event.Users.Select(y => y.ProfileImage.Id + y.ProfileImage.ImageExtension).ToList(),
                         EventTitle = x.Repost.Event.Name,
                         EventInterests = x.Repost.Event.Interests.Select(y => new InterestViewModel()
                         {
@@ -790,7 +782,7 @@ namespace FriendyFy.Services
                 CreatedAgo = x.CreatedAgo,
                 CreatorImage = this.blobService.GetBlobUrlAsync(x.CreatorImage, GlobalConstants.BlobPictures).GetAwaiter().GetResult(),
                 CreatorName = x.CreatorName,
-                EventGoing = x.EventGoing.Select(y => this.blobService.GetBlobUrlAsync(y, GlobalConstants.BlobPictures).GetAwaiter().GetResult()).ToList(),
+                //EventGoing = x.EventGoing.Select(y => this.blobService.GetBlobUrlAsync(y, GlobalConstants.BlobPictures).GetAwaiter().GetResult()).ToList(),
                 EventInterests = x.EventInterests,
                 EventIsReocurring = x.EventIsReocurring,
                 EventPostId = x.EventPostId,
@@ -815,7 +807,7 @@ namespace FriendyFy.Services
                     CreatorName = x.Repost.CreatorName,
                     CreatedAgo = x.Repost.CreatedAgo,
                     CreatorImage = this.blobService.GetBlobUrlAsync(x.Repost.CreatorImage, GlobalConstants.BlobPictures).GetAwaiter().GetResult(),
-                    EventGoing = x.Repost.EventGoing.Select(y => this.blobService.GetBlobUrlAsync(y, GlobalConstants.BlobPictures).GetAwaiter().GetResult()).ToList(),
+                    //EventGoing = x.Repost.EventGoing.Select(y => this.blobService.GetBlobUrlAsync(y, GlobalConstants.BlobPictures).GetAwaiter().GetResult()).ToList(),
                     EventTitle = x.Repost.EventTitle,
                     EventInterests = x.Repost.EventInterests,
                     LocationCity = x.Repost.LocationCity,

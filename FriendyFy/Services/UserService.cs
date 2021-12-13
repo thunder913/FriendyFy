@@ -196,7 +196,7 @@ namespace FriendyFy.Services
                 .Where(x => x.Id != userId && !blocked.Any(y => y == x.Id)
                 && !(x.Friends.Any(y => y.FriendId == x.Id && y.CurrentUserId == userId) || x.Friends.Any(y => y.CurrentUserId == x.Id && y.FriendId == userId)))
                 .OrderByDescending(x => x.Events.Count(y => y.Users.Any(z => z.Id == userId)) + 
-                x.Friends.Count(y => y.Id == userId) * 2 +
+                x.Friends.Where(x => x.IsFriend).Count(y => y.Id == userId) * 2 +
                 x.Interests.Count(y => userInterests.Any(z => z == y.Id)))
                 .Take(4)
                 .ToList()
@@ -204,7 +204,7 @@ namespace FriendyFy.Services
                 {
                     CommonInterests = x.Interests.Count(y => user.Interests.Any(z => z.Id == y.Id)),
                     EventsTogether = x.Events.Count(y => y.Users.Any(z => z.Id == userId)),
-                    MutualFriends = x.Friends.Count(y => y.Id == userId) * 2,
+                    MutualFriends = x.Friends.Where(x => x.IsFriend).Count(y => y.Id == userId) * 2,
                     Name = x.FirstName + " " + x.LastName,
                     ProfilePhoto = this.blobService.GetBlobUrlAsync(x.ProfileImage?.Id + x.ProfileImage?.ImageExtension, GlobalConstants.BlobPictures).GetAwaiter().GetResult(),
                     Username = x.UserName
@@ -308,7 +308,7 @@ namespace FriendyFy.Services
                     Id = x.UserName,
                     Name = x.FirstName + " " + x.LastName,
                     Image = x.ProfileImage.Id + x.ProfileImage.ImageExtension,
-                    MutualFriends = x.Friends.Count(y => y.FriendId == userId),
+                    MutualFriends = x.Friends.Where(x => x.IsFriend).Count(y => y.FriendId == userId),
                 })
                 .ToList();
 

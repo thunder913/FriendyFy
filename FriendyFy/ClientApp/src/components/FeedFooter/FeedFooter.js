@@ -101,7 +101,7 @@ const FeedFooter = (props) => {
         <footer className="feed-footer">
             <div className="top-footer">
                 <div className="likes">
-                    <RepostPopUp repostType={props.postType} id={props.repostId} show={showRepostPopUp} setShow={setShowRepostPopUp} />
+                    <RepostPopUp repostType={props.postType} id={props.repostId} show={showRepostPopUp} setShow={setShowRepostPopUp} setRepostsCount={props.setReposts}/>
                     <PeopleListPopUp
                         title="Likes"
                         count={props.likes}

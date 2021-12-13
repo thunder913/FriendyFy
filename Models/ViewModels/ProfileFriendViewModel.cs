@@ -9,5 +9,6 @@
         public bool IsFriend { get; set; }
         public bool HasRequested { get; set; }
         public bool HasReceived { get; set; }
+        public bool IsLoggedUser { get; set; }
     }
 }

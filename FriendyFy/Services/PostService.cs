@@ -269,7 +269,7 @@ namespace FriendyFy.Services
             return postDetailsViewModel;
         }
 
-        public async Task<bool> RepostAsync(string id, string text, string userId)
+        public async Task<int> RepostAsync(string id, string text, string userId)
         {
             var eventPost = new Post()
             {
@@ -282,7 +282,13 @@ namespace FriendyFy.Services
 
             await this.postRepository.AddAsync(eventPost);
             var added = await this.postRepository.SaveChangesAsync();
-            return added > 0;
+            return this.postRepository.All()
+                .Include(x => x.Reposts)
+                .Where(x => !x.IsDeleted)
+                .FirstOrDefault(x => x.Id == id)
+                .Reposts
+                .GroupBy(x => x.CreatorId)
+                .Count();
         }
 
         public List<PersonListPopupViewModel> GetPeopleReposts(string postId, int take, int skip)

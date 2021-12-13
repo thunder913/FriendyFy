@@ -102,6 +102,7 @@
 .friend-buttons .remove-suggestion{
     background-color: var(--remove-button);
     border: 1px solid var(--border-separator);
+    color: var(--text-main);
 }
 
 .friend-buttons .remove-suggestion:hover{

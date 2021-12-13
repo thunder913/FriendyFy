@@ -59,7 +59,7 @@
 
 .search-page .search-options .interests-input{
     margin-top: 0px;
-    z-index: 10;
+    z-index: 100;
 }
 
 .search-page .search-options .interests-input > div > div{

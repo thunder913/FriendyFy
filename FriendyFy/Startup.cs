@@ -57,7 +57,7 @@ namespace FriendyFy
             {
                 services.AddDbContext<ApplicationDbContext>(options =>
                     options.UseSqlServer(
-                        Configuration.GetConnectionString("ProductionConnection")));
+                        Configuration.GetConnectionString("DefaultConnection")));
             }
 
 

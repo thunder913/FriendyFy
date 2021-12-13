@@ -11,7 +11,6 @@ import { useLocation } from "react-router";
 
 const SearchPage = () => {
     const location = useLocation();
-    const [defaultInterestData, setDefaultInterestData] = useState([]);
     const [peopleCount, setPeopleCount] = useState(0);
     const [eventsCount, setEventsCount] = useState(0);
     const [feed, setFeed] = useState([]);
@@ -95,7 +94,6 @@ const SearchPage = () => {
             if (parsed.interests) {
                 interests = JSON.parse(parsed.interests);
                 setInterests(interests);
-                setDefaultInterestData(interests);
             }
             const isOnlyUserEvents = parsed.onlyUserEvents === "true";
             setOnlyYourEvents(isOnlyUserEvents);
@@ -118,7 +116,7 @@ const SearchPage = () => {
                         </RadioGroup>
                     </FormControl>
                 </div>
-                <InterestsDropdown placeholder='Search by interests' setInterests={setInterests} defaultData={defaultInterestData} />
+                <InterestsDropdown placeholder='Search by interests' setInterests={setInterests} defaultData={interests} />
                 <FormControlLabel control={<Checkbox checked={onlyYourEvents} disabled={type === 'Person'} onChange={(e) => setOnlyYourEvents(e.target.checked)} />} label="Only Your Events" />
                 <Datetime
                     input={true}
