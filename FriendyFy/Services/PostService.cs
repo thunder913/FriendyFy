@@ -368,7 +368,7 @@ namespace FriendyFy.Services
                     .ThenInclude(x => x.Friends)
                     .Where(x => x.Creator.UserName == userName)
                     .Where(x => !ids.Contains(x.Id))
-                    .OrderBy(x => x.CreatedOn)
+                    .OrderByDescending(x => x.CreatedOn)
                     .Take(take)
                     .Select(x => new PostDetailsViewModel()
                     {

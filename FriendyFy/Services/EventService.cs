@@ -709,9 +709,6 @@ namespace FriendyFy.Services
                 .ThenInclude(x => x.Comments)
                 .Include(x => x.Repost)
                 .ThenInclude(x => x.Reposts)
-                .Include(x => x.Repost)
-                .ThenInclude(x => x.Event)
-                .ThenInclude(x => x.Interests)
                 .Where(x => user == null || x.CreatorId != user.Id)
                 .OrderByDescending(x => EF.Functions.DateDiffSecond(DateTime.UtcNow, x.CreatedOn) / 1000.0 +
                 ((user != null ? x.Event.Users.Count(y => y.Id == user.Id) * 1000 : 0) +
@@ -729,7 +726,6 @@ namespace FriendyFy.Services
                     Username = x.Creator.UserName,
                     CreatorName = x.Creator.FirstName + " " + x.Creator.LastName,
                     CreatorImage = x.Creator.ProfileImage.Id + x.Creator.ProfileImage.ImageExtension,
-                    //EventGoing = x.Event.Users.Select(y => y.ProfileImage.Id + y.ProfileImage.ImageExtension).ToList(),
                     EventImage = x.Event.ProfileImage.Id + x.Event.ProfileImage.ImageExtension,
                     EventTitle = x.Event.Name,
                     EventInterests = x.Event.Interests.Select(y => new InterestViewModel()
@@ -754,24 +750,10 @@ namespace FriendyFy.Services
                         CreatorName = x.Repost.Creator.FirstName + " " + x.Repost.Creator.LastName,
                         CreatedAgo = (int)((DateTime.UtcNow - x.Repost.CreatedOn).TotalMinutes),
                         CreatorImage = x.Repost.Creator.ProfileImage.Id + x.Repost.Creator.ProfileImage.ImageExtension,
-                        //EventGoing = x.Repost.Event.Users.Select(y => y.ProfileImage.Id + y.ProfileImage.ImageExtension).ToList(),
-                        EventTitle = x.Repost.Event.Name,
-                        EventInterests = x.Repost.Event.Interests.Select(y => new InterestViewModel()
-                        {
-                            Id = y.Id,
-                            Label = y.Name,
-                        }).ToList(),
-                        LocationCity = x.Repost.Event.LocationCity,
-                        Latitude = x.Repost.Event.Latitude,
-                        Longitude = x.Repost.Event.Longitude,
-                        EventTime = x.Repost.Event.Time,
                         LikesCount = x.Repost.Likes.Count(),
                         RepostsCount = x.Repost.Reposts.GroupBy(x => x.CreatorId).Count(),
                         CommentsCount = x.Repost.Comments.Count(),
-                        EventIsReocurring = x.Repost.Event.IsReocurring,
-                        EventReocurring = x.Repost.Event.ReocurringType.ToString(),
                         IsLikedByUser = x.Repost.Likes.Any(y => y.LikedById == user.Id),
-                        PostId = x.Repost.EventId,
                         PostType = PostType.Event.ToString(),
                         EventPostId = x.RepostId,
                         EventImage = x.Event.ProfileImage.Id + x.Event.ProfileImage.ImageExtension
@@ -811,20 +793,17 @@ namespace FriendyFy.Services
                     CreatorName = x.Repost.CreatorName,
                     CreatedAgo = x.Repost.CreatedAgo,
                     CreatorImage = this.blobService.GetBlobUrlAsync(x.Repost.CreatorImage, GlobalConstants.BlobPictures).GetAwaiter().GetResult(),
-                    //EventGoing = x.Repost.EventGoing.Select(y => this.blobService.GetBlobUrlAsync(y, GlobalConstants.BlobPictures).GetAwaiter().GetResult()).ToList(),
-                    EventTitle = x.Repost.EventTitle,
-                    EventInterests = x.Repost.EventInterests,
-                    LocationCity = x.Repost.LocationCity,
-                    Latitude = x.Repost.Latitude,
-                    Longitude = x.Repost.Longitude,
-                    EventTime = x.Repost.EventTime,
+                    EventTitle = x.EventTitle,
+                    EventInterests = x.EventInterests,
+                    LocationCity = x.LocationCity,
+                    Latitude = x.Latitude,
+                    Longitude = x.Longitude,
+                    EventTime = x.EventTime,
+                    PostId = x.PostId,
                     LikesCount = x.Repost.LikesCount,
                     RepostsCount = x.Repost.RepostsCount,
                     CommentsCount = x.Repost.CommentsCount,
-                    EventIsReocurring = x.Repost.EventIsReocurring,
-                    EventReocurring = x.Repost.EventReocurring,
                     IsLikedByUser = x.Repost.IsLikedByUser,
-                    PostId = x.Repost.PostId,
                     PostType = PostType.Event.ToString(),
                     EventPostId = x.Repost.EventPostId,
                     EventImage = this.blobService.GetBlobUrlAsync(x.EventImage, GlobalConstants.BlobPictures).GetAwaiter().GetResult(),
