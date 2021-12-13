@@ -12,7 +12,7 @@ function UserChatHeadFooter({chatDetails, connection}){
     const [chat, setChat] = useState({messages: []});
     const [hasMore, setHasMore] = useState(true);
     const [firstTime, setFirstTime] = useState(true);
-    const [userOnline, setUserOnline] = useState('');
+    // const [userOnline, setUserOnline] = useState('');
     const [unreadMessages, setUnreadMessages] = useState('');
     const [newMessages, setNewMessages] = useState(chatDetails.newMessages);
     
@@ -148,11 +148,11 @@ function UserChatHeadFooter({chatDetails, connection}){
     };
 
     useEffect(() => {
-        if (chatDetails.isActive) {
-            setUserOnline(<div className="user-online"></div>);
-        }else{
-            setUserOnline(<div className="user-offline"></div>);
-        }
+        // if (chatDetails.isActive) {
+        //     setUserOnline(<div className="user-online"></div>);
+        // }else{
+        //     setUserOnline(<div className="user-offline"></div>);
+        // }
         if (newMessages > 0) {
             let messages = newMessages > 9 ? "9+" : newMessages;
             setUnreadMessages(<div className="user-has-messages">
@@ -178,8 +178,8 @@ function UserChatHeadFooter({chatDetails, connection}){
             <div className="footer-user-image">
                 <img src={chatDetails.picture} /*alt="UserImage"*/ />
             </div>
-            {userOnline}
-            {unreadMessages}
+            {/* {userOnline}
+            {unreadMessages} */}
             <span className="footer-chat-username">{chatDetails.name}</span>
             </div>
         </div>

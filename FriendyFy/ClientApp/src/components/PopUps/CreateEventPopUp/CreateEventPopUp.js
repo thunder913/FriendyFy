@@ -14,6 +14,7 @@ import PopUpHeader from "../PopUpHeader/PopUpHeader";
 import '../PopUp.css';
 import PopUp from "../PopUp";
 import { useThemeContext } from "../../../contexts/ThemeContext";
+import OutsideClickHandler from "react-outside-click-handler";
 
 const CreateEventPopUp = ({ show, setShow }) => {
     const [privacySettings, setPrivacySettings] = useState('Private');
@@ -28,7 +29,7 @@ const CreateEventPopUp = ({ show, setShow }) => {
     const { loggedIn } = useLoggedIn();
     const [eventError, setEventError] = useState('');
     const [image, setImage] = useState('');
-    const {theme} = useThemeContext();
+    const { theme } = useThemeContext();
 
     function getCurrentLocalization() {
         let localization = window.navigator.userLanguage || window.navigator.language;
@@ -77,58 +78,62 @@ const CreateEventPopUp = ({ show, setShow }) => {
     return (
         <PopUp show={show} setShow={setShow} escClose={true}>
             <div className="popup-outer create-event-popup">
-                <div className="popup-inner event-popup">
-                    <PopUpHeader title="Create An Event" closePopUp={() => setShow(false)}></PopUpHeader>
+                <OutsideClickHandler
+                    onOutsideClick={() => {
+                        setShow(false);
+                    }}>
+                    <div className="popup-inner event-popup">
+                        <PopUpHeader title="Create An Event" closePopUp={() => setShow(false)}></PopUpHeader>
 
-                    <section className="create-event-underheader">
-                        <div className="image">
-                            <img src={loggedIn.profilePhoto} alt="" />
+                        <section className="create-event-underheader">
+                            <div className="image">
+                                <img src={loggedIn.profilePhoto} alt="" />
+                            </div>
+                            <span>{loggedIn.firstName} {loggedIn.lastName}</span>
+                            <Select
+                                theme={(th) => ({
+                                    ...th,
+                                    colors: (theme === 'dark' ? {
+                                        ...th.colors,
+                                        primary25: '#595757',
+                                        primary: 'rgb(212, 212, 212)',
+                                        neutral0: '#3F3B3B',
+                                        neutral80: 'white',
+                                        neutral60: '#aaaaaa',
+                                        neutral10: '#595757',
+                                        dangerLight: '#523737',
+                                    } : { ...th.colors })
+                                })}
+                                className="privacy-picker"
+                                isSearchable={false}
+                                options={[{ value: 'Private', label: 'Private' }, { value: 'Public', label: 'Public' }]}
+                                defaultValue={{ value: privacySettings, label: 'Private' }}
+                                onChange={(e) => setPrivacySettings(e.value)}
+                            />
+                        </section>
+                        <div className="top-inputs">
+                            <input className="event-name" type="text" placeholder="Name" onChange={e => setName(e.target.value)} />
+                            <Datetime
+                                dateFormat="YYYY-MM-DD"
+                                timeFormat="HH:mm"
+                                input={true}
+                                initialViewMode='years'
+                                dateFormat={moment.localeData().longDateFormat('LL')}
+                                locale={getCurrentLocalization()}
+                                onChange={onDateChangeHandler}
+                                placeholder="When is it going to happen?"
+                                inputProps={{ id: 'datetime', placeholder: 'When is it going to happen?', autoComplete: "off" }}
+                            />
                         </div>
-                        <span>{loggedIn.firstName} {loggedIn.lastName}</span>
-                        <Select
-                            theme={(th) => ({
-                                ...th,
-                                colors: (theme === 'dark' ? {
-                                    ...th.colors,
-                                    primary25: '#595757',
-                                    primary: 'rgb(212, 212, 212)',
-                                    neutral0: '#3F3B3B',
-                                    neutral80: 'white',
-                                    neutral60: '#aaaaaa',
-                                    neutral10: '#595757',
-                                    dangerLight: '#523737',
-                                } : {...th.colors})
-                            })}
-                            className="privacy-picker"
-                            isSearchable={false}
-                            options={[{ value: 'Private', label: 'Private' }, { value: 'Public', label: 'Public' }]}
-                            defaultValue={{ value: privacySettings, label: 'Private' }}
-                            onChange={(e) => setPrivacySettings(e.value)}
-                        />
-                    </section>
-                    <div className="top-inputs">
-                        <input className="event-name" type="text" placeholder="Name" onChange={e => setName(e.target.value)} />
-                        <Datetime
-                            dateFormat="YYYY-MM-DD"
-                            timeFormat="HH:mm"
-                            input={true}
-                            initialViewMode='years'
-                            dateFormat={moment.localeData().longDateFormat('LL')}
-                            locale={getCurrentLocalization()}
-                            onChange={onDateChangeHandler}
-                            placeholder="When is it going to happen?"
-                            inputProps={{ id: 'datetime', placeholder: 'When is it going to happen?', autoComplete: "off" }}
-                        />
-                    </div>
-                    <InterestsDropdown setInterests={setInterests} placeholder='Choose up to 6 interests to attract more people easily'></InterestsDropdown>
-                    <MyGoogleMap location={location} setLocation={setLocation}></MyGoogleMap>
-                    <div className="create-event-image">
-                        <ImgDropAndCrop
-                            placeholder="Import an image for the event."
-                            setCroppedImg={setImage}
-                            imageClass="user-profile-photo" />
-                    </div>
-                    {/* <div className="reocurring-checkbox">
+                        <InterestsDropdown setInterests={setInterests} placeholder='Choose up to 6 interests to attract more people easily'></InterestsDropdown>
+                        <MyGoogleMap location={location} setLocation={setLocation}></MyGoogleMap>
+                        <div className="create-event-image">
+                            <ImgDropAndCrop
+                                placeholder="Import an image for the event."
+                                setCroppedImg={setImage}
+                                imageClass="user-profile-photo" />
+                        </div>
+                        {/* <div className="reocurring-checkbox">
                     <input type="checkbox" id="reocurring" onChange={() => setIsReocurring(prev => !prev)} />
                     <label htmlFor="reocurring">Reocurring event</label>         
                     {isReocurring ? <Select
@@ -152,13 +157,14 @@ const CreateEventPopUp = ({ show, setShow }) => {
                             onChange={(e) => setReocurringTime(e.value)}
                         /> : ''}
                 </div> */}
-                    <TextareaAutosize
-                        onChange={(e) => setDescription(e.target.value)}
-                        placeholder="What is the event about?"
-                        id="post-description" minRows={2} />
-                    <p className="event-error-message">{eventError}</p>
-                    <button className="create-event" onClick={onCreateButtonClicked}>Create Event</button>
-                </div>
+                        <TextareaAutosize
+                            onChange={(e) => setDescription(e.target.value)}
+                            placeholder="What is the event about?"
+                            id="post-description" minRows={2} />
+                        <p className="event-error-message">{eventError}</p>
+                        <button className="create-event" onClick={onCreateButtonClicked}>Create Event</button>
+                    </div>
+                </OutsideClickHandler>
             </div>
         </PopUp>
     )

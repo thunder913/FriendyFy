@@ -10,25 +10,28 @@ import $ from 'jquery';
 import '../../FeedFooter/FeedFooter.css'
 import RepostPopUp from "../RepostPopUp/RepostPopUp";
 import Loader from "react-loader-spinner";
+import PeopleListPopUp from "../PeopleListPopUp/PeopleListPopUp";
+import { getPostLikes } from "../../../services/postService";
 
-const ViewImagePopUpRightSide = ({comments, setComments, setCommentsCount, setIsLiked, isLiked, commentsCount, setLikes, likes, post}) => {
+const ViewImagePopUpRightSide = ({ comments, setComments, setCommentsCount, setIsLiked, isLiked, commentsCount, setLikes, likes, post, setReposts }) => {
     const [hasMore, setHasMore] = useState(true);
     const [showRepostPopUp, setShowRepostPopUp] = useState(false);
+    const [showLikes, setShowLikes] = useState(false);
     const scrollRef = useRef();
     const commentRef = useRef()
 
     const deleteCommentEvent = (commentId, postType) => {
         deleteComment(commentId, postType)
             .then(res => {
-                if(res.status === 200){
+                if (res.status === 200) {
                     let element = comments.find(x => x.id === commentId);
                     let index = comments.indexOf(element);
-            
+
                     let array = [...comments];
                     array.splice(index, 1);
                     setComments(array);
-                    setCommentsCount(prev => prev-1)
-                }else{
+                    setCommentsCount(prev => prev - 1)
+                } else {
                     console.log("ERROR");
                 }
             })
@@ -49,6 +52,10 @@ const ViewImagePopUpRightSide = ({comments, setComments, setCommentsCount, setIs
 
     const focusCommentInput = () => {
         commentRef.current.focus();
+    }
+
+    const loadLikes = (skip) => {
+        return getPostLikes(post.postId, post.postType, skip, 10);
     }
 
     useEffect(() => {
@@ -84,7 +91,21 @@ const ViewImagePopUpRightSide = ({comments, setComments, setCommentsCount, setIs
     }, [commentRef])
 
     return (<div className="right-side">
-        <RepostPopUp manyPopUps={true} repostType={post.postType} id={post.postId} show={showRepostPopUp} setShow={setShowRepostPopUp} />
+        <RepostPopUp
+            manyPopUps={true}
+            repostType={post.postType}
+            id={post.postId}
+            show={showRepostPopUp}
+            setShow={setShowRepostPopUp}
+            setRepostsCount={setReposts} />
+        <PeopleListPopUp
+            title="Likes"
+            count={likes}
+            loadPeople={loadLikes}
+            show={showLikes}
+            setShow={setShowLikes}
+            manyPopUps={true} />
+
         <div className="posted-by">
             <div className="image">
                 <img src={post.creatorImage} alt="" />
@@ -92,9 +113,9 @@ const ViewImagePopUpRightSide = ({comments, setComments, setCommentsCount, setIs
             <span>{post.creatorName}</span>
         </div>
         <p className="description">{post.postMessage}</p>
-        <p className="publshed-date">{parseTime(post.createdAgo)}</p>
+        <p className="published-date">{parseTime(post.createdAgo)}</p>
         <div className="likes-comments">
-            <span>{likes} like{likes === 1 ? '' : 's'}</span>
+            <span onClick={() => setShowLikes(true)}>{likes} like{likes === 1 ? '' : 's'}</span>
             <span>{commentsCount} comment{commentsCount === 1 ? '' : 's'}</span>
         </div>
         <div className="actions-footer">
@@ -119,7 +140,7 @@ const ViewImagePopUpRightSide = ({comments, setComments, setCommentsCount, setIs
                         className={"comments-section"}
                         dataLength={comments.length}
                         next={loadMoreCommentsEvent}
-                        height={900}
+                        height={500}
                         hasMore={hasMore}
                         loader={<Loader
                             type="TailSpin"
@@ -127,7 +148,7 @@ const ViewImagePopUpRightSide = ({comments, setComments, setCommentsCount, setIs
                             height={100}
                             width={100}
                             className="loader"
-                          />}
+                        />}
                         scrollableTarget="scrollableDiv"
                         endMessage={
                             <p style={{ textAlign: 'center' }}>

@@ -71,10 +71,11 @@
 
 }
 
-.image-popup .right-side .publshed-date{
+.image-popup .right-side .published-date{
     align-self: flex-start;
     font-size: 12px;
     font-style: italic;
+    cursor: pointer;
 }
 
 .image-popup .right-side .likes-comments{
