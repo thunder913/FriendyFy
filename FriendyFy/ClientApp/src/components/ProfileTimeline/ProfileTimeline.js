@@ -18,14 +18,15 @@ const ProfileTimeline = () => {
   const [hasEvents, setHasEvents] = useState(true);
   const userId = decodeURI(window.location.href.substring(window.location.href.lastIndexOf('/') + 1));
   const [didFirstTimeRequest, setDidFirstTimeRequest] = useState(false);
+  const [feedType, setFeedType] = useState('posts');
   const loadMorePosts = () => {
     if (didFirstTimeRequest) {
-      return getFeed(events, posts, true, 10, userId, hasPosts, hasEvents)
+      return getFeed(events, posts, true, 10, userId, hasPosts, hasEvents, feedType)
         .then(async res => {
           let obj = await res.json();
           obj.posts.forEach(el => {
             if (el.postType == "Event") {
-              setEvents(prev => [...prev, el.postId]);
+              setEvents(prev => [...prev, el.eventPostId]);
             } else if (el.postType == "Post") {
               setPosts(prev => [...prev, el.postId]);
             }
@@ -43,12 +44,12 @@ const ProfileTimeline = () => {
     setPosts([]);
     setHasPosts(true);
     setHasEvents(true);
-    getFeed([], [], true, 10, userId, true, true)
+    getFeed([], [], true, 10, userId, true, true, feedType)
       .then(async res => {
         let obj = await res.json();
         obj.posts.forEach(el => {
           if (el.postType == "Event") {
-            setEvents(prev => [...prev, el.postId]);
+            setEvents(prev => [...prev, el.eventPostId]);
           } else if (el.postType == "Post") {
             setPosts(prev => [...prev, el.postId]);
           }
@@ -59,7 +60,7 @@ const ProfileTimeline = () => {
         setDidFirstTimeRequest(true);
       });
     //eslint-disable-next-line
-  }, [userId])
+  }, [userId, feedType])
 
 
   return (
@@ -72,11 +73,15 @@ const ProfileTimeline = () => {
             showCreatePost={true}
             showCreateEvent={false}
           /> : ''}
+          <div className="feed-choice">
+            <button className={("posts "+ (feedType==='posts'?'selected':''))} onClick={() => setFeedType('posts')}>POSTS</button>
+            <button className={("events "+ (feedType==='events'?'selected':''))} onClick={() => setFeedType('events')}>EVENTS</button>
+          </div>
           <InfiniteScroll
             className={"feed-posts"}
-            dataLength={posts.length}
+            dataLength={feed.length}
             next={loadMorePosts}
-            hasMore={(hasPosts || hasEvents)}
+            hasMore={(hasEvents || hasPosts)}
             loader={<Loader
               type="TailSpin"
               color="#50A6FA"
@@ -90,7 +95,7 @@ const ProfileTimeline = () => {
                 <b>You reached the final post</b>
               </p>
             }>
-            {feed.map(el => (el.postType == 'Event' ? <FeedEvent eventData={el} /> :
+            {feed.map(el => (el.postType == 'Event' ? <FeedEvent key={el.postId} eventData={el} /> :
               !el.isRepost ? <FeedPost key={el.postId} post={el} /> : <FeedPostRepost key={el.postId} post={el} />))}
           </InfiniteScroll>
         </div>

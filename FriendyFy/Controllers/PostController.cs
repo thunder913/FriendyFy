@@ -139,7 +139,7 @@ namespace FriendyFy.Controllers
         }
 
         [HttpPost("repost")]
-        public async Task <IActionResult> Repost(RepostDto dto)
+        public async Task<IActionResult> Repost(RepostDto dto)
         {
             var parsed = Enum.TryParse(dto.Type, out PostType postType);
             if (!parsed)
@@ -157,10 +157,10 @@ namespace FriendyFy.Controllers
                 var result = await this.eventService.RepostEventAsync(dto.PostId, dto.Text, user.Id);
                 if (result > 0)
                 {
-                    return Ok(new { reposts=result });
+                    return Ok(new { reposts = result });
                 }
             }
-            else if(postType == PostType.Post)
+            else if (postType == PostType.Post)
             {
                 var result = await this.postService.RepostAsync(dto.PostId, dto.Text, user.Id);
                 if (result > 0)
@@ -211,16 +211,19 @@ namespace FriendyFy.Controllers
             var events = new List<PostDetailsViewModel>();
             var posts = new List<PostDetailsViewModel>();
             var toTake = dto.Take / 2;
-            if (!dto.isProfile)
+            if (dto.FeedType != "posts")
             {
                 if (dto.HasEvents)
                 {
                     events = this.eventService.GetFeedEvents(user, dto.isProfile, dto.Username, toTake, dto.EventIds.Count(), dto.EventIds);
                 }
             }
-            if (dto.HasPosts)
+            if (dto.FeedType != "events")
             {
-                posts = this.postService.GetFeedPosts(user, dto.isProfile, dto.Username, toTake, dto.PostIds.Count(), dto.PostIds);
+                if (dto.HasPosts)
+                {
+                    posts = this.postService.GetFeedPosts(user, dto.isProfile, dto.Username, toTake, dto.PostIds.Count(), dto.PostIds);
+                }
             }
             bool hasPosts = false, hasEvents = false;
 
@@ -243,7 +246,7 @@ namespace FriendyFy.Controllers
             {
                 data = data.OrderBy(x => x.CreatedAgo).ToList();
             }
-            return Ok(new FeedViewModel() 
+            return Ok(new FeedViewModel()
             {
                 Posts = data,
                 HasEvents = hasEvents,

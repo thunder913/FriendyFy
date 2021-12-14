@@ -1,5 +1,6 @@
 .profile-feed{
     flex-basis: 50%;
+    min-width: 50%;
 }
 
 .profile-friends{

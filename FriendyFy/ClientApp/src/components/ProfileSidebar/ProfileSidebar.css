@@ -19,12 +19,12 @@
 .profile-sidebar{
     display: flex;
     flex-direction: column;
-    margin-right: 15px;
     margin-top: 12px;
     flex-basis: 50%;
     position: sticky;
     top: -450px;
     height: 1100px;
+    min-width: 50%;
 } 
 
 .profile-sidebar.popup-shown{
@@ -153,8 +153,12 @@ header.headline > h2, header.headline > p{
     color: var(--text-main);
 }
 
-@media only screen and (max-width: 576px){
+@media only screen and (max-width: 933px){
     .profile-sidebar{
         display: none;
+    }
+
+    .profile-container .profile-main{
+        display: initial;
     }
 }

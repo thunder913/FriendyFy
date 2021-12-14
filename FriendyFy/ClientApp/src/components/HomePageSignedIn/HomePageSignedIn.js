@@ -26,7 +26,7 @@ const HomePageSignedIn = () => {
         let obj = await res.json();
         obj.posts.forEach(el => {
           if (el.postType == "Event") {
-            setEvents(prev => [...prev, el.postId]);
+            setEvents(prev => [...prev, el.eventPostId]);
           } else if (el.postType == "Post") {
             setPosts(prev => [...prev, el.postId]);
           }
@@ -41,12 +41,12 @@ const HomePageSignedIn = () => {
   useEffect(() => {
     resetUser();
     setShowFirstTimePopUp(!loggedIn.finishedFirstTimeLogin);
-    getFeed(events, posts, false, 10, loggedIn ? loggedIn.userName : null, hasPosts, hasEvents)
+    getFeed(events, posts, false, 10, loggedIn ? loggedIn.userName : null, hasPosts, hasEvents, 'feed')
       .then(async res => {
         let obj = await res.json();
         obj.posts.forEach(el => {
           if (el.postType == "Event") {
-            setEvents(prev => [...prev, el.postId]);
+            setEvents(prev => [...prev, el.eventPostId]);
           } else if (el.postType == "Post") {
             setPosts(prev => [...prev, el.postId]);
           }

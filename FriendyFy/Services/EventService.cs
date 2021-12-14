@@ -689,33 +689,73 @@ namespace FriendyFy.Services
                 interests = user.Interests.Select(x => x.Id).ToList();
             }
 
-            var events = this.eventPostRepository
+            var events = new List<PostDetailsViewModel>();
+
+            if (isProfile)
+            {
+                events.AddRange(this.eventPostRepository
+                    .AllAsNoTracking()
+                    .Where(x => x.Creator.UserName == userName)
+                    .Where(x => !ids.Contains(x.Id))
+                    .OrderByDescending(x => x.CreatedOn)
+                    .Take(take)
+                    .Select(x => new PostDetailsViewModel()
+                    {
+                        CreatedAgo = (int)((DateTime.UtcNow - x.CreatedOn).TotalMinutes),
+                        PostId = x.EventId,
+                        EventPostId = x.Id,
+                        IsRepost = x.IsRepost,
+                        PostMessage = x.Text,
+                        IsUserCreator = x.CreatorId == user.Id,
+                        Username = x.Creator.UserName,
+                        CreatorName = x.Creator.FirstName + " " + x.Creator.LastName,
+                        CreatorImage = x.Creator.ProfileImage.Id + x.Creator.ProfileImage.ImageExtension,
+                        EventImage = x.Event.ProfileImage.Id + x.Event.ProfileImage.ImageExtension,
+                        EventTitle = x.Event.Name,
+                        EventInterests = x.Event.Interests.Select(y => new InterestViewModel()
+                        {
+                            Id = y.Id,
+                            Label = y.Name,
+                        }).ToList(),
+                        LocationCity = x.Event.LocationCity,
+                        Latitude = x.Event.Latitude,
+                        Longitude = x.Event.Longitude,
+                        EventTime = x.Event.Time,
+                        EventIsReocurring = x.Event.IsReocurring,
+                        EventReocurring = x.Event.ReocurringType.ToString(),
+                        IsLikedByUser = x.Likes.Any(x => x.LikedById == user.Id),
+                        RepostsCount = x.Reposts.GroupBy(x => x.CreatorId).Count(),
+                        CommentsCount = x.Comments.Count(),
+                        LikesCount = x.Likes.Count(),
+                        PostType = PostType.Event.ToString(),
+                        Repost = !x.IsRepost ? null : new PostDetailsViewModel()
+                        {
+                            Username = x.Repost.Creator.UserName,
+                            CreatorName = x.Repost.Creator.FirstName + " " + x.Repost.Creator.LastName,
+                            CreatedAgo = (int)((DateTime.UtcNow - x.Repost.CreatedOn).TotalMinutes),
+                            CreatorImage = x.Repost.Creator.ProfileImage.Id + x.Repost.Creator.ProfileImage.ImageExtension,
+                            LikesCount = x.Repost.Likes.Count(),
+                            RepostsCount = x.Repost.Reposts.GroupBy(x => x.CreatorId).Count(),
+                            CommentsCount = x.Repost.Comments.Count(),
+                            IsLikedByUser = x.Repost.Likes.Any(y => y.LikedById == user.Id),
+                            PostType = PostType.Event.ToString(),
+                            EventPostId = x.RepostId,
+                            EventImage = x.Event.ProfileImage.Id + x.Event.ProfileImage.ImageExtension
+                        }
+                    })
+                    .ToList());
+            }
+            else
+            {
+                events.AddRange(this.eventPostRepository
                 .AllAsNoTracking()
-                .Include(x => x.Creator)
-                .ThenInclude(x => x.ProfileImage)
-                .Include(x => x.Event)
-                .ThenInclude(x => x.ProfileImage)
-                .Include(x => x.Likes)
-                .Include(x => x.Comments)
-                .Include(x => x.Reposts)
-                .Include(x => x.Event)
-                .ThenInclude(x => x.Interests)
-                .Include(x => x.Repost)
-                .ThenInclude(x => x.Creator)
-                .ThenInclude(x => x.ProfileImage)
-                .Include(x => x.Repost)
-                .ThenInclude(x => x.Likes)
-                .Include(x => x.Repost)
-                .ThenInclude(x => x.Comments)
-                .Include(x => x.Repost)
-                .ThenInclude(x => x.Reposts)
                 .Where(x => user == null || x.CreatorId != user.Id)
                 .OrderByDescending(x => EF.Functions.DateDiffSecond(DateTime.UtcNow, x.CreatedOn) / 1000.0 +
                 ((user != null ? x.Event.Users.Count(y => y.Id == user.Id) * 1000 : 0) +
                 (user != null ? x.Event.Interests.Count(y => interests.Contains(y.Id)) * 1000 : 0)))
                 .Where(x => !ids.Contains(x.Id))
                 .Take(take)
-                .Select(x => new
+                .Select(x => new PostDetailsViewModel()
                 {
                     CreatedAgo = (int)((DateTime.UtcNow - x.CreatedOn).TotalMinutes),
                     PostId = x.EventId,
@@ -744,7 +784,7 @@ namespace FriendyFy.Services
                     CommentsCount = x.Comments.Count(),
                     LikesCount = x.Likes.Count(),
                     PostType = PostType.Event.ToString(),
-                    Repost = !x.IsRepost ? null : new
+                    Repost = !x.IsRepost ? null : new PostDetailsViewModel()
                     {
                         Username = x.Repost.Creator.UserName,
                         CreatorName = x.Repost.Creator.FirstName + " " + x.Repost.Creator.LastName,
@@ -759,7 +799,9 @@ namespace FriendyFy.Services
                         EventImage = x.Event.ProfileImage.Id + x.Event.ProfileImage.ImageExtension
                     }
                 })
-                .ToList();
+                .ToList());
+            }
+
 
             var toReturn = events.Select(x => new PostDetailsViewModel()
             {

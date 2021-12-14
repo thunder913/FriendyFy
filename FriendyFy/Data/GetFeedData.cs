@@ -14,5 +14,6 @@ namespace FriendyFy.Data
         public int Take { get; set; }
         public bool HasPosts { get; set; }
         public bool HasEvents { get; set; }
+        public string FeedType { get; set; }
     }
 }

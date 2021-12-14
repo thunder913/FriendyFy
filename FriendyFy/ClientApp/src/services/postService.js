@@ -69,10 +69,10 @@ export function makePost(privacySetting, postMessage, locationLat, locationLng, 
     });
   }
 
-  export function getFeed(eventIds, postIds, isProfile, take, username, hasPosts, hasEvents) {
+  export function getFeed(eventIds, postIds, isProfile, take, username, hasPosts, hasEvents, feedType) {
     return fetch('/post/getFeedPosts', {
         method: 'POST',
         headers: {'Content-Type': 'application/json'},
-        body: JSON.stringify({eventIds, postIds, isProfile, take, username, hasPosts, hasEvents})
+        body: JSON.stringify({eventIds, postIds, isProfile, take, username, hasPosts, hasEvents, feedType})
     });
   }
