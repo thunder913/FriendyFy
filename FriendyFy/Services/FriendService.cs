@@ -59,15 +59,20 @@ namespace FriendyFy.Services
             userOne.Friends.Add(new UserFriend() { IsFriend = false, FriendId = userTwo.Id, RequestSenderId = senderId });
             userTwo.Friends.Add(new UserFriend() { IsFriend = false, FriendId = userOne.Id, RequestSenderId = senderId });
 
-            await this.chatRepository.AddAsync(new Chat()
+            var chat = this.chatRepository
+                .All()
+                .Include(x => x.Users)
+                .FirstOrDefault(x => x.Users.Any(y => y.Id == userOne.Id) && x.Users.Any(y => y.Id == userTwo.Id));
+            if (chat == null)
             {
-                ChatType = Models.Enums.ChatType.NotAccepted,
-                CreatedOn = DateTime.Now,
-                Users = new HashSet<ApplicationUser>() { userOne, userTwo }
-            });
-
+                await this.chatRepository.AddAsync(new Chat()
+                {
+                    ChatType = Models.Enums.ChatType.NotAccepted,
+                    CreatedOn = DateTime.Now,
+                    Users = new HashSet<ApplicationUser>() { userOne, userTwo }
+                });
+            }
             await userRepository.SaveChangesAsync();
-            await this.chatRepository.SaveChangesAsync();
 
             return true;
         }
@@ -157,7 +162,7 @@ namespace FriendyFy.Services
             var chat = this.chatRepository
                 .All()
                 .Include(x => x.Users)
-                .FirstOrDefault(x => x.Users.Any(y => y.Id == userOneFriend.CurrentUserId) && x.Users.Any(y => y.Id == userTwoFriend.CurrentUserId) && x.ChatType == ChatType.NotAccepted);
+                .FirstOrDefault(x => x.Users.Any(y => y.Id == userOneFriend.CurrentUserId) && x.Users.Any(y => y.Id == userTwoFriend.CurrentUserId) && (x.ChatType == ChatType.NotAccepted || x.ChatType == ChatType.Direct));
             if (chat != null)
             {
                 chat.ChatType = ChatType.Direct;

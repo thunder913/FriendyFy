@@ -61,7 +61,7 @@ const EventTop = ({ images = [], mainImage, lat, lng, city, time, userImages = [
         moment.locale(localization);
         let utcTime = moment.utc(time);
         setLocalTime(utcTime.local().format('LLL'))
-    }, [eventTime])
+    }, [time])
 
     return (<section className="event-page-top">
         <ViewImagePopUp
@@ -101,7 +101,7 @@ const EventTop = ({ images = [], mainImage, lat, lng, city, time, userImages = [
             </div>
         </div>
         <div className="location-time">
-            <MyGoogleMap location={{ lat: lat, lng: lng }} staticMap={true} />
+            {(lat && lng) ? <MyGoogleMap location={{ lat: lat, lng: lng }} staticMap={true} /> : ''}
             <p className="info-text">{city} {localTime}</p>
         </div>
     </section>)
