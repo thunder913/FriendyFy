@@ -352,3 +352,6 @@ MigrationBackup/
 /FriendyFy/appsettings.json
 /FriendyFy/appsettings.Production.json
 /FriendyFy/ClientApp/*.production
+
+.env
+appsettings.Development.json
