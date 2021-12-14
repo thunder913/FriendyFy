@@ -20,7 +20,7 @@ const ChatConnectionProvider = ({ children }) => {
     }
 
     const openConnection = () => {
-        if (connection) {
+        if (connection && !connection.connectionStarted) {
             connection.start();
         }
     }
