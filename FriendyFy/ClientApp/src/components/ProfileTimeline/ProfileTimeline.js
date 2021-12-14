@@ -67,7 +67,7 @@ const ProfileTimeline = () => {
       <ProfileSidebar />
       <div className="profile-feed">
         <div className="feed">
-          {loggedIn ? <MakePost
+          {(loggedIn && loggedIn.userName===userId) ? <MakePost
             showPostImage={false}
             showCreatePost={true}
             showCreateEvent={false}

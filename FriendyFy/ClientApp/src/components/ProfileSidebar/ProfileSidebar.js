@@ -2,7 +2,6 @@ import React, { useState, useEffect } from 'react';
 import './ProfileSidebar.css';
 import { getUserLocation, getUserEventsCount, getUserImages } from '../../services/userService';
 import { getFriends } from '../../services/friendService';
-import { useLocation } from 'react-router';
 import { Link } from "react-router-dom";
 import MapPopUp from '../PopUps/MapPopUp/MapPopUp';
 import { getPostByImageId } from '../../services/postService';
@@ -13,7 +12,6 @@ const ProfileSidebar = () => {
     const userId = decodeURI(window.location.href.substring(window.location.href.lastIndexOf('/') + 1));
     const [eventsCount, setEventsCount] = useState('');
     const [photos, setPhotos] = useState([]);
-    const siteLocation = useLocation().pathname;
     const [showMapPopUp, setShowMapPopUp] = useState(false);
     const [showImagePopUp, setShowImagePopUp] = useState(false);
     const [isLiked, setIsLiked] = useState(false);
@@ -23,7 +21,7 @@ const ProfileSidebar = () => {
     const [commentsCount, setCommentsCount] = useState('');
     const [post, setPost] = useState('');
     useEffect(() => {
-        if(userId){
+        if(userId && window.location.href.includes('profile')){
         getFriends(userId, 9, 0)
             .then(async res => { await setSidebarFriends(await res.json()) });
         getUserLocation(userId)
@@ -33,7 +31,7 @@ const ProfileSidebar = () => {
         getUserImages(userId, 9, 0)
             .then(async res => setPhotos(await res.json()));
         }
-    }, [siteLocation, userId])
+    }, [userId])
 
     const showImagePopUpEvent = (id) => {
         getPostByImageId(id)

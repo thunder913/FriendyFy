@@ -1,6 +1,5 @@
 import axios from 'axios';
 import React, { useEffect, useState } from 'react';
-import { useHistory, useLocation } from 'react-router';
 import UserFriendButton from '../UserFriendButton/UserFriendButton';
 import ViewImagePopUp from '../PopUps/ViewImagePopUp/ViewImagePopUp';
 import './ProfileHeader.css';
@@ -14,29 +13,6 @@ const ProfileHeader = ({ selected }) => {
     const [imagePopUpUrl, setImagePopUpUrl] = useState('');
     const [showImagePopUp, setShowImagePopUp] = useState(false);
     const userId = decodeURI(window.location.href.substring(window.location.href.lastIndexOf('/') + 1));
-    const location = useLocation().pathname;
-    const history = useHistory();
-
-    const goToPhotos = (e) => {
-        e.preventDefault();
-        if (!location.includes("photos")) {
-            history.push('/photos/' + userId);
-        }
-    }
-
-    const goToTimeline = (e) => {
-        e.preventDefault();
-        if (!location.includes("profile")) {
-            history.push('/profile/' + userId);
-        }
-    }
-
-    const goToFriends = (e) => {
-        e.preventDefault();
-        if (!location.includes("friends")) {
-            history.push('/friends/' + userId);
-        }
-    }
 
     const showProfileImage = () => {
         setImagePopUpUrl({ postImage: profilePicture })
@@ -60,7 +36,7 @@ const ProfileHeader = ({ selected }) => {
                     await setQuote(user.quote);
                 })
         }
-    }, [location, userId])
+    }, [userId])
 
     return (
         <header className="profile-header">
@@ -84,19 +60,19 @@ const ProfileHeader = ({ selected }) => {
             <p className="user-name">{name}</p>
             <div className="profile-navigation">
                 <div className="timeline-nav">
-                    <button className={"timeline " + (selected.match("timeline") ? "selected" : "")} onClick={goToTimeline}>
+                    <Link to={'/profile/' + userId} className={"timeline " + (selected.match("timeline") ? "selected" : "")}>
                         Timeline
-                    </button>
+                    </Link>
                 </div>
                 <div className="photos-nav">
-                    <button className={"photos " + (selected.match("photos") ? "selected" : "")} onClick={goToPhotos}>
+                    <Link to={'/photos/' + userId} className={"photos " + (selected.match("photos") ? "selected" : "")}>
                         Photos
-                    </button>
+                    </Link>
                 </div>
                 <div className="friends-nav">
-                    <button className={"friends " + (selected.match("friends") ? "selected" : "")} onClick={goToFriends}>
+                    <Link to={'/friends/' + userId} className={"friends " + (selected.match("friends") ? "selected" : "")}>
                         Friends
-                    </button>
+                    </Link>
                 </div>
                 <UserFriendButton userId={userId} />
             </div>
