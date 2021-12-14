@@ -3,7 +3,7 @@ import './FriendSuggestion.css';
 import { Link } from 'react-router-dom';
 import { addFriend, removeFriendSuggestion } from '../../services/friendService.js';
 
-const FriendSuggestion = ({friend}) =>{
+const FriendSuggestion = ({friend, setFriendsRemaining}) =>{
     const [show, setShow] = useState(true)
 
     const addFriendEvent = () => {
@@ -11,6 +11,7 @@ const FriendSuggestion = ({friend}) =>{
             .then(async res => {
                 if(res.ok){
                     setShow(false);
+                    setFriendsRemaining(prev => prev-1);
                 }
         });
     }
@@ -20,6 +21,7 @@ const FriendSuggestion = ({friend}) =>{
             .then(async res => {
                 if(res.ok){
                     setShow(false);
+                    setFriendsRemaining(prev => prev-1);
                 }
             })
     }

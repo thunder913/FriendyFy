@@ -12,9 +12,13 @@ const LeftNavigationButtons = () => {
     const [friends, setFriends] = useState([]);
     const [events, setEvents] = useState({});
     const [blockNavScroll, setBlockNavScroll] = useState(false);
+    const [friendsRemaining, setFriendsRemaining] = useState(0);
     useEffect(() => {
         getRecommendedFriends()
-            .then(async res => setFriends(await res.json()));
+            .then(async res => {let obj = await res.json(); 
+                setFriends(obj);
+                setFriendsRemaining(obj.length);
+            })
     }, [])
 
     useEffect(() => {
@@ -31,9 +35,9 @@ const LeftNavigationButtons = () => {
             <div className={"left-navigation " + (blockNavScroll ? 'scroll-blocked' : '')}>
                 <LeftNavigationEvents events={events} setBlockNavScroll={setBlockNavScroll} />
                 <div className="people-you-may-know">
-                    <div className="friend-suggestions">
-                        {friends.map(friend => <FriendSuggestion key={friend.username} friend={friend} />)}
-                    </div>
+                    {friendsRemaining ? <div className="friend-suggestions">
+                        {friends.map(friend => <FriendSuggestion key={friend.username} friend={friend} setFriendsRemaining={setFriendsRemaining}/>)}
+                    </div> : ''}
                 </div>
                 <div className="tos">
                     <SiteInfoButtons />

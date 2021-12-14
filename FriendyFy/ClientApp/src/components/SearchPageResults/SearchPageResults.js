@@ -23,13 +23,13 @@ const SearchPageResults = ({feed, loadMoreResults, hasMoreEvents, hasMorePeople}
                 <b>{feed.length ? 'You reached the final result' : 'Use the search filters to find some people and events!'}</b>
             </p>
         }>
-        {feed.map(item => (<div className="search-result">
+        {feed.map(item => (<div key={item.id} className="search-result">
             <div className="image">
                 <img src={item.imageUrl} alt="" />
             </div>
             <p className="name">{item.name}</p>
             {item.type === 'profile' ? <p className="mutual-friends">{item.mutualFriends} Mutual friend{item.mutualFriends === 1 ? '' : 's'}</p> : <div className="interests">
-                {item.interests.map(x => <span>{x.label}</span>)}</div>}
+                {item.interests.map(x => <span key={item.id+''+x.id}>{x.label}</span>)}</div>}
             <Link to={'/' + item.type + '/' + item.id} className="view-button">View</Link>
         </div>))}
     </InfiniteScroll>

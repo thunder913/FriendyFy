@@ -8,6 +8,9 @@
     overflow-y: overlay;
     padding-top: 52px;
     padding-bottom: 54px;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
 }
 
 .left-navigation.scroll-blocked{

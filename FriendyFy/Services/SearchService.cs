@@ -84,11 +84,13 @@ namespace FriendyFy.Services
             {
                 people.AddRange(this.userService.GetSearchPageUsers(take, skipPeople, searchWord, interestIds, userId));
                 hasMoreUsers = people.Count() == take;
+                hasMoreEvents = false;
             }
             else if (searchType == SearchType.Event)
             {
                 events.AddRange(this.eventService.GetSearchPageEvents(skipEvents, take, searchWord, interestIds, showOnlyUserEvents, eventDate, hasEventDate, userId));
                 hasMoreEvents = events.Count() == take;
+                hasMoreUsers = false;
             }
             else if (searchType == SearchType.Both)
             {
