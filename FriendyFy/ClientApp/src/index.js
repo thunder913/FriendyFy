@@ -3,6 +3,7 @@ import React from 'react';
 import ReactDOM from 'react-dom';
 import { BrowserRouter } from 'react-router-dom';
 import App from './App';
+import { ChatConnectionProvider } from './contexts/chatConnectionContext';
 import { LoggedInProvider } from './contexts/LoggedInContext';
 import { ThemeProvider } from './contexts/ThemeContext';
 //import registerServiceWorker from './registerServiceWorker';
@@ -12,11 +13,13 @@ const rootElement = document.getElementById('root');
 
 ReactDOM.render(
   <BrowserRouter basename={baseUrl}>
-    <LoggedInProvider>
-      <ThemeProvider>
-        <App />
-      </ThemeProvider>
-    </LoggedInProvider>
+    <ChatConnectionProvider>
+      <LoggedInProvider>
+        <ThemeProvider>
+          <App />
+        </ThemeProvider>
+      </LoggedInProvider>
+    </ChatConnectionProvider>
   </BrowserRouter>,
   rootElement);
 

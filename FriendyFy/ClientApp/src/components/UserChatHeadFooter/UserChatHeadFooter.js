@@ -3,9 +3,10 @@ import UserChatHeadBox from '../UserChatHeadBox/UserChatHeadBox';
 import './UserChatHeadFooter.css';
 import { getChat, seeMessages } from '../../services/chatService';
 import { useLoggedIn } from '../../contexts/LoggedInContext';
+import { useChatConnection } from '../../contexts/chatConnectionContext';
 
-function UserChatHeadFooter({chatDetails, connection}){
-
+function UserChatHeadFooter({chatDetails}){
+    const {connection} = useChatConnection();
     const {loggedIn} = useLoggedIn();
     const [showChat, setShowChat] = useState(false);
     const [bigChatBox, setBigChatBox] = useState(false);
@@ -21,7 +22,7 @@ function UserChatHeadFooter({chatDetails, connection}){
     const isChatOpen = useRef(null); isChatOpen.current = bigChatBox;
     const newMessagesRef = useRef(null); newMessagesRef.current = newMessages;
 
-    const onClick = (e) => 
+    const onClick = () => 
         {  
             if (!showChat) {
             setBigChatBox(!bigChatBox);
@@ -117,24 +118,35 @@ function UserChatHeadFooter({chatDetails, connection}){
                   message.isBottomMessage=true;
                   let firstMessage = latestChat.current.messages[0];
                   let chatMessages = [...latestChat.current.messages];
+                  console.log('1')
                   if(latestChat.current.messages.length>0 && latestChat.current.messages[0].username===message.username){
-                      message.isTopMessage=false;
+                  console.log('2')
+                  message.isTopMessage=false;
                       firstMessage.isBottomMessage=false;
                   }else{
-                      message.isTopMessage=true;
+                  console.log('3')
+                  message.isTopMessage=true;
                       if(firstMessage)
                       firstMessage.isBottomMessage=true;
                   }
+                  console.log('4')
                   if(chatMessages.length>0){
-                    chatMessages[0] = firstMessage;
-                    setChat(prevState => ({image: prevState.image, name: prevState.name, messages: [message ,...chatMessages]}));
+                  console.log('5')
+                  chatMessages[0] = firstMessage;
+                  
+                  setChat(prevState => ({image: prevState.image, name: prevState.name, messages: [message ,...chatMessages]}));
+                }else{
+                    setChat(prevState => ({image: prevState.image, name: prevState.name, messages: [message]}));
                   }
 
+                  console.log('6')
                   if(!message.isYourMessage){
                     if(isChatOpen.current){
-                        seeMessages(chatDetails.chatId);
+                  console.log('7')
+                  seeMessages(chatDetails.chatId);
                     }else{
-                        setNewMessages(newMessagesRef.current+1);
+                  console.log('8')
+                  setNewMessages(newMessagesRef.current+1);
                     }
                   }
 
@@ -178,8 +190,8 @@ function UserChatHeadFooter({chatDetails, connection}){
             <div className="footer-user-image">
                 <img src={chatDetails.picture} /*alt="UserImage"*/ />
             </div>
-            {/* {userOnline}
-            {unreadMessages} */}
+            {/* {userOnline} */}
+            {unreadMessages}
             <span className="footer-chat-username">{chatDetails.name}</span>
             </div>
         </div>
