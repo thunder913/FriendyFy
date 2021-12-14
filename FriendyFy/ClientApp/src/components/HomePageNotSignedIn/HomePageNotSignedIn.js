@@ -72,7 +72,7 @@ const HomePageNotSignedIn = () => {
                         </form>
                     </div>
                     <div className="create-account">
-                        <h3 className="join-our-community">Join our comunity now ↓↓</h3>
+                        <h3 className="join-our-community">Join our community now ↓↓</h3>
                         <button className="register" onClick={() => setShowRegister(true)}>
                             <span>
                                 Create New Account

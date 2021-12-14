@@ -74,3 +74,11 @@ export function likeEvent(eventId) {
         body: JSON.stringify({eventId})
     });
   }
+
+  export function getRandomEvent() {
+    return fetch('/event/getRandomEvent', {
+        method: 'POST'
+    });
+  }
+
+  

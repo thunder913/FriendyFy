@@ -65,7 +65,7 @@ const Friends = () => {
                         </p>
                     }
                     >
-                    {friends.map(friend => <Friend friend={friend}/>)}
+                    {friends.map(friend => <Friend key={friend.username} friend={friend}/>)}
                 </InfiniteScroll>
             </main>)
 }

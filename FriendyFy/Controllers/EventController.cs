@@ -231,5 +231,11 @@ namespace FriendyFy.Controllers
 
             return BadRequest();
         }
+
+        [HttpPost("getRandomEvent")]
+        public IActionResult GetRandomEvent()
+        {
+            return Ok(this.eventService.GetRandomEventId());
+        }
     }
 }

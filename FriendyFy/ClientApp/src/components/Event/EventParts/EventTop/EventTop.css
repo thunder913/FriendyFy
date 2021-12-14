@@ -150,3 +150,9 @@
         width: initial;
     }
 }
+
+@media only screen and (max-width: 767px){
+    .event-page .leave-button{
+        top: auto;
+    }
+}

@@ -145,6 +145,10 @@ header.headline > h2, header.headline > p{
     text-decoration: underline;
 }
 
+.profile-sidebar .tab-title:hover{
+    text-decoration: underline;
+}
+
 .tab-title,.tab-title:hover{
     color: var(--text-main);
 }

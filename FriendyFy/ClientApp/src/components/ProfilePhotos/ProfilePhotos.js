@@ -98,7 +98,7 @@ const ProfilePhotos = () => {
                         <b>There are no images!</b>
                     </p> : ''
                 }>
-                {photos.map(photo => <ProfilePhoto key={photo.id} showImagePopUpEvent={showImagePopUpEvent} image={photo.imageUrl} id={photo.imageId} />)}
+                {photos.map(photo => <ProfilePhoto key={photo.imageId} showImagePopUpEvent={showImagePopUpEvent} image={photo.imageUrl} id={photo.imageId} />)}
             </InfiniteScroll>
         </main>)
 }

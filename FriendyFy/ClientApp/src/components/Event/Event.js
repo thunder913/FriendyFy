@@ -20,7 +20,7 @@ const Event = () => {
                 setEvent(obj);
                 setIsInEvent(obj.isInEvent);
             });
-    }, [history.location])
+    }, [eventId])
 
     return(
         <PageLoading>

@@ -49,8 +49,10 @@ const MakePostPopUp = ({ hasImage, show, setShow }) => {
         <PopUp show={show} setShow={setShow} escClose={true}>
             <div className="popup-outer make-post-popup">
                 <OutsideClickHandler
-                    onOutsideClick={() => {
-                        setShow(false);
+                    onOutsideClick={(e) => {
+                        if(e.target.getAttribute('role') !== 'option'){
+                            setShow(false);
+                        }
                     }}>
                     <div className="popup-inner post-popup">
                         <PopUpHeader title="Create a post" closePopUp={() => setShow(false)}></PopUpHeader>

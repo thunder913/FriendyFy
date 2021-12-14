@@ -853,5 +853,14 @@ namespace FriendyFy.Services
 
             return toReturn;
         }
+
+        public string GetRandomEventId()
+        {
+            return this.eventRepository
+                .AllAsNoTracking()
+                .Include(x => x.Users)
+                .FirstOrDefault()
+                .Id;
+        }
     }
 }

@@ -85,7 +85,7 @@ const HomePageSignedIn = () => {
                 <b>You reached the final post</b>
               </p>
             }>
-            {feed.map(el => (el.postType == 'Event' ? <FeedEvent eventData={el} /> :
+            {feed.map(el => (el.postType == 'Event' ? <FeedEvent key={el.eventPostId} eventData={el} /> :
               !el.isRepost ? <FeedPost key={el.postId} post={el} /> : <FeedPostRepost key={el.postId} post={el} />))}
           </InfiniteScroll> </div>
           : ''}

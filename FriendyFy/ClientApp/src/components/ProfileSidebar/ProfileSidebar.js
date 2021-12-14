@@ -96,7 +96,7 @@ const ProfileSidebar = () => {
             <div className="friend-list rounded-side">
                 <header className="friends-header">
                     <h2><Link className="tab-title" to={`/friends/${userId}`}>Friends</Link></h2>
-                    <span>{sidebarFriends.friendsCount} friends</span>
+                    <Link className='tab-title' to={'/friends/'+userId}>{sidebarFriends.friendsCount} friend{sidebarFriends.friendsCount === 1 ? '' : 's'}</Link>
                 </header>
                 <section className="friends-section">
                     {sidebarFriends.friends ? sidebarFriends.friends.map(friend =>

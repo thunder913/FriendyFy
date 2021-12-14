@@ -225,7 +225,7 @@ namespace FriendyFy.Services
                     HasReceived = !string.IsNullOrWhiteSpace(loggedIn) && x.Friend.Friends.Any(y => !y.IsFriend && y.FriendId==loggedIn && y.RequestSenderId==x.Id),
                     HasRequested = !string.IsNullOrWhiteSpace(loggedIn) && x.Friend.Friends.Any(y => !y.IsFriend && y.RequestSenderId==loggedIn),
                     IsFriend = !string.IsNullOrWhiteSpace(loggedIn) && x.Friend.Friends.Any(y => y.IsFriend && y.FriendId==loggedIn),
-                    MutualFriends = !string.IsNullOrWhiteSpace(loggedIn) ? x.Friend.Friends.Count(y => y.FriendId != loggedIn && user.Friends.Any(z => z.FriendId == y.FriendId)) : -1,
+                    MutualFriends = !string.IsNullOrWhiteSpace(loggedIn) ? x.Friend.Friends.Where(x => x.IsFriend).Count(y => y.CurrentUserId != loggedIn && y.FriendId != loggedIn && user.Friends.Where(x => x.IsFriend).Any(z => z.FriendId == y.FriendId)) : -1,
                     IsLoggedUser = x.Friend.Id == loggedIn
                 })
                 .OrderByDescending(x => x.IsFriend)

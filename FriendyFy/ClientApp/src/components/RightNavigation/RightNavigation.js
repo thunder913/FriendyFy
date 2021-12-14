@@ -6,9 +6,12 @@ import { getRightNavigationSuggestions } from '../../services/friendService';
 import { useLoggedIn } from '../../contexts/LoggedInContext';
 import { Link } from 'react-router-dom';
 import PageLoading from '../PageLoading/PageLoading';
+import { getRandomEvent } from '../../services/eventService';
+
 const RightNavigation = () => {
     const { loggedIn } = useLoggedIn();
     let location = useLocation();
+    const [randomEventId, setRandomEventId] = useState('');
     const [recommendations, setRecommendation] = useState([]);
     useEffect(() => {
         getRightNavigationSuggestions()
@@ -16,6 +19,7 @@ const RightNavigation = () => {
                 let obj = await res.json();
                 setRecommendation(obj);
             })
+        getRandomEvent().then(async res => setRandomEventId(await res.text()))
     }, [])
 
     if (location.pathname !== '/' && location.pathname !== '/search-page') {
@@ -48,7 +52,7 @@ const RightNavigation = () => {
                         </Link>
                     </li>
                     <li className="right-nav-button">
-                        <Link to={"/profile/" + loggedIn.userName} >
+                        <Link to={"/event/" + randomEventId} >
                             Random Event
                         </Link>
                     </li>
@@ -61,7 +65,7 @@ const RightNavigation = () => {
             </div>
             <div className="bottom-half">
                 <h2 className="people-you-met-title">People You Probably Met</h2>
-                {recommendations.map(person => <PersonYouProbablyMet person={person} />)}
+                {recommendations.map(person => <PersonYouProbablyMet key={person.username} person={person} />)}
             </div>
         </PageLoading>
     </aside>
