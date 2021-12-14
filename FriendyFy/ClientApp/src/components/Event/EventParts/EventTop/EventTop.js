@@ -77,7 +77,7 @@ const EventTop = ({ images = [], mainImage, lat, lng, city, time, userImages = [
             setShow={setShowLeaveEventPopUp} />
         <AddImagePopUp setImages={setEventImages} eventId={eventId} show={showAddImagePopUp} setShow={setShowAddImagePopUp} />
         {isInEvent ? <button className="leave-button" onClick={leaveEventHandler}>Leave</button> : ''}
-        <div className="photos">
+        <div className={"photos "+(eventImages.length===0?'empty':'')}>
             {eventImages.length === 0 && isOrganizer ? <div className="add-image">
                 <button onClick={() => setShowAddImagePopUp(true)} className="big-add-image">Add Image</button>
             </div> : eventImages.length === 1 ? <EventOneImage showImagePopUp={showImagePopUpEvent} image={eventImages[0]} /> :

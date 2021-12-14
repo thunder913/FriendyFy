@@ -32,6 +32,10 @@
     cursor: pointer;
 }
 
+.event-page-top .photos.empty{
+    cursor: initial;
+}
+
 .event-page-top .photos .add-event-image, .event-page-top .photos .big-add-image{
     background-color: transparent;
     border: 0px;

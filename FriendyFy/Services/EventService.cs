@@ -437,7 +437,9 @@ namespace FriendyFy.Services
                 .ThenInclude(x => x.Friends)
                 .Where(x => x.Organizer.UserName != user.UserName && !x.Users.Any(y => y.UserName == user.UserName) && x.Time > DateTime.UtcNow)
                 .Where(x => (x.Latitude < user.Latitude && x.Latitude + 5 > user.Latitude) || (x.Latitude - 5 < user.Latitude && x.Latitude > user.Latitude)
-                && (x.Longitude < user.Longitude && x.Longitude + 5 > user.Longitude) || (x.Longitude - 5 < user.Longitude && x.Longitude > user.Longitude))
+                //&& (x.Longitude < user.Longitude && x.Longitude + 5 > user.Longitude) 
+                //|| (x.Longitude - 5 < user.Longitude && x.Longitude > user.Longitude)
+                )
                 .OrderBy(x => x.Time)
                 .Take(2)
                 .Select(x => new
