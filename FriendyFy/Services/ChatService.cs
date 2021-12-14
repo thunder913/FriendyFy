@@ -29,7 +29,7 @@ namespace FriendyFy.Services
             this.userRepository = userRepository;
         }
 
-        public List<ChatFooterUserDto> GetUserChats(string username)
+        public List<ChatFooterUserDto> GetUserChats(string username, int page, int itemsPerPage,int items, string search)
         {
             return this.chatRepository
                 .AllAsNoTracking()
@@ -39,6 +39,10 @@ namespace FriendyFy.Services
                 .ThenInclude(x => x.ProfileImage)
                 .Where(x => x.Users.Any(y => y.UserName == username))
                 .Where(x => x.ChatType != ChatType.NotAccepted)
+                .Where(x => string.IsNullOrWhiteSpace(search) || (x.Users.Any(y => (y.FirstName+" "+y.LastName).ToLower().Contains(search.ToLower()))))
+                .OrderBy(x => x.Id)
+                .Skip(page * itemsPerPage)
+                .Take(items)
                 // TODO remove this tolist
                 .ToList()
                 .Select(x => new ChatFooterUserDto()

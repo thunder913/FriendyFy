@@ -5,7 +5,7 @@ import { getChat, seeMessages } from '../../services/chatService';
 import { useLoggedIn } from '../../contexts/LoggedInContext';
 import { useChatConnection } from '../../contexts/chatConnectionContext';
 
-function UserChatHeadFooter({ chatDetails }) {
+function UserChatHeadFooter({ chatDetails, chats, setChats }) {
     const { connection } = useChatConnection();
     const { loggedIn } = useLoggedIn();
     const [showChat, setShowChat] = useState(false);
@@ -22,6 +22,13 @@ function UserChatHeadFooter({ chatDetails }) {
     const isChatOpen = useRef(null); isChatOpen.current = bigChatBox;
     const newMessagesRef = useRef(null); newMessagesRef.current = newMessages;
 
+    const changeEventActiveStatus = (status) => {
+        const index = chats.findIndex(chat => chat.chatId === chatDetails.chatId);
+        let newChats = [...chats];
+        newChats[index].isActive = status;
+        setChats(newChats);
+    }
+
     const onClick = () => {
         if (!showChat) {
             setBigChatBox(!bigChatBox);
@@ -29,11 +36,13 @@ function UserChatHeadFooter({ chatDetails }) {
             if (newMessages > 0)
                 seeMessages(chatDetails.chatId)
             setNewMessages(0);
+            changeEventActiveStatus(true);
         }
     };
 
     const closeChatPopup = () => {
         setBigChatBox(!bigChatBox);
+        changeEventActiveStatus(false);
         setTimeout(() => {
             setShowChat(!showChat);
         }, 300);

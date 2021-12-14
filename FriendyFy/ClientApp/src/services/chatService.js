@@ -1,6 +1,8 @@
-export function getChats(username) {
-    return fetch('/chat/getChats/'+username, {
-        method: 'GET',
+export function getChats(username, page, take, search, itemsPerPage) {
+    return fetch('/chat/getChats', {
+        method: 'POST',
+        headers: {'Content-Type': 'application/json'},
+        body: JSON.stringify({username, page, take, search, itemsPerPage})
     });
   }
 

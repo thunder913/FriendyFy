@@ -69,5 +69,29 @@
   scroll-behavior: smooth;
   vertical-align: middle;
   position: relative;
-  width: auto !important;
+  gap: 10px;
+  width: 100%;
+}
+
+.site-footer .left-arrow, .site-footer .right-arrow{
+  font-size: 40px;
+  padding: 5px;
+  cursor: pointer;
+  color: var(--text-main);
+  transition: 0.3s;
+  border-radius: 5px;
+}
+
+.site-footer .left-arrow:hover, .site-footer .right-arrow:hover{
+  background-color: var(--hover-gray);
+}
+
+.site-footer .right-arrow{
+  margin-left: auto;
+}
+
+.site-footer .chats{
+  display: flex;
+  flex-direction: row;
+  gap: 10px;
 }

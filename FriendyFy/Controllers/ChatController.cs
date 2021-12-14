@@ -19,17 +19,17 @@ namespace FriendyFy.Controllers
             this.chatService = chatService;
         }
 
-        [HttpGet("getChats/{username}")]
-        public IActionResult GetUserChats(string username)
+        [HttpPost("getChats/")]
+        public IActionResult GetUserChats(GetChatsDto dto)
         {
             var user = this.GetUserByToken();
 
-            if (user.UserName != username)
+            if (user.UserName != dto.Username)
             {
                 return Unauthorized("You are not signed in!");
             }
 
-            return Ok(this.chatService.GetUserChats(username));
+            return Ok(this.chatService.GetUserChats(dto.Username, dto.Page, dto.ItemsPerPage, dto.Take, dto.Search));
         }
 
         [HttpPost("getChat")]
