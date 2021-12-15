@@ -19,17 +19,21 @@ const ProfilePhotos = () => {
     const [comments, setComments] = useState([]);
     const [commentsCount, setCommentsCount] = useState('');
     const [post, setPost] = useState('');
+    const [isFirstTime, setIsFirstTime] = useState(true);
+
     const loadMorePhotos = () => {
-        return getUserImages(userId, 10, photos.length)
-            .then(async res => {
-                let obj = await res.json();
-                if (obj.length > 0) {
-                    setPhotos(prevState => ([...prevState, ...obj]));
-                }
-                else {
-                    setHasMore(false);
-                }
-            })
+        if (!isFirstTime) {
+            return getUserImages(userId, 12, photos.length)
+                .then(async res => {
+                    let obj = await res.json();
+                    if (obj.length > 0) {
+                        setPhotos(prevState => ([...prevState, ...obj]));
+                    }
+                    else {
+                        setHasMore(false);
+                    }
+                })
+        }
     }
 
     const showImagePopUpEvent = (id) => {
@@ -48,7 +52,7 @@ const ProfilePhotos = () => {
 
     useEffect(() => {
         setPhotos([]);
-        getUserImages(userId, 10, 0)
+        getUserImages(userId, 12, 0)
             .then(async res => {
                 let obj = await (res.json());
                 if (obj.length > 0) {
@@ -57,6 +61,7 @@ const ProfilePhotos = () => {
                 else {
                     setHasMore(false);
                 }
+                setIsFirstTime(false)
             })
     }, [])
 
@@ -91,7 +96,7 @@ const ProfilePhotos = () => {
                     height={100}
                     width={100}
                     className="loader"
-                  />}
+                />}
                 scrollableTarget="scrollableDiv"
                 endMessage={
                     !photos.length ? <p style={{ textAlign: 'center' }}>

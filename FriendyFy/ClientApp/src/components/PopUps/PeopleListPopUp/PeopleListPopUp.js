@@ -9,7 +9,7 @@ import OutsideClickHandler from "react-outside-click-handler";
 const PeopleListPopUp = ({ title, count, loadPeople, show, setShow, manyPopUps }) => {
     const [hasMore, setHasMore] = useState(true);
     const [people, setPeople] = useState([]);
-
+    const [isFirstTime, setIsFirstTime] = useState(true);
     useEffect(() => {
         if (show) {
             loadPeople(0)
@@ -21,6 +21,7 @@ const PeopleListPopUp = ({ title, count, loadPeople, show, setShow, manyPopUps }
                     else {
                         setHasMore(false);
                     }
+                    setIsFirstTime(false);
                 })
         } else {
             setPeople([]);
@@ -28,16 +29,18 @@ const PeopleListPopUp = ({ title, count, loadPeople, show, setShow, manyPopUps }
     }, [show])
 
     const loadMorePeople = () => {
-        return loadPeople(people.length)
-            .then(async res => {
-                let obj = await res.json();
-                if (obj.length > 0) {
-                    setPeople(prevState => ([...prevState, ...obj]));
-                }
-                else {
-                    setHasMore(false);
-                }
-            })
+        if (!isFirstTime) {
+            return loadPeople(people.length)
+                .then(async res => {
+                    let obj = await res.json();
+                    if (obj.length > 0) {
+                        setPeople(prevState => ([...prevState, ...obj]));
+                    }
+                    else {
+                        setHasMore(false);
+                    }
+                })
+        }
     }
 
     return (

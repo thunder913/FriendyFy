@@ -25,7 +25,7 @@
     top: 45px;
     position: fixed;
     height: 800px;
-    overflow: auto;
+    overflow: overlay;
     padding-bottom: 100px;
 }
 
@@ -161,6 +161,32 @@
     width: 150px;
 }
 
+.search-options::-webkit-scrollbar {
+    width: 5px;
+  }
+  
+  /* Track */
+  .search-options::-webkit-scrollbar-track {
+    background: transparent;
+  }
+  
+  /* Handle */
+  .search-options::-webkit-scrollbar-thumb {
+    background: transparent;
+    border-radius: 24px;
+  }
+  
+  /* Handle on hover */
+  .search-options::-webkit-scrollbar-thumb:hover {
+    background: rgb(61, 61, 61);
+    transition: 1s;
+  }
+  
+  .search-options:hover::-webkit-scrollbar-thumb{
+    background: rgb(168, 161, 161);
+    transition: 1s;
+  }
+
 @media only screen and (max-width: 1366px){
     .search-page{
         flex-direction: column;
@@ -205,3 +231,12 @@
         display: none;
     }
 }
+
+@media only screen and (max-height: 767px){
+    .search-page > div.search-options{
+        padding-bottom: 350px;
+        padding-top: 50px;
+    }
+}
+
+

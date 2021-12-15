@@ -19,22 +19,25 @@ const ProfileTimeline = () => {
   const userId = decodeURI(window.location.href.substring(window.location.href.lastIndexOf('/') + 1));
   const [didFirstTimeRequest, setDidFirstTimeRequest] = useState(false);
   const [feedType, setFeedType] = useState('posts');
+  const [isFirstTime, setIsFirstTime] = useState(true);
   const loadMorePosts = () => {
-    if (didFirstTimeRequest) {
-      return getFeed(events, posts, true, 10, userId, hasPosts, hasEvents, feedType)
-        .then(async res => {
-          let obj = await res.json();
-          obj.posts.forEach(el => {
-            if (el.postType == "Event") {
-              setEvents(prev => [...prev, el.eventPostId]);
-            } else if (el.postType == "Post") {
-              setPosts(prev => [...prev, el.postId]);
-            }
-          });
-          setHasEvents(obj.hasEvents);
-          setHasPosts(obj.hasPosts);
-          setFeed(prev => ([...prev, ...obj.posts]));
-        })
+    if (!isFirstTime) {
+      if (didFirstTimeRequest) {
+        return getFeed(events, posts, true, 10, userId, hasPosts, hasEvents, feedType)
+          .then(async res => {
+            let obj = await res.json();
+            obj.posts.forEach(el => {
+              if (el.postType == "Event") {
+                setEvents(prev => [...prev, el.eventPostId]);
+              } else if (el.postType == "Post") {
+                setPosts(prev => [...prev, el.postId]);
+              }
+            });
+            setHasEvents(obj.hasEvents);
+            setHasPosts(obj.hasPosts);
+            setFeed(prev => ([...prev, ...obj.posts]));
+          })
+      }
     }
   }
 
@@ -58,6 +61,7 @@ const ProfileTimeline = () => {
         setHasEvents(obj.hasEvents);
         setHasPosts(obj.hasPosts);
         setDidFirstTimeRequest(true);
+        setIsFirstTime(false);
       });
     //eslint-disable-next-line
   }, [userId, feedType])
@@ -68,14 +72,14 @@ const ProfileTimeline = () => {
       <ProfileSidebar />
       <div className="profile-feed">
         <div className="feed">
-          {(loggedIn && loggedIn.userName===userId) ? <MakePost
+          {(loggedIn && loggedIn.userName === userId) ? <MakePost
             showPostImage={false}
             showCreatePost={true}
             showCreateEvent={false}
           /> : ''}
           <div className="feed-choice">
-            <button className={("posts "+ (feedType==='posts'?'selected':''))} onClick={() => setFeedType('posts')}>POSTS</button>
-            <button className={("events "+ (feedType==='events'?'selected':''))} onClick={() => setFeedType('events')}>EVENTS</button>
+            <button className={("posts " + (feedType === 'posts' ? 'selected' : ''))} onClick={() => setFeedType('posts')}>POSTS</button>
+            <button className={("events " + (feedType === 'events' ? 'selected' : ''))} onClick={() => setFeedType('events')}>EVENTS</button>
           </div>
           <InfiniteScroll
             className={"feed-posts"}
