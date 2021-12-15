@@ -167,7 +167,7 @@ const Settings = () => {
                         setInterests={setInterests} />
                 </div>
             </div>
-            <MyGoogleMap location={location} setLocation={setLocation} />
+            <MyGoogleMap location={location} setLocation={setLocation} zoom={8}/>
 
             <button className="change-user-data" onClick={submitForm}>Save Changes</button>
         </div>

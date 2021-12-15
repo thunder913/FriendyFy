@@ -34,7 +34,7 @@ const options = {
   zoomControl: true
 }
 
-const MyGoogleMap = ({ location, setLocation, staticMap }) => {  
+const MyGoogleMap = ({ location, setLocation, staticMap, zoom }) => {  
   const [center, setCenter] = useState({
     lat: location.lat ?? 51.1657,
     lng: location.lng ?? 15.4123
@@ -89,7 +89,7 @@ const MyGoogleMap = ({ location, setLocation, staticMap }) => {
 
     <GoogleMap
       mapContainerStyle={mapContainerStyle}
-      zoom={location ? 8 : 2}
+      zoom={zoom ? zoom : 3}
       center={center}
       options={options}
       onClick={onMapClick}

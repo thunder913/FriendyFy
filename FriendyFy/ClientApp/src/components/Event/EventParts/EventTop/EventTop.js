@@ -101,7 +101,7 @@ const EventTop = ({ images = [], mainImage, lat, lng, city, time, userImages = [
             </div>
         </div>
         <div className="location-time">
-            {(lat && lng) ? <MyGoogleMap location={{ lat: lat, lng: lng }} staticMap={true} /> : ''}
+            {(lat && lng) ? <MyGoogleMap location={{ lat: lat, lng: lng }} staticMap={true} zoom={8}/> : ''}
             <p className="info-text">{city} {localTime}</p>
         </div>
     </section>)

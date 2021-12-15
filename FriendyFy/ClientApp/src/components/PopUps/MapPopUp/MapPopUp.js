@@ -19,7 +19,7 @@ const MapPopUp = ({ title, location, show, setShow, lat, long }) => {
                             <p className="town">{location}</p>
                             <button className="close-popup" onClick={() => setShow(false)}>x</button>
                         </header>
-                        <MyGoogleMap location={{ lat: lat, lng: long }} staticMap={true} />
+                        <MyGoogleMap location={{ lat: lat, lng: long }} staticMap={true} zoom={8}/>
                     </div>
                 </OutsideClickHandler>
             </div>
