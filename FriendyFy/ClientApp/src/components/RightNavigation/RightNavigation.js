@@ -13,6 +13,11 @@ const RightNavigation = () => {
     let location = useLocation();
     const [randomEventId, setRandomEventId] = useState('');
     const [recommendations, setRecommendation] = useState([]);
+    
+    const getNewEvent = () => {
+        getRandomEvent().then(async res => setRandomEventId(await res.text()))
+    }
+
     useEffect(() => {
         getRightNavigationSuggestions()
             .then(async res => {
@@ -52,7 +57,7 @@ const RightNavigation = () => {
                         </Link>
                     </li>
                     <li className="right-nav-button">
-                        <Link to={"/event/" + randomEventId} >
+                        <Link to={"/event/" + randomEventId} onClick={() => getNewEvent()}>
                             Random Event
                         </Link>
                     </li>

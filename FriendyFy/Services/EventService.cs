@@ -903,6 +903,7 @@ namespace FriendyFy.Services
             return this.eventRepository
                 .AllAsNoTracking()
                 .Include(x => x.Users)
+                .OrderBy(x => Guid.NewGuid().ToString())
                 .FirstOrDefault()
                 .Id;
         }

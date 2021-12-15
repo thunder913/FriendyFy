@@ -12,7 +12,7 @@
     align-self: center;
 }
 
-.search-page > div.search-options{
+.search-page > form.search-options{
     flex-basis: 40%;
     width: 18%;
     border-right: 1px solid var(--border-separator);
@@ -194,7 +194,7 @@
         float: right;
     }
 
-    .search-page > div.search-options{
+    .search-page > form.search-options{
         width: 100%;
         border: 0px;
         position: initial;
@@ -233,7 +233,7 @@
 }
 
 @media only screen and (max-height: 767px){
-    .search-page > div.search-options{
+    .search-page > form.search-options{
         padding-bottom: 350px;
         padding-top: 50px;
     }

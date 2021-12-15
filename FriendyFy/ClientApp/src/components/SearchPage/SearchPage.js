@@ -58,8 +58,8 @@ const SearchPage = () => {
             });
     }
 
-    const onButtonClick = () => {
-
+    const onButtonClick = (e) => {
+        e.preventDefault();
         setEventsCount(0);
         setPeopleCount(0);
         setHasMoreEvents(true);
@@ -104,7 +104,7 @@ const SearchPage = () => {
 
     return (<PageLoading>
         <div className="search-page">
-            <div className="search-options">
+            <form className="search-options">
                 <h2 className="search-title">Search</h2>
                 <input type="text" placeholder="Search" onChange={(e) => setSearchWord(e.target.value)} />
                 <div className="event-type-radio">
@@ -128,8 +128,8 @@ const SearchPage = () => {
                     className='birthday'
                     inputProps={{ id: 'birthday', placeholder: 'Event date in UTC time', autoComplete: "off" }}
                 />
-                <button className="search" onClick={() => onButtonClick()}>Search</button>
-            </div>
+                <button className="search" onClick={(e) => onButtonClick(e)}>Search</button>
+            </form>
             <div className="results">
                 <SearchPageResults
                     feed={feed}

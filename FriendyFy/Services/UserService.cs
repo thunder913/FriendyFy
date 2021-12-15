@@ -188,28 +188,35 @@ namespace FriendyFy.Services
             var blocked = user.RemoveSuggestionFriends.Select(y => y.BlockedUserId).ToArray();
             var userInterests = user.Interests.Select(y => y.Id).ToArray();
 
-            return this.userRepository
+            var users = this.userRepository
                 .AllAsNoTracking()
                 .Include(x => x.Interests)
                 .Include(x => x.ProfileImage)
                 .Include(x => x.Friends)
+                .Include(x => x.Events)
+                .ThenInclude(x => x.Users)
                 .Where(x => x.Id != userId && !blocked.Any(y => y == x.Id)
                 && !(x.Friends.Any(y => y.FriendId == x.Id && y.CurrentUserId == userId) || x.Friends.Any(y => y.CurrentUserId == x.Id && y.FriendId == userId)))
-                .OrderByDescending(x => x.Events.Count(y => y.Users.Any(z => z.Id == userId)) + 
+                .OrderByDescending(x => x.Events.Where(x => x.Time < DateTime.UtcNow).Count(y => y.Users.Any(z => z.Id == userId)) + 
                 x.Friends.Where(x => x.IsFriend).Count(y => y.Id == userId) * 2 +
                 x.Interests.Count(y => userInterests.Any(z => z == y.Id)))
                 .Take(4)
-                .ToList()
                 .Select(x => new RightNavigationRecommendationViewModel()
                 {
-                    CommonInterests = x.Interests.Count(y => user.Interests.Any(z => z.Id == y.Id)),
-                    EventsTogether = x.Events.Count(y => y.Users.Any(z => z.Id == userId)),
-                    MutualFriends = x.Friends.Where(x => x.IsFriend).Count(y => y.Id == userId) * 2,
+                    EventsTogether = x.Events.Where(x => x.Time < DateTime.UtcNow).Count(y => y.Users.Any(z => z.Id == userId)),
                     Name = x.FirstName + " " + x.LastName,
-                    ProfilePhoto = this.blobService.GetBlobUrlAsync(x.ProfileImage?.Id + x.ProfileImage?.ImageExtension, GlobalConstants.BlobPictures).GetAwaiter().GetResult(),
+                    ProfilePhoto = x.ProfileImage.Id + x.ProfileImage.ImageExtension,
                     Username = x.UserName
                 })
                 .ToList();
+
+            return users.Select(x => new RightNavigationRecommendationViewModel()
+            {
+                EventsTogether = x.EventsTogether,
+                Name = x.Name,
+                ProfilePhoto = this.blobService.GetBlobUrlAsync(x.ProfilePhoto, GlobalConstants.BlobPictures).GetAwaiter().GetResult(),
+                Username = x.Username
+            }).ToList();
         }
 
         public async Task<bool> ChangeUserThemeAsync(ApplicationUser user, ThemePreference theme)
@@ -296,6 +303,8 @@ namespace FriendyFy.Services
                 .Include(x => x.Interests)
                 .Include(x => x.ProfileImage)
                 .Include(x => x.Friends)
+                .ThenInclude(x => x.Friend)
+                .ThenInclude(x => x.Friends)
                 .Where(x => (string.IsNullOrWhiteSpace(searchWord) || (x.FirstName + " " + x.LastName).ToLower().Contains(searchWord)))
                 .Where(x => (interestIds.Count == 0) || (x.Interests.Count(y => interestIds.Contains(y.Id)) == interestIds.Count()))
                 .Where(x => x.Id != userId)
@@ -308,7 +317,7 @@ namespace FriendyFy.Services
                     Id = x.UserName,
                     Name = x.FirstName + " " + x.LastName,
                     Image = x.ProfileImage.Id + x.ProfileImage.ImageExtension,
-                    MutualFriends = x.Friends.Where(x => x.IsFriend).Count(y => y.FriendId == userId),
+                    MutualFriends = x.Friends.Where(x => x.IsFriend).Count(y => y.Friend.Friends.Any(z => z.IsFriend && z.FriendId == userId)),
                 })
                 .ToList();
 
