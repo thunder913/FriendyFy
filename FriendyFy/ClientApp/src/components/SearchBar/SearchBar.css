@@ -10,7 +10,7 @@
 }
 
 .search-form form input{
-    background-color: var(--slightly-light);
+    background-color: var(--secondary);
     padding: 0px 25px 0px 10px;
     border: 2px solid var(--border-separator);
     border-radius: 20px;
@@ -31,7 +31,7 @@
     right: 35px;
     padding: 0px 7px;
     border-radius: 0px 20px 20px 0px;
-    background-color: var(--slightly-light);
+    background-color: var(--secondary);
     font-size: 16px;
     transition: 0.5s;
     color: rgba(170, 170, 170, 0.856);

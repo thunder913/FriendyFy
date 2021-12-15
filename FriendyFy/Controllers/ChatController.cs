@@ -3,6 +3,8 @@ using FriendyFy.Hubs;
 using FriendyFy.Services.Contracts;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.SignalR;
+using Newtonsoft.Json;
+using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using ViewModels;
@@ -23,13 +25,17 @@ namespace FriendyFy.Controllers
         public IActionResult GetUserChats(GetChatsDto dto)
         {
             var user = this.GetUserByToken();
-
+            var chatIds = new List<string>();
+            if (!string.IsNullOrWhiteSpace(dto.ChatIds))
+            {
+                chatIds = JsonConvert.DeserializeObject<List<string>>(dto.ChatIds);
+            }
             if (user.UserName != dto.Username)
             {
                 return Unauthorized("You are not signed in!");
             }
 
-            return Ok(this.chatService.GetUserChats(dto.Username, dto.Page, dto.ItemsPerPage, dto.Take, dto.Search));
+            return Ok(this.chatService.GetUserChats(dto.Username, dto.Page, dto.ItemsPerPage, dto.Take, dto.Search, chatIds));
         }
 
         [HttpPost("getChat")]

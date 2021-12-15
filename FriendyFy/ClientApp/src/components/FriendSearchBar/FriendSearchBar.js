@@ -5,7 +5,7 @@ import { faSearch } from '@fortawesome/free-solid-svg-icons'
 
 const FriendSearchBar = ({setSearch, performSearch}) =>(
     <div className="friend-search-form" >
-        <form>
+        <form onSubmit={(e) => performSearch(e)}>
         <input
             type="text"
             id="header-search"
@@ -13,7 +13,7 @@ const FriendSearchBar = ({setSearch, performSearch}) =>(
             name="s" 
             onChange={(e) => setSearch(e.target.value)}
         />
-        <button onClick={(e) => performSearch(e)} className="friend-search-button" type="button">
+        <button className="friend-search-button" type="submit">
         <FontAwesomeIcon icon={faSearch} />
         </button>
     </form>
