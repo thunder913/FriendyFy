@@ -32,7 +32,7 @@ const EventTop = ({ images = [], mainImage, lat, lng, city, time, userImages = [
                     NotificationManager.success('Successfully left the event!', '', 2000);
                     setIsInEvent(false);
                 }else{
-                    NotificationManager.success('There was an error leaving the event!', '', 2000);
+                    NotificationManager.success('There was an error deleting the event!', '', 2000);
                 }
             })
     }

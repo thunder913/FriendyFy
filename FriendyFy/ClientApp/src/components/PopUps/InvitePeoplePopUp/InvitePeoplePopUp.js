@@ -73,7 +73,7 @@ const InvitePeoplePopUp = ({ title, eventId, show, setShow }) => {
                         <PopUpHeader title={title} closePopUp={(e) => { console.log(e.target); setShow(false); }} />
                         <section className={"people "}>
                             <InfiniteScroll
-                                className="people-section"
+                                className="people-section fancy-scroll"
                                 dataLength={people.length}
                                 next={loadMorePeople}
                                 height={300}
@@ -87,7 +87,7 @@ const InvitePeoplePopUp = ({ title, eventId, show, setShow }) => {
                                 />}
                                 scrollableTarget="scrollableDiv"
                             >
-                                {people.map(p => <div className="person">
+                                {people.map(p => <div key={p.username} className="person">
                                     <Link key={p.username} to={'/profile/' + p.username}><article className="person">
                                         <div className="person-image">
                                             <img src={p.profileImage} alt="" />

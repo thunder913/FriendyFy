@@ -13,7 +13,7 @@ const RightNavigation = () => {
     let location = useLocation();
     const [randomEventId, setRandomEventId] = useState('');
     const [recommendations, setRecommendation] = useState([]);
-    
+
     const getNewEvent = () => {
         getRandomEvent().then(async res => setRandomEventId(await res.text()))
     }
@@ -36,10 +36,12 @@ const RightNavigation = () => {
             <div className="top-half">
                 <ul className="right-navigation-list">
                     <li className="right-user right-user-name right-nav-button">
-                        <div className="right-user-photo">
-                            <img src={loggedIn.profilePhoto} alt="" />
-                        </div>
-                        <Link to={"/profile/" + loggedIn.userName}>{loggedIn.firstName} {loggedIn.lastName}</Link>
+                        <Link to={"/profile/" + loggedIn.userName}>
+                            <div className="right-user-photo">
+                                <img src={loggedIn.profilePhoto} alt="" />
+                            </div>
+                            {loggedIn.firstName} {loggedIn.lastName}
+                        </Link>
                     </li>
                     <li className="right-nav-button">
                         <Link to={"/profile/" + loggedIn.userName} >

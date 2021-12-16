@@ -136,10 +136,9 @@ const ViewImagePopUpRightSide = ({ comments, setComments, setCommentsCount, setI
         </div>
         <div className="feed-footer">
             <div className="comments">
-
                 <div className={"infinite-scroll"}>
                     <InfiniteScroll
-                        className={"comments-section"}
+                        className={"comments-section fancy-scroll"}
                         dataLength={comments.length}
                         next={loadMoreCommentsEvent}
                         height={500}

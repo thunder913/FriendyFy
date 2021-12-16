@@ -7,9 +7,11 @@ import './EventParts/EventTop/EventTop'
 import EventTop from "./EventParts/EventTop/EventTop";
 import PageLoading from "../PageLoading/PageLoading";
 import { useHistory } from "react-router";
+import AwaitLoggedInTransitionPopUp from "../PopUps/AwaitLoggedInTransitionPopUp/AwaitLoggedInTransitionPopUp";
 const Event = () => {
     const eventId = decodeURI(window.location.href.substring(window.location.href.lastIndexOf('/') + 1));
     const [event, setEvent] = useState({});
+    const [showLoader, setShowLoader] = useState(true)
     const [isInEvent, setIsInEvent] = useState(event.isInEvent);
     const history = useHistory();
 
@@ -20,6 +22,7 @@ const Event = () => {
                     let obj = await res.json();
                     setEvent(obj);
                     setIsInEvent(obj.isInEvent);
+                    setShowLoader(false);
                 })
                 .catch(() => {
                     history.push('/404');
@@ -30,6 +33,7 @@ const Event = () => {
 
     return (
         <PageLoading>
+            {!showLoader ? 
             <article className="event-page">
                 <EventTop
                     images={event.photos}
@@ -63,7 +67,7 @@ const Event = () => {
                     organizer={event.organizer}
                     isOrganizer={event.isOrganizer}
                 />
-            </article>
+            </article> : <AwaitLoggedInTransitionPopUp show={showLoader} setShow={setShowLoader} />}
         </PageLoading>
     )
 }

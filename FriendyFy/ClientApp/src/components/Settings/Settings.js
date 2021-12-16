@@ -11,12 +11,13 @@ import { TextareaAutosize } from '@mui/material';
 import { getUserData } from '../../services/userService';
 import axios from 'axios';
 import { useLoggedIn } from '../../contexts/LoggedInContext';
+import { NotificationManager } from 'react-notifications';
 
 const Settings = () => {
     const {resetUser, loggedIn} = useLoggedIn();
     const [firstName, setFirstName] = useState('');
     const [lastName, setLastName] = useState('');
-    const [user, setUser] = useState({});
+    const [, setUser] = useState({});
     const [momentDate, setMomentDate] = useState('');
     const [profileImage, setProfileImage] = useState('');
     const [coverImage, setCoverImage] = useState('');
@@ -28,6 +29,7 @@ const Settings = () => {
     const [newProfileImage, setNewProfileImage] = useState('');
     const [newCoverImage, setNewCoverImage] = useState('');
     const [errorMessage, setErrorMessage] = useState('');
+    const [displayError, setDisplayError] = useState(true);
 
     function getCurrentLocalization() {
         let localization = window.navigator.userLanguage || window.navigator.language;
@@ -42,23 +44,31 @@ const Settings = () => {
     const submitForm = async () => {
         if(firstName.length < 1){
             setErrorMessage('The first name cannot be empty!');
+            return;
         }else if(lastName.length < 1){
             setErrorMessage('The last name cannot be empety!');
+            return;
         }else if (location === '') {
             setErrorMessage("You haven't chosen a location.")
+            return;
         } else if (showAddProfileImage && !newProfileImage) {
             setErrorMessage("You must choose a profile image.")
+            return;
         } else if (showAddCoverImage && !newCoverImage) {
             setErrorMessage("You  must choose a cover image for your profile.");
+            return;
         } else if (interests.length < 3) {
             setErrorMessage("You must choose at least 3 interests.")
+            return;
         } else if (description.length < 1) {
             setErrorMessage("You must add a description/quote to display in your profile.")
+            return;
         } else {
             setErrorMessage(null);
         }
 
         if (errorMessage) {
+            setDisplayError(true);
             return;
         }
         let formInterests = interests.map(x => ({ label: x.label, id: Number.isInteger(x.value) ? x.value : 0, isNew: x.__isNew__ ?? false }));
@@ -92,10 +102,18 @@ const Settings = () => {
         let response = await axios.post("/api/editUserData", formdata);
         if (response.status === 200) {
             resetUser();
+            NotificationManager.success('Successfully updated your details!', '', 4000)
         } else {
             setErrorMessage(response.data);
         }
     }
+
+    useEffect(() => {
+        if(errorMessage && displayError){
+            setDisplayError(false);
+            NotificationManager.error(errorMessage, '', 5000);
+        }
+    }, [errorMessage, displayError])
 
     useEffect(() => {
         getUserData()
@@ -159,7 +177,7 @@ const Settings = () => {
                         onChange={(e) => setDescription(e.target.value)}
                         placeholder="What is the event about?"
                         id="post-description" minRows={2}
-                        defaultValue={user.quote} />
+                        value={description} />
                     <InterestsDropdown
                         defaultData={interests}
                         placeholder='Choose at least 3 interests'
@@ -168,7 +186,7 @@ const Settings = () => {
             </div>
             <MyGoogleMap location={location} setLocation={setLocation} zoom={8}/>
 
-            <button className="change-user-data" onClick={submitForm}>Save Changes</button>
+            <button className="change-user-data" onClick={() => submitForm()}>Save Changes</button>
         </div>
     </PageLoading>)
 }

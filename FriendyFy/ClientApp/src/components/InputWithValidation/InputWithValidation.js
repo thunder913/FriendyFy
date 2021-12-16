@@ -13,7 +13,7 @@ const InputWithValidation = (props) => {
             onChange={props.changeHandler} 
             onFocus={(e) => props.setErrorBubble(true)}
             onBlur={(e) => props.setErrorBubble(false)}
-            autocomplete="new-password"
+            autoComplete="new-password"
             id={props.id}
             />
     </div>

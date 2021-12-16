@@ -25,7 +25,8 @@ const ProfileHeader = ({ selected }) => {
     }
 
     useEffect(() => {
-        if (userId) {
+        let location = window.location.pathname;
+        if (userId && (location.includes('profile') || location.includes('friends') || location.includes('photos'))) {
             axios.get("api/getUserInformation/" + userId)
                 .then(async (res) => {
                     let user = res.data;
