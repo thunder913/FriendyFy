@@ -8,6 +8,7 @@ import OutsideClickHandler from "react-outside-click-handler";
 import { getEventInvitePeople } from "../../../services/eventService";
 import PopUpHeader from "../PopUpHeader/PopUpHeader";
 import { useNotificationConnection } from "../../../contexts/NotificationContext";
+import { NotificationManager } from 'react-notifications';
 
 const InvitePeoplePopUp = ({ title, eventId, show, setShow }) => {
     const [hasMore, setHasMore] = useState(true);
@@ -57,6 +58,7 @@ const InvitePeoplePopUp = ({ title, eventId, show, setShow }) => {
 
     const sendMessageEvent = (username) => {
         connection.send("SendEventInviteNotification", { username, eventId });
+        NotificationManager.success('Successfully sent the invite!', '', 2000);
     };
 
     return (
@@ -94,7 +96,7 @@ const InvitePeoplePopUp = ({ title, eventId, show, setShow }) => {
                                         </div>
                                     </article>
                                     </Link>
-                                    <button className={"invite-button " + (p.isInvited ? 'disabled' : '')} onClick={() => invitePerson(p)}>Invite</button>
+                                    <button className={"invite-button " + (p.isInvited ? 'disabled' : '')} onClick={() => !p.isInvited ? invitePerson(p) : ''}>Invite</button>
                                 </div>
                                 )}
                             </InfiniteScroll>

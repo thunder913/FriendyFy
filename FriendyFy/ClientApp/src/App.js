@@ -20,20 +20,21 @@ import SearchPage from './components/SearchPage/SearchPage';
 import NotFound from './components/NotFound/NotFound';
 import { useChatConnection } from './contexts/chatConnectionContext';
 import { useNotificationConnection } from './contexts/NotificationContext';
+import NotificationContainer from 'react-notifications/lib/NotificationContainer';
 
 function App() {
   const [showLoader, setShowLoader] = useState(true);
   const { loggedIn, resetUser } = useLoggedIn();
   const location = useLocation();
-  const { openConnection: openChatConnection, closeConnection: closeChatConnection, connection:chatConnection } = useChatConnection();
-  const { openConnection: openNotificationConnection, closeConnection: closeNotificationConnection, connection:notificationConnection } = useNotificationConnection();
+  const { openConnection: openChatConnection, closeConnection: closeChatConnection, connection: chatConnection } = useChatConnection();
+  const { openConnection: openNotificationConnection, closeConnection: closeNotificationConnection, connection: notificationConnection } = useNotificationConnection();
 
   const openConnections = () => {
-    if(loggedIn){
-      if(!chatConnection || chatConnection.connectionState === 'Disconnected')
-      openChatConnection();
+    if (loggedIn) {
+      if (!chatConnection || chatConnection.connectionState === 'Disconnected')
+        openChatConnection();
     }
-    if(!notificationConnection || notificationConnection.connectionState === 'Disconnected'){
+    if (!notificationConnection || notificationConnection.connectionState === 'Disconnected') {
       openNotificationConnection();
     }
   }
@@ -54,13 +55,14 @@ function App() {
     if (!loggedIn) {
       closeChatConnection();
       closeNotificationConnection();
-    }else{
+    } else {
       openConnections();
     }
   }, [loggedIn])
 
   return (
     <Layout>
+      <NotificationContainer />
       <AwaitLoggedInTransitionPopUp show={showLoader} setShow={setShowLoader} />
       <AnimatePresence exitBeforeEnter>
         <Switch location={location} key={location.pathname} className="app">

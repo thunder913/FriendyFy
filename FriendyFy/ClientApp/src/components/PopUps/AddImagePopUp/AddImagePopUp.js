@@ -4,7 +4,6 @@ import ImgDropAndCrop from "../../ImgDropAndCrop/ImgDropAndCrop";
 import PopUpHeader from "../PopUpHeader/PopUpHeader";
 import { addImageToEvent } from "../../../services/eventService";
 import NotificationManager from "react-notifications/lib/NotificationManager";
-import { NotificationContainer } from "react-notifications";
 import PopUp from "../PopUp";
 import OutsideClickHandler from "react-outside-click-handler";
 
@@ -35,7 +34,6 @@ const AddImagePopUp = ({ eventId, setImages, show, setShow }) => {
                     onOutsideClick={() => {
                         setShow(false);
                     }}>
-                    <NotificationContainer />
                     <div className="popup-inner add-image-inner-popup popup-flex-center">
                         <PopUpHeader title="Add an image to your event" closePopUp={() => setShow(false)}></PopUpHeader>
                         <div className="add-event-image">

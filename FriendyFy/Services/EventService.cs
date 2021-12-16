@@ -26,6 +26,7 @@ namespace FriendyFy.Services
         private readonly IRepository<EventComment> eventCommentRepository;
         private readonly IRepository<CommentLike> commentLikeRepository;
         private readonly IUserService userService;
+        private readonly IRepository<Notification> notificationRepository;
 
         public EventService(IGeolocationService geolocationService,
             IDeletableEntityRepository<Event> eventRepository,
@@ -35,7 +36,8 @@ namespace FriendyFy.Services
             IRepository<EventPost> eventPostRepository,
             IRepository<EventComment> eventCommentRepository,
             IRepository<CommentLike> commentLikeRepository,
-            IUserService userService)
+            IUserService userService,
+            IRepository<Notification> notificationRepository)
         {
             this.geolocationService = geolocationService;
             this.eventRepository = eventRepository;
@@ -46,6 +48,7 @@ namespace FriendyFy.Services
             this.eventCommentRepository = eventCommentRepository;
             this.commentLikeRepository = commentLikeRepository;
             this.userService = userService;
+            this.notificationRepository = notificationRepository;
         }
 
         public async Task CreateEventAsync(string name, DateTime date, List<Interest> interests, PrivacySettings privacySettings, decimal latitude, decimal longitude, string description, string profileImage, string organizerId)
@@ -540,6 +543,11 @@ namespace FriendyFy.Services
             var currEvent = this.eventRepository
                 .All()
                 .Include(x => x.EventPosts)
+                .ThenInclude(x => x.Comments)
+                .ThenInclude(x => x.CommentLikes)
+                .Include(x => x.Notification)
+                .Include(x => x.EventPosts)
+                .ThenInclude(x => x.Likes)
                 .FirstOrDefault(x => x.Id == eventId && x.OrganizerId == userId);
             if (currEvent == null)
             {
@@ -548,7 +556,25 @@ namespace FriendyFy.Services
             var eventPosts = currEvent.EventPosts;
             foreach (var eventPost in eventPosts)
             {
+                foreach (var like in eventPost.Likes)
+                {
+                    this.eventLikeRepository.Delete(like);
+                }
+
+                foreach (var comment in eventPost.Comments)
+                {
+                    foreach (var commentLike in comment.CommentLikes)
+                    {
+                        this.commentLikeRepository.Delete(commentLike);
+                    }
+                    this.eventCommentRepository.Delete(comment);
+                }
                 this.eventPostRepository.Delete(eventPost);
+            }
+
+            foreach (var notification in currEvent.Notification)
+            {
+                this.notificationRepository.Delete(notification);
             }
             this.eventRepository.Delete(currEvent);
             var removed = await this.eventRepository.SaveChangesAsync();

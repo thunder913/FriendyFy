@@ -22,7 +22,7 @@
     margin-top: 12px;
     flex-basis: 50%;
     position: sticky;
-    top: -450px;
+    top: -320px;
     height: 1100px;
     min-width: 50%;
 } 
@@ -114,6 +114,7 @@ header.headline > h2, header.headline > p{
     padding-bottom: 5px;
     display: flex;
     flex-direction: column;
+    padding-bottom: 20px;
 }
 
 .friend-list > header.friends-header{
@@ -161,4 +162,16 @@ header.headline > h2, header.headline > p{
     .profile-container .profile-main{
         display: initial;
     }
+}
+
+@media only screen and (max-height: 1000px){
+    .profile-sidebar{
+        top: -400px;
+    } 
+}
+
+@media only screen and (max-height: 850px){
+    .profile-sidebar{
+        top: -500px;
+    } 
 }

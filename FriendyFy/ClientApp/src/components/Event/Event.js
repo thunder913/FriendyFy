@@ -6,11 +6,13 @@ import EventMiddle from "./EventParts/EventMiddle/EventMiddle";
 import './EventParts/EventTop/EventTop'
 import EventTop from "./EventParts/EventTop/EventTop";
 import PageLoading from "../PageLoading/PageLoading";
-
+import { useHistory } from "react-router";
 const Event = () => {
     const eventId = decodeURI(window.location.href.substring(window.location.href.lastIndexOf('/') + 1));
     const [event, setEvent] = useState({});
     const [isInEvent, setIsInEvent] = useState(event.isInEvent);
+    const history = useHistory();
+    
     useEffect(() => {
         if (window.location.href.includes('event')) {
             getEventById(eventId)
@@ -18,6 +20,9 @@ const Event = () => {
                     let obj = await res.json();
                     setEvent(obj);
                     setIsInEvent(obj.isInEvent);
+                })
+                .catch(() => {
+                    history.push('/404');
                 });
         }
     }, [eventId])

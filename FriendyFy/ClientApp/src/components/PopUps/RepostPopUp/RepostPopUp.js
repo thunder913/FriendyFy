@@ -5,6 +5,8 @@ import PopUpHeader from "../PopUpHeader/PopUpHeader";
 import PopUp from "../PopUp";
 import { repost } from "../../../services/postService";
 import OutsideClickHandler from "react-outside-click-handler";
+import { NotificationManager } from 'react-notifications';
+
 const RepostPopUp = ({ id, repostType, show, setShow, manyPopUps, setRepostsCount }) => {
     const [text, setText] = useState('');
 
@@ -14,6 +16,9 @@ const RepostPopUp = ({ id, repostType, show, setShow, manyPopUps, setRepostsCoun
                 if (res.status === 200) {
                     setRepostsCount((await res.json()).reposts);
                     setShow(false);
+                    NotificationManager.success('Successfully reposted!', '', 2000);
+                }else{
+                    NotificationManager.error('There was an error reposting!', '', 2000);
                 }
             });
     }

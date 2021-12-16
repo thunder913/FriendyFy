@@ -7,14 +7,13 @@ import EventThreeImages from "../../EventImages/EventThreeImages/EventThreeImage
 import moment from "moment-timezone";
 import AddImagePopUp from "../../../PopUps/AddImagePopUp/AddImagePopUp";
 import { deleteEvent, leaveEvent } from "../../../../services/eventService";
-import { NotificationContainer, NotificationManager } from 'react-notifications';
+import { NotificationManager } from 'react-notifications';
 import ApprovePopUp from "../../../PopUps/ApprovePopUp/ApprovePopUp";
 import { useHistory } from "react-router";
 import ViewImagePopUp from "../../../PopUps/ViewImagePopUp/ViewImagePopUp";
 
 const EventTop = ({ images = [], mainImage, lat, lng, city, time, userImages = [], isOrganizer, eventId, isInEvent, setIsInEvent }) => {
     const [localTime, setLocalTime] = useState('');
-    const [eventTime,] = useState(time);
     const [showAddImagePopUp, setShowAddImagePopUp] = useState(false);
     const [eventImages, setEventImages] = useState([]);
     const [showLeaveEventPopUp, setShowLeaveEventPopUp] = useState(false);
@@ -32,6 +31,8 @@ const EventTop = ({ images = [], mainImage, lat, lng, city, time, userImages = [
                 if (res.status === 200) {
                     NotificationManager.success('Successfully left the event!', '', 2000);
                     setIsInEvent(false);
+                }else{
+                    NotificationManager.success('There was an error leaving the event!', '', 2000);
                 }
             })
     }
@@ -40,7 +41,10 @@ const EventTop = ({ images = [], mainImage, lat, lng, city, time, userImages = [
         deleteEvent(eventId)
             .then(res => {
                 if (res.status === 200) {
+                    NotificationManager.success('Successfully deleted the event!', '', 2000);
                     history.push('/');
+                }else{
+                    NotificationManager.success('There was an error deleting the event!', '', 2000);
                 }
             })
     }
@@ -69,7 +73,6 @@ const EventTop = ({ images = [], mainImage, lat, lng, city, time, userImages = [
             post={imagePopUpUrl}
             show={showImagePopUp}
             setShow={setShowImagePopUp}/>
-        <NotificationContainer />
         <ApprovePopUp
             text="Are you sure you want to delete the event. If you click the Approve button, it will be gone permanently!"
             acceptEvent={leaveEventAsOrganizer}

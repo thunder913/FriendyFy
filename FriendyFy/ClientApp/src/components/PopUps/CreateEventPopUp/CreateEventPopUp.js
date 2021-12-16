@@ -15,6 +15,7 @@ import '../PopUp.css';
 import PopUp from "../PopUp";
 import { useThemeContext } from "../../../contexts/ThemeContext";
 import OutsideClickHandler from "react-outside-click-handler";
+import { NotificationManager } from 'react-notifications';
 
 const CreateEventPopUp = ({ show, setShow }) => {
     const [privacySettings, setPrivacySettings] = useState('Private');
@@ -66,6 +67,7 @@ const CreateEventPopUp = ({ show, setShow }) => {
             createEvent(name, utcDate, intereststString, privacySettings, location.lat, location.lng, description, image)
                 .then((res) => {
                     if (res.status === 200) {
+                        NotificationManager.success('Successfully created the event!', '', 2000);
                         setShow(false);
                     }
                 })
@@ -74,6 +76,12 @@ const CreateEventPopUp = ({ show, setShow }) => {
                 });
         }
     }
+
+    useEffect(() => {
+        if(eventError){
+            NotificationManager.error(eventError, '', 2000);
+        }
+    }, [eventError])
 
     return (
         <PopUp show={show} setShow={setShow} escClose={true}>

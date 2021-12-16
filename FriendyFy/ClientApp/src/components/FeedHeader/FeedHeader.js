@@ -35,7 +35,6 @@ function FeedHeader({ photo, name, time, username, city, lat, long, taggedPeople
 
     return (
         <header className="feed-header">
-            <NotificationContainer />
             <PeopleListPopUp
                 title="Tagged People"
                 count={taggedPeople}

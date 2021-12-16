@@ -2,46 +2,49 @@ import React, { useState } from 'react';
 import './FriendSuggestion.css';
 import { Link } from 'react-router-dom';
 import { addFriend, removeFriendSuggestion } from '../../services/friendService.js';
-
-const FriendSuggestion = ({friend, setFriendsRemaining}) =>{
+import { NotificationManager } from 'react-notifications';
+const FriendSuggestion = ({ friend, setFriendsRemaining }) => {
     const [show, setShow] = useState(true)
 
     const addFriendEvent = () => {
-        addFriend({userId: friend.username})
+        addFriend({ userId: friend.username })
             .then(async res => {
-                if(res.ok){
+                if (res.ok) {
                     setShow(false);
-                    setFriendsRemaining(prev => prev-1);
+                    setFriendsRemaining(prev => prev - 1);
+                    NotificationManager.success('Successfully sent a friend request!', '', 2000);
+                }else{
+                    NotificationManager.error('There was an error sending the friend request!', '', 2000);
                 }
-        });
+            });
     }
 
     const removeFriendEvent = () => {
-        removeFriendSuggestion({userId: friend.username})
+        removeFriendSuggestion({ userId: friend.username })
             .then(async res => {
-                if(res.ok){
+                if (res.ok) {
                     setShow(false);
-                    setFriendsRemaining(prev => prev-1);
+                    setFriendsRemaining(prev => prev - 1);
                 }
             })
     }
-    
-    if(!show){
+
+    if (!show) {
         return null;
     }
 
-    return(
-            <div className="friend-suggestion" key={friend.username}>
+    return (
+        <div className="friend-suggestion" key={friend.username}>
             <div className="left-side">
-            <Link to={`/profile/${friend.username}`}>
-                <div className="friend-image">
-                    <img src={friend.profilePhoto} alt="" />
-                </div>
-            </Link>
+                <Link to={`/profile/${friend.username}`}>
+                    <div className="friend-image">
+                        <img src={friend.profilePhoto} alt="" />
+                    </div>
+                </Link>
             </div>
             <div className="right-side">
                 <Link to={`/profile/${friend.username}`}>
-                <span className="friend-name">{friend.name}</span>
+                    <span className="friend-name">{friend.name}</span>
                 </Link>
                 <div className="main-suggestion-body">
                     <div className="common-stuff">

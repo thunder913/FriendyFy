@@ -14,7 +14,7 @@ import PopUpHeader from "../PopUpHeader/PopUpHeader";
 import PopUp from '../PopUp';
 import { useThemeContext } from '../../../contexts/ThemeContext';
 import OutsideClickHandler from "react-outside-click-handler";
-
+import { NotificationManager } from 'react-notifications';
 
 const MakePostPopUp = ({ hasImage, show, setShow }) => {
     const [showImage, setShowImage] = useState(hasImage);
@@ -32,6 +32,7 @@ const MakePostPopUp = ({ hasImage, show, setShow }) => {
     const onPostButtonClick = async () => {
         let peopleIds = people.map(x => x.value)
         if (postMessage.length == 0 && !image) {
+            NotificationManager.error('You should either write a message or upload a photo!', '', 2000);
             return;
         }
         await makePost(privacySettings, postMessage, location.lat, location.lng, image, peopleIds)
@@ -39,8 +40,9 @@ const MakePostPopUp = ({ hasImage, show, setShow }) => {
                 let result = await (res.json());
                 if (result.success) {
                     setShow(false);
+                    NotificationManager.success('Successfully created a post!', '', 2000);
                 } else {
-                    //error
+                    NotificationManager.error('There was an error making the post!', '', 2000);
                 }
             })
     }
@@ -50,8 +52,9 @@ const MakePostPopUp = ({ hasImage, show, setShow }) => {
             <div className="popup-outer make-post-popup">
                 <OutsideClickHandler
                     onOutsideClick={(e) => {
-                        if(e.target.getAttribute('role') !== 'option'){
+                        if(e.target.getAttribute('role') !== 'option' && !e.target.classList.contains('message')  && !e.target.classList.contains('notification')){
                             setShow(false);
+                            console.log(e.target)
                         }
                     }}>
                     <div className="popup-inner post-popup fancy-scroll">

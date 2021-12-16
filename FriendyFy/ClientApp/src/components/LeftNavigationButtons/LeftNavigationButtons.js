@@ -13,6 +13,7 @@ const LeftNavigationButtons = () => {
     const [events, setEvents] = useState({});
     const [blockNavScroll, setBlockNavScroll] = useState(false);
     const [friendsRemaining, setFriendsRemaining] = useState(0);
+    let location = useLocation();
     useEffect(() => {
         getRecommendedFriends()
             .then(async res => {let obj = await res.json(); 
@@ -22,11 +23,12 @@ const LeftNavigationButtons = () => {
     }, [])
 
     useEffect(() => {
-        getNavigationEvents()
-            .then(async res => setEvents(await res.json()))
-    }, [])
+        if(location.pathname === '/' || location.pathname === '/search-page'){
+            getNavigationEvents()
+                .then(async res => setEvents(await res.json()))
+        }
+    }, [location.pathname])
 
-    let location = useLocation();
     if (location.pathname !== '/' && location.pathname !== '/search-page') {
         return null;
     }
