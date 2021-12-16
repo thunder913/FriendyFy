@@ -63,7 +63,7 @@ const FeedPost = ({post}) => {
         {post.postMessage ? <div className="post-text">
             <p>{post.postMessage}</p>
         </div> : ""}
-        {post.postImage != defaultImage ? <div className="post-image">
+        {post.postImage !== defaultImage ? <div className="post-image">
             <img onClick={() => setShowImagePopUp(true)} src={post.postImage} alt="" />
         </div> : ""}
         <FeedFooter

@@ -13,7 +13,7 @@ const Friends = () => {
     const [hasMore, setHasMore] = useState(true);
     const [search, setSearch] = useState('');
     const [isSearching, setIsSearching] = useState(false);
-    const [isFirstTime, setIsFirstTime] = useState(true);
+    const [, setIsFirstTime] = useState(true);
     useEffect(() => {
         getFriends(userId, 10, 0, isSearching ? search : null)
             .then(async res => {
@@ -26,6 +26,7 @@ const Friends = () => {
                 }
                 setIsFirstTime(false);
             })
+        //eslint-disable-next-line
     }, [userId, isSearching])
 
     const getMoreFriends = () => {
@@ -62,11 +63,11 @@ const Friends = () => {
                     width={100}
                     className="loader"
                 />}
-                // endMessage={
-                //     // <p style={{ textAlign: 'center' }}>
-                //         {/* <b>No more friends to show!</b> */}
-                //     // </p>
-                // }
+            // endMessage={
+            //     // <p style={{ textAlign: 'center' }}>
+            //         {/* <b>No more friends to show!</b> */}
+            //     // </p>
+            // }
             >
                 {friends.map(friend => <Friend key={friend.username} friend={friend} />)}
             </InfiniteScroll>

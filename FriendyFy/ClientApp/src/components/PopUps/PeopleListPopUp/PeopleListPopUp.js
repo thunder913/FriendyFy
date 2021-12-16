@@ -26,6 +26,7 @@ const PeopleListPopUp = ({ title, count, loadPeople, show, setShow, manyPopUps }
         } else {
             setPeople([]);
         }
+        //eslint-disable-next-line
     }, [show])
 
     const loadMorePeople = () => {

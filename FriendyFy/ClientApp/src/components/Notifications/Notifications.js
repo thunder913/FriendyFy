@@ -84,22 +84,24 @@ const Notifications = () => {
         } else {
             setNotifications([]);
         }
+        //eslint-disable-next-line
     }, [show])
 
     useEffect(() => {
         if (connection) {
             connection.on(loggedIn.id, (notification) => {
-                if(show){
+                if (show) {
                     seeNotification(notification.id);
                     notification.isSeen = true;
-                }else{
-                    setUnseenCount(prev => Number(prev)+1);
+                } else {
+                    setUnseenCount(prev => Number(prev) + 1);
                 }
                 setNotifications(prev => ([notification, ...prev]));
             })
         }
         getUnseenCount()
             .then(async res => setUnseenCount(await res.text()));
+        //eslint-disable-next-line
     }, [])
 
     return (<div className="notifications circle-right">
@@ -135,14 +137,14 @@ const Notifications = () => {
                         scrollableTarget="scrollableDiv"
                     >
                         {notifications.map(not => (<div key={not.id} title={getTime(not.date)} className="user-notification">
-                            <Link to={("/"+ not.type +"/" + not.inviterUsername)}>
+                            <Link to={("/" + not.type + "/" + not.inviterUsername)}>
                                 <div className="notification-image">
                                     <img src={not.image} alt="" />
                                 </div>
                             </Link>
                             {not.type === 'event' ? <p><Link className="inviter-name" to={"/profile/" + not.inviterUsername}>{not.name}</Link> invited you to join <Link className="event-name" to={"/event/" + not.eventId}>{not.eventName}.</Link></p> : ''}
                             {not.type === 'profile' ? <p><Link className="inviter-name" to={"/profile/" + not.inviterUsername}>{not.name}</Link> sent you a friend request.</p> : ''}
-                            {(not.isAvailable && not.type==='event') ? <div className="notification-options">
+                            {(not.isAvailable && not.type === 'event') ? <div className="notification-options">
                                 <button className='accept' onClick={() => eventAction(not.id, true)}>Accept</button>
                                 <button className='reject' onClick={() => eventAction(not.id, false)}>Reject</button>
                             </div> : ''}

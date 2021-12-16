@@ -5,7 +5,6 @@ import { useHistory } from 'react-router';
 import ProfilePhotos from '../ProfilePhotos/ProfilePhotos';
 import Friends from '../Friends/Friends';
 import ProfileTimeline from '../ProfileTimeline/ProfileTimeline';
-import { motion } from "framer-motion/dist/es/index.js";
 import PageLoading from '../PageLoading/PageLoading';
 
 const Profile = () => {

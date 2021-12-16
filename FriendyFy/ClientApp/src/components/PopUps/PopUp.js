@@ -30,6 +30,7 @@ const PopUp = ({ children, show, setShow, escClose, manyPopUps }) => {
                 allowScroll();
             }
         }
+        //eslint-disable-next-line
     }, [show])
 
 

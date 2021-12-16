@@ -31,6 +31,7 @@ const Register = ({ setPopUpText }) => {
         if (registerSuccess) {
             setPopUpText('You successfully registered!')
         }
+        //eslint-disable-next-line
     }, [registerSuccess])
 
     return (

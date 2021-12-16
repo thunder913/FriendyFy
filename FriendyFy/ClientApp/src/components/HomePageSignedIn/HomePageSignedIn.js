@@ -25,9 +25,9 @@ const HomePageSignedIn = () => {
         .then(async res => {
           let obj = await res.json();
           obj.posts.forEach(el => {
-            if (el.postType == "Event") {
+            if (el.postType === "Event") {
               setEvents(prev => [...prev, el.eventPostId]);
-            } else if (el.postType == "Post") {
+            } else if (el.postType === "Post") {
               setPosts(prev => [...prev, el.postId]);
             }
           });
@@ -45,9 +45,9 @@ const HomePageSignedIn = () => {
       .then(async res => {
         let obj = await res.json();
         obj.posts.forEach(el => {
-          if (el.postType == "Event") {
+          if (el.postType === "Event") {
             setEvents(prev => [...prev, el.eventPostId]);
-          } else if (el.postType == "Post") {
+          } else if (el.postType === "Post") {
             setPosts(prev => [...prev, el.postId]);
           }
         });
@@ -85,7 +85,7 @@ const HomePageSignedIn = () => {
               <b>You reached the final post</b>
             </p>
           }>
-          {feed.map(el => (el.postType == 'Event' ? <FeedEvent key={el.eventPostId} eventData={el} /> :
+          {feed.map(el => (el.postType === 'Event' ? <FeedEvent key={el.eventPostId} eventData={el} /> :
             !el.isRepost ? <FeedPost key={el.postId} post={el} /> : <FeedPostRepost key={el.postId} post={el} />))}
         </InfiniteScroll> </div>
         : ''}

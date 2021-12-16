@@ -31,7 +31,7 @@ const MakePostPopUp = ({ hasImage, show, setShow }) => {
 
     const onPostButtonClick = async () => {
         let peopleIds = people.map(x => x.value)
-        if (postMessage.length == 0 && !image) {
+        if (postMessage.length === 0 && !image) {
             NotificationManager.error('You should either write a message or upload a photo!', '', 2000);
             return;
         }

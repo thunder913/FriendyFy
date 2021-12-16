@@ -188,7 +188,7 @@ function UserChatHeadFooter({ chatDetails, chats, setChats }) {
                 onClick={onClick}
                 style={{ width: bigChatBox ? "310px" : "100%" }}>
                 <div className="footer-user-image">
-                    <img src={chatDetails.picture} /*alt="UserImage"*/ />
+                    <img src={chatDetails.picture} alt="UserImage" />
                 </div>
                 {/* {userOnline} */}
                 {unreadMessages}

@@ -31,6 +31,7 @@ const InvitePeoplePopUp = ({ title, eventId, show, setShow }) => {
         } else {
             setPeople([]);
         }
+        //eslint-disable-next-line
     }, [show])
 
     const loadMorePeople = () => {

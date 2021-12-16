@@ -5,7 +5,6 @@ import { getTaggedPeople } from '../../services/postService';
 import MapPopUp from '../PopUps/MapPopUp/MapPopUp'
 import FeedHeaderOptions from '../FeedHeaderOptions/FeedHeaderOptions';
 import NotificationManager from "react-notifications/lib/NotificationManager";
-import { NotificationContainer } from "react-notifications";
 import { Link } from 'react-router-dom';
 
 function FeedHeader({ photo, name, time, username, city, lat, long, taggedPeople, postId, postType, isRepost, setHidePost, isCreator }) {
@@ -29,6 +28,7 @@ function FeedHeader({ photo, name, time, username, city, lat, long, taggedPeople
                 setHidePost(true);
             }
         }
+        //eslint-disable-next-line
     }, [isDeleted])
 
 
@@ -62,8 +62,8 @@ function FeedHeader({ photo, name, time, username, city, lat, long, taggedPeople
                         <Link to={'/profile/' + username}>
                             <h3>{name}</h3>
                         </Link>
-                        {city != null ? <p className="post-location"> is at <button onClick={() => setShowPostLocation(true)}>{city}</button></p> : ''}
-                        {taggedPeople && taggedPeople != 0 ? <p>with <button onClick={() => setShowTaggedPeople(true)}> {taggedPeople} {taggedPeople == 1 ? 'person' : 'people'} </button></p> : ''}
+                        {city !== null ? <p className="post-location"> is at <button onClick={() => setShowPostLocation(true)}>{city}</button></p> : ''}
+                        {taggedPeople && taggedPeople !== 0 ? <p>with <button onClick={() => setShowTaggedPeople(true)}> {taggedPeople} {taggedPeople === 1 ? 'person' : 'people'} </button></p> : ''}
 
                     </div>
                     <span>{time}</span>

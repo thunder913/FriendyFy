@@ -1,21 +1,21 @@
-import React, {useState, useEffect} from "react";
+import React, { useState, useEffect } from "react";
 import { useLoggedIn } from "./LoggedInContext";
 
 const ThemeContext = React.createContext({})
 
-const ThemeProvider = ({children}) => {
+const ThemeProvider = ({ children }) => {
     const [theme, setTheme] = useState(window.localStorage.getItem('theme'));
-    const {loggedIn} = useLoggedIn();
+    const { loggedIn } = useLoggedIn();
 
     const checkTheme = () => {
         let currTheme = theme;
-        if(loggedIn){
-            if(loggedIn.isDark && currTheme!='dark'){
+        if (loggedIn) {
+            if (loggedIn.isDark && currTheme !== 'dark') {
                 currTheme = 'dark';
-            }else if(!loggedIn.isDark && currTheme!='light'){
+            } else if (!loggedIn.isDark && currTheme !== 'light') {
                 currTheme = 'light';
             }
-        }else if(!currTheme){
+        } else if (!currTheme) {
             currTheme = 'light';
         }
         setThemeEvent(currTheme);
@@ -23,6 +23,7 @@ const ThemeProvider = ({children}) => {
 
     useEffect(() => {
         checkTheme();
+        //eslint-disable-next-line
     }, [loggedIn])
 
     const changeTheme = (theme) => {
@@ -45,11 +46,11 @@ const ThemeProvider = ({children}) => {
     return (<ThemeContext.Provider value={value}>{children}</ThemeContext.Provider>)
 }
 
-const ThemeConsumer = ({children}) => {
-    return(
+const ThemeConsumer = ({ children }) => {
+    return (
         <ThemeContext.Consumer>
             {(context) => {
-                if(context === undefined){
+                if (context === undefined) {
                     throw new Error("Error");
                 }
                 return children(context);
@@ -63,7 +64,7 @@ const useThemeContext = () => {
     return context;
 }
 
-export{
+export {
     ThemeProvider,
     ThemeConsumer,
     useThemeContext,

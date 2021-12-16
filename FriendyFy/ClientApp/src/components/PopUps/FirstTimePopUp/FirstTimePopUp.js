@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react';
+import React, { useState } from 'react';
 import MyGoogleMap from '../../GoogleMap/MyGoogleMap';
 import InterestsDropdown from '../../InterestsDropdown/InterestsDropdown';
 import './FirstTimePopUp..css';

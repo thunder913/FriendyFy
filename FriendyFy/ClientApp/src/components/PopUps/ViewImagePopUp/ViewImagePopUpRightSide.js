@@ -13,7 +13,7 @@ import Loader from "react-loader-spinner";
 import PeopleListPopUp from "../PeopleListPopUp/PeopleListPopUp";
 import { getPostLikes } from "../../../services/postService";
 import { NotificationManager } from 'react-notifications';
-                  
+
 const ViewImagePopUpRightSide = ({ comments, setComments, setCommentsCount, setIsLiked, isLiked, commentsCount, setLikes, likes, post, setReposts }) => {
     const [hasMore, setHasMore] = useState(true);
     const [showRepostPopUp, setShowRepostPopUp] = useState(false);
@@ -72,6 +72,7 @@ const ViewImagePopUpRightSide = ({ comments, setComments, setCommentsCount, setI
                     }
                 })
         }
+        //eslint-disable-next-line
     }, [post])
 
     useEffect(() => {
@@ -88,7 +89,7 @@ const ViewImagePopUpRightSide = ({ comments, setComments, setCommentsCount, setI
                 this.style.height = this.scrollHeight + 'px';
             }
         }
-
+        //eslint-disable-next-line
     }, [commentRef])
 
     return (<div className="right-side">

@@ -2,9 +2,9 @@ import React, { useState, useRef, useEffect } from 'react';
 import './FeedFooter.css';
 import { faComment, faComments, faShare, faThumbsUp } from '@fortawesome/free-solid-svg-icons';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { getPostLikes, getPostReposts, likePost } from '../../services/postService';
+import { getPostLikes, getPostReposts } from '../../services/postService';
 import $ from 'jquery';
-import { deleteComment, getComments, makeComment } from '../../services/commentService';
+import { deleteComment, getComments } from '../../services/commentService';
 import PostComment from '../PostComment/PostComment';
 import PeopleListPopUp from '../PopUps/PeopleListPopUp/PeopleListPopUp'
 import InfiniteScroll from 'react-infinite-scroll-component';
@@ -12,7 +12,7 @@ import { loadMoreComments, addComment, likedButtonClicked } from '../../services
 import RepostPopUp from '../PopUps/RepostPopUp/RepostPopUp';
 import Loader from 'react-loader-spinner';
 import { NotificationManager } from 'react-notifications';
-                  
+
 const FeedFooter = (props) => {
     const [showComments, setShowComments] = useState(false);
     const [showPeopleLiked, setShowPeopleLiked] = useState(false);
@@ -50,15 +50,15 @@ const FeedFooter = (props) => {
     const deleteCommentEvent = (commentId, postType) => {
         deleteComment(commentId, postType)
             .then(res => {
-                if(res.status === 200){
+                if (res.status === 200) {
                     let element = props.comments.find(x => x.id === commentId);
                     let index = props.comments.indexOf(element);
-            
+
                     let array = [...props.comments];
                     array.splice(index, 1);
                     props.setComments(array);
-                    props.setCommentsCount(prev => prev-1)
-                }else{
+                    props.setCommentsCount(prev => prev - 1)
+                } else {
                     NotificationManager.error('There was an error deleting the comment!', '', 4000)
                 }
             })
@@ -78,7 +78,7 @@ const FeedFooter = (props) => {
                 this.style.height = this.scrollHeight + 'px';
             }
         }
-
+        //eslint-disable-next-line
     }, [showComments, commentRef])
 
     useEffect(() => {
@@ -89,18 +89,19 @@ const FeedFooter = (props) => {
                     if (obj.length > 0) {
                         props.setComments(prevState => ([...prevState, ...obj]));
                     }
-                    if(obj.length < 10) {
+                    if (obj.length < 10) {
                         setHasMore(false);
                     }
                 })
         }
+        //eslint-disable-next-line
     }, [showComments])
 
     return (
         <footer className="feed-footer">
             <div className="top-footer">
                 <div className="likes">
-                    <RepostPopUp repostType={props.postType} id={props.repostId} show={showRepostPopUp} setShow={setShowRepostPopUp} setRepostsCount={props.setReposts}/>
+                    <RepostPopUp repostType={props.postType} id={props.repostId} show={showRepostPopUp} setShow={setShowRepostPopUp} setRepostsCount={props.setReposts} />
                     <PeopleListPopUp
                         title="Likes"
                         count={props.likes}
@@ -150,7 +151,7 @@ const FeedFooter = (props) => {
                                 height={100}
                                 width={100}
                                 className="loader"
-                              />}
+                            />}
                             scrollableTarget="scrollableDiv"
                             endMessage={
                                 <p style={{ textAlign: 'center' }}>

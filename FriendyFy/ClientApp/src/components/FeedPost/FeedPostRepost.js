@@ -87,7 +87,7 @@ const FeedPostRepost = ({post}) => {
             {post.repost.postMessage ? <div className="post-text">
                 <p>{post.repost.postMessage}</p>
             </div> : ""}
-            {post.repost.postImage != defaultImage ? <div className="post-image">
+            {post.repost.postImage !== defaultImage ? <div className="post-image">
                 <img onClick={() => setShowImagePopUp(true)} src={post.repost.postImage} alt="" />
             </div> : ""}
             </div>

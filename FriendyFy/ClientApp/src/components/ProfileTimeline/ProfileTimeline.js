@@ -10,7 +10,7 @@ import InfiniteScroll from "react-infinite-scroll-component";
 import Loader from 'react-loader-spinner';
 
 const ProfileTimeline = () => {
-  const { loggedIn, resetUser } = useLoggedIn();
+  const { loggedIn } = useLoggedIn();
   const [events, setEvents] = useState([]);
   const [posts, setPosts] = useState([]);
   const [feed, setFeed] = useState([]);
@@ -27,9 +27,9 @@ const ProfileTimeline = () => {
           .then(async res => {
             let obj = await res.json();
             obj.posts.forEach(el => {
-              if (el.postType == "Event") {
+              if (el.postType === "Event") {
                 setEvents(prev => [...prev, el.eventPostId]);
-              } else if (el.postType == "Post") {
+              } else if (el.postType === "Post") {
                 setPosts(prev => [...prev, el.postId]);
               }
             });
@@ -51,9 +51,9 @@ const ProfileTimeline = () => {
       .then(async res => {
         let obj = await res.json();
         obj.posts.forEach(el => {
-          if (el.postType == "Event") {
+          if (el.postType === "Event") {
             setEvents(prev => [...prev, el.eventPostId]);
-          } else if (el.postType == "Post") {
+          } else if (el.postType === "Post") {
             setPosts(prev => [...prev, el.postId]);
           }
         });
@@ -99,7 +99,7 @@ const ProfileTimeline = () => {
                 <b>You reached the final {feedType === 'posts' ? 'post' : 'event'}</b>
               </p>
             }>
-            {feed.map(el => (el.postType == 'Event' ? <FeedEvent key={el.postId} eventData={el} /> :
+            {feed.map(el => (el.postType === 'Event' ? <FeedEvent key={el.postId} eventData={el} /> :
               !el.isRepost ? <FeedPost key={el.postId} post={el} /> : <FeedPostRepost key={el.postId} post={el} />))}
           </InfiniteScroll>
         </div>

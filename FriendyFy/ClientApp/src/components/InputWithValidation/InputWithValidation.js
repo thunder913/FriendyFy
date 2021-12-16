@@ -6,7 +6,7 @@ const InputWithValidation = (props) => {
         <div className="input">
         <div className="input-error">{props.errorBubble ? props.error : ''}</div>
             <input 
-            className={props.error != null ? 'error' : ''} 
+            className={props.error !== null ? 'error' : ''} 
             type={ props.type ?? "text"} 
             placeholder={props.placeholder} 
             value={props.value} 

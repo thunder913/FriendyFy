@@ -12,7 +12,7 @@ const Event = () => {
     const [event, setEvent] = useState({});
     const [isInEvent, setIsInEvent] = useState(event.isInEvent);
     const history = useHistory();
-    
+
     useEffect(() => {
         if (window.location.href.includes('event')) {
             getEventById(eventId)
@@ -25,6 +25,7 @@ const Event = () => {
                     history.push('/404');
                 });
         }
+        //eslint-disable-next-line
     }, [eventId])
 
     return (

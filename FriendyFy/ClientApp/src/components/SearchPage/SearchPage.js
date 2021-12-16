@@ -24,11 +24,11 @@ const SearchPage = () => {
     const [momentDate, setMomentDate] = useState('');
 
 
-    const [currentSearchWord, setCurrentSearchWord] = useState('');
-    const [currentType, setCurrentType] = useState('Both');
-    const [currentInterests, setCurrentInterests] = useState([]);
-    const [currentOnlyYourEvents, setCurrentOnlyYourEvents] = useState(false);
-    const [currentMomentDate, setCurrentMomentDate] = useState('');
+    const [, setCurrentSearchWord] = useState('');
+    const [, setCurrentType] = useState('Both');
+    const [, setCurrentInterests] = useState([]);
+    const [, setCurrentOnlyYourEvents] = useState(false);
+    const [, setCurrentMomentDate] = useState('');
 
     function getCurrentLocalization() {
         let localization = window.navigator.userLanguage || window.navigator.language;
@@ -50,9 +50,9 @@ const SearchPage = () => {
                 setPeopleCount(data.peopleCount);
                 setHasMoreEvents(data.hasMoreEvents);
                 setHasMorePeople(data.hasMorePeople);
-                if(isSearchButtonClicked){
+                if (isSearchButtonClicked) {
                     setFeed(data.searchResults);
-                }else{
+                } else {
                     setFeed(prev => ([...prev, ...data.searchResults]));
                 }
             });
@@ -97,6 +97,7 @@ const SearchPage = () => {
             setOnlyYourEvents(isOnlyUserEvents);
             performSearch(searchWord, type, interests, isOnlyUserEvents, momentDate, 0, 0, true);
         }
+        //eslint-disable-next-line
     }, [location])
 
 

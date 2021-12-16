@@ -49,7 +49,7 @@ const CreateEventPopUp = ({ show, setShow }) => {
             setEventError('The name cannot be that short!')
         } else if (moment() > momentDate) {
             setEventError('The date may not be selected or is in the past!')
-        } else if (interests.length == 0) {
+        } else if (interests.length === 0) {
             setEventError('Choose some interests, in order to make the event more attractable!')
         } else if (interests.length > 6) {
             setEventError('You have chosen more than 6 interests!');
@@ -58,7 +58,7 @@ const CreateEventPopUp = ({ show, setShow }) => {
             setEventError('Choose a location!')
         } else if (!description) {
             setEventError('Add a short description to the event!')
-        } else if (privacySettings != 'Private' && privacySettings != 'Public') {
+        } else if (privacySettings !== 'Private' && privacySettings !== 'Public') {
             setEventError('The privacy of the event must be either Private or Public!')
         } else if (!image) {
             setEventError('You must upload an image for the event!');
@@ -78,7 +78,7 @@ const CreateEventPopUp = ({ show, setShow }) => {
     }
 
     useEffect(() => {
-        if(eventError){
+        if (eventError) {
             NotificationManager.error(eventError, '', 2000);
         }
     }, [eventError])
@@ -88,7 +88,7 @@ const CreateEventPopUp = ({ show, setShow }) => {
             <div className="popup-outer create-event-popup">
                 <OutsideClickHandler
                     onOutsideClick={(e) => {
-                        if(e.target.getAttribute('role') !== 'option'){
+                        if (e.target.getAttribute('role') !== 'option') {
                             setShow(false);
                         }
                     }}>
@@ -124,7 +124,6 @@ const CreateEventPopUp = ({ show, setShow }) => {
                         <div className="top-inputs">
                             <input className="event-name" type="text" placeholder="Name" onChange={e => setName(e.target.value)} />
                             <Datetime
-                                dateFormat="YYYY-MM-DD"
                                 timeFormat="HH:mm"
                                 input={true}
                                 initialViewMode='years'

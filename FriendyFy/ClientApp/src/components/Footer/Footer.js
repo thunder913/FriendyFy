@@ -49,16 +49,16 @@ function Footer() {
   const performSearch = (e) => {
     e.preventDefault();
     setIsSearching(true);
-    if(page === 0){
+    if (page === 0) {
       searchFriends(true);
-    }else{
+    } else {
       setPage(0);
     }
   }
 
   useEffect(() => {
     document.getElementsByClassName('site-footer-wrapper')[0].addEventListener('mousewheel', function (e) {
-      if (e.target.closest('.live-chat') == null) {
+      if (e.target.closest('.live-chat') === null) {
         this.scrollLeft -= (e.wheelDelta * 5);
         e.preventDefault();
       }
@@ -73,6 +73,7 @@ function Footer() {
 
   useEffect(() => {
     searchFriends(isSearching);
+    //eslint-disable-next-line
   }, [loggedIn.userName, page])
 
   return (

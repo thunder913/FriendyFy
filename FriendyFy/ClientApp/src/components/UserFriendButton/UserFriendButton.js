@@ -100,7 +100,7 @@ function UserFriendButton({ userId }) {
         renderAddFriend();
     }, [])
 
-    if (friendText == "None") {
+    if (friendText === "None") {
         return '';
     }
 

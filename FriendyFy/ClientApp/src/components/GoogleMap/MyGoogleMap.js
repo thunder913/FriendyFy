@@ -34,30 +34,32 @@ const options = {
   zoomControl: true
 }
 
-const MyGoogleMap = ({ location, setLocation, staticMap, zoom }) => {  
+const MyGoogleMap = ({ location, setLocation, staticMap, zoom }) => {
   const [center, setCenter] = useState({
     lat: location.lat ?? 51.1657,
     lng: location.lng ?? 15.4123
   });
   const [firstLoad, setFirstLoad] = useState(true);
-  
+
   useEffect(() => {
-    if(firstLoad){
-      if(location){
-        setCenter({lat: location.lat, lng: location.lng});
+    if (firstLoad) {
+      if (location) {
+        setCenter({ lat: location.lat, lng: location.lng });
         setFirstLoad(false);
       }
     }
+    //eslint-disable-next-line
   }, [location])
 
   const onMapClick = React.useCallback((e) => {
-    if(!staticMap){
+    if (!staticMap) {
       setLocation({
         lat: e.latLng.lat() ?? 0,
         lng: e.latLng.lng() ?? 0,
         time: new Date(),
       })
     }
+    //eslint-disable-next-line
   }, [])
 
   const panTo = React.useCallback(({ lat, lng }) => {
@@ -79,13 +81,13 @@ const MyGoogleMap = ({ location, setLocation, staticMap, zoom }) => {
   if (!isLoaded) return "Loading maps";
 
 
-  
+
   return (<div>
     {!staticMap ?
-    <div className="map-user-search">
-      <Search panTo={panTo} />
-      <Locate panTo={panTo} />
-    </div> : ''}
+      <div className="map-user-search">
+        <Search panTo={panTo} />
+        <Locate panTo={panTo} />
+      </div> : ''}
 
     <GoogleMap
       mapContainerStyle={mapContainerStyle}
@@ -95,10 +97,10 @@ const MyGoogleMap = ({ location, setLocation, staticMap, zoom }) => {
       onClick={onMapClick}
       onLoad={onMapLoad}
       className="map">
-        {location ?       <Marker
+      {location ? <Marker
         key={location.time}
         position={{ lat: location.lat, lng: location.lng }} /> : ''}
-)
+      )
     </GoogleMap>
   </div>)
 }

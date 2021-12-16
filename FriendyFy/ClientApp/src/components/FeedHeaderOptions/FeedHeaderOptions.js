@@ -12,7 +12,7 @@ const FeedHeaderOptions = ({ showOptions, setShowOptions, postId, postType, setI
     const onDeleteButtonClicked = () => {
         deletePost(postId, postType)
             .then(res => {
-                if (res.status == 200) {
+                if (res.status === 200) {
                     setHasError(false);
                 } else {
                     setHasError(true);

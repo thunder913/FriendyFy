@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState } from 'react';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import { faSearch } from '@fortawesome/free-solid-svg-icons'
 import './SearchBar.css';
@@ -6,7 +6,6 @@ import { searchUsersAndEvents } from '../../services/searchService';
 import InfiniteScroll from 'react-infinite-scroll-component';
 import { useHistory } from 'react-router';
 import OutsideClickHandler from 'react-outside-click-handler';
-import { useDebounce } from 'use-debounce';
 import Loader from 'react-loader-spinner';
 
 const SearchBar = () =>{
@@ -17,7 +16,7 @@ const SearchBar = () =>{
     const [searchResults, setSearchResults] = useState([]);
     const [search, setSearch] = useState('');
     const [showSearchResults, setShowSearchResults] = useState(false);
-    const [isSearching, setIsSearching] = useState(false);
+    const [, setIsSearching] = useState(false);
     const history = useHistory();
     // const [value] = useDebounce(search, 500);
 

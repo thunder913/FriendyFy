@@ -1,4 +1,4 @@
-import React, { useEffect } from "react";
+import React from "react";
 import '../PopUp.css';
 import './ViewImagePopUp.css';
 import ViewImagePopUpRightSide from "./ViewImagePopUpRightSide";

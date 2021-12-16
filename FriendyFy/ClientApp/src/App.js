@@ -45,10 +45,12 @@ function App() {
       .then(() => setTimeout(() => {
         setShowLoader(false)
       }, 1000));
+    //eslint-disable-next-line
   }, [])
 
   useEffect(() => {
     openConnections();
+    //eslint-disable-next-line
   }, [])
 
   useEffect(() => {
@@ -58,6 +60,7 @@ function App() {
     } else {
       openConnections();
     }
+    //eslint-disable-next-line
   }, [loggedIn])
 
   return (
