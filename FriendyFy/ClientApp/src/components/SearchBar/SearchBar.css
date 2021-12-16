@@ -100,32 +100,6 @@
     flex-direction: column-reverse;
 }
 
-.search::-webkit-scrollbar {
-    width: 5px;
-  }
-  
-  /* Track */
-  .search::-webkit-scrollbar-track {
-    background: transparent;
-  }
-  
-  /* Handle */
-  .search::-webkit-scrollbar-thumb {
-    background: transparent;
-    border-radius: 24px;
-  }
-  
-  /* Handle on hover */
-  .search::-webkit-scrollbar-thumb:hover {
-    background: rgb(61, 61, 61);
-    transition: 1s;
-  }
-
-  .search::-webkit-scrollbar-thumb{
-    background: rgb(168, 161, 161);
-    transition: 1s;
-  }
-
   .search-suggestions .loader{
     display: flex;
     flex-direction: column;

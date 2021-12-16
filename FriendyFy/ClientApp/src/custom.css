@@ -81,3 +81,29 @@ body{
 a:hover{
   text-decoration: none;
 }
+
+.fancy-scroll::-webkit-scrollbar {
+  width: 5px;
+}
+
+/* Track */
+.fancy-scroll::-webkit-scrollbar-track {
+  background: transparent;
+}
+
+/* Handle */
+.fancy-scroll::-webkit-scrollbar-thumb {
+  background: transparent;
+  border-radius: 24px;
+}
+
+/* Handle on hover */
+.fancy-scroll::-webkit-scrollbar-thumb:hover {
+  background: rgb(61, 61, 61);
+  transition: 1s;
+}
+
+.fancy-scroll:hover::-webkit-scrollbar-thumb{
+  background: rgb(168, 161, 161);
+  transition: 1s;
+}

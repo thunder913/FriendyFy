@@ -139,7 +139,7 @@ const FeedFooter = (props) => {
                 <div className="comments">
                     <div className={"infinite-scroll"}>
                         <InfiniteScroll
-                            className={"comments-section"}
+                            className={"comments-section fancy-scroll"}
                             dataLength={props.comments.length}
                             next={loadMoreCommentsEvent}
                             height={300}

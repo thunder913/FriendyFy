@@ -15,30 +15,6 @@
     z-index: 1;
 }
 
-.site-footer-wrapper::-webkit-scrollbar {
-  height: 5px;
-}
-  
-  /* Track */
-  .site-footer-wrapper::-webkit-scrollbar-track {
-    background: rgb(92, 92, 92);
-  }
-  
-  /* Handle */
-  .site-footer-wrapper::-webkit-scrollbar-thumb {
-    background: transparent;
-    border-radius: 30px;
-  }
-  
-  /* Handle on hover */
-  .site-footer-wrapper::-webkit-scrollbar-thumb:hover {
-    background: rgb(61, 61, 61);
-  }
-
-  .site-footer-wrapper:hover::-webkit-scrollbar-thumb{
-    background: #888;
-  }
-
   footer.feed-footer{
     display: flex;
     flex-direction: column;

@@ -32,7 +32,7 @@ const LeftNavigationButtons = () => {
     }
     return (
         <PageLoading>
-            <div className={"left-navigation " + (blockNavScroll ? 'scroll-blocked' : '')}>
+            <div className={"left-navigation fancy-scroll " + (blockNavScroll ? 'scroll-blocked' : '')}>
                 <LeftNavigationEvents events={events} setBlockNavScroll={setBlockNavScroll} />
                 <div className="people-you-may-know">
                     {friendsRemaining ? <div className="friend-suggestions">

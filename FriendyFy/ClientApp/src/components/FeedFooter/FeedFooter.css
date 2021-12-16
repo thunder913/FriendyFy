@@ -133,31 +133,6 @@ footer.feed-footer .bottom-footer > div.feed-comment.opened-comments{
         color: #d9d7d7;;
 }
 
-.feed-footer .comments-section::-webkit-scrollbar {
-    width: 5px;
-  }
-  
-  /* Track */
-  .feed-footer .comments-section::-webkit-scrollbar-track {
-    background: transparent;
-  }
-  
-  /* Handle */
-  .feed-footer .comments-section::-webkit-scrollbar-thumb {
-    background: transparent;
-    border-radius: 24px;
-  }
-  
-  /* Handle on hover */
-  .feed-footer .comments-section::-webkit-scrollbar-thumb:hover {
-    background: rgb(61, 61, 61);
-    transition: 1s;
-  }
-  
-  .feed-footer .comments-section:hover::-webkit-scrollbar-thumb{
-    background: rgb(168, 161, 161);
-    transition: 1s;
-  }
   
   .feed-footer .add-comment textarea{
     width: 99%;

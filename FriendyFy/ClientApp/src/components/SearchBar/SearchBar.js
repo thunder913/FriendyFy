@@ -103,7 +103,7 @@ const SearchBar = () =>{
         />
         <div className={"search-suggestions "+ (!showSearchResults ? 'hide' : '')} onBlur={hideSearchResults}>
             {showSearchResults ? <InfiniteScroll
-                    className="search"
+                    className="search fancy-scroll"
                     dataLength={eventsCount+peopleCount}
                     next={loadMoreResults}
                     height={300}

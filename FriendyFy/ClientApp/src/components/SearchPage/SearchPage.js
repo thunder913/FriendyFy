@@ -104,7 +104,7 @@ const SearchPage = () => {
 
     return (<PageLoading>
         <div className="search-page">
-            <form className="search-options">
+            <form className="search-options fancy-scroll">
                 <h2 className="search-title">Search</h2>
                 <input type="text" placeholder="Search" onChange={(e) => setSearchWord(e.target.value)} />
                 <div className="event-type-radio">

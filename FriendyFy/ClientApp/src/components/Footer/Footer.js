@@ -77,7 +77,7 @@ function Footer() {
 
   return (
     <div className="site-footer" >
-      <div className="site-footer-wrapper">
+      <div className="site-footer-wrapper fancy-scroll">
         <FriendSearchBar setSearch={setSearch} performSearch={performSearch} />
         {page > 0 ? <FontAwesomeIcon className="left-arrow" icon={faArrowCircleLeft} onClick={() => changePage(-1)} /> : ''}
         <div className="chats">

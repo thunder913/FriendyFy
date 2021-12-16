@@ -82,7 +82,7 @@ const CreateEventPopUp = ({ show, setShow }) => {
                     onOutsideClick={() => {
                         setShow(false);
                     }}>
-                    <div className="popup-inner event-popup">
+                    <div className="popup-inner event-popup fancy-scroll">
                         <PopUpHeader title="Create An Event" closePopUp={() => setShow(false)}></PopUpHeader>
 
                         <section className="create-event-underheader">

@@ -2,32 +2,6 @@
     position: fixed;
 }
 
-.make-post-popup .post-popup::-webkit-scrollbar {
-    width: 5px;
-  }
-  
-  /* Track */
-  .make-post-popup .post-popup::-webkit-scrollbar-track {
-    background: transparent;
-  }
-  
-  /* Handle */
-  .make-post-popup .post-popup::-webkit-scrollbar-thumb {
-    background: transparent;
-    border-radius: 24px;
-  }
-  
-  /* Handle on hover */
-  .make-post-popup .post-popup::-webkit-scrollbar-thumb:hover {
-    background: rgb(61, 61, 61);
-    transition: 1s;
-  }
-  
-  .make-post-popup .post-popup:hover::-webkit-scrollbar-thumb{
-    background: rgb(168, 161, 161);
-    transition: 1s;
-  }
-
 .make-post-underheader > .image{
     width: 50px;
     height: 50px;

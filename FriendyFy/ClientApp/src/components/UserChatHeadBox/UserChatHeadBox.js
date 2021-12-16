@@ -50,7 +50,7 @@ function UserChatHeadBox({changeChatBox, chat, sendMessageEvent, loadMoreMessage
         </header>
         <div className="chat">
                 <InfiniteScroll
-                    className="chat-history"
+                    className="chat-history fancy-scroll"
                     dataLength={chat.messages.length}
                     next={loadMoreMessages}
                     height={300}

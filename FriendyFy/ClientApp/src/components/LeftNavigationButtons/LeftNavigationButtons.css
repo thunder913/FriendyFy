@@ -18,30 +18,4 @@
   overflow: hidden;
 }
 
-.left-navigation::-webkit-scrollbar {
-    width: 5px;
-  }
-  
-  /* Track */
-  .left-navigation::-webkit-scrollbar-track {
-    background: transparent;
-  }
-  
-  /* Handle */
-  .left-navigation::-webkit-scrollbar-thumb {
-    background: transparent;
-    border-radius: 24px;
-  }
-  
-  /* Handle on hover */
-  .left-navigation::-webkit-scrollbar-thumb:hover {
-    background: rgb(61, 61, 61);
-    transition: 1s;
-  }
-
-  .left-navigation:hover::-webkit-scrollbar-thumb{
-    background: rgb(168, 161, 161);
-    transition: 1s;
-  }
-
 

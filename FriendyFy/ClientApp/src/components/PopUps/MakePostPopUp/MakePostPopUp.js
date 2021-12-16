@@ -54,7 +54,7 @@ const MakePostPopUp = ({ hasImage, show, setShow }) => {
                             setShow(false);
                         }
                     }}>
-                    <div className="popup-inner post-popup">
+                    <div className="popup-inner post-popup fancy-scroll">
                         <PopUpHeader title="Create a post" closePopUp={() => setShow(false)}></PopUpHeader>
                         <section className="make-post-underheader">
                             <div className="image">

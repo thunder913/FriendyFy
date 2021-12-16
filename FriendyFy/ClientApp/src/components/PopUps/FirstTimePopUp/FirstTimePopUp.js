@@ -59,7 +59,7 @@ const FirstTimePopUp = ({ show, setShow }) => {
                     onOutsideClick={() => {
                         setShow(false);
                     }}>
-                    <div className="popup-inner popup-text">
+                    <div className="popup-inner popup-text fancy-scroll">
                         <h2 className="first-time-title">This is your first time logging in.</h2>
                         <h3 className="first-time-undertitle">You have to fill some information about yourself in order to help us recommend the events, you really wish to attend!</h3>
                         <form>
