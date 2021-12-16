@@ -1,9 +1,9 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { resetPassword } from "../../services/userService";
 import PageLoading from "../PageLoading/PageLoading";
 import './ResetPassword.css'
 import { useLocation } from "react-router";
-
+import { NotificationManager } from 'react-notifications';
 const ResetPassword = () => {
     const [email, setEmail] = useState('')
     const [password, setPassword] = useState('')
@@ -36,17 +36,29 @@ const ResetPassword = () => {
             return true;
         }
 
-        return false;
+        return true;
     }
 
 
-    const resetPasswordEvent = (e) => {
+    const resetPasswordEvent = () => {
         let validated = passwordValidation();
         if (validated) {
             resetPassword(email, password, confirmPassword, code)
-                .then(res => console.log(res));
+                .then(async (res) => {
+                    if (res.status === 200) {
+                        NotificationManager.success('Successfully changed the password!', '', 2000);
+                    } else {
+                        NotificationManager.error(await res.text(), '', 2000);
+                    }
+                });
         }
     }
+
+    useEffect(() => {
+        if(error){
+            NotificationManager.error(error, '', 5000);
+        }
+    }, [error])
 
     return (
         <PageLoading>
@@ -60,7 +72,7 @@ const ResetPassword = () => {
                     <input type="text" placeholder="Email" onChange={(e) => setEmail(e.target.value)} />
                     <input type="password" placeholder="Password" onChange={(e) => setPassword(e.target.value)} />
                     <input type="password" placeholder="Confirmed Password" onChange={(e) => setConfirmPassword(e.target.value)} />
-                    <button type="button" onClick={resetPasswordEvent}>Reset</button>
+                    <button type="button" onClick={() => resetPasswordEvent()}>Reset</button>
                 </form>
             </div>
         </PageLoading>

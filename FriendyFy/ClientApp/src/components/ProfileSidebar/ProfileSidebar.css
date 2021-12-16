@@ -23,7 +23,7 @@
     flex-basis: 50%;
     position: sticky;
     top: -320px;
-    height: 1100px;
+    height: 900px;
     min-width: 50%;
 } 
 
@@ -164,7 +164,7 @@ header.headline > h2, header.headline > p{
     }
 }
 
-@media only screen and (max-height: 1000px){
+@media only screen and (max-height: 900px){
     .profile-sidebar{
         top: -400px;
     } 

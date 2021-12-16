@@ -110,7 +110,6 @@ const Settings = () => {
                 setInterests(selectedInterests)
                 setLocation({ lat: data.latitude, lng: data.longitude })
                 setMomentDate(moment(data.birthday)._d);
-                console.log(data.birthday);
                 setFirstName(data.firstName);
                 setLastName(data.lastName);
             });

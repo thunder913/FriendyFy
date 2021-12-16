@@ -8,12 +8,11 @@ import { deleteComment, getComments, makeComment } from '../../services/commentS
 import PostComment from '../PostComment/PostComment';
 import PeopleListPopUp from '../PopUps/PeopleListPopUp/PeopleListPopUp'
 import InfiniteScroll from 'react-infinite-scroll-component';
-import { likeEvent } from '../../services/eventService';
 import { loadMoreComments, addComment, likedButtonClicked } from '../../services/postRequests';
-import { repost } from '../../services/postService';
 import RepostPopUp from '../PopUps/RepostPopUp/RepostPopUp';
 import Loader from 'react-loader-spinner';
-
+import { NotificationManager } from 'react-notifications';
+                  
 const FeedFooter = (props) => {
     const [showComments, setShowComments] = useState(false);
     const [showPeopleLiked, setShowPeopleLiked] = useState(false);
@@ -60,7 +59,7 @@ const FeedFooter = (props) => {
                     props.setComments(array);
                     props.setCommentsCount(prev => prev-1)
                 }else{
-                    console.log("ERROR");
+                    NotificationManager.error('There was an error deleting the comment!', '', 4000)
                 }
             })
     }

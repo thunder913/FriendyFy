@@ -62,11 +62,11 @@ const Friends = () => {
                     width={100}
                     className="loader"
                 />}
-                endMessage={
-                    <p style={{ textAlign: 'center' }}>
-                        <b>No more friends to show!</b>
-                    </p>
-                }
+                // endMessage={
+                //     // <p style={{ textAlign: 'center' }}>
+                //         {/* <b>No more friends to show!</b> */}
+                //     // </p>
+                // }
             >
                 {friends.map(friend => <Friend key={friend.username} friend={friend} />)}
             </InfiniteScroll>

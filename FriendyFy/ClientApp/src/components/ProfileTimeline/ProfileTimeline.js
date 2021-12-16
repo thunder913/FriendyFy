@@ -96,7 +96,7 @@ const ProfileTimeline = () => {
             scrollableTarget="scrollableDiv"
             endMessage={
               <p style={{ textAlign: 'center' }}>
-                <b>You reached the final post</b>
+                <b>You reached the final {feedType === 'posts' ? 'post' : 'event'}</b>
               </p>
             }>
             {feed.map(el => (el.postType == 'Event' ? <FeedEvent key={el.postId} eventData={el} /> :

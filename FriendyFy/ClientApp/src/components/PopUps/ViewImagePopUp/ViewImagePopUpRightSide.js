@@ -12,7 +12,8 @@ import RepostPopUp from "../RepostPopUp/RepostPopUp";
 import Loader from "react-loader-spinner";
 import PeopleListPopUp from "../PeopleListPopUp/PeopleListPopUp";
 import { getPostLikes } from "../../../services/postService";
-
+import { NotificationManager } from 'react-notifications';
+                  
 const ViewImagePopUpRightSide = ({ comments, setComments, setCommentsCount, setIsLiked, isLiked, commentsCount, setLikes, likes, post, setReposts }) => {
     const [hasMore, setHasMore] = useState(true);
     const [showRepostPopUp, setShowRepostPopUp] = useState(false);
@@ -32,7 +33,7 @@ const ViewImagePopUpRightSide = ({ comments, setComments, setCommentsCount, setI
                     setComments(array);
                     setCommentsCount(prev => prev - 1)
                 } else {
-                    console.log("ERROR");
+                    NotificationManager.error('There was an error deleting the comment!', '', 4000);
                 }
             })
     }

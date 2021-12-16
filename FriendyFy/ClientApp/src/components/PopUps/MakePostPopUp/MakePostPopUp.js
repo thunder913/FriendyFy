@@ -54,7 +54,6 @@ const MakePostPopUp = ({ hasImage, show, setShow }) => {
                     onOutsideClick={(e) => {
                         if(e.target.getAttribute('role') !== 'option' && !e.target.classList.contains('message')  && !e.target.classList.contains('notification')){
                             setShow(false);
-                            console.log(e.target)
                         }
                     }}>
                     <div className="popup-inner post-popup fancy-scroll">

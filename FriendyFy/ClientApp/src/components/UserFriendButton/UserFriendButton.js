@@ -1,7 +1,9 @@
 import React, { useState } from 'react';
 import { Link } from 'react-router-dom';
 import { addFriend, checkFriendStatus, cancelFriendRequest, acceptFriendRequest, removeFriend } from '../../services/friendService';
-import "./UserFriendButton.css"
+import "./UserFriendButton.css";
+import { NotificationManager } from 'react-notifications';
+
 function UserFriendButton({ userId }) {
     const [isHovering, setIsHovering] = useState(false)
     const [friendText, setFriendText] = useState('');
@@ -12,6 +14,7 @@ function UserFriendButton({ userId }) {
             .then(async res => {
                 if (res.ok) {
                     setFriendText("Requested");
+                    NotificationManager.success('Successfully sent a friend request!', '', 2000);
                 }
                 await renderAddFriend();
             });
@@ -23,6 +26,7 @@ function UserFriendButton({ userId }) {
             .then(async res => {
                 if (res.ok) {
                     setFriendText("Friends");
+                    NotificationManager.success('You are now friends!', '', 2000);
                 }
                 await renderAddFriend();
             })
@@ -34,6 +38,7 @@ function UserFriendButton({ userId }) {
             .then(async res => {
                 if (res.ok) {
                     setFriendText("Add Friends");
+                    NotificationManager.success('You declined the friend request!', '', 2000);
                 }
                 await renderAddFriend();
             })
@@ -45,6 +50,7 @@ function UserFriendButton({ userId }) {
             .then(async res => {
                 if (res.ok) {
                     setFriendText("Add Friends");
+                    NotificationManager.success('Successfully canceled the request!', '', 2000);
                 }
                 await renderAddFriend();
             })
@@ -56,6 +62,7 @@ function UserFriendButton({ userId }) {
             .then(async res => {
                 if (res.ok) {
                     setFriendText("no-friends");
+                    NotificationManager.success('Successfully removed friend!', '', 2000);
                 }
                 await renderAddFriend();
             })
