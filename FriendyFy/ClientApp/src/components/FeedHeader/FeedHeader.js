@@ -62,7 +62,7 @@ function FeedHeader({ photo, name, time, username, city, lat, long, taggedPeople
                         <Link to={'/profile/' + username}>
                             <h3>{name}</h3>
                         </Link>
-                        {city !== null ? <p className="post-location"> is at <button onClick={() => setShowPostLocation(true)}>{city}</button></p> : ''}
+                        {city ? <p className="post-location"> is at <button onClick={() => setShowPostLocation(true)}>{city}</button></p> : ''}
                         {taggedPeople && taggedPeople !== 0 ? <p>with <button onClick={() => setShowTaggedPeople(true)}> {taggedPeople} {taggedPeople === 1 ? 'person' : 'people'} </button></p> : ''}
 
                     </div>

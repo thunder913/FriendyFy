@@ -37,7 +37,7 @@ const PersonYouProbablyMet = ({ person }) => {
             <Link to={'/profile/' + person.username}><span className="person-name">{person.name}</span></Link>
             <div className="main-suggestion-body">
                 <div className="common-stuff">
-                    <span className="friend-friends">You were together at {person.eventsTogether} event{person.eventsTogether > 1 ? "s" : ""}.</span>
+                    <span className="friend-friends">You were together at {person.eventsTogether} event{(person.eventsTogether > 1 || person.eventsTogether === 0) ? "s" : ""}.</span>
                 </div>
                 <div className="friend-buttons">
                     <button className="add-friend" onClick={addFriendEvent}>Add</button>
