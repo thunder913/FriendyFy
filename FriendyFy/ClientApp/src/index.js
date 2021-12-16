@@ -5,6 +5,7 @@ import { BrowserRouter } from 'react-router-dom';
 import App from './App';
 import { ChatConnectionProvider } from './contexts/chatConnectionContext';
 import { LoggedInProvider } from './contexts/LoggedInContext';
+import { NotificationConnectionProvider } from './contexts/NotificationContext';
 import { ThemeProvider } from './contexts/ThemeContext';
 //import registerServiceWorker from './registerServiceWorker';
 
@@ -14,11 +15,13 @@ const rootElement = document.getElementById('root');
 ReactDOM.render(
   <BrowserRouter basename={baseUrl}>
     <ChatConnectionProvider>
-      <LoggedInProvider>
-        <ThemeProvider>
-          <App />
-        </ThemeProvider>
-      </LoggedInProvider>
+      <NotificationConnectionProvider>
+        <LoggedInProvider>
+          <ThemeProvider>
+            <App />
+          </ThemeProvider>
+        </LoggedInProvider>
+      </NotificationConnectionProvider>
     </ChatConnectionProvider>
   </BrowserRouter>,
   rootElement);

@@ -19,12 +19,15 @@ namespace FriendyFy.Controllers
     {
         private readonly IInterestService interestService;
         private readonly IEventService eventService;
+        private readonly INotificationService notificationService;
 
         public EventController(IInterestService interestService,
-            IEventService eventService)
+            IEventService eventService,
+            INotificationService notificationService)
         {
             this.interestService = interestService;
             this.eventService = eventService;
+            this.notificationService = notificationService;
         }
 
         [HttpPost("create")]
@@ -236,6 +239,19 @@ namespace FriendyFy.Controllers
         public IActionResult GetRandomEvent()
         {
             return Ok(this.eventService.GetRandomEventId());
+        }
+
+        [HttpPost("getEventInvitePeople")]
+        public IActionResult GetEventInvitePeople(EventInvitePeopleDto dto)
+        {
+            var user = this.GetUserByToken();
+
+            if (user == null)
+            {
+                return Unauthorized("You are not logged in!");
+            }
+
+            return Ok(this.eventService.GetPeopleInviteDto(dto.EventId, dto.Take, dto.Skip, user));
         }
     }
 }

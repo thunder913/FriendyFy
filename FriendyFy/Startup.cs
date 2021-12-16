@@ -96,6 +96,7 @@ namespace FriendyFy
             services.AddTransient<ICommentService, CommentService>();
             services.AddTransient<IEventService, EventService>();
             services.AddTransient<ISearchService, SearchService>();
+            services.AddTransient<INotificationService, NotificationService>();
 
 
             services.AddControllersWithViews();
@@ -153,6 +154,7 @@ namespace FriendyFy
                     pattern: "{controller}/{action=Index}/{id?}");
                 endpoints.MapRazorPages();
                 endpoints.MapHub<ChatHub>("/chat");
+                endpoints.MapHub<NotificationHub>("/notification");
             });
             app.UseSpa(spa =>
             {

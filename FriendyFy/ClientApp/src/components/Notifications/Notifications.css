@@ -3,10 +3,93 @@
     background-color: rgba(214, 39, 39, 0.822);
     font-size: 12px;
     border-radius: 50%;
-    padding: 0px 5px;
-    right: 15px;
+    padding: 0px 2.5px;
+    right: 5px;
     top: -10px;
     margin-bottom: -18px;
     user-select: none;
     color: white;
+    width: 18px;
+}
+
+.notifications.circle-right{
+    padding: 0px;
+}
+
+.notifications .notification-button{
+    padding: 3px 9.25px;
+    cursor: pointer;
+}
+
+.notifications .notifications-pop-up{
+    position: absolute;
+    right: 0px;
+    display: flex;
+    flex-direction: column;
+    background-color: var(--light);
+    gap: 5px;
+    border-radius: 10px 0px 0px 10px;
+    border: 2px solid var(--border-separator);
+    width: 400px;
+    height: 500px;
+    text-align: left;
+    cursor: initial;
+}
+
+.notifications .notifications-section{
+    display: flex;
+    flex-direction: column;
+}
+
+.notifications .user-notification{
+    padding: 0px 10px;
+    display: flex;
+    flex-direction: row;
+    text-align: center;
+    gap: 3px;
+    border-top: 1px solid var(--border-separator);
+    padding: 5px 0px 5px 10px;
+}
+
+.user-notification .notification-options{
+    display: flex;
+    flex-direction: column;
+    margin-left: 5px;
+}
+
+.notification-options .accept, .notification-options .reject{
+    border: 0px;
+    padding: 3px 1px;
+    font-size: 20px;
+    color: white;
+}
+
+.notification-options .accept{
+    background-color: rgba(17, 192, 17, 0.8);
+}
+
+.notification-options .accept:hover{
+    background-color: rgba(49, 206, 49, 0.8);
+}
+
+.notification-options .reject{
+    background-color: rgb(184, 35, 35);
+}
+
+.notification-options .reject:hover{
+    background-color: rgb(197, 48, 48);
+}
+
+.user-notification .notification-image{
+    width: 100px;
+    border-radius: 10%;
+}
+
+.user-notification .notification-image > img {
+    width: 100%;
+    border-radius: 10%;
+}
+
+.user-notification > p{
+    align-self: center;
 }

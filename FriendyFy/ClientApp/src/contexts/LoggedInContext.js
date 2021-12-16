@@ -2,26 +2,30 @@ import React from "react";
 import { useEffect } from "react";
 import { getLoggedInUser } from "../services/userService";
 import { useChatConnection } from "./chatConnectionContext";
+import { useNotificationConnection } from "./NotificationContext";
 
 const LoggedInContext = React.createContext({})
 
 const LoggedInProvider = ({ children }) => {
     const [loggedIn, setLoggedIn] = React.useState(false);
-    const { openConnection, closeConnection } = useChatConnection();
+    const { openConnection:openChatConnection, closeConnection:closeChatConnection } = useChatConnection();
+    const {  openConnection:openNotificationConnection,  closeConnection:closeNotificationConnection } = useNotificationConnection();
     const resetUser = async () => {
         return getLoggedInUser()
             .then(async res => {
                 let obj = await res.json();
                 if (res.ok) {
                     setLoggedIn(await obj);
-                    openConnection();
+                    openChatConnection();
+                    openNotificationConnection()
                 }
             });
     }
 
     useEffect(() => {
         if (!loggedIn) {
-            closeConnection();
+            closeChatConnection();
+            closeNotificationConnection();
         }
     }, [loggedIn])
 

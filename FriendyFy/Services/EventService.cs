@@ -25,6 +25,7 @@ namespace FriendyFy.Services
         private readonly IRepository<EventPost> eventPostRepository;
         private readonly IRepository<EventComment> eventCommentRepository;
         private readonly IRepository<CommentLike> commentLikeRepository;
+        private readonly IUserService userService;
 
         public EventService(IGeolocationService geolocationService,
             IDeletableEntityRepository<Event> eventRepository,
@@ -33,7 +34,8 @@ namespace FriendyFy.Services
             IRepository<EventLike> eventLikeRepository,
             IRepository<EventPost> eventPostRepository,
             IRepository<EventComment> eventCommentRepository,
-            IRepository<CommentLike> commentLikeRepository)
+            IRepository<CommentLike> commentLikeRepository,
+            IUserService userService)
         {
             this.geolocationService = geolocationService;
             this.eventRepository = eventRepository;
@@ -43,6 +45,7 @@ namespace FriendyFy.Services
             this.eventPostRepository = eventPostRepository;
             this.eventCommentRepository = eventCommentRepository;
             this.commentLikeRepository = commentLikeRepository;
+            this.userService = userService;
         }
 
         public async Task CreateEventAsync(string name, DateTime date, List<Interest> interests, PrivacySettings privacySettings, decimal latitude, decimal longitude, string description, string profileImage, string organizerId)
@@ -906,6 +909,34 @@ namespace FriendyFy.Services
                 .OrderBy(x => Guid.NewGuid().ToString())
                 .FirstOrDefault()
                 .Id;
+        }
+
+        public List<PersonListPopupViewModel> GetPeopleInviteDto(string eventId, int take, int skip, ApplicationUser user)
+        {
+
+            var currEvent = this.eventRepository.All()
+                .Include(x => x.Users)
+                .FirstOrDefault(x => x.Id == eventId);
+
+            var creatorId = currEvent.OrganizerId;
+
+            var usersInEvent = currEvent
+                .Users
+                .Select(x => x.Id)
+                .ToList();
+
+            usersInEvent.Add(creatorId);
+
+            var usersToInvite = user.Friends
+                .Where(x => !usersInEvent.Any(y => y == x.FriendId))
+                .Where(x => x.IsFriend)
+                .OrderBy(x => x.FriendId)
+                .Skip(skip)
+                .Take(take)
+                .Select(x => x.FriendId)
+                .ToList();
+
+            return this.userService.GetInvitePeoplePopUp(usersToInvite);
         }
     }
 }

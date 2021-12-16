@@ -81,4 +81,10 @@ export function likeEvent(eventId) {
     });
   }
 
-  
+  export function getEventInvitePeople(eventId, skip, take) {
+    return fetch('/event/getEventInvitePeople', {
+        method: 'POST',
+        headers: {'Content-Type': 'application/json'},
+        body: JSON.stringify({eventId, skip, take})
+    });
+  }

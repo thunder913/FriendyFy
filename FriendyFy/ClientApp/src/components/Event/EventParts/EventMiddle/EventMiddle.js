@@ -4,9 +4,11 @@ import {NotificationContainer, NotificationManager} from 'react-notifications';
 import 'react-notifications/lib/notifications.css';
 import './EventMiddle.css'
 import { Link } from 'react-router-dom';
+import InvitePeoplePopUp from '../../../PopUps/InvitePeoplePopUp/InvitePeoplePopUp';
+
 const EventMiddle = ({eventId, title, privacy, interests=[], organizerName, organizerUsername, isInEvent, isOrganizer, setIsInEvent}) => {
     const [isUserInEvent, setIsUserInEvent] = useState(isInEvent);
-
+    const [show, setShow] = useState(false);
     const joinEventHandler = () => {
         joinEvent(eventId)
             .then(res => {
@@ -19,12 +21,6 @@ const EventMiddle = ({eventId, title, privacy, interests=[], organizerName, orga
                     setIsUserInEvent(false);
                 }
             })
-    }
-
-    const inviteEventHandler = () => {
-        NotificationManager.success('Successfully joined the event!', '', 2000);
-        NotificationManager.error('There was an error joining the event!');
-        
     }
 
     const shareEventHandler = () => {
@@ -45,6 +41,7 @@ const EventMiddle = ({eventId, title, privacy, interests=[], organizerName, orga
     return(
             <section className="event-page-middle">
                 <NotificationContainer/>
+                <InvitePeoplePopUp title='Invite your friends' eventId={eventId} show={show} setShow={setShow}/>
                 <div className="left-side">
                     <h2 className="event-title">{title}</h2>
                     <div className="other-info">
@@ -63,7 +60,7 @@ const EventMiddle = ({eventId, title, privacy, interests=[], organizerName, orga
                     <div className="buttons">
                         {!isUserInEvent ? 
                         <button className="join" onClick={joinEventHandler}>Join</button> :
-                        <button className="invite" onClick={inviteEventHandler}>Invite</button>}
+                        <button className="invite" onClick={() => setShow(true)}>Invite</button>}
                         <button className="share" onClick={shareEventHandler}>Share</button>
                     </div> 
                 </div>

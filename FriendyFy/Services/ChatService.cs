@@ -40,7 +40,7 @@ namespace FriendyFy.Services
                 .Where(x => x.Users.Any(y => y.UserName == username))
                 .Where(x => x.ChatType != ChatType.NotAccepted)
                 .Where(x => string.IsNullOrWhiteSpace(search) || (x.Users.Any(y => (y.FirstName+" "+y.LastName).ToLower().Contains(search.ToLower()))))
-                .Where(x => !chatIds.Any(y => y == x.Id))
+                .Where(x => !chatIds.Any(y => y == x.Id)) 
                 .OrderBy(x => x.Id)
                 .Skip(items*page)
                 .Take(items)

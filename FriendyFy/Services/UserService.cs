@@ -332,5 +332,26 @@ namespace FriendyFy.Services
 
             return toReturn;
         }
+
+        public List<PersonListPopupViewModel> GetInvitePeoplePopUp(List<string> userIds)
+        {
+            var users = this.userRepository
+                .AllAsNoTracking()
+                .Where(x => userIds.Any(y => y == x.Id))
+                .Select(x => new PersonListPopupViewModel()
+                {
+                    Name = x.FirstName + " " + x.LastName,
+                    ProfileImage = x.ProfileImage.Id + x.ProfileImage.ImageExtension,
+                    Username = x.UserName,
+                }).ToList();
+
+            return users.Select(x => new PersonListPopupViewModel()
+            {
+                Name = x.Name,
+                Username = x.Username,
+                ProfileImage = this.blobService.GetBlobUrlAsync(x.ProfileImage, GlobalConstants.BlobPictures).GetAwaiter().GetResult()
+            }).ToList();
+
+        }
     }
 }

@@ -1,0 +1,23 @@
+.invite-people .invite-button{
+    margin-left: auto;
+    border-radius: 0px;
+    padding: 7px 15px;
+    background-color: var(--like-option);
+    border: 0px;
+    color: white;
+    border-radius: 10px;
+    font-size: 20px;
+    height: 60px
+}
+
+.invite-people .invite-button:hover{
+    background-color: var(--like-option-hover);
+}
+
+.invite-people .invite-button.disabled{
+    background-color: var(--hover-gray) !important;
+}
+
+.invite-people .person>a{
+    width: 100%;
+}

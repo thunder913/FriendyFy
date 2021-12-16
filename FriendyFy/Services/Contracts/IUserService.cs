@@ -4,6 +4,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using ViewModels;
 using ViewModels.ViewModels;
 
 namespace FriendyFy.Services.Contracts
@@ -32,5 +33,6 @@ namespace FriendyFy.Services.Contracts
            List<Interest> interests, decimal? longitude, decimal? latitude, string newProfilePicture = null, string newCoverImage = null);
         Task<bool> ResetPassword(ApplicationUser user, string newPasswordHash);
         List<SearchPageResultViewModel> GetSearchPageUsers(int take, int skip, string searchWord, List<int> interestIds, string userId);
+        List<PersonListPopupViewModel> GetInvitePeoplePopUp(List<string> userIds);
     }
 }
