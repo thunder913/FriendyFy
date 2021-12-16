@@ -126,20 +126,15 @@ function UserChatHeadFooter({ chatDetails, chats, setChats }) {
                 message.isBottomMessage = true;
                 let firstMessage = latestChat.current.messages[0];
                 let chatMessages = [...latestChat.current.messages];
-                console.log('1')
                 if (latestChat.current.messages.length > 0 && latestChat.current.messages[0].username === message.username) {
-                    console.log('2')
                     message.isTopMessage = false;
                     firstMessage.isBottomMessage = false;
                 } else {
-                    console.log('3')
                     message.isTopMessage = true;
                     if (firstMessage)
                         firstMessage.isBottomMessage = true;
                 }
-                console.log('4')
                 if (chatMessages.length > 0) {
-                    console.log('5')
                     chatMessages[0] = firstMessage;
 
                     setChat(prevState => ({ image: prevState.image, name: prevState.name, messages: [message, ...chatMessages] }));
@@ -147,13 +142,10 @@ function UserChatHeadFooter({ chatDetails, chats, setChats }) {
                     setChat(prevState => ({ image: prevState.image, name: prevState.name, messages: [message] }));
                 }
 
-                console.log('6')
                 if (!message.isYourMessage) {
                     if (isChatOpen.current) {
-                        console.log('7')
                         seeMessages(chatDetails.chatId);
                     } else {
-                        console.log('8')
                         setNewMessages(newMessagesRef.current + 1);
                     }
                 }

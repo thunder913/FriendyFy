@@ -21,7 +21,7 @@ namespace FriendyFy.Controllers
             this.chatService = chatService;
         }
 
-        [HttpPost("getChats/")]
+        [HttpPost("getChats")]
         public IActionResult GetUserChats(GetChatsDto dto)
         {
             var user = this.GetUserByToken();

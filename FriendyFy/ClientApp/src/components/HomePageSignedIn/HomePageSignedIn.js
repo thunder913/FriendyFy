@@ -20,21 +20,21 @@ const HomePageSignedIn = () => {
   const [hasEvents, setHasEvents] = useState(true);
   const [didFirstTimeRequest, setDidFirstTimeRequest] = useState(false);
   const loadMorePosts = () => {
-    if(didFirstTimeRequest){
-    return getFeed(events, posts, false, 10, null, hasPosts, hasEvents)
-      .then(async res => {
-        let obj = await res.json();
-        obj.posts.forEach(el => {
-          if (el.postType == "Event") {
-            setEvents(prev => [...prev, el.eventPostId]);
-          } else if (el.postType == "Post") {
-            setPosts(prev => [...prev, el.postId]);
-          }
-        });
-        setHasEvents(obj.hasEvents);
-        setHasPosts(obj.hasPosts);
-        setFeed(prev => ([...prev, ...obj.posts]));
-      })
+    if (didFirstTimeRequest) {
+      return getFeed(events, posts, false, 10, null, hasPosts, hasEvents)
+        .then(async res => {
+          let obj = await res.json();
+          obj.posts.forEach(el => {
+            if (el.postType == "Event") {
+              setEvents(prev => [...prev, el.eventPostId]);
+            } else if (el.postType == "Post") {
+              setPosts(prev => [...prev, el.postId]);
+            }
+          });
+          setHasEvents(obj.hasEvents);
+          setHasPosts(obj.hasPosts);
+          setFeed(prev => ([...prev, ...obj.posts]));
+        })
     }
   }
 
@@ -60,36 +60,36 @@ const HomePageSignedIn = () => {
   }, [])
 
   return (
-      <div className="feed home-feed">
-        <FirstTimePopUp show={showFirstTimePopUp} setShow={setShowFirstTimePopUp} />
-        {!showFirstTimePopUp ? <div className="main-feed">  <MakePost
-          showPostImage={true}
-          showCreatePost={true}
-          showCreateEvent={true} />
-          <InfiniteScroll
-            className={"feed-posts"}
-            dataLength={posts.length}
-            next={loadMorePosts}
-            hasMore={(hasPosts || hasEvents)}
-            loader={<Loader
-              type="MutatingDots"
-              color="#50A6FA"
-              secondaryColor="#3779CF"
-              height={100}
-              width={100}
-              className="loader"
-            />}
-            scrollableTarget="scrollableDiv"
-            endMessage={
-              <p style={{ textAlign: 'center' }}>
-                <b>You reached the final post</b>
-              </p>
-            }>
-            {feed.map(el => (el.postType == 'Event' ? <FeedEvent key={el.eventPostId} eventData={el} /> :
-              !el.isRepost ? <FeedPost key={el.postId} post={el} /> : <FeedPostRepost key={el.postId} post={el} />))}
-          </InfiniteScroll> </div>
-          : ''}
-      </div>)
+    <div className="feed home-feed">
+      <FirstTimePopUp show={showFirstTimePopUp} setShow={setShowFirstTimePopUp} />
+      {!showFirstTimePopUp ? <div className="main-feed">  <MakePost
+        showPostImage={true}
+        showCreatePost={true}
+        showCreateEvent={true} />
+        <InfiniteScroll
+          className={"feed-posts"}
+          dataLength={posts.length}
+          next={loadMorePosts}
+          hasMore={(hasPosts || hasEvents)}
+          loader={<Loader
+            type="MutatingDots"
+            color="#50A6FA"
+            secondaryColor="#3779CF"
+            height={100}
+            width={100}
+            className="loader"
+          />}
+          scrollableTarget="scrollableDiv"
+          endMessage={
+            <p style={{ textAlign: 'center' }}>
+              <b>You reached the final post</b>
+            </p>
+          }>
+          {feed.map(el => (el.postType == 'Event' ? <FeedEvent key={el.eventPostId} eventData={el} /> :
+            !el.isRepost ? <FeedPost key={el.postId} post={el} /> : <FeedPostRepost key={el.postId} post={el} />))}
+        </InfiniteScroll> </div>
+        : ''}
+    </div>)
 }
 
 export default HomePageSignedIn;

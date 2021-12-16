@@ -22,17 +22,17 @@ function Footer() {
     setPage(newPage);
   }
 
-  const searchFriends = () => {
+  const searchFriends = (hasSearchWord) => {
     let openedChats = chats.filter(c => c.isActive);
     let chatIds = openedChats.map(c => c.chatId);
     let itemsPerPage = parseInt((window.innerWidth - 200) / 300);
 
-    getChats(loggedIn.userName, page, itemsPerPage - openedChats.length, isSearching ? search : '', itemsPerPage, JSON.stringify(chatIds))
+    getChats(loggedIn.userName, page, itemsPerPage - openedChats.length, hasSearchWord ? search : '', itemsPerPage, JSON.stringify(chatIds))
       .then(async res => {
         let obj = await res.json();
-        if (obj.length === 0 && !isSearching) {
+        if (obj.length === 0 && !hasSearchWord) {
           setHasMore(false);
-        } else if (obj.length === 0 && isSearching) {
+        } else if (obj.length === 0 && hasSearchWord) {
           setHasMore(false);
           setChats([...openedChats]);
         }
@@ -50,7 +50,7 @@ function Footer() {
     e.preventDefault();
     setIsSearching(true);
     if(page === 0){
-      searchFriends();
+      searchFriends(true);
     }else{
       setPage(0);
     }
@@ -72,7 +72,7 @@ function Footer() {
   }, [search])
 
   useEffect(() => {
-    searchFriends();
+    searchFriends(isSearching);
   }, [loggedIn.userName, page])
 
   return (

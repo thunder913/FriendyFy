@@ -11,5 +11,7 @@ namespace ViewModels.ViewModels
         public string EventName { get; set; }
         public string InviterUsername { get; set; }
         public DateTime? Date { get; set; }
+        public string EventId { get; set; }
+        public bool IsAvailable { get; set; }
     }
 }

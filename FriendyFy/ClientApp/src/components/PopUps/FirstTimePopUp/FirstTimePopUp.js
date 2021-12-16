@@ -7,7 +7,6 @@ import axios from 'axios';
 import '../PopUp.css';
 import PopUp from '../PopUp';
 import { useLoggedIn } from '../../../contexts/LoggedInContext';
-import OutsideClickHandler from "react-outside-click-handler";
 const FirstTimePopUp = ({ show, setShow }) => {
     const [location, setLocation] = useState('');
     const [profileImg, setProfileImg] = useState(null)
@@ -55,37 +54,32 @@ const FirstTimePopUp = ({ show, setShow }) => {
     return (
         <PopUp escClose={false} show={show} setShow={setShow}>
             <div className="popup-outer first-time-popup">
-                <OutsideClickHandler
-                    onOutsideClick={() => {
-                        setShow(false);
-                    }}>
-                    <div className="popup-inner popup-text fancy-scroll">
-                        <h2 className="first-time-title">This is your first time logging in.</h2>
-                        <h3 className="first-time-undertitle">You have to fill some information about yourself in order to help us recommend the events, you really wish to attend!</h3>
-                        <form>
-                            <ImgDropAndCrop
-                                placeholder="Choose a profile photo."
-                                aspectRatio={1 / 1}
-                                setCroppedImg={setProfileImg}
-                                imageClass="user-profile-photo" />
-
-                            <div className="find-location">
-                                <MyGoogleMap location={location} setLocation={setLocation}></MyGoogleMap>
-                            </div>
-                        </form>
-                        <InterestsDropdown placeholder='Choose at least 3 interests' setInterests={setInterests}></InterestsDropdown>
-
+                <div className="popup-inner popup-text fancy-scroll">
+                    <h2 className="first-time-title">This is your first time logging in.</h2>
+                    <h3 className="first-time-undertitle">You have to fill some information about yourself in order to help us recommend the events, you really wish to attend!</h3>
+                    <form>
                         <ImgDropAndCrop
-                            placeholder="Choose a cover photo."
-                            aspectRatio={837 / 310}
-                            setCroppedImg={setCoverImg}
-                            imageClass="cover-user-image" />
+                            placeholder="Choose a profile photo."
+                            aspectRatio={1 / 1}
+                            setCroppedImg={setProfileImg}
+                            imageClass="user-profile-photo" />
 
-                        <textarea onChange={(e) => setQuote(e.target.value)} name="" id="quote" rows="2" className="css-p8sdl4-control" placeholder="Enter a quote/description that will show in your profile"></textarea>
-                        {errorMessage ? <span className="error-message">{errorMessage}</span> : ''}
-                        <input type="submit" className="create-account-button" value="Finish My Account" onClick={submitForm} />
-                    </div>
-                </OutsideClickHandler>
+                        <div className="find-location">
+                            <MyGoogleMap location={location} setLocation={setLocation}></MyGoogleMap>
+                        </div>
+                    </form>
+                    <InterestsDropdown placeholder='Choose at least 3 interests' setInterests={setInterests}></InterestsDropdown>
+
+                    <ImgDropAndCrop
+                        placeholder="Choose a cover photo."
+                        aspectRatio={837 / 310}
+                        setCroppedImg={setCoverImg}
+                        imageClass="cover-user-image" />
+
+                    <textarea onChange={(e) => setQuote(e.target.value)} name="" id="quote" rows="2" className="css-p8sdl4-control" placeholder="Enter a quote/description that will show in your profile"></textarea>
+                    {errorMessage ? <span className="error-message">{errorMessage}</span> : ''}
+                    <input type="submit" className="create-account-button" value="Finish My Account" onClick={submitForm} />
+                </div>
             </div>
         </PopUp>)
 }

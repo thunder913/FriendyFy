@@ -1,6 +1,8 @@
 ﻿using FriendyFy.Data;
+using FriendyFy.Hubs;
 using FriendyFy.Services.Contracts;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.SignalR;
 using System.Threading.Tasks;
 using ViewModels;
 
@@ -11,16 +13,23 @@ namespace FriendyFy.Controllers
     public class FriendController : BaseController
     {
         private readonly IFriendService friendService;
+        private readonly IHubContext<NotificationHub> notificationHub;
+        private readonly INotificationService notificationService;
 
-        public FriendController(IFriendService friendService)
+        public FriendController(IFriendService friendService,
+            IHubContext<NotificationHub> notificationHub,
+            INotificationService notificationService)
         {
             this.friendService = friendService;
+            this.notificationHub = notificationHub;
+            this.notificationService = notificationService;
         }
 
         [HttpPost("add")]
         public async Task<IActionResult> AddFriend(FriendIdDto dto)
         {
             var user = this.GetUserByToken();
+            var receiverId = this.UserService.GetByUsername(dto.UserId).Id;
             if (user == null || dto.UserId == null)
             {
                 return BadRequest("The user cannot be added as a friend!");
@@ -32,6 +41,11 @@ namespace FriendyFy.Controllers
                 return BadRequest("Cannot add friend!");
             }
 
+            var notification = await this.notificationService.CreateFriendRequestNotification(user, dto.UserId);
+            if (notification != null)
+            {
+                await this.notificationHub.Clients.User(receiverId).SendAsync(receiverId, notification);
+            }
             return Ok();
         }
 
@@ -50,6 +64,7 @@ namespace FriendyFy.Controllers
                 return BadRequest("Cannot acccept friend request!");
             }
 
+            await this.notificationService.ChangeUserFriendNotificationStatus(dto.UserId, user.Id);
             return Ok();
         }
 
@@ -68,6 +83,8 @@ namespace FriendyFy.Controllers
                 return BadRequest("Cannot cancel friend request!");
             }
 
+            await this.notificationService.ChangeUserFriendNotificationStatus(dto.UserId, user.Id);
+            await this.notificationService.ChangeUserFriendNotificationStatus(user.Id, dto.UserId);
             return Ok();
         }
 

@@ -100,7 +100,13 @@ namespace FriendyFy.Services
 
         public int GetUserEventsCount(string username)
         {
-            return this.userRepository.All().Include(x => x.Events).FirstOrDefault(x => x.UserName == username && username != null).Events.Count();
+            return this.userRepository.All()
+                .Include(x => x.Events)
+                .Include(x => x.EventsOrganized)
+                .FirstOrDefault(x => x.UserName == username && username != null)
+                .Events
+                .Where(x => x.Time < DateTime.UtcNow)
+                .Count();
         }
 
         public async Task SetUserFirstTimeLoginAsync(ApplicationUser user, Image profileImage, Image coverImage, string quote, List<Interest> interests, decimal? longitude, decimal? latitude)

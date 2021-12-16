@@ -86,9 +86,7 @@ const SearchPage = () => {
 
     useEffect(() => {
         const queryString = require('query-string');
-        console.log(queryString, 'query')
         const parsed = queryString.parse(location.search);
-        console.log(parsed);
         if (parsed) {
             let interests = [];
             if (parsed.interests) {

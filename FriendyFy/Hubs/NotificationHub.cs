@@ -35,7 +35,10 @@ namespace FriendyFy.Hubs
 
             var notification = await this.notificationService.CreateNotificationAsync(user, dto.Username, dto.EventId);
 
-            await this.Clients.User(inviteeId).SendAsync(inviteeId, notification);
+            if (notification != null)
+            {
+                await this.Clients.User(inviteeId).SendAsync(inviteeId, notification);
+            }
 
             return true;
         }

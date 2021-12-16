@@ -18,11 +18,25 @@ import Cookies from './components/Cookies/Cookies';
 import ResetPassword from './components/ResetPassword/ResetPassword';
 import SearchPage from './components/SearchPage/SearchPage';
 import NotFound from './components/NotFound/NotFound';
+import { useChatConnection } from './contexts/chatConnectionContext';
+import { useNotificationConnection } from './contexts/NotificationContext';
 
 function App() {
   const [showLoader, setShowLoader] = useState(true);
   const { loggedIn, resetUser } = useLoggedIn();
   const location = useLocation();
+  const { openConnection: openChatConnection, closeConnection: closeChatConnection, connection:chatConnection } = useChatConnection();
+  const { openConnection: openNotificationConnection, closeConnection: closeNotificationConnection, connection:notificationConnection } = useNotificationConnection();
+
+  const openConnections = () => {
+    if(loggedIn){
+      if(!chatConnection || chatConnection.connectionState === 'Disconnected')
+      openChatConnection();
+    }
+    if(!notificationConnection || notificationConnection.connectionState === 'Disconnected'){
+      openNotificationConnection();
+    }
+  }
 
   useEffect(() => {
     setShowLoader(true);
@@ -31,6 +45,19 @@ function App() {
         setShowLoader(false)
       }, 1000));
   }, [])
+
+  useEffect(() => {
+    openConnections();
+  }, [])
+
+  useEffect(() => {
+    if (!loggedIn) {
+      closeChatConnection();
+      closeNotificationConnection();
+    }else{
+      openConnections();
+    }
+  }, [loggedIn])
 
   return (
     <Layout>
@@ -45,8 +72,8 @@ function App() {
           <Route path="/tos" component={TermsOfService}></Route>
           <Route path="/search-page" component={SearchPage}></Route>
           <Route path={ApplicationPaths.ApiAuthorizationPrefix} component={ApiAuthorizationRoutes} />
-          <Route exact path={['/','/Auth/Register']} component={Home} />
-          <Route path='/Auth/SendForgottenPasswordEmail' component={ResetPassword}/>
+          <Route exact path={['/', '/Auth/Register']} component={Home} />
+          <Route path='/Auth/SendForgottenPasswordEmail' component={ResetPassword} />
           <Route component={NotFound}></Route>
         </Switch>
       </AnimatePresence>

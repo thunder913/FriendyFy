@@ -16,6 +16,7 @@ namespace FriendyFy.Models
         public ApplicationUser Invitee { get; set; }
         public string InviteeId { get; set; }
         public bool IsSeen { get; set; }
+        // This is actully not available
         public bool IsAvailable { get; set; }
         public new DateTime CreatedOn { get; set; } = DateTime.UtcNow;
         public bool AcceptedStatus { get; set; }
