@@ -28,7 +28,7 @@
 } 
 
 .profile-sidebar.popup-shown{
-    z-index: 10;
+    z-index: 102;
 }
 
 .profile-sidebar::-webkit-scrollbar {

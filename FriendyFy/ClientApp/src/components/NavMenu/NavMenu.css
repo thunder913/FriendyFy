@@ -22,7 +22,7 @@ html {
   color:var(--text-main);
   position: fixed;
   width: 100%;
-  z-index: 2;
+  z-index: 101;
 }
 
 .circle-right{
@@ -81,6 +81,22 @@ html {
   height: 100%;
 }
 
+.site-header .search-page-button{
+  color: var(--text-main);
+  cursor: pointer;
+  background-color: var(--light);
+  transition: 0.3s;
+  text-align: center;
+  vertical-align: middle;
+  align-self: center;
+  padding: 5px 10px;
+  border-radius: 20px;
+}
+
+.site-header .search-page-button:hover{
+  background-color: var(--hover-gray);
+}
+
 @media only screen and (max-width: 767px){
   .site-header > nav.navbar{
     flex-direction: column;
@@ -113,5 +129,18 @@ html {
 
   .site-header .search-form{
     width: initial;
+  }
+}
+
+@media only screen and (max-width: 476px){
+  .notifications .notifications-pop-up{
+    width: 300px;
+  }
+}
+
+@media only screen and (max-width: 767px){
+  .notifications.circle-right{
+    margin-left: auto;
+    margin-right: 40px;
   }
 }

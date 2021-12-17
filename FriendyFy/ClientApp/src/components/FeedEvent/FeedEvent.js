@@ -79,7 +79,7 @@ const FeedEvent = ({ eventData }) => {
                     <div className="second-row">
                         <Link to={'/event/' + event.postId} className='event-title'>{event.eventTitle}</Link>
                         <div className="interests">
-                            {event.eventInterests.map(interest => <Link to={`/search-page?interests=[{"label":"${interest.label}","value":${interest.id}}]`} key={interest.id} className="interest">{interest.label}</Link>)}
+                            {event.eventInterests.map(interest => <Link title={interest.label} to={`/search-page?interests=[{"label":"${interest.label}","value":${interest.id}}]`} key={interest.id} className="interest">{interest.label}</Link>)}
                         </div>
                         <Link to={'/event/' + event.postId} className="join">View</Link>
                     </div>

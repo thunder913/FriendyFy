@@ -18,7 +18,7 @@ const RepostPopUp = ({ id, repostType, show, setShow, manyPopUps, setRepostsCoun
                     setShow(false);
                     NotificationManager.success('Successfully reposted!', '', 2000);
                 }else{
-                    NotificationManager.error('There was an error reposting!', '', 2000);
+                    NotificationManager.error('There was an error reposting! Check if you are logged in!', '', 2000);
                 }
             });
     }

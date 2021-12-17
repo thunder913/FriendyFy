@@ -14,12 +14,6 @@ export function getEventById(id){
     })
 }
 
-export function getEvents(){
-    return fetch('/event', {
-        method: 'GET'
-    })
-}
-
 export function likeEvent(eventId) {
     return fetch('/event/likeEvent', {
         method: 'POST',

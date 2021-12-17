@@ -101,7 +101,7 @@ namespace FriendyFy.Controllers
                 return Unauthorized();
             }
             var parsed = Enum.TryParse(dto.PostType, out PostType postType);
-            if (parsed)
+            if (!parsed)
             {
                 return BadRequest();
             }

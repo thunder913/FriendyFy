@@ -40,10 +40,10 @@ namespace FriendyFy.Controllers
             var user = this.GetUserByToken();
             var interests = JsonConvert.DeserializeObject<List<InterestDto>>(dto.Interests);
 
-            if (user == null && dto.ShowOnlyUserEvents)
-            {
-                return BadRequest("You mush be logged in to use your events!");
-            }
+            //if (user == null && dto.ShowOnlyUserEvents)
+            //{
+            //    return BadRequest("You mush be logged in to use your events!");
+            //}
 
             var parsed = Enum.TryParse(dto.Type, out SearchType type);
             if (!parsed)
@@ -52,7 +52,7 @@ namespace FriendyFy.Controllers
             }
             var parsedDate = DateTime.TryParseExact(dto.EventDate, "dd/MM/yyyy", CultureInfo.InvariantCulture, DateTimeStyles.None, out DateTime date);
 
-            var result = this.searchService.PerformSearch(dto.Take, dto.SkipPeople, dto.SkipEvents, dto.SearchWord, interests.Where(x => x.IsNew == false).Select(x => x.Id).ToList(), type, dto.ShowOnlyUserEvents, date, parsedDate, user.Id);
+            var result = this.searchService.PerformSearch(dto.Take, dto.SkipPeople, dto.SkipEvents, dto.SearchWord, interests.Where(x => x.IsNew == false).Select(x => x.Id).ToList(), type, dto.ShowOnlyUserEvents, date, parsedDate, user?.Id);
 
             return Ok(result);
         }

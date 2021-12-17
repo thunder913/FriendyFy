@@ -98,6 +98,8 @@
     padding: 2px 5px;
     height: 28px;
     background-color: var(--gray);
+    text-overflow: ellipsis;
+    white-space: nowrap;
  }
 
  .feed .interests{

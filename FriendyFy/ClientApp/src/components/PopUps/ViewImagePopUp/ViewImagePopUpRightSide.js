@@ -117,7 +117,7 @@ const ViewImagePopUpRightSide = ({ comments, setComments, setCommentsCount, setI
         <p className="description">{post.postMessage}</p>
         <p className="published-date">{parseTime(post.createdAgo)}</p>
         <div className="likes-comments">
-            <span onClick={() => setShowLikes(true)}>{likes} like{likes === 1 ? '' : 's'}</span>
+            <span className="likes-count" onClick={() => setShowLikes(true)}>{likes} like{likes === 1 ? '' : 's'}</span>
             <span>{commentsCount} comment{commentsCount === 1 ? '' : 's'}</span>
         </div>
         <div className="actions-footer">
@@ -157,7 +157,7 @@ const ViewImagePopUpRightSide = ({ comments, setComments, setCommentsCount, setI
                             </p>
                         }
                         ref={scrollRef}>
-                        {comments.map(c => <PostComment deleteCommentEvent={deleteCommentEvent} manyPopUps={true} comment={c} key={c.id} />)}
+                        {comments.map(c => <PostComment deleteCommentEvent={() => deleteCommentEvent(c.id, 'Post')} manyPopUps={true} comment={c} key={c.id} />)}
                     </InfiniteScroll>
                 </div>
 

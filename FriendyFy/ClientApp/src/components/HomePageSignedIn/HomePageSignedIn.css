@@ -16,6 +16,7 @@
 
 .home-page .main-feed > div{
     align-self: center;
+    width: 100%;
 }
 
 @media only screen and (max-width: 1367px) {

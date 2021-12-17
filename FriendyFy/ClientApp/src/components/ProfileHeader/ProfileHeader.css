@@ -80,6 +80,8 @@ header.profile-header{
     transition: 0.3s;
     margin-bottom: 5px;
     border-radius: 5px;
+    text-overflow: ellipsis;
+    white-space: nowrap;
 }
 
 .user-interest:hover{

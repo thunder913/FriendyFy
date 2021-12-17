@@ -96,13 +96,13 @@ namespace FriendyFy.Controllers
             var toReturn = await this.eventService.GetEventByIdAsync(eventDto.Id, user?.Id);
             return Ok(toReturn);
         }
-        [HttpGet]
-        public IActionResult GetEvents()
-        {
-            var user = this.GetUserByToken();
-            var events = this.eventService.GetEvents(user.Id);
-            return Ok(events);
-        }
+        //[HttpGet]
+        //public IActionResult GetEvents()
+        //{
+        //    var user = this.GetUserByToken();
+        //    var events = this.eventService.GetEvents(user.Id);
+        //    return Ok(events);
+        //}
 
         [HttpPost("likeEvent")]
         public async Task<IActionResult> LikeEvent(LikePostDto likePostDto)

@@ -77,7 +77,7 @@ const ProfileSidebar = () => {
                 <h2>Info</h2>
                 <div className="user-details">
                     <p className="user-location" onClick={() => setShowMapPopUp(true)}>Lives in {location.location}</p>
-                    <p>Attended {eventsCount} events!</p>
+                    <p>Attended {eventsCount} event{eventsCount === 1 ? '' : 's'}!</p>
                 </div>
             </div>
             <div className="user-photos rounded-side">

@@ -16,14 +16,15 @@ const LeftNavigationButtons = () => {
     let location = useLocation();
     useEffect(() => {
         getRecommendedFriends()
-            .then(async res => {let obj = await res.json(); 
+            .then(async res => {
+                let obj = await res.json();
                 setFriends(obj);
                 setFriendsRemaining(obj.length);
             })
     }, [])
 
     useEffect(() => {
-        if(location.pathname === '/' || location.pathname === '/search-page'){
+        if (location.pathname === '/' || location.pathname === '/search-page') {
             getNavigationEvents()
                 .then(async res => setEvents(await res.json()))
         }
@@ -38,7 +39,7 @@ const LeftNavigationButtons = () => {
                 <LeftNavigationEvents events={events} setBlockNavScroll={setBlockNavScroll} />
                 <div className="people-you-may-know">
                     {friendsRemaining ? <div className="friend-suggestions">
-                        {friends.map(friend => <FriendSuggestion key={friend.username} friend={friend} setFriendsRemaining={setFriendsRemaining}/>)}
+                        {friends.map(friend => <FriendSuggestion key={friend.username} friend={friend} setFriendsRemaining={setFriendsRemaining} />)}
                     </div> : ''}
                 </div>
                 <div className="tos">

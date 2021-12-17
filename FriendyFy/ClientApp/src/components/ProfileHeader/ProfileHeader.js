@@ -55,7 +55,7 @@ const ProfileHeader = ({ selected }) => {
                     <img src={profilePicture} alt="" />
                 </div>
                 <div className="user-interests">
-                    {interests.map(interest => <Link to={`/search-page?interests=[{"label":"${interest.label}","value":${interest.id}}]`} className="user-interest" key={interest.id} data-id={interest.id}>{interest.label}</Link>)}
+                    {interests.map(interest => <Link title={interest.label} to={`/search-page?interests=[{"label":"${interest.label}","value":${interest.id}}]`} className="user-interest" key={interest.id} data-id={interest.id}>{interest.label}</Link>)}
                 </div>
             </div>
             <p className="user-name">{name}</p>

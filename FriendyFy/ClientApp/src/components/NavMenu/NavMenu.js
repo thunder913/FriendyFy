@@ -31,6 +31,7 @@ function NavMenu() {
         <div className="nav-right">
           {loggedIn ? <UserHeader /> : ''}
           {loggedIn ? <Notifications /> : ''}
+          {!loggedIn ? <Link className='search-page-button' to="/search-page">Search</Link> : ''}
           <UserOptions />
         </div>
 

@@ -49,7 +49,7 @@ const LeftNavigationEvent = ({ data, setBlockNavScroll }) => {
             <main className="event-card">
                 <div className="left-side">
                     <section className="interests">
-                        {data.interests.map(interest => (<Link to={`/search-page?interests=[{"label":"${interest.label}","value":${interest.id}}]`} key={interest.id} className="interest">{interest.label}</Link>))}
+                        {data.interests.map(interest => (<Link title={interest.label} to={`/search-page?interests=[{"label":"${interest.label}","value":${interest.id}}]`} key={interest.id} className="interest">{interest.label}</Link>))}
                     </section>
                 </div>
                 <div className="right-side">

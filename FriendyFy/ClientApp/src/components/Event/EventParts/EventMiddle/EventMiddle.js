@@ -50,7 +50,7 @@ const EventMiddle = ({ eventId, title, privacy, interests = [], organizerName, o
             </div>
             <div className="middle">
                 <div className="interests">
-                    {interests.map(interest => <Link to={`/search-page?interests=[{"label":"${interest.label}","value":${interest.id}}]`} className="user-interest" key={interest.id} data-id={interest.id}>{interest.label}</Link>)}
+                    {interests.map(interest => <Link title={interest.label} to={`/search-page?interests=[{"label":"${interest.label}","value":${interest.id}}]`} className="user-interest" key={interest.id} data-id={interest.id}>{interest.label}</Link>)}
                 </div>
             </div>
             <div className="right-side">

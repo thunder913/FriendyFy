@@ -21,7 +21,7 @@ const PersonYouProbablyMet = ({ person }) => {
         addFriend({ userId: person.username })
             .then(async res => {
                 if (res.ok) {
-                    NotificationManager.success('Successfully joined the event!', '', 2000);
+                    NotificationManager.success('Successfully sent the friend request!', '', 2000);
                     setShow(false);
                 } else {
                     NotificationManager.error('There was an error sending the friend request!', '', 2000);

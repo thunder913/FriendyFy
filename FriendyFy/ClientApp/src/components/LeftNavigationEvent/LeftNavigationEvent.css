@@ -55,6 +55,8 @@
     padding: 2px 5px;
     height: 28px;
     transition: 0.3s;
+    text-overflow: ellipsis;
+    white-space: nowrap;
 }
 
 .event .interest:hover{

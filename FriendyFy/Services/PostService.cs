@@ -359,7 +359,7 @@ namespace FriendyFy.Services
                         PostMessage = x.Text,
                         RepostsCount = x.Reposts.Where(x => !x.IsDeleted).GroupBy(x => x.CreatorId).Count(),
                         PostImage = x.Image.Id + x.Image.ImageExtension,
-                        IsLikedByUser = x.Likes.Any(x => x.LikedById == user.Id),
+                        IsLikedByUser = user == null ? false : x.Likes.Any(x => x.LikedById == user.Id),
                         Username = x.Creator.UserName,
                         Latitude = x.Latitude ?? x.Latitude,
                         Longitude = x.Longitude ?? x.Longitude,
@@ -367,7 +367,7 @@ namespace FriendyFy.Services
                         TaggedPeopleCount = x.TaggedPeople.Count(),
                         PostType = PostType.Post.ToString(),
                         IsRepost = x.IsRepost,
-                        IsUserCreator = x.CreatorId == user.Id,
+                        IsUserCreator = user == null ? false : x.CreatorId == user.Id,
                         Repost = !x.IsRepost ? null : new PostDetailsViewModel()
                         {
                             PostId = x.Repost.Id,
@@ -379,7 +379,7 @@ namespace FriendyFy.Services
                             PostMessage = x.Repost.Text,
                             RepostsCount = x.Reposts.Where(x => !x.IsDeleted).GroupBy(x => x.CreatorId).Count(),
                             PostImage = x.Repost.Image.Id + x.Repost.Image.ImageExtension,
-                            IsLikedByUser = x.Repost.Likes.Any(y => y.LikedById == user.Id),
+                            IsLikedByUser = user == null ? false : x.Repost.Likes.Any(y => y.LikedById == user.Id),
                             Username = x.Repost.Creator.UserName,
                             Latitude = x.Repost.Latitude ?? x.Repost.Latitude,
                             Longitude = x.Repost.Longitude ?? x.Repost.Longitude,

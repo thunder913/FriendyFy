@@ -737,7 +737,7 @@ namespace FriendyFy.Services
                         EventPostId = x.Id,
                         IsRepost = x.IsRepost,
                         PostMessage = x.Text,
-                        IsUserCreator = x.CreatorId == user.Id,
+                        IsUserCreator = user == null ? false : x.CreatorId == user.Id,
                         Username = x.Creator.UserName,
                         CreatorName = x.Creator.FirstName + " " + x.Creator.LastName,
                         CreatorImage = x.Creator.ProfileImage.Id + x.Creator.ProfileImage.ImageExtension,
@@ -754,7 +754,7 @@ namespace FriendyFy.Services
                         EventTime = x.Event.Time,
                         EventIsReocurring = x.Event.IsReocurring,
                         EventReocurring = x.Event.ReocurringType.ToString(),
-                        IsLikedByUser = x.Likes.Any(x => x.LikedById == user.Id),
+                        IsLikedByUser = user == null ? false : x.Likes.Any(x => x.LikedById == user.Id),
                         RepostsCount = x.Reposts.GroupBy(x => x.CreatorId).Count(),
                         CommentsCount = x.Comments.Count(),
                         LikesCount = x.Likes.Count(),
@@ -768,7 +768,7 @@ namespace FriendyFy.Services
                             LikesCount = x.Repost.Likes.Count(),
                             RepostsCount = x.Repost.Reposts.GroupBy(x => x.CreatorId).Count(),
                             CommentsCount = x.Repost.Comments.Count(),
-                            IsLikedByUser = x.Repost.Likes.Any(y => y.LikedById == user.Id),
+                            IsLikedByUser = user == null ? false : x.Repost.Likes.Any(y => y.LikedById == user.Id),
                             PostType = PostType.Event.ToString(),
                             EventPostId = x.RepostId,
                             EventImage = x.Event.ProfileImage.Id + x.Event.ProfileImage.ImageExtension
@@ -781,9 +781,10 @@ namespace FriendyFy.Services
                 events.AddRange(this.eventPostRepository
                 .AllAsNoTracking()
                 .Where(x => user == null || x.CreatorId != user.Id)
-                .OrderByDescending(x => EF.Functions.DateDiffSecond(DateTime.UtcNow, x.CreatedOn) / 1000.0 +
-                ((user != null ? x.Event.Users.Count(y => y.Id == user.Id) * 1000 : 0) +
-                (user != null ? x.Event.Interests.Count(y => interests.Contains(y.Id)) * 1000 : 0)))
+                .OrderByDescending(x => x.CreatedOn)
+                //.OrderByDescending(x => EF.Functions.DateDiffSecond(DateTime.UtcNow, x.CreatedOn) / 1000.0 +
+                //((user != null ? x.Event.Users.Count(y => y.Id == user.Id) * 1000 : 0) +
+                //(user != null ? x.Event.Interests.Count(y => interests.Contains(y.Id)) * 1000 : 0)))
                 .Where(x => !ids.Contains(x.Id))
                 .Take(take)
                 .Select(x => new PostDetailsViewModel()
@@ -812,8 +813,8 @@ namespace FriendyFy.Services
                     EventReocurring = x.Event.ReocurringType.ToString(),
                     IsLikedByUser = x.Likes.Any(x => x.LikedById == user.Id),
                     RepostsCount = x.Reposts.GroupBy(x => x.CreatorId).Count(),
-                    CommentsCount = x.Comments.Count(),
-                    LikesCount = x.Likes.Count(),
+                    CommentsCount = x.Comments.Count,
+                    LikesCount = x.Likes.Count,
                     PostType = PostType.Event.ToString(),
                     Repost = !x.IsRepost ? null : new PostDetailsViewModel()
                     {
@@ -840,7 +841,6 @@ namespace FriendyFy.Services
                 CreatedAgo = x.CreatedAgo,
                 CreatorImage = this.blobService.GetBlobUrlAsync(x.CreatorImage, GlobalConstants.BlobPictures).GetAwaiter().GetResult(),
                 CreatorName = x.CreatorName,
-                //EventGoing = x.EventGoing.Select(y => this.blobService.GetBlobUrlAsync(y, GlobalConstants.BlobPictures).GetAwaiter().GetResult()).ToList(),
                 EventInterests = x.EventInterests,
                 EventIsReocurring = x.EventIsReocurring,
                 EventPostId = x.EventPostId,

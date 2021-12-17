@@ -137,7 +137,7 @@ const Notifications = () => {
                         scrollableTarget="scrollableDiv"
                     >
                         {notifications.map(not => (<div key={not.id} title={getTime(not.date)} className="user-notification">
-                            <Link to={("/" + not.type + "/" + not.inviterUsername)}>
+                            <Link to={("/profile/" + not.inviterUsername)}>
                                 <div className="notification-image">
                                     <img src={not.image} alt="" />
                                 </div>

@@ -86,6 +86,7 @@
 
 .search-page .search-options .search{
     background-color: var(--like-option);
+    color: white;
     border: 0px;
     border-radius: 20px;
     padding: 10px 5px;

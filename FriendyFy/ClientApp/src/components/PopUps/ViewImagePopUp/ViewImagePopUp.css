@@ -89,6 +89,10 @@
     padding: 10px 10px;
 }
 
+.image-popup .likes-comments .likes-count{
+    cursor: pointer;
+}
+
 .image-popup .actions-footer{
     display: flex;
     flex-direction: row;

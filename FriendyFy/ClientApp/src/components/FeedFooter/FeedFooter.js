@@ -159,7 +159,7 @@ const FeedFooter = (props) => {
                                 </p>
                             }
                             ref={scrollRef}>
-                            {props.comments.map(c => <PostComment deleteCommentEvent={deleteCommentEvent} comment={c} key={c.id} />)}
+                            {props.comments.map(c => <PostComment deleteCommentEvent={() => deleteCommentEvent(c.id, props.postType)} comment={c} key={c.id} />)}
                         </InfiniteScroll>
                     </div>
 

@@ -14,7 +14,7 @@ import { useLoggedIn } from '../../contexts/LoggedInContext';
 import { NotificationManager } from 'react-notifications';
 
 const Settings = () => {
-    const {resetUser, loggedIn} = useLoggedIn();
+    const { resetUser, loggedIn } = useLoggedIn();
     const [firstName, setFirstName] = useState('');
     const [lastName, setLastName] = useState('');
     const [, setUser] = useState({});
@@ -42,13 +42,13 @@ const Settings = () => {
     }
 
     const submitForm = async () => {
-        if(firstName.length < 1){
+        if (firstName.length < 1) {
             setErrorMessage('The first name cannot be empty!');
             return;
-        }else if(lastName.length < 1){
+        } else if (lastName.length < 1) {
             setErrorMessage('The last name cannot be empety!');
             return;
-        }else if (location === '') {
+        } else if (location === '') {
             setErrorMessage("You haven't chosen a location.")
             return;
         } else if (showAddProfileImage && !newProfileImage) {
@@ -74,7 +74,7 @@ const Settings = () => {
         let formInterests = interests.map(x => ({ label: x.label, id: Number.isInteger(x.value) ? x.value : 0, isNew: x.__isNew__ ?? false }));
 
         let formdata = new FormData();
-        
+
         formdata.append("profileImage", showAddProfileImage ? newProfileImage : profileImage);
         formdata.append("coverImage", showAddCoverImage ? newCoverImage : coverImage);
         formdata.append("description", description);
@@ -87,7 +87,7 @@ const Settings = () => {
         formdata.append("date", moment(momentDate).format("DD/MM/YYYY"));
         formdata.append("changedProfileImage", showAddProfileImage);
         formdata.append("changedCoverImage", showAddCoverImage);
-        
+
         // console.log(newProfileImage, 'newProfileImage');
         // console.log(profileImage, 'profileImage');
         // console.log(newCoverImage, 'newCoverImage');
@@ -99,17 +99,18 @@ const Settings = () => {
         // console.log(lastName)
         // console.log(interests, 'interests')
         // console.log(errorMessage);
-        let response = await axios.post("/api/editUserData", formdata);
-        if (response.status === 200) {
+        await axios.post("/api/editUserData", formdata).then(() => {
             resetUser();
             NotificationManager.success('Successfully updated your details!', '', 4000)
-        } else {
-            setErrorMessage(response.data);
-        }
+        }).catch(error => {
+            if (error.response) {
+                NotificationManager.error(error.response.data, '', 5000);
+            }
+        });
     }
 
     useEffect(() => {
-        if(errorMessage && displayError){
+        if (errorMessage && displayError) {
             setDisplayError(false);
             NotificationManager.error(errorMessage, '', 5000);
         }
@@ -137,8 +138,8 @@ const Settings = () => {
         <div className="settings-page">
             <h1 className="settings-title">Change your profile data</h1>
             <div className="name-inputs">
-                <input type="text" placeholder='First Name' defaultValue={firstName} onChange={e => setFirstName(e.target.value)}/>
-                <input type="text" placeholder='Last Name' defaultValue={lastName} onChange={e => setLastName(e.target.value)}/>
+                <input type="text" placeholder='First Name' defaultValue={firstName} onChange={e => setFirstName(e.target.value)} />
+                <input type="text" placeholder='Last Name' defaultValue={lastName} onChange={e => setLastName(e.target.value)} />
                 <Datetime
                     input={true}
                     initialViewMode='years'
@@ -184,7 +185,7 @@ const Settings = () => {
                         setInterests={setInterests} />
                 </div>
             </div>
-            <MyGoogleMap location={location} setLocation={setLocation} zoom={8}/>
+            <MyGoogleMap location={location} setLocation={setLocation} zoom={8} />
 
             <button className="change-user-data" onClick={() => submitForm()}>Save Changes</button>
         </div>
