@@ -17,7 +17,7 @@ code {
   }
   
   .search {
-    z-index: 10;
+    z-index: 102;
     color: var(--text-main);
     transition: 0.3s;
   }
@@ -53,7 +53,7 @@ code {
   }
 
   .search-suggestion{
-    z-index: 10;
+    z-index: 102;
   }
 
   .find-location div{
