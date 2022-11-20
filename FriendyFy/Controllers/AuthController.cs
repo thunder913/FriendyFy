@@ -182,6 +182,12 @@ namespace FriendyFy.Controllers
             try
             {
                 var user = this.GetUserByToken();
+
+                if (user is null)
+                {
+                    return Unauthorized();
+                }
+
                 var viewModel = new UserViewModel()
                 {
                     Id = user.Id,
