@@ -7,7 +7,7 @@ import ViewImagePopUp from '../PopUps/ViewImagePopUp/ViewImagePopUp';
 import { CSSTransition } from 'react-transition-group';
 
 const FeedPost = ({post}) => {
-    const defaultImage = "https://friendyfy.blob.core.windows.net/pictures";        
+    const defaultImage = "https://friendyfyblobstorage.blob.core.windows.net/pictures/istockphoto-1223671392-612x612.jpg";        
     const [showImagePopUp, setShowImagePopUp] = useState(false);
     const [isLiked, setIsLiked] = useState(post.isLiked);
     const [likes, setLikes] = useState(post.likes)

@@ -68,7 +68,7 @@ namespace FriendyFy.BlobStorage
             var bytes = Convert.FromBase64String(content);
 
             using var memoryStream = new MemoryStream(bytes);
-            await blobClient.UploadAsync(memoryStream, new BlobHttpHeaders { ContentType = fileName.GetContentType() });
+                await blobClient.UploadAsync(memoryStream, new BlobHttpHeaders { ContentType = fileName.GetContentType() });
         }
 
         public async Task UploadFileBlobAsync(string filePath, string fileName, string blob)
@@ -80,6 +80,11 @@ namespace FriendyFy.BlobStorage
         }
         public async Task<string> GetBlobUrlAsync(string name, string blob)
         {
+            if (string.IsNullOrWhiteSpace(name))
+            {
+                name = "defaultPicture.jpg";
+            }
+
             var containerClient = this.blobServiceClient.GetBlobContainerClient(blob);
             var blobClient = containerClient.GetBlobClient(name);
             return blobClient.Uri.AbsoluteUri;

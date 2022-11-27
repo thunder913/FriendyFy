@@ -933,7 +933,7 @@ namespace FriendyFy.Services
                 .AllAsNoTracking()
                 .Include(x => x.Users)
                 .OrderBy(x => Guid.NewGuid().ToString())
-                .FirstOrDefault()
+                .FirstOrDefault()?
                 .Id;
         }
 
