@@ -1,6 +1,6 @@
 # FriendyFy
 
-**Link to the website -> https://friendyfy.azurewebsites.net/**
+**Link to the website -> https://friendyfy20221127171333.azurewebsites.net/**
 
 **ASP .NET Core 5.0 with ReactJS**
 
