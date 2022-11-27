@@ -1,7 +1,6 @@
 using Azure.Storage.Blobs;
 using FriendyFy.BlobStorage;
 using FriendyFy.Data;
-using FriendyFy.Data.Common.QueryRunner;
 using FriendyFy.Helpers;
 using FriendyFy.Helpers.Contracts;
 using FriendyFy.Hubs;
@@ -78,7 +77,6 @@ namespace FriendyFy
             // Date repos
             services.AddScoped(typeof(IDeletableEntityRepository<>), typeof(EfDeletableEntityRepository<>));
             services.AddScoped(typeof(IRepository<>), typeof(EfRepository<>));
-            services.AddScoped<IDbQueryRunner, DbQueryRunner>();
 
             services.AddTransient<IEmailSender>(serviceProvider => new SendGridEmailSender(this.Configuration["SendGrid-ApiKey"]));
             services.AddTransient<IUserService, UserService>();
@@ -124,7 +122,6 @@ namespace FriendyFy
             else
             {
                 app.UseExceptionHandler("/Error");
-                // The default HSTS value is 30 days. You may want to change this for production scenarios, see https://aka.ms/aspnetcore-hsts.
                 app.UseHsts();
             }
 

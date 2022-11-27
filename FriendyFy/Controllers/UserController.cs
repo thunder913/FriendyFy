@@ -48,14 +48,14 @@ namespace FriendyFy.Controllers
         [HttpPost("changeTheme")]
         public async Task<IActionResult> ChangerUserTheme(ChangeUserThemeDto dto)
         {
-            TextInfo ti = CultureInfo.CurrentCulture.TextInfo;
             var user = this.GetUserByToken();
+            
             if (user.UserName != dto.Username)
             {
                 return Unauthorized("You are trying to impersonate a user!");
             }
 
-            var parsed = Enum.TryParse(ti.ToTitleCase(dto.Theme), out ThemePreference theme);
+            var parsed = Enum.TryParse(CultureInfo.CurrentCulture.TextInfo.ToTitleCase(dto.Theme), out ThemePreference theme);
             
             if (!parsed)
             {

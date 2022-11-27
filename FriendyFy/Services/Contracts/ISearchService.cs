@@ -1,7 +1,6 @@
 ﻿using FriendyFy.Models.Enums;
 using System;
 using System.Collections.Generic;
-using ViewModels;
 using ViewModels.ViewModels;
 
 namespace FriendyFy.Services.Contracts

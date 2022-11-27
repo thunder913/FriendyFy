@@ -7,7 +7,6 @@ using System;
 using System.Collections.Generic;
 using System.Globalization;
 using System.Linq;
-using System.Threading.Tasks;
 
 namespace FriendyFy.Controllers
 {
@@ -26,6 +25,7 @@ namespace FriendyFy.Controllers
         public IActionResult GetSearchResults(SearchDto dto)
         {
             var user = this.GetUserByToken();
+            
             string userId = null;
             if (user != null)
             {
@@ -39,12 +39,7 @@ namespace FriendyFy.Controllers
         {
             var user = this.GetUserByToken();
             var interests = JsonConvert.DeserializeObject<List<InterestDto>>(dto.Interests);
-
-            //if (user == null && dto.ShowOnlyUserEvents)
-            //{
-            //    return BadRequest("You mush be logged in to use your events!");
-            //}
-
+            
             var parsed = Enum.TryParse(dto.Type, out SearchType type);
             if (!parsed)
             {

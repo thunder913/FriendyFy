@@ -36,7 +36,7 @@ namespace FriendyFy.Services
             {
                 await imageRepository.AddAsync(image);
             }
-            catch(Exception ex)
+            catch(Exception)
             {
 
             }

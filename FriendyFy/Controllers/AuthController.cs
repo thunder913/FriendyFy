@@ -23,7 +23,6 @@ using System.Text.Encodings.Web;
 using System.Text.RegularExpressions;
 using System.Threading.Tasks;
 using ViewModels;
-using ViewModels.ViewModels;
 
 namespace FriendyFy.Controllers
 {
@@ -38,7 +37,6 @@ namespace FriendyFy.Controllers
         private readonly IInterestService interestService;
         private readonly IBlobService blobService;
         private readonly IImageService imageService;
-        private readonly IFriendService friendService;
 
         public AuthController(
             IUserService userService,
@@ -47,8 +45,7 @@ namespace FriendyFy.Controllers
             UserManager<ApplicationUser> userManager,
             IInterestService interestService,
             IBlobService blobService,
-            IImageService imageService,
-            IFriendService friendService)
+            IImageService imageService)
         {
             this.userService = userService;
             this.jwtService = jwtService;
@@ -57,7 +54,6 @@ namespace FriendyFy.Controllers
             this.interestService = interestService;
             this.blobService = blobService;
             this.imageService = imageService;
-            this.friendService = friendService;
         }
         public IActionResult Index()
         {
@@ -73,27 +69,33 @@ namespace FriendyFy.Controllers
             {
                 return BadRequest("The first name is invalid!");
             }
+            
             if (userDto.LastName.Length > 50 || userDto.LastName.Length < 2 || !nameValidator.IsMatch(userDto.LastName))
             {
                 return BadRequest("The last name is invalid!");
             }
+            
             if (!(new EmailAddressAttribute().IsValid(userDto.Email)))
             {
                 return BadRequest("The email is invalid!");
             }
+            
             if (!DateTime.TryParseExact(userDto.Birthday, "dd/MM/yyyy",
                 CultureInfo.InvariantCulture, DateTimeStyles.AdjustToUniversal, out var birthday) ||
                 birthday > DateTime.Now ||
                 birthday < new DateTime(1900, 1, 1))
             {
                 return BadRequest("The birthday is invalid!");
-            };
+            }
+            
             if (!Enum.TryParse(typeof(Gender), textInfo.ToTitleCase(userDto.Gender), out var gender))
             {
                 return BadRequest("You must select a gender!");
             }
+            
             var passwordNumberRegex = new Regex(@"\d");
             var passwordUpperCaseRegex = new Regex(@"[A-Z]");
+            
             if (!passwordNumberRegex.IsMatch(userDto.Password) ||
                 !passwordUpperCaseRegex.IsMatch(userDto.Password) ||
                 userDto.Password.Length < 8)
@@ -102,6 +104,7 @@ namespace FriendyFy.Controllers
             }
 
             var existingUser = this.userService.GetByEmail(userDto.Email) != null;
+            
             if (existingUser)
             {
                 return BadRequest("There is already a user with this email!");
@@ -142,7 +145,6 @@ namespace FriendyFy.Controllers
             $"Please confirm your account by <a href='{HtmlEncoder.Default.Encode(callbackUrl)}'>clicking here</a>.");
 
             return Created("registered", user);
-
         }
 
         [HttpPost("login")]
@@ -232,6 +234,7 @@ namespace FriendyFy.Controllers
             {
                 return BadRequest("The email is already activated!");
             }
+            
             if (user == null)
             {
                 return NotFound($"Unable to load user with ID '{confirmDto.UserId}'.");
@@ -239,10 +242,11 @@ namespace FriendyFy.Controllers
 
             var code = Encoding.UTF8.GetString(WebEncoders.Base64UrlDecode(confirmDto.Code));
             var result = await userManager.ConfirmEmailAsync(user, code);
+            
             return result.Succeeded ? Ok() : BadRequest("Could not confirm the email!");
         }
 
-        //userId is actually username
+        //userId is actually username??? Why
         [HttpGet("profilePicture/{userId}")]
         public async Task<string> GetProfilePicture(string userId)
         {
@@ -295,7 +299,7 @@ namespace FriendyFy.Controllers
                 Interests = user.Interests.Select(x => new InterestViewModel() { Id = x.Id, Label = x.Name }).ToList(),
                 Quote = user.Quote,
             };
-
+            
             return viewModel;
         }
 
@@ -357,7 +361,9 @@ namespace FriendyFy.Controllers
         public async Task<IActionResult> EditUserData([FromForm] EditUserDataDto dto)
         {
             var user = this.GetUserByToken();
+            
             Regex nameValidator = new Regex(@"^[A-Za-z\u00C0-\u1FFF\u2800-\uFFFD 0-9-]+$");
+            
             if (user == null || user.Id != dto.UserId)
             {
                 return Unauthorized("You are not authorized to make such changes, try logging in!");
@@ -397,6 +403,7 @@ namespace FriendyFy.Controllers
             {
                 return BadRequest("You must choose a location!");
             }
+            
             var allInterests = await this.interestService.AddNewInterestsAsync(interests);
 
             await this.userService.ChangeUserDataAsync(user, dto.FirstName, dto.LastName, birthday, dto.ChangedProfileImage, dto.ChangedCoverImage, dto.Description, allInterests, dto.Longitude, dto.Latitude, dto.ProfileImage, dto.CoverImage);
@@ -440,8 +447,10 @@ namespace FriendyFy.Controllers
             {
                 return BadRequest("There was an error resetting the password!");
             }
+            
             var password = BCrypt.Net.BCrypt.HashPassword(dto.Password);
             var code = Encoding.UTF8.GetString(Convert.FromBase64String(dto.Code));
+            
             if (await userManager.VerifyUserTokenAsync(user, userManager.Options.Tokens.PasswordResetTokenProvider, "ResetPassword", code))
             {
                 await this.userService.ResetPassword(user, password);

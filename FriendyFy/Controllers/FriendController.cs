@@ -29,6 +29,7 @@ namespace FriendyFy.Controllers
         public async Task<IActionResult> AddFriend(FriendIdDto dto)
         {
             var user = this.GetUserByToken();
+            
             var receiverId = this.UserService.GetByUsername(dto.UserId).Id;
             if (user == null || dto.UserId == null)
             {
@@ -53,6 +54,7 @@ namespace FriendyFy.Controllers
         public async Task<IActionResult> AcceptFriendRequest(FriendIdDto dto)
         {
             var user = this.GetUserByToken();
+            
             if (user == null || dto.UserId == null)
             {
                 return BadRequest("The user cannot be added as a friend!");
@@ -72,6 +74,7 @@ namespace FriendyFy.Controllers
         public async Task<IActionResult> CancelFriendRequest(FriendIdDto dto)
         {
             var user = this.GetUserByToken();
+            
             if (user == null || dto.UserId == null)
             {
                 return BadRequest("The friend request cannot be cancelled!");
@@ -112,6 +115,7 @@ namespace FriendyFy.Controllers
         public async Task<IActionResult> RemoveFriend(FriendIdDto dto)
         {
             var user = this.GetUserByToken();
+            
             if (user == null || dto.UserId == null)
             {
                 return BadRequest("The friend cannot be removed!");
@@ -130,6 +134,7 @@ namespace FriendyFy.Controllers
         public IActionResult CheckFriendStatus(FriendIdDto dto)
         {
             var user = this.GetUserByToken();
+            
             if (user == null || dto.UserId == null)
             {
                 return BadRequest("The user cannot be added as a friend!");
@@ -142,6 +147,7 @@ namespace FriendyFy.Controllers
         public IActionResult GetFriendRecommendations()
         {
             var user = this.GetUserByToken();
+            
             if (user == null)
             {
                 return BadRequest("You are not current logged in!");
@@ -154,6 +160,7 @@ namespace FriendyFy.Controllers
         public async Task<IActionResult> GetFriendRecommendations(FriendIdDto dto)
         {
             var user = this.GetUserByToken();
+            
             if (user == null)
             {
                 return BadRequest("You are not current logged in!");
@@ -167,6 +174,7 @@ namespace FriendyFy.Controllers
         public IActionResult GetRightNavRecommendations()
         {
             var user = this.GetUserByToken();
+            
             if (user == null)
             {
                 return BadRequest();

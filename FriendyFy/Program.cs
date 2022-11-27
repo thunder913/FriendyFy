@@ -1,5 +1,4 @@
 using FriendyFy.Data;
-using FriendyFy.Data.Common.QueryRunner;
 using Azure.Extensions.AspNetCore.Configuration.Secrets;
 using Azure.Identity;
 using Azure.Security.KeyVault.Secrets;
@@ -43,7 +42,6 @@ namespace FriendyFy
         {
             services.AddScoped(typeof(IDeletableEntityRepository<>), typeof(EfDeletableEntityRepository<>));
             services.AddScoped(typeof(IRepository<>), typeof(EfRepository<>));
-            services.AddScoped<IDbQueryRunner, DbQueryRunner>();
 
             services.AddTransient<IEmailSender, SendGridEmailSender>();
         }

@@ -170,6 +170,7 @@ namespace FriendyFy.Services
             }
 
             await userFriendRepository.SaveChangesAsync();
+            
             return true;
         } 
 

@@ -6,9 +6,7 @@ using Newtonsoft.Json;
 using System;
 using System.Collections.Generic;
 using System.Globalization;
-using System.Linq;
 using System.Threading.Tasks;
-using ViewModels;
 using ViewModels.ViewModels;
 
 namespace FriendyFy.Controllers
@@ -19,15 +17,12 @@ namespace FriendyFy.Controllers
     {
         private readonly IInterestService interestService;
         private readonly IEventService eventService;
-        private readonly INotificationService notificationService;
 
         public EventController(IInterestService interestService,
-            IEventService eventService,
-            INotificationService notificationService)
+            IEventService eventService)
         {
             this.interestService = interestService;
             this.eventService = eventService;
-            this.notificationService = notificationService;
         }
 
         [HttpPost("create")]
@@ -38,9 +33,9 @@ namespace FriendyFy.Controllers
             {
                 return Unauthorized("You are not signed in!");
             }
+            
             var interests = JsonConvert.DeserializeObject<List<InterestDto>>(dto.Interests);
             var privacySettingsParsed = Enum.TryParse(dto.PrivacyOptions, out PrivacySettings privacySettings);
-            //var reocurringTypeParsed = Enum.TryParse(dto.ReocurringFrequency, out ReocurringType reocurringType);
             var dateParsed = DateTime.TryParseExact(dto.Date, "dd/MM/yyyy HH:mm",
                 CultureInfo.InvariantCulture, DateTimeStyles.AdjustToUniversal, out var date);
 
@@ -96,14 +91,7 @@ namespace FriendyFy.Controllers
             var toReturn = await this.eventService.GetEventByIdAsync(eventDto.Id, user?.Id);
             return Ok(toReturn);
         }
-        //[HttpGet]
-        //public IActionResult GetEvents()
-        //{
-        //    var user = this.GetUserByToken();
-        //    var events = this.eventService.GetEvents(user.Id);
-        //    return Ok(events);
-        //}
-
+        
         [HttpPost("likeEvent")]
         public async Task<IActionResult> LikeEvent(LikePostDto likePostDto)
         {
@@ -119,7 +107,7 @@ namespace FriendyFy.Controllers
             {
                 likes = await this.eventService.LikeEventAsync(likePostDto.PostId, user);
             }
-            catch (Exception ex)
+            catch (Exception)
             {
                 return BadRequest("There was an error saving your like!");
             }
@@ -138,6 +126,7 @@ namespace FriendyFy.Controllers
         public async Task<IActionResult> JoinEvent(JoinEventDto dto)
         {
             var user = this.GetUserByToken();
+            
             if (user == null)
             {
                 return Unauthorized("You are not logged in!");
@@ -155,6 +144,7 @@ namespace FriendyFy.Controllers
         public async Task<IActionResult> ShareEvent(ShareEventDto dto)
         {
             var user = this.GetUserByToken();
+            
             if (user == null)
             {
                 return Unauthorized("You are not logged in!");

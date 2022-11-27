@@ -1,4 +1,4 @@
-﻿namespace FriendyFy.Controllers
+﻿namespace FriendyFy.Data
 {
     public class GetEventIdDto
     {

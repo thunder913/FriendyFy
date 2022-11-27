@@ -3,7 +3,6 @@ using FriendyFy.Services.Contracts;
 using System;
 using System.Collections.Generic;
 using System.Linq;
-using ViewModels;
 using ViewModels.ViewModels;
 
 namespace FriendyFy.Services

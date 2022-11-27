@@ -130,6 +130,7 @@ namespace FriendyFy.Controllers
         public IActionResult GetPostByImageId(GetByImageIdDto dto)
         {
             var user = this.GetUserByToken();
+
             var post = this.postService.GetPostByImageId(dto.ImageId, user != null ? user.Id : null);
             if (post == null)
             {
@@ -196,6 +197,7 @@ namespace FriendyFy.Controllers
             {
                 deleted = await this.eventService.DeleteEventPostAsync(dto.PostId, user.Id);
             }
+            
             if (deleted)
                 return Ok(deleted);
 
@@ -211,6 +213,7 @@ namespace FriendyFy.Controllers
             var events = new List<PostDetailsViewModel>();
             var posts = new List<PostDetailsViewModel>();
             var toTake = dto.Take / 2;
+            
             if (dto.FeedType != "posts")
             {
                 if (dto.HasEvents)
@@ -238,6 +241,7 @@ namespace FriendyFy.Controllers
 
             data.AddRange(events);
             data.AddRange(posts);
+            
             if (!dto.isProfile)
             {
                 data = data.OrderBy(x => Guid.NewGuid()).ToList();

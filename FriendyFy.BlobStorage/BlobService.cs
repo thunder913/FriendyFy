@@ -1,11 +1,8 @@
 ﻿using Azure.Storage.Blobs;
 using Azure.Storage.Blobs.Models;
-using FriendyFy.Common;
 using System;
 using System.Collections.Generic;
 using System.IO;
-using System.Linq;
-using System.Net.Mime;
 using System.Text;
 using System.Text.RegularExpressions;
 using System.Threading.Tasks;
@@ -78,6 +75,7 @@ namespace FriendyFy.BlobStorage
 
             await blobClient.UploadAsync(filePath, new BlobHttpHeaders { ContentType = filePath.GetContentType() });
         }
+        
         public async Task<string> GetBlobUrlAsync(string name, string blob)
         {
             if (string.IsNullOrWhiteSpace(name))

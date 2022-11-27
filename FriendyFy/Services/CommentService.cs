@@ -15,7 +15,6 @@ namespace FriendyFy.Services
     public class CommentService : ICommentService
     {
         private readonly IRepository<EventComment> eventCommentRepository;
-        private readonly IDeletableEntityRepository<Event> eventRepositry;
         private readonly IRepository<EventPost> eventPostRepository;
         private readonly IDeletableEntityRepository<Post> postRepository;
         private readonly IRepository<PostComment> postCommentRepository;
@@ -27,7 +26,6 @@ namespace FriendyFy.Services
             IBlobService blobService,
             IRepository<CommentLike> commentLikeRepository,
             IRepository<EventComment> eventCommentRepository,
-            IDeletableEntityRepository<Event> eventRepositry,
             IRepository<EventPost> eventPostRepository)
         {
             this.postCommentRepository = postCommentRepository;
@@ -35,7 +33,6 @@ namespace FriendyFy.Services
             this.blobService = blobService;
             this.commentLikeRepository = commentLikeRepository;
             this.eventCommentRepository = eventCommentRepository;
-            this.eventRepositry = eventRepositry;
             this.eventPostRepository = eventPostRepository;
         }
 

@@ -1,11 +1,9 @@
 ﻿using FriendyFy.BlobStorage;
 using FriendyFy.Common;
 using FriendyFy.Data;
-using FriendyFy.Hubs;
 using FriendyFy.Models;
 using FriendyFy.Models.Enums;
 using FriendyFy.Services.Contracts;
-using Microsoft.AspNetCore.SignalR;
 using Microsoft.EntityFrameworkCore;
 using System;
 using System.Collections.Generic;

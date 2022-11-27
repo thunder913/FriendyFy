@@ -28,10 +28,9 @@ namespace FriendyFy.Controllers
                 return Unauthorized("You are not signed in!");
             }
 
-            PostCommentViewModel commentAdded = null;
             Enum.TryParse(comment.PostType, out PostType postType);
 
-            commentAdded = await this.commentService.AddCommentAsync(user, comment.Text, comment.PostId, postType);
+            var commentAdded = await this.commentService.AddCommentAsync(user, comment.Text, comment.PostId, postType);
             if (commentAdded != null)
             {
                 return Ok(commentAdded);
@@ -46,11 +45,13 @@ namespace FriendyFy.Controllers
         public List<PostCommentViewModel> GetPostComments([FromBody] GetCommentsDto commentDto)
         {
             var user = this.GetUserByToken();
+            
             var parsed = Enum.TryParse(commentDto.PostType, out PostType postType);
             if (parsed)
             {
                 return this.commentService.GetCommentsForPost(user?.Id, commentDto.PostId, commentDto.Take, commentDto.Skip, postType);
             }
+            
             return null;
         }
 
@@ -83,7 +84,6 @@ namespace FriendyFy.Controllers
             {
                 return BadRequest();
             }
-
         }
 
         [HttpPost("getLikes")]
@@ -96,6 +96,7 @@ namespace FriendyFy.Controllers
         public async Task<IActionResult> DeleteComment(LikeCommentDto dto)
         {
             var user = this.GetUserByToken();
+            
             if (user == null)
             {
                 return Unauthorized();

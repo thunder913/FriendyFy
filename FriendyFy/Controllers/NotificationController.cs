@@ -15,10 +15,12 @@ namespace FriendyFy.Controllers
         {
             this.notificationService = notificationService;
         }
+
         [HttpPost("getForUser")]
         public IActionResult GetNotification(GetNotificationsDto dto)
         {
             var user = this.GetUserByToken();
+            
             if (user == null || dto.UserId != user.Id)
             {
                 return Unauthorized("You are not logged in!");
@@ -31,6 +33,7 @@ namespace FriendyFy.Controllers
         public async Task<IActionResult> AcceptEvent(UpdateEventRequestDto dto)
         {
             var user = this.GetUserByToken();
+            
             if (user == null)
             {
                 return Unauthorized("You are not logged in!");
@@ -49,6 +52,7 @@ namespace FriendyFy.Controllers
         public async Task<IActionResult> RejectEvent(UpdateEventRequestDto dto)
         {
             var user = this.GetUserByToken();
+            
             if (user == null)
             {
                 return Unauthorized("You are not logged in!");

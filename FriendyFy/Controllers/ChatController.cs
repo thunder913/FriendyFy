@@ -1,13 +1,9 @@
 ﻿using FriendyFy.Data;
-using FriendyFy.Hubs;
 using FriendyFy.Services.Contracts;
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.AspNetCore.SignalR;
 using Newtonsoft.Json;
 using System.Collections.Generic;
-using System.Linq;
 using System.Threading.Tasks;
-using ViewModels;
 
 namespace FriendyFy.Controllers
 {
@@ -25,6 +21,7 @@ namespace FriendyFy.Controllers
         public IActionResult GetUserChats(GetChatsDto dto)
         {
             var user = this.GetUserByToken();
+
             var chatIds = new List<string>();
             if (!string.IsNullOrWhiteSpace(dto.ChatIds))
             {

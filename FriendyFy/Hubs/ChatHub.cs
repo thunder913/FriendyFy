@@ -17,12 +17,10 @@ namespace FriendyFy.Hubs
 {
     public class ChatHub : Hub
     {
-        private IJwtService jwtService { get; set; }
         private IChatService chatService { get; set; }
         private IMessageService messageService { get; set; }
-        public ChatHub(IJwtService jwtService, IChatService chatService, IMessageService messageService)
+        public ChatHub(IChatService chatService, IMessageService messageService)
         {
-            this.jwtService = jwtService;
             this.chatService = chatService;
             this.messageService = messageService;
         }
@@ -51,9 +49,10 @@ namespace FriendyFy.Hubs
             }
 
             await this.Clients.Users(usersInChat).SendAsync(dto.ChatId, message);
+
             message.IsYourMessage = true;
-            await this.Clients.User(userId).SendAsync(dto.ChatId, message);
             
+            await this.Clients.User(userId).SendAsync(dto.ChatId, message);
 
             return true;
         }
