@@ -30,6 +30,10 @@ namespace FriendyFy.Controllers
     [ApiController]
     public class AuthController : BaseController
     {
+        private const string NameRegex = @"^[A-Za-z\u00C0-\u1FFF\u2800-\uFFFD 0-9-]+$";
+        private const string NumberRegex = @"\d";
+        private const string UpperCaseRegex = @"[A-Z]";
+
         private readonly IUserService userService;
         private readonly IJwtService jwtService;
         private readonly IEmailSender emailSender;
@@ -63,7 +67,7 @@ namespace FriendyFy.Controllers
         [HttpPost("register")]
         public async Task<IActionResult> Register(RegisterUserDto userDto)
         {
-            Regex nameValidator = new Regex(@"^[A-Za-z\u00C0-\u1FFF\u2800-\uFFFD 0-9-]+$");
+            Regex nameValidator = new Regex(NameRegex);
             TextInfo textInfo = new CultureInfo("en-US", false).TextInfo;
             if (userDto.FirstName.Length > 50 || userDto.FirstName.Length < 2 || !nameValidator.IsMatch(userDto.FirstName))
             {
@@ -93,8 +97,8 @@ namespace FriendyFy.Controllers
                 return BadRequest("You must select a gender!");
             }
             
-            var passwordNumberRegex = new Regex(@"\d");
-            var passwordUpperCaseRegex = new Regex(@"[A-Z]");
+            var passwordNumberRegex = new Regex(NumberRegex);
+            var passwordUpperCaseRegex = new Regex(UpperCaseRegex);
             
             if (!passwordNumberRegex.IsMatch(userDto.Password) ||
                 !passwordUpperCaseRegex.IsMatch(userDto.Password) ||
@@ -365,7 +369,7 @@ namespace FriendyFy.Controllers
         {
             var user = GetUserByToken();
             
-            Regex nameValidator = new Regex(@"^[A-Za-z\u00C0-\u1FFF\u2800-\uFFFD 0-9-]+$");
+            Regex nameValidator = new Regex(NameRegex);
             
             if (user == null || user.Id != dto.UserId)
             {
