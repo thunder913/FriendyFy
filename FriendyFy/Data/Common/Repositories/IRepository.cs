@@ -11,7 +11,7 @@ namespace FriendyFy.Data
 
         IQueryable<TEntity> AllAsNoTracking();
 
-        Task AddAsync(TEntity entity);
+        void Add(TEntity entity);
 
         void Update(TEntity entity);
 

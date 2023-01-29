@@ -39,7 +39,7 @@ namespace FriendyFy.Services
 
         public async Task<bool> AddFriendToUserAsync(string senderId, string receiverUsername)
         {
-            var friendStatus = GetUserFriendStatus(senderId, receiverUsername);
+            var friendStatus = await GetUserFriendStatusAsync(senderId, receiverUsername);
 
             if (friendStatus != "no-friends")
             {
@@ -56,13 +56,13 @@ namespace FriendyFy.Services
             userOne.Friends.Add(new UserFriend { IsFriend = false, FriendId = userTwo.Id, RequestSenderId = senderId });
             userTwo.Friends.Add(new UserFriend { IsFriend = false, FriendId = userOne.Id, RequestSenderId = senderId });
 
-            var chat = chatRepository
+            var chat = await chatRepository
                 .All()
                 .Include(x => x.Users)
-                .FirstOrDefault(x => x.Users.Any(y => y.Id == userOne.Id) && x.Users.Any(y => y.Id == userTwo.Id));
+                .FirstOrDefaultAsync(x => x.Users.Any(y => y.Id == userOne.Id) && x.Users.Any(y => y.Id == userTwo.Id));
             if (chat == null)
             {
-                await chatRepository.AddAsync(new Chat
+                chatRepository.Add(new Chat
                 {
                     ChatType = ChatType.NotAccepted,
                     CreatedOn = DateTime.Now,
@@ -76,7 +76,7 @@ namespace FriendyFy.Services
 
         public async Task<bool> CancelFriendRequestAsync(string senderId, string receiverUsername)
         {
-            var friendStatus = GetUserFriendStatus(senderId, receiverUsername);
+            var friendStatus = await GetUserFriendStatusAsync(senderId, receiverUsername);
 
             if (friendStatus != "received" && friendStatus != "requested")
             {
@@ -102,7 +102,7 @@ namespace FriendyFy.Services
 
         public async Task<bool> RemoveFriendAsync(string senderId, string receiverUsername)
         {
-            var friendStatus = GetUserFriendStatus(senderId, receiverUsername);
+            var friendStatus = await GetUserFriendStatusAsync(senderId, receiverUsername);
 
             if (friendStatus != "friends")
             {
@@ -129,7 +129,7 @@ namespace FriendyFy.Services
 
         public async Task<bool> AcceptFriendRequestAsync(string senderId, string receiverUsername)
         {
-            var friendStatus = GetUserFriendStatus(senderId, receiverUsername);
+            var friendStatus = await GetUserFriendStatusAsync(senderId, receiverUsername);
 
             if (friendStatus != "received" && friendStatus != "requested")
             {
@@ -156,10 +156,10 @@ namespace FriendyFy.Services
             userOneFriend.ModifiedOn = DateTime.UtcNow;
             userTwoFriend.ModifiedOn = DateTime.UtcNow;
 
-            var chat = chatRepository
+            var chat = await chatRepository
                 .All()
                 .Include(x => x.Users)
-                .FirstOrDefault(x => x.Users.Any(y => y.Id == userOneFriend.CurrentUserId) && x.Users.Any(y => y.Id == userTwoFriend.CurrentUserId) && (x.ChatType == ChatType.NotAccepted || x.ChatType == ChatType.Direct));
+                .FirstOrDefaultAsync(x => x.Users.Any(y => y.Id == userOneFriend.CurrentUserId) && x.Users.Any(y => y.Id == userTwoFriend.CurrentUserId) && (x.ChatType == ChatType.NotAccepted || x.ChatType == ChatType.Direct));
             if (chat != null)
             {
                 chat.ChatType = ChatType.Direct;
@@ -170,16 +170,16 @@ namespace FriendyFy.Services
             return true;
         } 
 
-        public string GetUserFriendStatus(string userId, string friendUsername)
+        public async Task<string> GetUserFriendStatusAsync(string userId, string friendUsername)
         {
-            var user = userRepository.All().Include(x => x.Friends).FirstOrDefault(x => x.Id == userId);
+            var user = await userRepository.All().Include(x => x.Friends).FirstOrDefaultAsync(x => x.Id == userId);
             var friend = userRepository.All().FirstOrDefault(x => x.UserName == friendUsername);
             if (user == null)
             {
                 return "invalid";
             }
 
-            if(user.Id == friend.Id)
+            if(user.Id == friend?.Id)
             {
                 return "same-user";
             }
@@ -240,8 +240,7 @@ namespace FriendyFy.Services
             return userFriendRepository
                 .All()
                 .Include(x => x.CurrentUser)
-                .Where(x => x.CurrentUser.UserName == userId && x.IsFriend)
-                .Count();
+                .Count(x => x.CurrentUser.UserName == userId && x.IsFriend);
         }
 
         public List<SidebarFriendRecommendationViewModel> GetFriendRecommendations(string userId)
@@ -292,12 +291,11 @@ namespace FriendyFy.Services
                     .ToList()
                     .Where(x =>
                     x.Id != user.Id
-                    && !user.RemoveSuggestionFriends.Any(y => y.BlockedUserId == x.Id)
-                    && !user.Friends.Any(y => y.FriendId == x.Id
-                    && x.Id != user.Id))
+                    && user.RemoveSuggestionFriends.All(y => y.BlockedUserId != x.Id) && !user.Friends.Any(y => y.FriendId == x.Id
+                                                                                                                && x.Id != user.Id))
                     .OrderByDescending(x => x.Interests.Count(y => user.Interests.Any(z => z.Id == y.Id)) * 0.5
                     + x.Friends.Where(x => x.IsFriend).Count(y => user.Friends.Any(z => z.FriendId == y.Id)) * 0.1
-                    + rand.Next((int)((-x.Friends.Where(x => x.IsFriend).Count() - x.Interests.Count()) * 0.2), (int)((x.Friends.Where(x => x.IsFriend).Count() + x.Interests.Count()) * 0.2)))
+                    + rand.Next((int)((-x.Friends.Count(x => x.IsFriend) - x.Interests.Count()) * 0.2), (int)((x.Friends.Count(x => x.IsFriend) + x.Interests.Count()) * 0.2)))
                     .Select(x => new SidebarFriendRecommendationViewModel
                     {
                         Name = x.FirstName + " " + x.LastName,
@@ -325,7 +323,7 @@ namespace FriendyFy.Services
                 UserId = userId
             };
 
-            await removeSuggestionRepository.AddAsync(model);
+            removeSuggestionRepository.Add(model);
             await removeSuggestionRepository.SaveChangesAsync();
         }
 

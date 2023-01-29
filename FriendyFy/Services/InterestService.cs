@@ -5,6 +5,7 @@ using System.Threading.Tasks;
 using FriendyFy.Data;
 using FriendyFy.Models;
 using FriendyFy.Services.Contracts;
+using Microsoft.EntityFrameworkCore;
 
 namespace FriendyFy.Services
 {
@@ -19,9 +20,6 @@ namespace FriendyFy.Services
 
         public async Task<List<Interest>> AddNewInterestsAsync(List<InterestDto> interests)
         {
-            var existingInterests = interests.Where(x => !x.IsNew).ToList();
-            var newInterests = interests.Where(x => x.IsNew);
-
             var allInterests = new List<Interest>();
             foreach (var item in interests)
             {
@@ -31,7 +29,7 @@ namespace FriendyFy.Services
                 }
                 else
                 {
-                    allInterests.Add(GetInterest(item.Id));
+                    allInterests.Add(await GetInterestAsync(item.Id));
                 }
             }
 
@@ -41,10 +39,10 @@ namespace FriendyFy.Services
         public async Task<Interest> AddInterestToDbAsync(InterestDto interest)
         {
             var interestToAdd = new Interest { Name = interest.Label};
-            var interestInDb = interestRepository.AllAsNoTracking().Where(x => x.Name == interest.Label).FirstOrDefault();
+            var interestInDb = await interestRepository.AllAsNoTracking().FirstOrDefaultAsync(x => x.Name == interest.Label);
             if (interestInDb == null)
             {
-                await interestRepository.AddAsync(interestToAdd);
+                interestRepository.Add(interestToAdd);
                 await interestRepository.SaveChangesAsync();
                 return interestToAdd;
             }
@@ -67,12 +65,11 @@ namespace FriendyFy.Services
             }).ToList();
         }
 
-        public Interest GetInterest(int id)
+        public async Task<Interest> GetInterestAsync(int id)
         {
-            return interestRepository
+            return await interestRepository
                 .All()
-                .Where(x => x.Id == id)
-                .FirstOrDefault();
+                .FirstOrDefaultAsync(x => x.Id == id);
         }
     }
 }

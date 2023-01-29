@@ -1,9 +1,10 @@
-﻿using ViewModels;
+﻿using System.Threading.Tasks;
+using ViewModels;
 
 namespace FriendyFy.Services.Contracts
 {
     public interface IMessageService
     {
-        ChatMessageViewModel GetChatMessageForOtherPeople(string id);
+        Task<ChatMessageViewModel> GetChatMessageForOtherPeopleAsync(string id);
     }
 }

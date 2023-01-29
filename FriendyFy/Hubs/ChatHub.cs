@@ -33,7 +33,7 @@ namespace FriendyFy.Hubs
 
             var usersInChat = chatService.GetChatUserIds(dto.ChatId).Where(x => x != userId).ToList();
 
-            var message = messageService.GetChatMessageForOtherPeople(messageId);
+            var message = await messageService.GetChatMessageForOtherPeopleAsync(messageId);
             if (message == null)
             {
                 return false;

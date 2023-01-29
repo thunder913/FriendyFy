@@ -11,6 +11,7 @@ using FriendyFy.Services.Contracts;
 using Microsoft.EntityFrameworkCore;
 using ViewModels;
 using ViewModels.ViewModels;
+using static System.Decimal;
 
 namespace FriendyFy.Services
 {
@@ -59,7 +60,7 @@ namespace FriendyFy.Services
 
             if (makePostDto.LocationLat != null && makePostDto.LocationLng != null)
             {
-                post.LocationCity = geolocationService.GetUserLocation(Decimal.ToDouble((decimal)makePostDto.LocationLat), Decimal.ToDouble((decimal)makePostDto.LocationLng));
+                post.LocationCity = geolocationService.GetUserLocation(ToDouble((decimal)makePostDto.LocationLat), ToDouble((decimal)makePostDto.LocationLng));
             }
 
             if (makePostDto.Image != null && !string.IsNullOrWhiteSpace(makePostDto.Image))
@@ -78,7 +79,7 @@ namespace FriendyFy.Services
                 };
                 post.TaggedPeople.Add(userTagged);
             }
-            await postRepository.AddAsync(post);
+            postRepository.Add(post);
             await postRepository.SaveChangesAsync();
 
             return true;
@@ -155,10 +156,10 @@ namespace FriendyFy.Services
 
         public async Task<int?> LikePostAsync(string postId, ApplicationUser user)
         {
-            var post = postRepository
+            var post = await postRepository
                 .All()
                 .Include(x => x.Likes)
-                .FirstOrDefault(x => x.Id == postId);
+                .FirstOrDefaultAsync(x => x.Id == postId);
 
             if (post == null)
             {
@@ -184,7 +185,7 @@ namespace FriendyFy.Services
             await postRepository.SaveChangesAsync();
 
 
-            return post.Likes.Count();
+            return post.Likes.Count;
         }
 
         public List<PersonListPopupViewModel> GetPeopleLikes(string postId, int take, int skip)
@@ -229,9 +230,9 @@ namespace FriendyFy.Services
                 .ToList();
         }
 
-        public PostDetailsViewModel GetPostByImageId(string imageId, string userId)
+        public async Task<PostDetailsViewModel> GetPostByImageIdAsync(string imageId, string userId)
         {
-            var post = postRepository.AllAsNoTracking()
+            var post = await postRepository.AllAsNoTracking()
                 .Include(x => x.Creator)
                 .ThenInclude(x => x.ProfileImage)
                 .Include(x => x.Image)
@@ -239,7 +240,8 @@ namespace FriendyFy.Services
                 .Include(x => x.Comments)
                 .Include(x => x.Reposts)
                 .Include(x => x.TaggedPeople)
-                .FirstOrDefault(x => x.Image.Id == imageId && x.IsRepost == false);
+                .FirstOrDefaultAsync(x => x.Image.Id == imageId && x.IsRepost == false);
+            
             if (post == null)
             {
                 return null;
@@ -254,7 +256,7 @@ namespace FriendyFy.Services
                 CreatorName = post.Creator.FirstName + " " + post.Creator.LastName,
                 LikesCount = post.Likes.Count(),
                 PostMessage = post.Text,
-                RepostsCount = post.Reposts.Where(x => !x.IsDeleted).Count(),
+                RepostsCount = post.Reposts.Count(x => !x.IsDeleted),
                 PostImage = blobService.GetBlobUrlAsync(post.Image?.Id + post.Image?.ImageExtension, GlobalConstants.BlobPictures).GetAwaiter().GetResult(),
                 IsLikedByUser = post.Likes.Any(x => x.LikedById == userId),
                 Username = post.Creator.UserName,
@@ -280,12 +282,12 @@ namespace FriendyFy.Services
                 RepostId = id
             };
 
-            await postRepository.AddAsync(eventPost);
+            postRepository.Add(eventPost);
             var added = await postRepository.SaveChangesAsync();
             return postRepository.All()
                 .Include(x => x.Reposts)
                 .Where(x => !x.IsDeleted)
-                .FirstOrDefault(x => x.Id == id)
+                .FirstOrDefault(x => x.Id == id)!
                 .Reposts
                 .GroupBy(x => x.CreatorId)
                 .Count();
@@ -298,7 +300,7 @@ namespace FriendyFy.Services
                 .Include(x => x.Reposts)
                 .ThenInclude(x => x.Creator)
                 .ThenInclude(x => x.ProfileImage)
-                .FirstOrDefault(x => x.Id == postId)
+                .FirstOrDefault(x => x.Id == postId)?
                 .Reposts
                 .Where(x => !x.IsDeleted)
                 .GroupBy(x => x.CreatorId)
@@ -318,10 +320,10 @@ namespace FriendyFy.Services
 
         public async Task<bool> DeletePostAsync(string postId, string userId)
         {
-            var post = postRepository
+            var post = await postRepository
                 .All()
                 .Include(x => x.Reposts)
-                .FirstOrDefault(x => x.Id == postId && x.CreatorId == userId);
+                .FirstOrDefaultAsync(x => x.Id == postId && x.CreatorId == userId);
             if (post == null)
             {
                 return false;
@@ -367,7 +369,7 @@ namespace FriendyFy.Services
                         TaggedPeopleCount = x.TaggedPeople.Count(),
                         PostType = PostType.Post.ToString(),
                         IsRepost = x.IsRepost,
-                        IsUserCreator = user == null ? false : x.CreatorId == user.Id,
+                        IsUserCreator = user != null && x.CreatorId == user.Id,
                         Repost = !x.IsRepost ? null : new PostDetailsViewModel
                         {
                             PostId = x.Repost.Id,
@@ -379,7 +381,7 @@ namespace FriendyFy.Services
                             PostMessage = x.Repost.Text,
                             RepostsCount = x.Reposts.Where(x => !x.IsDeleted).GroupBy(x => x.CreatorId).Count(),
                             PostImage = x.Repost.Image.Id + x.Repost.Image.ImageExtension,
-                            IsLikedByUser = user == null ? false : x.Repost.Likes.Any(y => y.LikedById == user.Id),
+                            IsLikedByUser = user != null && x.Repost.Likes.Any(y => y.LikedById == user.Id),
                             Username = x.Repost.Creator.UserName,
                             Latitude = x.Repost.Latitude ?? x.Repost.Latitude,
                             Longitude = x.Repost.Longitude ?? x.Repost.Longitude,

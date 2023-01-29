@@ -22,7 +22,7 @@ namespace FriendyFy.Data
 
         public virtual IQueryable<TEntity> AllAsNoTracking() => DbSet.AsNoTracking();
 
-        public virtual Task AddAsync(TEntity entity) => DbSet.AddAsync(entity).AsTask();
+        public virtual void Add(TEntity entity) => DbSet.Add(entity);
 
         public virtual void Update(TEntity entity)
         {

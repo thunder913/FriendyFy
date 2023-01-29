@@ -131,7 +131,7 @@ namespace FriendyFy.Controllers
         }
 
         [HttpPost("checkFriendStatus")]
-        public IActionResult CheckFriendStatus(FriendIdDto dto)
+        public async Task<IActionResult> CheckFriendStatus(FriendIdDto dto)
         {
             var user = GetUserByToken();
             
@@ -140,7 +140,7 @@ namespace FriendyFy.Controllers
                 return BadRequest("The user cannot be added as a friend!");
             }
 
-            return Content(friendService.GetUserFriendStatus(user.Id, dto.UserId));
+            return Content(await friendService.GetUserFriendStatusAsync(user.Id, dto.UserId));
         }
 
         [HttpPost("getRecommendations")]
@@ -171,7 +171,7 @@ namespace FriendyFy.Controllers
         }
 
         [HttpPost("getRightNavSuggestions")]
-        public IActionResult GetRightNavRecommendations()
+        public async Task<IActionResult> GetRightNavRecommendations()
         {
             var user = GetUserByToken();
             
@@ -180,7 +180,7 @@ namespace FriendyFy.Controllers
                 return BadRequest();
             }
 
-            return Ok(UserService.GetEventUserRecommendations(user.Id));
+            return Ok(await UserService.GetEventUserRecommendationsAsync(user.Id));
         }
     }
 }

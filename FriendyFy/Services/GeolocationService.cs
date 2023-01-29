@@ -7,9 +7,10 @@ using static FriendyFy.Data.GoogleMapsApi.GoogleMapsClasses;
 
 namespace FriendyFy.Services
 {
+    // TODO use httpclient
     public class GeolocationService : IGeolocationService
     {
-        private IConfiguration configuration { get; set; }
+        private IConfiguration configuration { get; }
         public GeolocationService(IConfiguration configuration)
         {
             this.configuration = configuration;

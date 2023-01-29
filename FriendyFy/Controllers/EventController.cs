@@ -231,13 +231,13 @@ namespace FriendyFy.Controllers
         }
 
         [HttpPost("getRandomEvent")]
-        public IActionResult GetRandomEvent()
+        public async Task<IActionResult> GetRandomEvent()
         {
-            return Ok(eventService.GetRandomEventId());
+            return Ok(await eventService.GetRandomEventIdAsync());
         }
 
         [HttpPost("getEventInvitePeople")]
-        public IActionResult GetEventInvitePeople(EventInvitePeopleDto dto)
+        public async Task<IActionResult> GetEventInvitePeople(EventInvitePeopleDto dto)
         {
             var user = GetUserByToken();
 
@@ -246,7 +246,7 @@ namespace FriendyFy.Controllers
                 return Unauthorized("You are not logged in!");
             }
 
-            return Ok(eventService.GetPeopleInviteDto(dto.EventId, dto.Take, dto.Skip, user));
+            return Ok(await eventService.GetPeopleInviteDtoAsync(dto.EventId, dto.Take, dto.Skip, user));
         }
     }
 }

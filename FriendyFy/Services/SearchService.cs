@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Threading.Tasks;
 using FriendyFy.Models.Enums;
 using FriendyFy.Services.Contracts;
 using ViewModels.ViewModels;
@@ -72,7 +73,7 @@ namespace FriendyFy.Services
             return viewmodel;
         }
 
-        public SearchPageResultsViewModel PerformSearch(int take, int skipPeople, int skipEvents, string searchWord, List<int> interestIds, SearchType searchType, 
+        public async Task<SearchPageResultsViewModel> PerformSearchAsync(int take, int skipPeople, int skipEvents, string searchWord, List<int> interestIds, SearchType searchType, 
             bool showOnlyUserEvents, DateTime eventDate, bool hasEventDate, string userId)
         {
             var people = new List<SearchPageResultViewModel>();
@@ -81,13 +82,13 @@ namespace FriendyFy.Services
             var hasMoreEvents = true;
             if (searchType == SearchType.Person && !showOnlyUserEvents)
             {
-                people.AddRange(userService.GetSearchPageUsers(take, skipPeople, searchWord, interestIds, userId));
+                people.AddRange(await userService.GetSearchPageUsersAsync(take, skipPeople, searchWord, interestIds, userId));
                 hasMoreUsers = people.Count() == take;
                 hasMoreEvents = false;
             }
             else if (searchType == SearchType.Event)
             {
-                events.AddRange(eventService.GetSearchPageEvents(skipEvents, take, searchWord, interestIds, showOnlyUserEvents, eventDate, hasEventDate, userId));
+                events.AddRange(await eventService.GetSearchPageEventsAsync(skipEvents, take, searchWord, interestIds, showOnlyUserEvents, eventDate, hasEventDate, userId));
                 hasMoreEvents = events.Count() == take;
                 hasMoreUsers = false;
             }
@@ -96,9 +97,9 @@ namespace FriendyFy.Services
                 var takeCount = take / 2;
                 if (!showOnlyUserEvents)
                 {
-                    people.AddRange(userService.GetSearchPageUsers(takeCount, skipPeople, searchWord, interestIds, userId));
+                    people.AddRange(await userService.GetSearchPageUsersAsync(takeCount, skipPeople, searchWord, interestIds, userId));
                 }
-                events.AddRange(eventService.GetSearchPageEvents(skipEvents, takeCount, searchWord, interestIds, showOnlyUserEvents, eventDate, hasEventDate, userId));
+                events.AddRange(await eventService.GetSearchPageEventsAsync(skipEvents, takeCount, searchWord, interestIds, showOnlyUserEvents, eventDate, hasEventDate, userId));
 
 
                 if (people.Count < takeCount)

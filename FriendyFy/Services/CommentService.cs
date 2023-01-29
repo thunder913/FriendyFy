@@ -43,63 +43,67 @@ namespace FriendyFy.Services
                 return null;
             }
 
-            if (postType == PostType.Post)
+            switch (postType)
             {
-                var post = postRepository.AllAsNoTracking().FirstOrDefault(x => x.Id == postId);
-
-                if (post == null)
+                case PostType.Post:
                 {
-                    return null;
+                    var post = await postRepository.AllAsNoTracking().FirstOrDefaultAsync(x => x.Id == postId);
+
+                    if (post == null)
+                    {
+                        return null;
+                    }
+
+                    var postComment = new PostComment
+                    {
+                        CommentedBy = user,
+                        CreatedOn = DateTime.UtcNow,
+                        PostId = postId,
+                        Text = comment,
+                    };
+
+                    postCommentRepository.Add(postComment);
+                    await postCommentRepository.SaveChangesAsync();
+
+                    return GetCommentViewModelById(postComment.Id, postType);
                 }
-
-                var postComment = new PostComment
+                case PostType.Event:
                 {
-                    CommentedBy = user,
-                    CreatedOn = DateTime.UtcNow,
-                    PostId = postId,
-                    Text = comment,
-                };
+                    var currEvent = await eventPostRepository
+                        .AllAsNoTracking()
+                        .FirstOrDefaultAsync(x => x.Id == postId);
+                    
+                    if (currEvent == null)
+                    {
+                        return null;
+                    }
 
-                await postCommentRepository.AddAsync(postComment);
-                await postCommentRepository.SaveChangesAsync();
+                    var eventComment = new EventComment
+                    {
+                        CommentedBy = user,
+                        CreatedOn = DateTime.UtcNow,
+                        EventPostId = currEvent.Id,
+                        Text = comment,
+                    };
 
-                return GetCommentViewModelById(postComment.Id, postType);
-            }
+                    eventCommentRepository.Add(eventComment);
+                    await eventCommentRepository.SaveChangesAsync();
 
-            if (postType == PostType.Event)
-            {
-                var currEvent = eventPostRepository
-                    .AllAsNoTracking()
-                    .FirstOrDefault(x => x.Id == postId);
-                if (currEvent == null)
-                {
-                    return null;
+                    return GetCommentViewModelById(eventComment.Id, postType);
                 }
-
-                var eventComment = new EventComment
-                {
-                    CommentedBy = user,
-                    CreatedOn = DateTime.UtcNow,
-                    EventPostId = currEvent.Id,
-                    Text = comment,
-                };
-
-                await eventCommentRepository.AddAsync(eventComment);
-                await eventCommentRepository.SaveChangesAsync();
-
-                return GetCommentViewModelById(eventComment.Id, postType);
+                default:
+                    return null;
             }
-            return null;
         }
 
         public async Task<bool> RemoveCommentAsync(string commentId, string userId)
         {
-            var comment = postCommentRepository
+            var comment = await postCommentRepository
                 .All()
                 .Include(x => x.Post)
                 .ThenInclude(x => x.Creator)
-                .FirstOrDefault(x => x.Id == commentId);
-
+                .FirstOrDefaultAsync(x => x.Id == commentId);
+            
             if (comment.CommentedById != userId && comment.Post.CreatorId != userId)
             {
                 return false;
@@ -112,25 +116,28 @@ namespace FriendyFy.Services
 
         public List<PostCommentViewModel> GetCommentsForPost(string userId, string postId, int take, int skip, PostType postType)
         {
-            if (postType == PostType.Post)
+            return postType switch
             {
-                return postRepository
-                    .AllAsNoTracking()
+                PostType.Post => postRepository.AllAsNoTracking()
                     .Include(x => x.Comments)
                     .ThenInclude(x => x.CommentedBy)
                     .ThenInclude(x => x.ProfileImage)
                     .Include(x => x.Comments)
                     .ThenInclude(x => x.CommentLikes)
-                    .FirstOrDefault(x => x.Id == postId)?
-                    .Comments
-                    .OrderByDescending(x => x.CreatedOn)
+                    .FirstOrDefault(x => x.Id == postId)
+                    ?.Comments.OrderByDescending(x => x.CreatedOn)
                     .Skip(skip)
                     .Take(take)
                     .Select(x => new PostCommentViewModel
                     {
                         CommentorUsername = x.CommentedBy.UserName,
                         CommentorName = x.CommentedBy.FirstName + " " + x.CommentedBy.LastName,
-                        CommentorPicture = blobService.GetBlobUrlAsync(x.CommentedBy.ProfileImage?.Id + x.CommentedBy.ProfileImage?.ImageExtension, GlobalConstants.BlobPictures).GetAwaiter().GetResult(),
+                        CommentorPicture =
+                            blobService.GetBlobUrlAsync(
+                                    x.CommentedBy.ProfileImage?.Id + x.CommentedBy.ProfileImage?.ImageExtension,
+                                    GlobalConstants.BlobPictures)
+                                .GetAwaiter()
+                                .GetResult(),
                         CommentText = x.Text,
                         CreatedAgo = (int)((DateTime.UtcNow - x.CreatedOn).TotalMinutes),
                         IsLikedByUser = x.CommentLikes.Any(y => y.LikedById == userId),
@@ -138,28 +145,27 @@ namespace FriendyFy.Services
                         Id = x.Id,
                         PostType = postType.ToString(),
                     })
-                    .ToList();
-            }
-
-            if(postType == PostType.Event)
-            {
-                return eventPostRepository
-                    .AllAsNoTracking()
+                    .ToList(),
+                PostType.Event => eventPostRepository.AllAsNoTracking()
                     .Include(x => x.Comments)
                     .ThenInclude(x => x.CommentedBy)
                     .ThenInclude(x => x.ProfileImage)
                     .Include(x => x.Comments)
                     .ThenInclude(x => x.CommentLikes)
-                    .FirstOrDefault(x => x.Id == postId)?
-                    .Comments
-                    .OrderByDescending(x => x.CreatedOn)
+                    .FirstOrDefault(x => x.Id == postId)
+                    ?.Comments.OrderByDescending(x => x.CreatedOn)
                     .Skip(skip)
                     .Take(take)
                     .Select(x => new PostCommentViewModel
                     {
                         CommentorUsername = x.CommentedBy.UserName,
                         CommentorName = x.CommentedBy.FirstName + " " + x.CommentedBy.LastName,
-                        CommentorPicture = blobService.GetBlobUrlAsync(x.CommentedBy.ProfileImage?.Id + x.CommentedBy.ProfileImage?.ImageExtension, GlobalConstants.BlobPictures).GetAwaiter().GetResult(),
+                        CommentorPicture =
+                            blobService.GetBlobUrlAsync(
+                                    x.CommentedBy.ProfileImage?.Id + x.CommentedBy.ProfileImage?.ImageExtension,
+                                    GlobalConstants.BlobPictures)
+                                .GetAwaiter()
+                                .GetResult(),
                         CommentText = x.Text,
                         CreatedAgo = (int)((DateTime.UtcNow - x.CreatedOn).TotalMinutes),
                         IsLikedByUser = x.CommentLikes.Any(y => y.LikedById == userId),
@@ -167,10 +173,9 @@ namespace FriendyFy.Services
                         Id = x.Id,
                         PostType = postType.ToString(),
                     })
-                    .ToList();
-            }
-
-            return null;
+                    .ToList(),
+                _ => null
+            };
         }
 
         public async Task<int?> LikeCommentAsync(string commentId, ApplicationUser user, PostType postType)
@@ -178,30 +183,35 @@ namespace FriendyFy.Services
             PostComment comment = null;
             EventComment eventComment = null;
             CommentLike existingLike = null;
-            if (postType == PostType.Post)
+            switch (postType)
             {
-                comment = postCommentRepository
-                    .All()
-                    .Include(x => x.CommentLikes)
-                    .FirstOrDefault(x => x.Id == commentId);
-                if (comment == null)
+                case PostType.Post:
                 {
-                    return null;
+                    comment = await postCommentRepository
+                        .All()
+                        .Include(x => x.CommentLikes)
+                        .FirstOrDefaultAsync(x => x.Id == commentId);
+                
+                    if (comment == null)
+                    {
+                        return null;
+                    }
+                    existingLike = comment.CommentLikes.FirstOrDefault(x => x.LikedById == user.Id);
+                    break;
                 }
-                existingLike = comment.CommentLikes.FirstOrDefault(x => x.LikedById == user.Id);
-
-            }
-            else if (postType == PostType.Event)
-            {
-                eventComment = eventCommentRepository
-                    .All()
-                    .Include(x => x.CommentLikes)
-                    .FirstOrDefault(x => x.Id == commentId);
-                if (eventComment == null)
+                case PostType.Event:
                 {
-                    return null;
+                    eventComment = await eventCommentRepository
+                        .All()
+                        .Include(x => x.CommentLikes)
+                        .FirstOrDefaultAsync(x => x.Id == commentId);
+                    if (eventComment == null)
+                    {
+                        return null;
+                    }
+                    existingLike = eventComment.CommentLikes.FirstOrDefault(x => x.LikedById == user.Id);
+                    break;
                 }
-                existingLike = eventComment.CommentLikes.FirstOrDefault(x => x.LikedById == user.Id);
             }
 
             if (existingLike != null)
@@ -219,17 +229,17 @@ namespace FriendyFy.Services
 
                 if (postType == PostType.Post)
                 {
-                    comment.CommentLikes.Add(commentLike);
+                    comment?.CommentLikes.Add(commentLike);
                 }
                 else
                 {
-                    eventComment.CommentLikes.Add(commentLike);
+                    eventComment?.CommentLikes.Add(commentLike);
                 }
             }
             await postCommentRepository.SaveChangesAsync();
 
 
-            return postType == PostType.Post ? comment.CommentLikes.Count() : eventComment.CommentLikes.Count();
+            return postType == PostType.Post ? comment?.CommentLikes.Count : eventComment?.CommentLikes.Count;
         }
 
         public List<PersonListPopupViewModel> GetPeopleLikes(string commentId, int take, int skip)
@@ -255,10 +265,9 @@ namespace FriendyFy.Services
         }
         private PostCommentViewModel GetCommentViewModelById(string commentId, PostType postType)
         {
-            if (postType == PostType.Post)
+            return postType switch
             {
-                return postCommentRepository
-                    .AllAsNoTracking()
+                PostType.Post => postCommentRepository.AllAsNoTracking()
                     .Include(x => x.CommentedBy)
                     .ThenInclude(x => x.ProfileImage)
                     .Where(x => x.Id == commentId)?
@@ -267,7 +276,12 @@ namespace FriendyFy.Services
                     {
                         CommentorUsername = x.CommentedBy.UserName,
                         CommentorName = x.CommentedBy.FirstName + " " + x.CommentedBy.LastName,
-                        CommentorPicture = blobService.GetBlobUrlAsync(x.CommentedBy.ProfileImage?.Id + x.CommentedBy.ProfileImage?.ImageExtension, GlobalConstants.BlobPictures).GetAwaiter().GetResult(),
+                        CommentorPicture =
+                            blobService.GetBlobUrlAsync(
+                                    x.CommentedBy.ProfileImage?.Id + x.CommentedBy.ProfileImage?.ImageExtension,
+                                    GlobalConstants.BlobPictures)
+                                .GetAwaiter()
+                                .GetResult(),
                         CommentText = x.Text,
                         CreatedAgo = (int)((DateTime.UtcNow - x.CreatedOn).TotalMinutes),
                         IsLikedByUser = false,
@@ -275,22 +289,22 @@ namespace FriendyFy.Services
                         Id = x.Id,
                         PostType = postType.ToString()
                     })
-                    .FirstOrDefault();
-            }
-
-            if (postType == PostType.Event)
-            {
-                return eventCommentRepository
-                    .AllAsNoTracking()
+                    .FirstOrDefault(),
+                PostType.Event => eventCommentRepository.AllAsNoTracking()
                     .Include(x => x.CommentedBy)
                     .ThenInclude(x => x.ProfileImage)
-                    .Where(x => x.Id == commentId)?
-                    .ToList()
+                    .Where(x => x.Id == commentId)
+                    ?.ToList()
                     .Select(x => new PostCommentViewModel
                     {
                         CommentorUsername = x.CommentedBy.UserName,
                         CommentorName = x.CommentedBy.FirstName + " " + x.CommentedBy.LastName,
-                        CommentorPicture = blobService.GetBlobUrlAsync(x.CommentedBy.ProfileImage?.Id + x.CommentedBy.ProfileImage?.ImageExtension, GlobalConstants.BlobPictures).GetAwaiter().GetResult(),
+                        CommentorPicture =
+                            blobService.GetBlobUrlAsync(
+                                    x.CommentedBy.ProfileImage?.Id + x.CommentedBy.ProfileImage?.ImageExtension,
+                                    GlobalConstants.BlobPictures)
+                                .GetAwaiter()
+                                .GetResult(),
                         CommentText = x.Text,
                         CreatedAgo = (int)((DateTime.UtcNow - x.CreatedOn).TotalMinutes),
                         IsLikedByUser = false,
@@ -298,30 +312,36 @@ namespace FriendyFy.Services
                         Id = x.Id,
                         PostType = postType.ToString()
                     })
-                    .FirstOrDefault();
-            }
-
-            return null;
+                    .FirstOrDefault(),
+                _ => null
+            };
         }
 
         public async Task<bool> DeleteCommentAsync(string userId, string commentId, PostType postType)
         {
-            if (postType == PostType.Event)
+            switch (postType)
             {
-                var comment = eventCommentRepository.All()
-                    .FirstOrDefault(x => x.Id == commentId && x.CommentedById == userId);
-                if (comment != null)
+                case PostType.Event:
                 {
-                    eventCommentRepository.Delete(comment);
+                    var comment = eventCommentRepository.All()
+                        .FirstOrDefault(x => x.Id == commentId && x.CommentedById == userId);
+                    if (comment != null)
+                    {
+                        eventCommentRepository.Delete(comment);
+                    }
+
+                    break;
                 }
-            }
-            else if(postType == PostType.Post)
-            {
-                var comment = postCommentRepository.All()
-                    .FirstOrDefault(x => x.Id == commentId && x.CommentedById == userId);
-                if (comment != null)
+                case PostType.Post:
                 {
-                    postCommentRepository.Delete(comment);
+                    var comment = postCommentRepository.All()
+                        .FirstOrDefault(x => x.Id == commentId && x.CommentedById == userId);
+                    if (comment != null)
+                    {
+                        postCommentRepository.Delete(comment);
+                    }
+
+                    break;
                 }
             }
 

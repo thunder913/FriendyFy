@@ -122,11 +122,11 @@ namespace FriendyFy.Controllers
         }
 
         [HttpPost("getByImageId")]
-        public IActionResult GetPostByImageId(GetByImageIdDto dto)
+        public async Task<IActionResult> GetPostByImageId(GetByImageIdDto dto)
         {
             var user = GetUserByToken();
 
-            var post = postService.GetPostByImageId(dto.ImageId, user != null ? user.Id : null);
+            var post = await postService.GetPostByImageIdAsync(dto.ImageId, user != null ? user.Id : null);
             if (post == null)
             {
                 return BadRequest();
@@ -200,7 +200,7 @@ namespace FriendyFy.Controllers
         }
 
         [HttpPost("getFeedPosts")]
-        public IActionResult GetFeedPosts(GetFeedData dto)
+        public async Task<IActionResult> GetFeedPosts(GetFeedData dto)
         {
             var user = GetUserByToken();
 
@@ -213,7 +213,7 @@ namespace FriendyFy.Controllers
             {
                 if (dto.HasEvents)
                 {
-                    events = eventService.GetFeedEvents(user, dto.isProfile, dto.Username, toTake, dto.EventIds.Count(), dto.EventIds);
+                    events = await eventService.GetFeedEventsAsync(user, dto.isProfile, dto.Username, toTake, dto.EventIds.Count(), dto.EventIds);
                 }
             }
             if (dto.FeedType != "events")

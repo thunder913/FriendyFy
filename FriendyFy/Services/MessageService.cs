@@ -1,4 +1,5 @@
 ﻿using System.Linq;
+using System.Threading.Tasks;
 using FriendyFy.BlobStorage;
 using FriendyFy.Common;
 using FriendyFy.Data;
@@ -20,13 +21,13 @@ namespace FriendyFy.Services
             this.blobService = blobService;
         }
 
-        public ChatMessageViewModel GetChatMessageForOtherPeople(string id)
+        public async Task<ChatMessageViewModel> GetChatMessageForOtherPeopleAsync(string id)
         {
-            var message = messageRepository
+            var message = await messageRepository
                 .AllAsNoTracking()
                 .Include(x => x.User)
                 .ThenInclude(x => x.ProfileImage)
-                .FirstOrDefault(x => x.Id == id);
+                .FirstOrDefaultAsync(x => x.Id == id);
 
             return new ChatMessageViewModel
             {

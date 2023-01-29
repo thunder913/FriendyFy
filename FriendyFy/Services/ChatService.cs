@@ -38,7 +38,7 @@ namespace FriendyFy.Services
                 .Where(x => x.Users.Any(y => y.UserName == username))
                 .Where(x => x.ChatType != ChatType.NotAccepted)
                 .Where(x => string.IsNullOrWhiteSpace(search) || (x.Users.Where(y => y.UserName != username).Any(y => (y.FirstName+" "+y.LastName).ToLower().Contains(search.ToLower()))))
-                .Where(x => !chatIds.Any(y => y == x.Id)) 
+                .Where(x => chatIds.All(y => y != x.Id)) 
                 .OrderBy(x => x.Id)
                 .Skip(items*page)
                 .Take(items)
@@ -50,7 +50,7 @@ namespace FriendyFy.Services
                     Name = x.ChatType == ChatType.Direct ? x.Users.FirstOrDefault(y => y.UserName != username)?.FirstName : x.Name,
                     FullName = x.ChatType == ChatType.Direct ? x.Users.FirstOrDefault(y => y.UserName != username)?.FirstName + " " + x.Users.FirstOrDefault(y => y.UserName != username)?.LastName : x.Name,
                     IsActive = false,
-                    NewMessages = x.Messages.Count() - x.Messages.Where(y => y.SeenBy.Any(y => y.UserName == username)).Count(),
+                    NewMessages = x.Messages.Count - x.Messages.Count(y => y.SeenBy.Any(y => y.UserName == username)),
                     Picture = x.ChatType == ChatType.Direct
                         ? blobService.GetBlobUrlAsync(x.Users.FirstOrDefault(y => y.UserName != username)?.ProfileImage?.Id + x.Users.FirstOrDefault(y => y.UserName != username)?.ProfileImage?.ImageExtension, GlobalConstants.BlobPictures).GetAwaiter().GetResult()
                         : x.Image,
@@ -112,14 +112,14 @@ namespace FriendyFy.Services
 
         public async Task<string> SendChatMessage(string chatId, string userId, string message)
         {
-            var user = userRepository.All().FirstOrDefault(x => x.Id == userId);
+            var user = await userRepository.All().FirstOrDefaultAsync(x => x.Id == userId);
             var chat = chatRepository.All().Include(x => x.Users).FirstOrDefault(x => x.Id == chatId);
             if (chat == null)
             {
                 return null;
             }
 
-            if (!chat.Users.Any(x => x.Id == userId))
+            if (chat.Users.All(x => x.Id != userId))
             {
                 return null;
             }
@@ -145,7 +145,7 @@ namespace FriendyFy.Services
                 .AllAsNoTracking()
                 .Include(x => x.Users)
                 .ThenInclude(x => x.ProfileImage)
-                .FirstOrDefault(x => x.Id == chatId)
+                .FirstOrDefault(x => x.Id == chatId)?
                 .Users
                 .Select(x => x.Id)
                 .ToList();
@@ -158,9 +158,9 @@ namespace FriendyFy.Services
                 .All()
                 .Include(x => x.Messages)
                 .ThenInclude(x => x.SeenBy)
-                .FirstOrDefault(x => x.Id == chatId)
+                .FirstOrDefault(x => x.Id == chatId)?
                 .Messages
-                .Where(x => !x.SeenBy.Any(y => y.Id == user.Id));
+                .Where(x => x.SeenBy.All(y => y.Id != user.Id));
 
             foreach (var message in notSeenMessages)
             {

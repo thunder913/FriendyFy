@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Globalization;
 using System.Linq;
+using System.Threading.Tasks;
 using FriendyFy.Data;
 using FriendyFy.Models.Enums;
 using FriendyFy.Services.Contracts;
@@ -35,7 +36,7 @@ namespace FriendyFy.Controllers
         }
 
         [HttpPost("search")]
-        public IActionResult PerformSeach(SearchPageDto dto)
+        public async Task<IActionResult> PerformSeach(SearchPageDto dto)
         {
             var user = GetUserByToken();
             var interests = JsonConvert.DeserializeObject<List<InterestDto>>(dto.Interests);
@@ -47,7 +48,7 @@ namespace FriendyFy.Controllers
             }
             var parsedDate = DateTime.TryParseExact(dto.EventDate, "dd/MM/yyyy", CultureInfo.InvariantCulture, DateTimeStyles.None, out DateTime date);
 
-            var result = searchService.PerformSearch(dto.Take, dto.SkipPeople, dto.SkipEvents, dto.SearchWord, interests.Where(x => x.IsNew == false).Select(x => x.Id).ToList(), type, dto.ShowOnlyUserEvents, date, parsedDate, user?.Id);
+            var result = await searchService.PerformSearchAsync(dto.Take, dto.SkipPeople, dto.SkipEvents, dto.SearchWord, interests.Where(x => x.IsNew == false).Select(x => x.Id).ToList(), type, dto.ShowOnlyUserEvents, date, parsedDate, user?.Id);
 
             return Ok(result);
         }

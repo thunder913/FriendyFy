@@ -350,7 +350,7 @@ namespace FriendyFy.Controllers
         }
 
         [HttpPost("getUserData")]
-        public IActionResult GetUserData()
+        public async Task<IActionResult> GetUserData()
         {
             var user = GetUserByToken();
 
@@ -359,7 +359,7 @@ namespace FriendyFy.Controllers
                 return Unauthorized();
             }
 
-            var viewmodel = userService.GetUserData(user);
+            var viewmodel = await userService.GetUserDataAsync(user);
 
             return Ok(viewmodel);
         }

@@ -1,6 +1,5 @@
 ﻿using System;
 using System.Threading.Tasks;
-using FriendyFy.BlobStorage;
 using FriendyFy.Data;
 using FriendyFy.Models;
 using FriendyFy.Models.Enums;
@@ -11,13 +10,10 @@ namespace FriendyFy.Services
     public class ImageService : IImageService
     {
         private readonly IRepository<Image> imageRepository;
-        private readonly IBlobService blobService;
 
-        public ImageService(IRepository<Image> imageRepository,
-            IBlobService blobService)
+        public ImageService(IRepository<Image> imageRepository)
         {
             this.imageRepository = imageRepository;
-            this.blobService = blobService;
         }
 
         public async Task<Image> AddImageAsync(ImageType imageType)
@@ -30,12 +26,13 @@ namespace FriendyFy.Services
 
             try
             {
-                await imageRepository.AddAsync(image);
+                imageRepository.Add(image);
             }
-            catch(Exception)
+            catch (Exception)
             {
-
+                // ignored
             }
+
             await imageRepository.SaveChangesAsync();
             return image;
         }

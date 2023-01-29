@@ -18,28 +18,29 @@ namespace FriendyFy.Services
     public class UserService : IUserService
     {
         private readonly IDeletableEntityRepository<ApplicationUser> userRepository;
-        private readonly IDeletableEntityRepository<Post> postRepositry;
+        private readonly IDeletableEntityRepository<Post> postRepository;
         private readonly IBlobService blobService;
         private readonly IImageService imageService;
 
         public UserService(IDeletableEntityRepository<ApplicationUser> userRepository,
-            IDeletableEntityRepository<Post> postRepositry,
+            IDeletableEntityRepository<Post> postRepository,
             IBlobService blobService,
             IImageService imageService)
         {
             this.userRepository = userRepository;
-            this.postRepositry = postRepositry;
+            this.postRepository = postRepository;
             this.blobService = blobService;
             this.imageService = imageService;
         }
         public async Task<ApplicationUser> CreateAsync(ApplicationUser user)
         {
-            await userRepository.AddAsync(user);
+            userRepository.Add(user);
             await userRepository.SaveChangesAsync();
 
             return user;
         }
 
+        // TODO check how this works
         public string GenerateUsername(string firstName, string lastName)
         {
             var rand = new Random();
@@ -103,10 +104,9 @@ namespace FriendyFy.Services
             return userRepository.All()
                 .Include(x => x.Events)
                 .Include(x => x.EventsOrganized)
-                .FirstOrDefault(x => x.UserName == username && username != null)
+                .FirstOrDefault(x => x.UserName == username && username != null)!
                 .Events
-                .Where(x => x.Time < DateTime.UtcNow)
-                .Count();
+                .Count(x => x.Time < DateTime.UtcNow);
         }
 
         public async Task SetUserFirstTimeLoginAsync(ApplicationUser user, Image profileImage, Image coverImage, string quote, List<Interest> interests, decimal? longitude, decimal? latitude)
@@ -125,7 +125,7 @@ namespace FriendyFy.Services
 
         public List<DisplayImageViewModel> GetUserImages(string username, int take, int skip)
         {
-            var images = postRepositry
+            var images = postRepository
                 .AllAsNoTracking()
                 .Include(x => x.Creator)
                 .Include(x => x.Image)
@@ -184,17 +184,17 @@ namespace FriendyFy.Services
             return toReturn;
         }
 
-        public List<RightNavigationRecommendationViewModel> GetEventUserRecommendations(string userId)
+        public async Task<List<RightNavigationRecommendationViewModel>> GetEventUserRecommendationsAsync(string userId)
         {
-            var user = userRepository.All()
+            var user = await userRepository.All()
                 .Include(x => x.Interests)
                 .Include(x => x.RemoveSuggestionFriends)
-                .FirstOrDefault(x => x.Id == userId);
+                .FirstOrDefaultAsync(x => x.Id == userId);
 
             var blocked = user.RemoveSuggestionFriends.Select(y => y.BlockedUserId).ToArray();
             var userInterests = user.Interests.Select(y => y.Id).ToArray();
 
-            var users = userRepository
+            var users = await userRepository
                 .AllAsNoTracking()
                 .Include(x => x.Interests)
                 .Include(x => x.ProfileImage)
@@ -214,7 +214,7 @@ namespace FriendyFy.Services
                     ProfilePhoto = x.ProfileImage.Id + x.ProfileImage.ImageExtension,
                     Username = x.UserName
                 })
-                .ToList();
+                .ToListAsync();
 
             return users.Select(x => new RightNavigationRecommendationViewModel
             {
@@ -232,9 +232,9 @@ namespace FriendyFy.Services
             return result > 0;
         }
 
-        public UserDataViewModel GetUserData(ApplicationUser user)
+        public async Task<UserDataViewModel> GetUserDataAsync(ApplicationUser user)
         {
-            var viewmodel = userRepository
+            var viewmodel = await userRepository
                 .AllAsNoTracking()
                 .Where(x => x.Id == user.Id)
                 .Include(x => x.Interests)
@@ -254,7 +254,7 @@ namespace FriendyFy.Services
                     Longitude = x.Longitude,
                     Quote = x.Quote
                 })
-                .FirstOrDefault();
+                .FirstOrDefaultAsync();
 
             viewmodel.ProfilePhoto = blobService.GetBlobUrlAsync(user.ProfileImage?.Id + user.ProfileImage?.ImageExtension, GlobalConstants.BlobPictures).GetAwaiter().GetResult();
             viewmodel.CoverPhoto = blobService.GetBlobUrlAsync(user.CoverImage?.Id + user.CoverImage?.ImageExtension, GlobalConstants.BlobPictures).GetAwaiter().GetResult();
@@ -301,10 +301,10 @@ namespace FriendyFy.Services
             return result > 0;
         }
 
-        public List<SearchPageResultViewModel> GetSearchPageUsers(int take, int skip, string searchWord, List<int> interestIds, string userId)
+        public async Task<List<SearchPageResultViewModel>> GetSearchPageUsersAsync(int take, int skip, string searchWord, List<int> interestIds, string userId)
         {
             searchWord = searchWord.ToLower();
-            var users = userRepository
+            var users = await userRepository
                 .AllAsNoTracking()
                 .Include(x => x.Interests)
                 .Include(x => x.ProfileImage)
@@ -325,7 +325,7 @@ namespace FriendyFy.Services
                     Image = x.ProfileImage.Id + x.ProfileImage.ImageExtension,
                     MutualFriends = x.Friends.Where(x => x.IsFriend).Count(y => y.Friend.Friends.Any(z => z.IsFriend && z.FriendId == userId)),
                 })
-                .ToList();
+                .ToListAsync();
 
             var toReturn = users.Select(x => new SearchPageResultViewModel
             {
@@ -339,9 +339,9 @@ namespace FriendyFy.Services
             return toReturn;
         }
 
-        public List<PersonListPopupViewModel> GetInvitePeoplePopUp(List<string> userIds)
+        public async Task<List<PersonListPopupViewModel>> GetInvitePeoplePopUpAsync(List<string> userIds)
         {
-            var users = userRepository
+            var users = await userRepository
                 .AllAsNoTracking()
                 .Where(x => userIds.Any(y => y == x.Id))
                 .Select(x => new PersonListPopupViewModel
@@ -349,7 +349,7 @@ namespace FriendyFy.Services
                     Name = x.FirstName + " " + x.LastName,
                     ProfileImage = x.ProfileImage.Id + x.ProfileImage.ImageExtension,
                     Username = x.UserName,
-                }).ToList();
+                }).ToListAsync();
 
             return users.Select(x => new PersonListPopupViewModel
             {

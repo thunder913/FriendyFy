@@ -17,7 +17,7 @@ namespace FriendyFy.Controllers
         }
 
         [HttpPost("getForUser")]
-        public IActionResult GetNotification(GetNotificationsDto dto)
+        public async Task<IActionResult> GetNotification(GetNotificationsDto dto)
         {
             var user = GetUserByToken();
             
@@ -26,7 +26,7 @@ namespace FriendyFy.Controllers
                 return Unauthorized("You are not logged in!");
             }
 
-            return Ok(notificationService.GetNotificationsForUser(dto.UserId, dto.Take, dto.Skip));
+            return Ok(await notificationService.GetNotificationsForUserAsync(dto.UserId, dto.Take, dto.Skip));
         }
 
         [HttpPost("acceptEvent")]
@@ -68,7 +68,7 @@ namespace FriendyFy.Controllers
         }
 
         [HttpPost("getUnseen")]
-        public IActionResult GetUnseenNotifications()
+        public async Task<IActionResult> GetUnseenNotifications()
         {
             var user = GetUserByToken();
 
@@ -77,7 +77,7 @@ namespace FriendyFy.Controllers
                 return Unauthorized("You are not logged in!");
             }
 
-            return Ok(notificationService.UnseenNotifications(user.Id));
+            return Ok(await notificationService.UnseenNotificationsAsync(user.Id));
         }
 
         [HttpPost("seeNotification")]

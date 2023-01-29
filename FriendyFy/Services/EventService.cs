@@ -12,6 +12,7 @@ using FriendyFy.Services.Contracts;
 using Microsoft.EntityFrameworkCore;
 using ViewModels;
 using ViewModels.ViewModels;
+using static System.Decimal;
 
 namespace FriendyFy.Services
 {
@@ -64,20 +65,15 @@ namespace FriendyFy.Services
                 Description = description,
                 OrganizerId = organizerId,
                 CreatedOn = DateTime.UtcNow,
-                LocationCity = geolocationService.GetUserLocation(Decimal.ToDouble(latitude), Decimal.ToDouble(longitude))
+                LocationCity = geolocationService.GetUserLocation(ToDouble(latitude), ToDouble(longitude))
             };
             if (profileImage != null && !string.IsNullOrWhiteSpace(profileImage))
             {
                 newEvent.ProfileImage = await imageService.AddImageAsync(ImageType.NormalImage);
                 await blobService.UploadBase64StringAsync(profileImage, newEvent.ProfileImage?.Id + newEvent.ProfileImage?.ImageExtension, GlobalConstants.BlobPictures);
             }
-            //if (isReocurring)
-            //{
-            //    newEvent.IsReocurring = true;
-            //    newEvent.ReocurringType = reocurringType;
-            //}
 
-            await eventRepository.AddAsync(newEvent);
+            eventRepository.Add(newEvent);
 
             var eventPost = new EventPost
             {
@@ -85,14 +81,14 @@ namespace FriendyFy.Services
                 CreatorId = organizerId,
                 EventId = newEvent.Id
             };
-            await eventPostRepository.AddAsync(eventPost);
+            eventPostRepository.Add(eventPost);
             await eventRepository.SaveChangesAsync();
         }
 
         public async Task<EventPageViewModel> GetEventByIdAsync(string id, string userId)
         {
             var mapper = AutoMapperConfig.MapperInstance;
-            var eventWithId = eventRepository
+            var eventWithId = await eventRepository
                 .AllAsNoTracking()
                 .Include(x => x.Interests)
                 .Include(x => x.Users)
@@ -108,7 +104,7 @@ namespace FriendyFy.Services
                     CreatedOn = x.CreatedOn,
                     Description = x.Description,
                     Interests = x.Interests.Take(6).Select(y => new InterestViewModel
-                        {
+                    {
                         Id = y.Id,
                         Label = y.Name,
                     })
@@ -129,7 +125,8 @@ namespace FriendyFy.Services
                     IsOrganizer = x.Organizer.Id == userId,
                     OrganizerImageUrl = x.Organizer.ProfileImage.Id + x.Organizer.ProfileImage.ImageExtension
                 })
-                .FirstOrDefault(x => x.Id == id);
+                .FirstOrDefaultAsync(x => x.Id == id);
+
             var toReturn = mapper.Map<EventPageViewModel>(eventWithId);
             foreach (var item in eventWithId.UserImages.Take(8))
             {
@@ -240,10 +237,10 @@ namespace FriendyFy.Services
 
         public async Task<int?> LikeEventAsync(string eventId, ApplicationUser user)
         {
-            var currEvent = eventPostRepository
+            var currEvent = await eventPostRepository
                 .All()
                 .Include(x => x.Likes)
-                .FirstOrDefault(x => x.Id == eventId);
+                .FirstOrDefaultAsync(x => x.Id == eventId);
             if (currEvent == null)
             {
                 return null;
@@ -309,7 +306,7 @@ namespace FriendyFy.Services
 
         public async Task<bool> CreateEventPostAsync(string eventId, string userId)
         {
-            var currEvent = eventRepository.All().FirstOrDefault(x => x.Id == eventId);
+            var currEvent = await eventRepository.All().FirstOrDefaultAsync(x => x.Id == eventId);
             if (currEvent == null)
             {
                 return false;
@@ -322,7 +319,7 @@ namespace FriendyFy.Services
                 Event = currEvent
             };
 
-            await eventPostRepository.AddAsync(eventPost);
+            eventPostRepository.Add(eventPost);
             var saved = await eventPostRepository.SaveChangesAsync();
             return saved > 0;
         }
@@ -490,10 +487,10 @@ namespace FriendyFy.Services
 
         public async Task<string> AddImageToEventAsync(string eventId, string userId, string image)
         {
-            var currEvent = eventRepository
+            var currEvent = await eventRepository
                 .All()
                 .Include(x => x.Images)
-                .FirstOrDefault(x => x.Id == eventId && x.OrganizerId == userId);
+                .FirstOrDefaultAsync(x => x.Id == eventId && x.OrganizerId == userId);
             if (currEvent == null || currEvent.Images.Count >= 3)
             {
                 return null;
@@ -518,16 +515,12 @@ namespace FriendyFy.Services
 
         public async Task<bool> LeaveEventAsync(string eventId, string userId)
         {
-            var currEvent = eventRepository
+            var currEvent = await eventRepository
                 .All()
                 .Include(x => x.Users)
-                .FirstOrDefault(x => x.Id == eventId);
-            if (currEvent == null)
-            {
-                return false;
-            }
+                .FirstOrDefaultAsync(x => x.Id == eventId);
 
-            var userInEvent = currEvent.Users.FirstOrDefault(x => x.Id == userId);
+            var userInEvent = currEvent?.Users.FirstOrDefault(x => x.Id == userId);
             if (userInEvent == null)
             {
                 return false;
@@ -540,7 +533,7 @@ namespace FriendyFy.Services
 
         public async Task<bool> DeleteEventAsync(string eventId, string userId)
         {
-            var currEvent = eventRepository
+            var currEvent = await eventRepository
                 .All()
                 .Include(x => x.EventPosts)
                 .ThenInclude(x => x.Comments)
@@ -548,7 +541,8 @@ namespace FriendyFy.Services
                 .Include(x => x.Notification)
                 .Include(x => x.EventPosts)
                 .ThenInclude(x => x.Likes)
-                .FirstOrDefault(x => x.Id == eventId && x.OrganizerId == userId);
+                .FirstOrDefaultAsync(x => x.Id == eventId && x.OrganizerId == userId);
+
             if (currEvent == null)
             {
                 return false;
@@ -616,10 +610,10 @@ namespace FriendyFy.Services
 
         public async Task<int> RepostEventAsync(string id, string text, string userId)
         {
-            var currEvent = eventPostRepository
+            var currEvent = await eventPostRepository
                 .All()
                 .Include(x => x.Reposts)
-                .FirstOrDefault(x => x.Id == id);
+                .FirstOrDefaultAsync(x => x.Id == id);
 
             var eventPost = new EventPost
             {
@@ -631,7 +625,7 @@ namespace FriendyFy.Services
                 RepostId = id
             };
 
-            await eventPostRepository.AddAsync(eventPost);
+            eventPostRepository.Add(eventPost);
             var added = await eventPostRepository.SaveChangesAsync();
             return currEvent.Reposts.GroupBy(x => x.CreatorId).Count();
         }
@@ -643,7 +637,7 @@ namespace FriendyFy.Services
                 .Include(x => x.Reposts)
                 .ThenInclude(x => x.Creator)
                 .ThenInclude(x => x.ProfileImage)
-                .FirstOrDefault(x => x.Id == eventId)
+                .FirstOrDefault(x => x.Id == eventId)?
                 .Reposts
                 .GroupBy(x => x.CreatorId)
                 .Select(x => x.First())
@@ -662,7 +656,7 @@ namespace FriendyFy.Services
 
         public async Task<bool> DeleteEventPostAsync(string postId, string userId)
         {
-            var post = eventPostRepository
+            var post = await eventPostRepository
                 .All()
                 .Include(x => x.Comments)
                 .ThenInclude(x => x.CommentLikes)
@@ -672,7 +666,7 @@ namespace FriendyFy.Services
                 .ThenInclude(x => x.CommentLikes)
                 .Include(x => x.Reposts)
                 .ThenInclude(x => x.Likes)
-                .FirstOrDefault(x => x.Id == postId && x.CreatorId == userId);
+                .FirstOrDefaultAsync(x => x.Id == postId && x.CreatorId == userId);
             if (post == null)
             {
                 return false;
@@ -712,19 +706,17 @@ namespace FriendyFy.Services
             return removed > 0;
         }
 
-        public List<PostDetailsViewModel> GetFeedEvents(ApplicationUser user, bool isProfile, string userName, int take, int skip, List<string> ids)
+        public async Task<List<PostDetailsViewModel>> GetFeedEventsAsync(ApplicationUser user, bool isProfile, string userName, int take, int skip, List<string> ids)
         {
-            var interests = new List<int>();
             if (user != null)
             {
-                interests = user.Interests.Select(x => x.Id).ToList();
             }
 
             var events = new List<PostDetailsViewModel>();
 
             if (isProfile)
             {
-                events.AddRange(eventPostRepository
+                events.AddRange(await eventPostRepository
                     .AllAsNoTracking()
                     .Where(x => x.Creator.UserName == userName)
                     .Where(x => !ids.Contains(x.Id))
@@ -737,7 +729,7 @@ namespace FriendyFy.Services
                         EventPostId = x.Id,
                         IsRepost = x.IsRepost,
                         PostMessage = x.Text,
-                        IsUserCreator = user == null ? false : x.CreatorId == user.Id,
+                        IsUserCreator = user != null && x.CreatorId == user.Id,
                         Username = x.Creator.UserName,
                         CreatorName = x.Creator.FirstName + " " + x.Creator.LastName,
                         CreatorImage = x.Creator.ProfileImage.Id + x.Creator.ProfileImage.ImageExtension,
@@ -768,17 +760,17 @@ namespace FriendyFy.Services
                             LikesCount = x.Repost.Likes.Count(),
                             RepostsCount = x.Repost.Reposts.GroupBy(x => x.CreatorId).Count(),
                             CommentsCount = x.Repost.Comments.Count(),
-                            IsLikedByUser = user == null ? false : x.Repost.Likes.Any(y => y.LikedById == user.Id),
+                            IsLikedByUser = user != null && x.Repost.Likes.Any(y => y.LikedById == user.Id),
                             PostType = PostType.Event.ToString(),
                             EventPostId = x.RepostId,
                             EventImage = x.Event.ProfileImage.Id + x.Event.ProfileImage.ImageExtension
                         }
                     })
-                    .ToList());
+                    .ToListAsync());
             }
             else
             {
-                events.AddRange(eventPostRepository
+                events.AddRange(await eventPostRepository
                 .AllAsNoTracking()
                 .Where(x => user == null || x.CreatorId != user.Id)
                 .OrderByDescending(x => x.CreatedOn)
@@ -831,12 +823,12 @@ namespace FriendyFy.Services
                         EventImage = x.Event.ProfileImage.Id + x.Event.ProfileImage.ImageExtension
                     }
                 })
-                .ToList());
+                .ToListAsync());
             }
 
 
             var toReturn = events.Select(x => new PostDetailsViewModel
-                {
+            {
                 CommentsCount = x.CommentsCount,
                 CreatedAgo = x.CreatedAgo,
                 CreatorImage = blobService.GetBlobUrlAsync(x.CreatorImage, GlobalConstants.BlobPictures).GetAwaiter().GetResult(),
@@ -887,11 +879,11 @@ namespace FriendyFy.Services
             return toReturn;
         }
 
-        public List<SearchPageResultViewModel> GetSearchPageEvents(int skip, int take, string searchWord, List<int> interestIds, bool showOnlyUserEvents, DateTime eventDate, bool hasDate, string userId)
+        public async Task<List<SearchPageResultViewModel>> GetSearchPageEventsAsync(int skip, int take, string searchWord, List<int> interestIds, bool showOnlyUserEvents, DateTime eventDate, bool hasDate, string userId)
         {
             searchWord = searchWord.ToLower();
 
-            var events = eventRepository
+            var events = await eventRepository
                 .AllAsNoTracking()
                 .Include(x => x.Interests)
                 .Include(x => x.ProfileImage)
@@ -913,7 +905,7 @@ namespace FriendyFy.Services
                         Label = y.Name,
                     }).ToList(),
                 })
-                .ToList();
+                .ToListAsync();
 
             var toReturn = events.Select(x => new SearchPageResultViewModel
             {
@@ -927,17 +919,18 @@ namespace FriendyFy.Services
             return toReturn;
         }
 
-        public string GetRandomEventId()
+        public async Task<string> GetRandomEventIdAsync()
         {
-            return eventRepository
+            var randomEvent = await eventRepository
                 .AllAsNoTracking()
                 .Include(x => x.Users)
                 .OrderBy(x => Guid.NewGuid().ToString())
-                .FirstOrDefault()?
-                .Id;
+                .FirstOrDefaultAsync();
+
+            return randomEvent?.Id;
         }
 
-        public List<PersonListPopupViewModel> GetPeopleInviteDto(string eventId, int take, int skip, ApplicationUser user)
+        public async Task<List<PersonListPopupViewModel>> GetPeopleInviteDtoAsync(string eventId, int take, int skip, ApplicationUser user)
         {
 
             var currEvent = eventRepository.All()
@@ -962,7 +955,7 @@ namespace FriendyFy.Services
                 .Select(x => x.FriendId)
                 .ToList();
 
-            return userService.GetInvitePeoplePopUp(usersToInvite);
+            return await userService.GetInvitePeoplePopUpAsync(usersToInvite);
         }
     }
 }

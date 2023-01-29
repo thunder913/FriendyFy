@@ -23,15 +23,15 @@ namespace FriendyFy.Services.Contracts
         int GetUserEventsCount(string username);
         List<DisplayImageViewModel> GetUserImages(string username, int take, int skip);
         List<SearchResultViewModel> GetUserSearchViewModel(string search, string userId, int take, int skip);
-        List<RightNavigationRecommendationViewModel> GetEventUserRecommendations(string userId);
+        Task<List<RightNavigationRecommendationViewModel>> GetEventUserRecommendationsAsync(string userId);
         Task<bool> ChangeUserThemeAsync(ApplicationUser user, ThemePreference theme);
-        UserDataViewModel GetUserData(ApplicationUser user);
+        Task<UserDataViewModel> GetUserDataAsync(ApplicationUser user);
 
         Task ChangeUserDataAsync(ApplicationUser user, string firstName, string lastName,
            DateTime birthday, bool hasNewProfileImage, bool hasNewCoverImage, string description,
            List<Interest> interests, decimal? longitude, decimal? latitude, string newProfilePicture = null, string newCoverImage = null);
         Task<bool> ResetPassword(ApplicationUser user, string newPasswordHash);
-        List<SearchPageResultViewModel> GetSearchPageUsers(int take, int skip, string searchWord, List<int> interestIds, string userId);
-        List<PersonListPopupViewModel> GetInvitePeoplePopUp(List<string> userIds);
+        Task<List<SearchPageResultViewModel>> GetSearchPageUsersAsync(int take, int skip, string searchWord, List<int> interestIds, string userId);
+        Task<List<PersonListPopupViewModel>> GetInvitePeoplePopUpAsync(List<string> userIds);
     }
 }

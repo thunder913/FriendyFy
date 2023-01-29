@@ -27,9 +27,12 @@ namespace FriendyFy.Services.Contracts
         Task<int> RepostEventAsync(string id, string text, string userId);
         List<PersonListPopupViewModel> GetPostReposts(string eventId, int take, int skip);
         Task<bool> DeleteEventPostAsync(string postId, string userId);
-        List<PostDetailsViewModel> GetFeedEvents(ApplicationUser user, bool isProfile, string userName, int take, int skip, List<string> ids);
-        List<SearchPageResultViewModel> GetSearchPageEvents(int skip, int take, string searchWord, List<int> interestIds, bool showOnlyUserEvents, DateTime eventDate, bool hasDate, string userId);
-        string GetRandomEventId();
-        List<PersonListPopupViewModel> GetPeopleInviteDto(string eventId, int take, int skip, ApplicationUser user);
+        Task<List<PostDetailsViewModel>> GetFeedEventsAsync(ApplicationUser user, bool isProfile, string userName, int take,
+            int skip, List<string> ids);
+        Task<List<SearchPageResultViewModel>> GetSearchPageEventsAsync(int skip, int take, string searchWord,
+            List<int> interestIds, bool showOnlyUserEvents, DateTime eventDate, bool hasDate, string userId);
+        Task<string> GetRandomEventIdAsync();
+        Task<List<PersonListPopupViewModel>> GetPeopleInviteDtoAsync(string eventId, int take, int skip,
+            ApplicationUser user);
     }
 }
