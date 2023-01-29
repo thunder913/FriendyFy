@@ -1,4 +1,4 @@
-﻿using AutoMapper;
+﻿using AutoMapper.Configuration.Annotations;
 
 namespace ViewModels
 {
@@ -6,9 +6,9 @@ namespace ViewModels
     {
         public string FirstName { get; set; }
         public string LastName { get; set; }
-        [IgnoreMap]
+        [Ignore]
         public string ProfilePhoto { get; set; }
-        [IgnoreMap]
+        [Ignore]
         public string CoverPhoto { get; set; }
         public string UserName { get; set; }
         public string Id { get; set; }

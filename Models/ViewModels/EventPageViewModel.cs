@@ -1,5 +1,4 @@
-﻿using FriendyFy.Mapping;
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations.Schema;
 
@@ -9,11 +8,11 @@ namespace ViewModels
     {
         public string Id { get; set; }
         [NotMapped]
-        public List<string> Photos { get; set; } = new List<string>();
+        public List<string> Photos { get; set; } = new();
         [NotMapped]
         public string MainPhoto { get; set; }
         [NotMapped]
-        public List<string> UserImages { get; set; } = new List<string>();
+        public List<string> UserImages { get; set; } = new();
         public decimal? Lat { get; set; }
         public decimal? Lng { get; set; }
         public string City { get; set; }
@@ -22,7 +21,7 @@ namespace ViewModels
         public string Privacy { get; set; }
         public bool IsReocurring { get; set; }
         public string ReocurringTime { get; set; }
-        public List<InterestViewModel> Interests { get; set; } = new List<InterestViewModel>();
+        public List<InterestViewModel> Interests { get; set; } = new();
         public string Organizer { get; set; }
         public string OrganizerUsername { get; set; }
         public bool IsInEvent { get; set; }
