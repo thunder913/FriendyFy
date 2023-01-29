@@ -11,6 +11,7 @@ namespace FriendyFy.BlobStorage
 {
     public class BlobService : IBlobService
     {
+        private const string uploadRegex = @"^[\w/\:.-]+;base64,";
         private readonly BlobServiceClient blobServiceClient;
         public BlobService(BlobServiceClient blobServiceClient)
         {
@@ -60,7 +61,7 @@ namespace FriendyFy.BlobStorage
         {
             var containerClient = this.blobServiceClient.GetBlobContainerClient(blob);
             var blobClient = containerClient.GetBlobClient(fileName);
-            Regex regex = new Regex(@"^[\w/\:.-]+;base64,");
+            Regex regex = new Regex(uploadRegex);
             content = regex.Replace(content, string.Empty);
             var bytes = Convert.FromBase64String(content);
 
