@@ -35,7 +35,7 @@ namespace FriendyFy.Messaging
                 }
             }
 
-            var response = await this.client.SendEmailAsync(message);
+            await this.client.SendEmailAsync(message);
         }
 
 
