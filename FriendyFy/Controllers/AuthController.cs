@@ -246,11 +246,11 @@ namespace FriendyFy.Controllers
             return result.Succeeded ? Ok() : BadRequest("Could not confirm the email!");
         }
 
-        //userId is actually username??? Why
-        [HttpGet("profilePicture/{userId}")]
-        public async Task<string> GetProfilePicture(string userId)
+        //TODO remove this endpoint if you dont find a use for it
+        [HttpGet("profilePicture/{username}")]
+        public async Task<string> GetProfilePicture(string username)
         {
-            var user = this.userService.GetByUsername(userId);
+            var user = this.userService.GetByUsername(username);
 
             return await this.blobService.GetBlobUrlAsync(user.ProfileImage?.Id + user.ProfileImage?.ImageExtension, GlobalConstants.BlobPictures);
         }
