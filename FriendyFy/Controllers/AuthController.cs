@@ -184,7 +184,6 @@ namespace FriendyFy.Controllers
         [HttpGet("user")]
         public async Task<IActionResult> GetUser()
         {
-            var mapper = AutoMapperConfig.MapperInstance;
             try
             {
                 var user = GetUserByToken();
