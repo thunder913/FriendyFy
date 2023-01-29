@@ -3,9 +3,6 @@ using Microsoft.AspNetCore.Mvc;
 using System;
 using System.Threading.Tasks;
 using FriendyFy.Data;
-using System.Net;
-using System.Runtime.Serialization.Json;
-using System.IO;
 using FriendyFy.Models.Enums;
 using System.Globalization;
 

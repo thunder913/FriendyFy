@@ -1,5 +1,4 @@
-﻿using FriendyFy.Helpers;
-using FriendyFy.Helpers.Contracts;
+﻿using FriendyFy.Helpers.Contracts;
 using FriendyFy.Models;
 using FriendyFy.Services.Contracts;
 using Microsoft.AspNetCore.Mvc;

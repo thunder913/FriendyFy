@@ -1,6 +1,4 @@
-﻿using System.Collections.Generic;
-
-namespace FriendyFy.Data
+﻿namespace FriendyFy.Data
 {
     public class GetChatsDto
     {

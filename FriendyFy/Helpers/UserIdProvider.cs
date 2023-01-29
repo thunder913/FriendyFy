@@ -1,6 +1,5 @@
 ﻿using FriendyFy.Helpers.Contracts;
 using Microsoft.AspNetCore.SignalR;
-using System.Security.Claims;
 
 namespace FriendyFy.Helpers
 {

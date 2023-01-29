@@ -1,14 +1,10 @@
 ﻿using FriendyFy.BlobStorage;
-using FriendyFy.Common;
 using FriendyFy.Data;
 using FriendyFy.Models;
 using FriendyFy.Models.Enums;
 using FriendyFy.Services.Contracts;
 using System;
-using System.Collections.Generic;
-using System.Linq;
 using System.Threading.Tasks;
-using ViewModels.ViewModels;
 
 namespace FriendyFy.Services
 {

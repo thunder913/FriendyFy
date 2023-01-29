@@ -1,11 +1,7 @@
-﻿using FriendyFy.Data;
-using FriendyFy.Services.Contracts;
+﻿using FriendyFy.Services.Contracts;
 using Microsoft.Extensions.Configuration;
-using System;
-using System.IO;
 using System.Linq;
 using System.Net;
-using System.Runtime.Serialization.Json;
 using System.Text.Json;
 using static FriendyFy.Data.GoogleMapsApi.GoogleMapsClasses;
 

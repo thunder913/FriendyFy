@@ -1,5 +1,4 @@
 ﻿using Microsoft.AspNetCore.Authentication.JwtBearer;
-using System;
 
 namespace FriendyFy.Common
 {

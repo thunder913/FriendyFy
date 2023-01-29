@@ -1,15 +1,6 @@
-﻿using Azure.Core;
-using FriendyFy.Common;
-using FriendyFy.Data;
-using FriendyFy.Helpers.Contracts;
-using FriendyFy.Models;
+﻿using FriendyFy.Data;
 using FriendyFy.Services.Contracts;
-using Microsoft.AspNetCore.Authorization;
-using Microsoft.AspNetCore.Http.Connections.Features;
-using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.SignalR;
-using System;
-using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 
