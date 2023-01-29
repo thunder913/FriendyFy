@@ -1,5 +1,5 @@
-﻿using FriendyFy.Models.Common;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
+using FriendyFy.Models.Common;
 
 namespace FriendyFy.Models
 {

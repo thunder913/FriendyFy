@@ -1,6 +1,6 @@
-﻿using FriendyFy.Models.Common;
+﻿using System.Collections.Generic;
+using FriendyFy.Models.Common;
 using FriendyFy.Models.Enums;
-using System.Collections.Generic;
 
 namespace FriendyFy.Models
 {

@@ -19,11 +19,11 @@ namespace FriendyFy.Controllers
                 return null;
             }
             
-            var token = this.JwtService.Verify(jwt);
+            var token = JwtService.Verify(jwt);
 
             var userId = token.Id;
 
-            return this.UserService.GetById(userId);
+            return UserService.GetById(userId);
         }
     }
 }

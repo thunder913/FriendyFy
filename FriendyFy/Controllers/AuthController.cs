@@ -1,4 +1,14 @@
-﻿using FriendyFy.BlobStorage;
+﻿using System;
+using System.Collections.Generic;
+using System.ComponentModel.DataAnnotations;
+using System.Globalization;
+using System.Linq;
+using System.Security.Claims;
+using System.Text;
+using System.Text.Encodings.Web;
+using System.Text.RegularExpressions;
+using System.Threading.Tasks;
+using FriendyFy.BlobStorage;
 using FriendyFy.Common;
 using FriendyFy.Data;
 using FriendyFy.Helpers.Contracts;
@@ -12,16 +22,6 @@ using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.WebUtilities;
 using Newtonsoft.Json;
-using System;
-using System.Collections.Generic;
-using System.ComponentModel.DataAnnotations;
-using System.Globalization;
-using System.Linq;
-using System.Security.Claims;
-using System.Text;
-using System.Text.Encodings.Web;
-using System.Text.RegularExpressions;
-using System.Threading.Tasks;
 using ViewModels;
 
 namespace FriendyFy.Controllers
@@ -103,7 +103,7 @@ namespace FriendyFy.Controllers
                 return BadRequest("The password is invalid!");
             }
 
-            var existingUser = this.userService.GetByEmail(userDto.Email) != null;
+            var existingUser = userService.GetByEmail(userDto.Email) != null;
             
             if (existingUser)
             {
@@ -115,7 +115,7 @@ namespace FriendyFy.Controllers
                 return BadRequest("You sent an invalid theme!");
             }
 
-            var user = new ApplicationUser()
+            var user = new ApplicationUser
             {
                 FirstName = userDto.FirstName,
                 LastName = userDto.LastName,
@@ -123,14 +123,14 @@ namespace FriendyFy.Controllers
                 PasswordHash = BCrypt.Net.BCrypt.HashPassword(userDto.Password),
                 Gender = (Gender)Enum.Parse(typeof(Gender), textInfo.ToTitleCase(userDto.Gender)),
                 BirthDate = DateTime.ParseExact(userDto.Birthday, "dd/MM/yyyy", CultureInfo.InvariantCulture),
-                UserName = this.userService.GenerateUsername(userDto.FirstName, userDto.LastName),
+                UserName = userService.GenerateUsername(userDto.FirstName, userDto.LastName),
                 CreatedOn = DateTime.UtcNow,
                 EmailConfirmed = false,
                 ThemePreference = theme
             };
 
-            await this.userManager.CreateAsync(user);
-            await this.userManager.AddClaimAsync(user, new Claim(ClaimTypes.NameIdentifier, user.Id));
+            await userManager.CreateAsync(user);
+            await userManager.AddClaimAsync(user, new Claim(ClaimTypes.NameIdentifier, user.Id));
             
             var code = await userManager.GenerateEmailConfirmationTokenAsync(user);
             code = WebEncoders.Base64UrlEncode(Encoding.UTF8.GetBytes(code));
@@ -138,7 +138,7 @@ namespace FriendyFy.Controllers
             var callbackUrl = Url.Page(
             "/Auth/ConfirmEmail",
             pageHandler: null,
-            values: new { userId = user.Id, code = code },
+            values: new { userId = user.Id, code },
             protocol: Request.Scheme);
 
             await emailSender.SendEmailAsync(GlobalConstants.Email, "FriendyFy", user.Email, "Confirm your email",
@@ -150,7 +150,7 @@ namespace FriendyFy.Controllers
         [HttpPost("login")]
         public IActionResult Login(LoginUserDto loginUserDto)
         {
-            var user = this.userService.GetByEmail(loginUserDto.Email);
+            var user = userService.GetByEmail(loginUserDto.Email);
 
             if (user == null ||
                 !BCrypt.Net.BCrypt.Verify(loginUserDto.Password, user.PasswordHash))
@@ -163,9 +163,9 @@ namespace FriendyFy.Controllers
                 return BadRequest("The email is not confirmed!");
             }
 
-            var jwt = this.jwtService.Generate(user.Id, user.Email);
+            var jwt = jwtService.Generate(user.Id, user.Email);
 
-            Response.Cookies.Append("jwt", jwt, new CookieOptions()
+            Response.Cookies.Append("jwt", jwt, new CookieOptions
             {
                 HttpOnly = true
             });
@@ -183,22 +183,22 @@ namespace FriendyFy.Controllers
             var mapper = AutoMapperConfig.MapperInstance;
             try
             {
-                var user = this.GetUserByToken();
+                var user = GetUserByToken();
 
                 if (user is null)
                 {
                     return Unauthorized();
                 }
 
-                var viewModel = new UserViewModel()
+                var viewModel = new UserViewModel
                 {
                     Id = user.Id,
                     FinishedFirstTimeLogin = user.FinishedFirstTimeLogin,
                     FirstName = user.FirstName,
                     LastName = user.LastName,
                     UserName = user.UserName,
-                    CoverPhoto = await this.blobService.GetBlobUrlAsync(user.CoverImage?.Id + user.CoverImage?.ImageExtension, GlobalConstants.BlobPictures),
-                    ProfilePhoto = await this.blobService.GetBlobUrlAsync(user.ProfileImage?.Id + user.ProfileImage?.ImageExtension, GlobalConstants.BlobPictures),
+                    CoverPhoto = await blobService.GetBlobUrlAsync(user.CoverImage?.Id + user.CoverImage?.ImageExtension, GlobalConstants.BlobPictures),
+                    ProfilePhoto = await blobService.GetBlobUrlAsync(user.ProfileImage?.Id + user.ProfileImage?.ImageExtension, GlobalConstants.BlobPictures),
                     IsDark = user.ThemePreference == ThemePreference.Dark,
                 };
 
@@ -250,33 +250,33 @@ namespace FriendyFy.Controllers
         [HttpGet("profilePicture/{username}")]
         public async Task<string> GetProfilePicture(string username)
         {
-            var user = this.userService.GetByUsername(username);
+            var user = userService.GetByUsername(username);
 
-            return await this.blobService.GetBlobUrlAsync(user.ProfileImage?.Id + user.ProfileImage?.ImageExtension, GlobalConstants.BlobPictures);
+            return await blobService.GetBlobUrlAsync(user.ProfileImage?.Id + user.ProfileImage?.ImageExtension, GlobalConstants.BlobPictures);
         }
 
         [HttpGet("coverPicture/{userId}")]
         public async Task<string> GetCoverPicture(string userId)
         {
-            var user = this.userService.GetByUsername(userId);
+            var user = userService.GetByUsername(userId);
 
-            return await this.blobService.GetBlobUrlAsync(user.CoverImage?.Id + user.CoverImage?.ImageExtension, GlobalConstants.BlobPictures);
+            return await blobService.GetBlobUrlAsync(user.CoverImage?.Id + user.CoverImage?.ImageExtension, GlobalConstants.BlobPictures);
         }
 
         [HttpGet("getUserInformation/{username}")]
         public async Task<UserInformationViewModel> GetUserInformation(string username)
         {
-            var user = this.userService.GetByUsername(username);
-            var coverPicture = await this.blobService.GetBlobUrlAsync(user.CoverImage?.Id + user.CoverImage?.ImageExtension, GlobalConstants.BlobPictures);
-            var profilePicture = await this.blobService.GetBlobUrlAsync(user.ProfileImage?.Id + user.ProfileImage?.ImageExtension, GlobalConstants.BlobPictures);
+            var user = userService.GetByUsername(username);
+            var coverPicture = await blobService.GetBlobUrlAsync(user.CoverImage?.Id + user.CoverImage?.ImageExtension, GlobalConstants.BlobPictures);
+            var profilePicture = await blobService.GetBlobUrlAsync(user.ProfileImage?.Id + user.ProfileImage?.ImageExtension, GlobalConstants.BlobPictures);
 
-            var viewModel = new UserInformationViewModel()
+            var viewModel = new UserInformationViewModel
             {
                 CoverImage = coverPicture,
                 ProfileImage = profilePicture,
                 FirstName = user.FirstName,
                 LastName = user.LastName,
-                Interests = user.Interests.Select(x => new InterestViewModel() { Id = x.Id, Label = x.Name }).ToList(),
+                Interests = user.Interests.Select(x => new InterestViewModel { Id = x.Id, Label = x.Name }).ToList(),
                 Quote = user.Quote,
             };
 
@@ -286,17 +286,17 @@ namespace FriendyFy.Controllers
         [HttpGet("getUserSideInformation/{username}")]
         public async Task<UserInformationViewModel> GetUserSideInformation(string username)
         {
-            var user = this.userService.GetByUsername(username);
-            var coverPicture = await this.blobService.GetBlobUrlAsync(user.CoverImage?.Id + user.CoverImage?.ImageExtension, GlobalConstants.BlobPictures);
-            var profilePicture = await this.blobService.GetBlobUrlAsync(user.ProfileImage?.Id + user.ProfileImage?.ImageExtension, GlobalConstants.BlobPictures);
+            var user = userService.GetByUsername(username);
+            var coverPicture = await blobService.GetBlobUrlAsync(user.CoverImage?.Id + user.CoverImage?.ImageExtension, GlobalConstants.BlobPictures);
+            var profilePicture = await blobService.GetBlobUrlAsync(user.ProfileImage?.Id + user.ProfileImage?.ImageExtension, GlobalConstants.BlobPictures);
 
-            var viewModel = new UserInformationViewModel()
+            var viewModel = new UserInformationViewModel
             {
                 CoverImage = coverPicture,
                 ProfileImage = profilePicture,
                 FirstName = user.FirstName,
                 LastName = user.LastName,
-                Interests = user.Interests.Select(x => new InterestViewModel() { Id = x.Id, Label = x.Name }).ToList(),
+                Interests = user.Interests.Select(x => new InterestViewModel { Id = x.Id, Label = x.Name }).ToList(),
                 Quote = user.Quote,
             };
             
@@ -312,26 +312,29 @@ namespace FriendyFy.Controllers
             if (user == null)
             {
                 return Unauthorized("You are not logged in!");
-            }else if (interests.Count < 3)
+            }
+            if (interests.Count < 3)
             {
                 return BadRequest("You must choose at least 3 interests!");
             }
-            else if (string.IsNullOrWhiteSpace(dto.Quote))
+
+            if (string.IsNullOrWhiteSpace(dto.Quote))
             {
                 return BadRequest("You must enter a description/quote!");
-            }else if(dto.Latitude == null || dto.Longitude == null)
+            }
+            if(dto.Latitude == null || dto.Longitude == null)
             {
                 return BadRequest("You must choose a location!");
             }
 
-            var allInterests = await this.interestService.AddNewInterestsAsync(interests);
+            var allInterests = await interestService.AddNewInterestsAsync(interests);
             var profileImage = await imageService.AddImageAsync(ImageType.ProfileImage);
             var coverImage = await imageService.AddImageAsync(ImageType.ProfileImage);
 
             await blobService.UploadBase64StringAsync(dto.ProfilePhoto, profileImage.Id+profileImage.ImageExtension, GlobalConstants.BlobPictures);
             await blobService.UploadBase64StringAsync(dto.CoverPhoto, coverImage.Id+coverImage.ImageExtension, GlobalConstants.BlobPictures);
 
-            await this.userService.SetUserFirstTimeLoginAsync(user, profileImage, coverImage, dto.Quote, allInterests, dto.Longitude, dto.Latitude);
+            await userService.SetUserFirstTimeLoginAsync(user, profileImage, coverImage, dto.Quote, allInterests, dto.Longitude, dto.Latitude);
 
             return Ok("success");
         }
@@ -339,20 +342,20 @@ namespace FriendyFy.Controllers
         [HttpPost("getUserImages")]
         public IActionResult GetUserImages(GetUserImagesDto dto)
         {
-            return Ok(this.userService.GetUserImages(dto.Username, dto.Take, dto.Skip));
+            return Ok(userService.GetUserImages(dto.Username, dto.Take, dto.Skip));
         }
 
         [HttpPost("getUserData")]
         public IActionResult GetUserData()
         {
-            var user = this.GetUserByToken();
+            var user = GetUserByToken();
 
             if (user == null)
             {
                 return Unauthorized();
             }
 
-            var viewmodel = this.userService.GetUserData(user);
+            var viewmodel = userService.GetUserData(user);
 
             return Ok(viewmodel);
         }
@@ -360,7 +363,7 @@ namespace FriendyFy.Controllers
         [HttpPost("editUserData")]
         public async Task<IActionResult> EditUserData([FromForm] EditUserDataDto dto)
         {
-            var user = this.GetUserByToken();
+            var user = GetUserByToken();
             
             Regex nameValidator = new Regex(@"^[A-Za-z\u00C0-\u1FFF\u2800-\uFFFD 0-9-]+$");
             
@@ -391,22 +394,25 @@ namespace FriendyFy.Controllers
             {
                 return Unauthorized("You are not logged in!");
             }
-            else if (interests.Count < 3)
+
+            if (interests.Count < 3)
             {
                 return BadRequest("You must choose at least 3 interests!");
             }
-            else if (string.IsNullOrWhiteSpace(dto.Description))
+
+            if (string.IsNullOrWhiteSpace(dto.Description))
             {
                 return BadRequest("You must enter a description/quote!");
             }
-            else if (dto.Latitude == null || dto.Longitude == null)
+
+            if (dto.Latitude == null || dto.Longitude == null)
             {
                 return BadRequest("You must choose a location!");
             }
-            
-            var allInterests = await this.interestService.AddNewInterestsAsync(interests);
 
-            await this.userService.ChangeUserDataAsync(user, dto.FirstName, dto.LastName, birthday, dto.ChangedProfileImage, dto.ChangedCoverImage, dto.Description, allInterests, dto.Longitude, dto.Latitude, dto.ProfileImage, dto.CoverImage);
+            var allInterests = await interestService.AddNewInterestsAsync(interests);
+
+            await userService.ChangeUserDataAsync(user, dto.FirstName, dto.LastName, birthday, dto.ChangedProfileImage, dto.ChangedCoverImage, dto.Description, allInterests, dto.Longitude, dto.Latitude, dto.ProfileImage, dto.CoverImage);
 
             return Ok();
         }
@@ -453,7 +459,7 @@ namespace FriendyFy.Controllers
             
             if (await userManager.VerifyUserTokenAsync(user, userManager.Options.Tokens.PasswordResetTokenProvider, "ResetPassword", code))
             {
-                await this.userService.ResetPassword(user, password);
+                await userService.ResetPassword(user, password);
             }
 
 

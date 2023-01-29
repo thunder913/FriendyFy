@@ -1,7 +1,7 @@
-﻿using FriendyFy.Data;
+﻿using System.Threading.Tasks;
+using FriendyFy.Data;
 using FriendyFy.Services.Contracts;
 using Microsoft.AspNetCore.Mvc;
-using System.Threading.Tasks;
 
 namespace FriendyFy.Controllers
 {
@@ -19,27 +19,27 @@ namespace FriendyFy.Controllers
         [HttpPost("getForUser")]
         public IActionResult GetNotification(GetNotificationsDto dto)
         {
-            var user = this.GetUserByToken();
+            var user = GetUserByToken();
             
             if (user == null || dto.UserId != user.Id)
             {
                 return Unauthorized("You are not logged in!");
             }
 
-            return Ok(this.notificationService.GetNotificationsForUser(dto.UserId, dto.Take, dto.Skip));
+            return Ok(notificationService.GetNotificationsForUser(dto.UserId, dto.Take, dto.Skip));
         }
 
         [HttpPost("acceptEvent")]
         public async Task<IActionResult> AcceptEvent(UpdateEventRequestDto dto)
         {
-            var user = this.GetUserByToken();
+            var user = GetUserByToken();
             
             if (user == null)
             {
                 return Unauthorized("You are not logged in!");
             }
 
-            var result = await this.notificationService.ChangeEventStatusAsync(dto.NotificationId, user, true);
+            var result = await notificationService.ChangeEventStatusAsync(dto.NotificationId, user, true);
             if (result)
             {
                 return Ok();
@@ -51,14 +51,14 @@ namespace FriendyFy.Controllers
         [HttpPost("rejectEvent")]
         public async Task<IActionResult> RejectEvent(UpdateEventRequestDto dto)
         {
-            var user = this.GetUserByToken();
+            var user = GetUserByToken();
             
             if (user == null)
             {
                 return Unauthorized("You are not logged in!");
             }
 
-            var result = await this.notificationService.ChangeEventStatusAsync(dto.NotificationId, user, false);
+            var result = await notificationService.ChangeEventStatusAsync(dto.NotificationId, user, false);
             if (result)
             {
                 return Ok();
@@ -70,27 +70,27 @@ namespace FriendyFy.Controllers
         [HttpPost("getUnseen")]
         public IActionResult GetUnseenNotifications()
         {
-            var user = this.GetUserByToken();
+            var user = GetUserByToken();
 
             if (user == null)
             {
                 return Unauthorized("You are not logged in!");
             }
 
-            return Ok(this.notificationService.UnseenNotifications(user.Id));
+            return Ok(notificationService.UnseenNotifications(user.Id));
         }
 
         [HttpPost("seeNotification")]
         public async Task<IActionResult> SeeNotification(SeeNotificationsDto dto)
         {
-            var user = this.GetUserByToken();
+            var user = GetUserByToken();
 
             if (user == null)
             {
                 return Unauthorized("You are not logged in!");
             }
 
-            var result = await this.notificationService.SeeNotificationAsync(user.Id, dto.NotificationId);
+            var result = await notificationService.SeeNotificationAsync(user.Id, dto.NotificationId);
 
             if (result)
             {

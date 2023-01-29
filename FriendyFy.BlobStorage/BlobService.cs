@@ -1,17 +1,17 @@
-﻿using Azure.Storage.Blobs;
-using Azure.Storage.Blobs.Models;
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Text;
 using System.Text.RegularExpressions;
 using System.Threading.Tasks;
+using Azure.Storage.Blobs;
+using Azure.Storage.Blobs.Models;
 
 namespace FriendyFy.BlobStorage
 {
     public class BlobService : IBlobService
     {
-        private const string uploadRegex = @"^[\w/\:.-]+;base64,";
+        private const string UploadRegex = @"^[\w/\:.-]+;base64,";
         private readonly BlobServiceClient blobServiceClient;
         public BlobService(BlobServiceClient blobServiceClient)
         {
@@ -20,7 +20,7 @@ namespace FriendyFy.BlobStorage
 
         public async Task DeleteBlobAsync(string blobName, string blob)
         {
-            var containerClient = this.blobServiceClient.GetBlobContainerClient(blob);
+            var containerClient = blobServiceClient.GetBlobContainerClient(blob);
             var blobClient = containerClient.GetBlobClient(blobName);
 
             await blobClient.DeleteIfExistsAsync();
@@ -28,7 +28,7 @@ namespace FriendyFy.BlobStorage
 
         public async Task<BlobInfo> GetBlobAsync(string name, string blob)
         {
-            var containerClient = this.blobServiceClient.GetBlobContainerClient(blob);
+            var containerClient = blobServiceClient.GetBlobContainerClient(blob);
             var blobClient = containerClient.GetBlobClient(name);
             var blobDownloadInfo = await blobClient.DownloadAsync();
             return new BlobInfo(blobDownloadInfo.Value.Content, blobDownloadInfo.Value.ContentType);
@@ -36,7 +36,7 @@ namespace FriendyFy.BlobStorage
 
         public async Task<IEnumerable<string>> ListBlobAsync(string blob)
         {
-            var containerClient = this.blobServiceClient.GetBlobContainerClient(blob);
+            var containerClient = blobServiceClient.GetBlobContainerClient(blob);
             var items = new List<string>();
             var blobItems = containerClient.GetBlobs();
             await foreach(var blobItem in containerClient.GetBlobsAsync())
@@ -49,7 +49,7 @@ namespace FriendyFy.BlobStorage
 
         public async Task UploadContentBlobAsync(string content, string fileName, string blob)
         {
-            var containerClient = this.blobServiceClient.GetBlobContainerClient(blob);
+            var containerClient = blobServiceClient.GetBlobContainerClient(blob);
             var blobClient = containerClient.GetBlobClient(fileName);
            
             var bytes = Encoding.UTF8.GetBytes(content);
@@ -59,9 +59,9 @@ namespace FriendyFy.BlobStorage
 
         public async Task UploadBase64StringAsync(string content, string fileName, string blob)
         {
-            var containerClient = this.blobServiceClient.GetBlobContainerClient(blob);
+            var containerClient = blobServiceClient.GetBlobContainerClient(blob);
             var blobClient = containerClient.GetBlobClient(fileName);
-            Regex regex = new Regex(uploadRegex);
+            Regex regex = new Regex(UploadRegex);
             content = regex.Replace(content, string.Empty);
             var bytes = Convert.FromBase64String(content);
 
@@ -71,7 +71,7 @@ namespace FriendyFy.BlobStorage
 
         public async Task UploadFileBlobAsync(string filePath, string fileName, string blob)
         {
-            var containerClient = this.blobServiceClient.GetBlobContainerClient(blob);
+            var containerClient = blobServiceClient.GetBlobContainerClient(blob);
             var blobClient = containerClient.GetBlobClient(fileName);
 
             await blobClient.UploadAsync(filePath, new BlobHttpHeaders { ContentType = filePath.GetContentType() });
@@ -84,7 +84,7 @@ namespace FriendyFy.BlobStorage
                 name = "defaultPicture.jpg";
             }
 
-            var containerClient = this.blobServiceClient.GetBlobContainerClient(blob);
+            var containerClient = blobServiceClient.GetBlobContainerClient(blob);
             var blobClient = containerClient.GetBlobClient(name);
             return blobClient.Uri.AbsoluteUri;
         }

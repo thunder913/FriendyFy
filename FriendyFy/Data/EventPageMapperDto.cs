@@ -1,7 +1,7 @@
-﻿using AutoMapper;
-using FriendyFy.Mapping;
-using System;
+﻿using System;
 using System.Collections.Generic;
+using AutoMapper;
+using FriendyFy.Mapping;
 using ViewModels;
 
 namespace FriendyFy.Data

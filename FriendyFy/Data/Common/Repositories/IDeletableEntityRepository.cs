@@ -1,8 +1,8 @@
-﻿namespace FriendyFy.Data
-{
-    using FriendyFy.Models.Common;
-    using System.Linq;
+﻿using System.Linq;
+using FriendyFy.Models.Common;
 
+namespace FriendyFy.Data
+{
     public interface IDeletableEntityRepository<TEntity> : IRepository<TEntity>
         where TEntity : class, IDeletableEntity
     {

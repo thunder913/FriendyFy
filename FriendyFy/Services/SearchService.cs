@@ -1,8 +1,8 @@
-﻿using FriendyFy.Models.Enums;
-using FriendyFy.Services.Contracts;
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using FriendyFy.Models.Enums;
+using FriendyFy.Services.Contracts;
 using ViewModels.ViewModels;
 
 namespace FriendyFy.Services
@@ -22,8 +22,8 @@ namespace FriendyFy.Services
         public SearchResultsViewModel GetSearchResults(string search, string userId, int take, int skipPeople, int skipEvents)
         {
             var takeCount = take / 2;
-            var users = this.userService.GetUserSearchViewModel(search, userId, take/2, skipPeople);
-            var events = this.eventService.GetEventSearchViewModel(search, take/2, skipEvents);
+            var users = userService.GetUserSearchViewModel(search, userId, take/2, skipPeople);
+            var events = eventService.GetEventSearchViewModel(search, take/2, skipEvents);
 
             var hasMoreUsers = true;
             var hasMoreEvents = true;
@@ -39,7 +39,7 @@ namespace FriendyFy.Services
             if (!hasMoreUsers && hasMoreEvents)
             {
                 var eventsTake = take - takeCount - users.Count;
-                events.AddRange(this.eventService.GetEventSearchViewModel(search, eventsTake, skipEvents + events.Count));
+                events.AddRange(eventService.GetEventSearchViewModel(search, eventsTake, skipEvents + events.Count));
                 if (events.Count < eventsTake + takeCount)
                 {
                     hasMoreEvents = false;
@@ -48,7 +48,7 @@ namespace FriendyFy.Services
             else if (hasMoreUsers && !hasMoreEvents)
             {
                 var usersTake = take - takeCount - events.Count;
-                users.AddRange(this.userService.GetUserSearchViewModel(search, userId, usersTake, skipPeople + users.Count));
+                users.AddRange(userService.GetUserSearchViewModel(search, userId, usersTake, skipPeople + users.Count));
                 if (users.Count < usersTake + takeCount)
                 {
                     hasMoreUsers = false;
@@ -60,7 +60,7 @@ namespace FriendyFy.Services
             searchResults.AddRange(events);
             searchResults = searchResults.OrderBy(x => Guid.NewGuid()).ToList();
 
-            var viewmodel = new SearchResultsViewModel()
+            var viewmodel = new SearchResultsViewModel
             {
                 EventsCount = skipEvents + events.Count,
                 PeopleCount = skipPeople + users.Count,
@@ -81,13 +81,13 @@ namespace FriendyFy.Services
             var hasMoreEvents = true;
             if (searchType == SearchType.Person && !showOnlyUserEvents)
             {
-                people.AddRange(this.userService.GetSearchPageUsers(take, skipPeople, searchWord, interestIds, userId));
+                people.AddRange(userService.GetSearchPageUsers(take, skipPeople, searchWord, interestIds, userId));
                 hasMoreUsers = people.Count() == take;
                 hasMoreEvents = false;
             }
             else if (searchType == SearchType.Event)
             {
-                events.AddRange(this.eventService.GetSearchPageEvents(skipEvents, take, searchWord, interestIds, showOnlyUserEvents, eventDate, hasEventDate, userId));
+                events.AddRange(eventService.GetSearchPageEvents(skipEvents, take, searchWord, interestIds, showOnlyUserEvents, eventDate, hasEventDate, userId));
                 hasMoreEvents = events.Count() == take;
                 hasMoreUsers = false;
             }
@@ -96,9 +96,9 @@ namespace FriendyFy.Services
                 var takeCount = take / 2;
                 if (!showOnlyUserEvents)
                 {
-                    people.AddRange(this.userService.GetSearchPageUsers(takeCount, skipPeople, searchWord, interestIds, userId));
+                    people.AddRange(userService.GetSearchPageUsers(takeCount, skipPeople, searchWord, interestIds, userId));
                 }
-                events.AddRange(this.eventService.GetSearchPageEvents(skipEvents, takeCount, searchWord, interestIds, showOnlyUserEvents, eventDate, hasEventDate, userId));
+                events.AddRange(eventService.GetSearchPageEvents(skipEvents, takeCount, searchWord, interestIds, showOnlyUserEvents, eventDate, hasEventDate, userId));
 
 
                 if (people.Count < takeCount)
@@ -115,7 +115,7 @@ namespace FriendyFy.Services
             results.AddRange(people);
             results.AddRange(events);
 
-            var viewmodel = new SearchPageResultsViewModel()
+            var viewmodel = new SearchPageResultsViewModel
             {
                 EventsCount = skipEvents + events.Count,
                 PeopleCount = skipPeople + people.Count,

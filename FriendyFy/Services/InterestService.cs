@@ -1,9 +1,10 @@
-﻿using FriendyFy.Data;
-using FriendyFy.Models;
-using FriendyFy.Services.Contracts;
+﻿using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using FriendyFy.Data;
+using FriendyFy.Models;
+using FriendyFy.Services.Contracts;
 
 namespace FriendyFy.Services
 {
@@ -26,11 +27,11 @@ namespace FriendyFy.Services
             {
                 if (item.IsNew)
                 {
-                    allInterests.Add(await this.AddInterestToDbAsync(item));
+                    allInterests.Add(await AddInterestToDbAsync(item));
                 }
                 else
                 {
-                    allInterests.Add(this.GetInterest(item.Id));
+                    allInterests.Add(GetInterest(item.Id));
                 }
             }
 
@@ -39,12 +40,12 @@ namespace FriendyFy.Services
 
         public async Task<Interest> AddInterestToDbAsync(InterestDto interest)
         {
-            var interestToAdd = new Interest(){ Name = interest.Label};
-            var interestInDb = this.interestRepository.AllAsNoTracking().Where(x => x.Name == interest.Label).FirstOrDefault();
+            var interestToAdd = new Interest { Name = interest.Label};
+            var interestInDb = interestRepository.AllAsNoTracking().Where(x => x.Name == interest.Label).FirstOrDefault();
             if (interestInDb == null)
             {
-                await this.interestRepository.AddAsync(interestToAdd);
-                await this.interestRepository.SaveChangesAsync();
+                await interestRepository.AddAsync(interestToAdd);
+                await interestRepository.SaveChangesAsync();
                 return interestToAdd;
             }
 
@@ -53,14 +54,14 @@ namespace FriendyFy.Services
 
         public Interest CheckInterestSimillarWord(InterestDto interest)
         {
-            throw new System.NotImplementedException();
+            throw new NotImplementedException();
         }
 
         public ICollection<InterestDto> GetAllInterests()
         {
-            return this.interestRepository.All()
-                .Select(x => new InterestDto() 
-            {
+            return interestRepository.All()
+                .Select(x => new InterestDto
+                {
                 Id = x.Id,
                 Label = x.Name
             }).ToList();
@@ -68,7 +69,7 @@ namespace FriendyFy.Services
 
         public Interest GetInterest(int id)
         {
-            return this.interestRepository
+            return interestRepository
                 .All()
                 .Where(x => x.Id == id)
                 .FirstOrDefault();

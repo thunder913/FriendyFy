@@ -1,10 +1,10 @@
-﻿namespace FriendyFy.Data
-{
-    using System;
-    using System.Linq;
-    using FriendyFy.Models.Common;
-    using Microsoft.EntityFrameworkCore;
+﻿using System;
+using System.Linq;
+using FriendyFy.Models.Common;
+using Microsoft.EntityFrameworkCore;
 
+namespace FriendyFy.Data
+{
     public class EfDeletableEntityRepository<TEntity> : EfRepository<TEntity>, IDeletableEntityRepository<TEntity>
         where TEntity : class, IDeletableEntity
     {
@@ -27,14 +27,14 @@
         {
             entity.IsDeleted = false;
             entity.DeletedOn = null;
-            this.Update(entity);
+            Update(entity);
         }
 
         public override void Delete(TEntity entity)
         {
             entity.IsDeleted = true;
             entity.DeletedOn = DateTime.UtcNow;
-            this.Update(entity);
+            Update(entity);
         }
     }
 }

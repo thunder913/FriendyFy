@@ -1,10 +1,10 @@
-﻿using FriendyFy.Common;
-using FriendyFy.Helpers.Contracts;
-using Microsoft.IdentityModel.Tokens;
-using System;
+﻿using System;
 using System.IdentityModel.Tokens.Jwt;
 using System.Security.Claims;
 using System.Text;
+using FriendyFy.Common;
+using FriendyFy.Helpers.Contracts;
+using Microsoft.IdentityModel.Tokens;
 
 namespace FriendyFy.Helpers
 {

@@ -1,10 +1,10 @@
-﻿using FriendyFy.Services.Contracts;
-using Microsoft.AspNetCore.Mvc;
-using System;
+﻿using System;
+using System.Globalization;
 using System.Threading.Tasks;
 using FriendyFy.Data;
 using FriendyFy.Models.Enums;
-using System.Globalization;
+using FriendyFy.Services.Contracts;
+using Microsoft.AspNetCore.Mvc;
 
 namespace FriendyFy.Controllers
 {
@@ -24,20 +24,20 @@ namespace FriendyFy.Controllers
         [HttpPost("getLocation")]
         public IActionResult GetLocation([FromBody] string userId)
         {
-            var user = this.UserService.GetByUsername(userId);
+            var user = UserService.GetByUsername(userId);
 
             if (user?.Longitude == null || user?.Latitude == null)
             {
                 return BadRequest("The user hasn't set his location!");
             }
 
-            return Ok(new { Location = this.geolocationService.GetUserLocation(Decimal.ToDouble((decimal)user.Latitude), Decimal.ToDouble((decimal)user.Longitude)), Latitude = user.Latitude, Longitude = user.Longitude });
+            return Ok(new { Location = geolocationService.GetUserLocation(Decimal.ToDouble((decimal)user.Latitude), Decimal.ToDouble((decimal)user.Longitude)), user.Latitude, user.Longitude });
         }
 
         [HttpPost("getEventsCount")]
         public IActionResult GetEventsCount([FromBody] string userId)
         {
-            var count = this.UserService.GetUserEventsCount(userId);
+            var count = UserService.GetUserEventsCount(userId);
 
             return Ok(new { count });
         }
@@ -45,7 +45,7 @@ namespace FriendyFy.Controllers
         [HttpPost("changeTheme")]
         public async Task<IActionResult> ChangerUserTheme(ChangeUserThemeDto dto)
         {
-            var user = this.GetUserByToken();
+            var user = GetUserByToken();
             
             if (user.UserName != dto.Username)
             {
@@ -59,7 +59,7 @@ namespace FriendyFy.Controllers
                 return BadRequest("There was an error switching the theme!");
             }
 
-            var result = await this.userService.ChangeUserThemeAsync(user, theme);
+            var result = await userService.ChangeUserThemeAsync(user, theme);
             if (result)
             {
                 return Ok();

@@ -1,14 +1,14 @@
-﻿using FriendyFy.BlobStorage;
+﻿using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Threading.Tasks;
+using FriendyFy.BlobStorage;
 using FriendyFy.Common;
 using FriendyFy.Data;
 using FriendyFy.Models;
 using FriendyFy.Models.Enums;
 using FriendyFy.Services.Contracts;
 using Microsoft.EntityFrameworkCore;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
 using ViewModels;
 
 namespace FriendyFy.Services
@@ -39,7 +39,7 @@ namespace FriendyFy.Services
 
         public async Task<bool> AddFriendToUserAsync(string senderId, string receiverUsername)
         {
-            var friendStatus = this.GetUserFriendStatus(senderId, receiverUsername);
+            var friendStatus = GetUserFriendStatus(senderId, receiverUsername);
 
             if (friendStatus != "no-friends")
             {
@@ -48,25 +48,25 @@ namespace FriendyFy.Services
 
             var userOne = userService.GetById(senderId);
             var userTwo = userService.GetByUsername(receiverUsername);
-            if (!this.AreUsersValid(userOne, userTwo))
+            if (!AreUsersValid(userOne, userTwo))
             {
                 return false;
             }
 
-            userOne.Friends.Add(new UserFriend() { IsFriend = false, FriendId = userTwo.Id, RequestSenderId = senderId });
-            userTwo.Friends.Add(new UserFriend() { IsFriend = false, FriendId = userOne.Id, RequestSenderId = senderId });
+            userOne.Friends.Add(new UserFriend { IsFriend = false, FriendId = userTwo.Id, RequestSenderId = senderId });
+            userTwo.Friends.Add(new UserFriend { IsFriend = false, FriendId = userOne.Id, RequestSenderId = senderId });
 
-            var chat = this.chatRepository
+            var chat = chatRepository
                 .All()
                 .Include(x => x.Users)
                 .FirstOrDefault(x => x.Users.Any(y => y.Id == userOne.Id) && x.Users.Any(y => y.Id == userTwo.Id));
             if (chat == null)
             {
-                await this.chatRepository.AddAsync(new Chat()
+                await chatRepository.AddAsync(new Chat
                 {
-                    ChatType = Models.Enums.ChatType.NotAccepted,
+                    ChatType = ChatType.NotAccepted,
                     CreatedOn = DateTime.Now,
-                    Users = new HashSet<ApplicationUser>() { userOne, userTwo }
+                    Users = new HashSet<ApplicationUser> { userOne, userTwo }
                 });
             }
             await userRepository.SaveChangesAsync();
@@ -76,7 +76,7 @@ namespace FriendyFy.Services
 
         public async Task<bool> CancelFriendRequestAsync(string senderId, string receiverUsername)
         {
-            var friendStatus = this.GetUserFriendStatus(senderId, receiverUsername);
+            var friendStatus = GetUserFriendStatus(senderId, receiverUsername);
 
             if (friendStatus != "received" && friendStatus != "requested")
             {
@@ -85,7 +85,7 @@ namespace FriendyFy.Services
 
             var userOne = userService.GetById(senderId);
             var userTwo = userService.GetByUsername(receiverUsername);
-            if (!this.AreUsersValid(userOne, userTwo))
+            if (!AreUsersValid(userOne, userTwo))
             {
                 return false;
             }
@@ -93,8 +93,8 @@ namespace FriendyFy.Services
             var userOneFriend = userOne.Friends.FirstOrDefault(x => x.FriendId == userTwo.Id);
             var userTwoFriend = userTwo.Friends.FirstOrDefault(x => x.FriendId == userOne.Id);
 
-            this.userFriendRepository.Delete(userOneFriend);
-            this.userFriendRepository.Delete(userTwoFriend);
+            userFriendRepository.Delete(userOneFriend);
+            userFriendRepository.Delete(userTwoFriend);
             
             await userFriendRepository.SaveChangesAsync();
             return true;
@@ -102,7 +102,7 @@ namespace FriendyFy.Services
 
         public async Task<bool> RemoveFriendAsync(string senderId, string receiverUsername)
         {
-            var friendStatus = this.GetUserFriendStatus(senderId, receiverUsername);
+            var friendStatus = GetUserFriendStatus(senderId, receiverUsername);
 
             if (friendStatus != "friends")
             {
@@ -112,7 +112,7 @@ namespace FriendyFy.Services
             var userOne = userService.GetById(senderId);
             var userTwo = userService.GetByUsername(receiverUsername);
 
-            if (!this.AreUsersValid(userOne, userTwo))
+            if (!AreUsersValid(userOne, userTwo))
             {
                 return false;
             }
@@ -120,8 +120,8 @@ namespace FriendyFy.Services
             var userOneFriend = userOne.Friends.FirstOrDefault(x => x.FriendId == userTwo.Id);
             var userTwoFriend = userTwo.Friends.FirstOrDefault(x => x.FriendId == userOne.Id);
 
-            this.userFriendRepository.Delete(userOneFriend);
-            this.userFriendRepository.Delete(userTwoFriend);
+            userFriendRepository.Delete(userOneFriend);
+            userFriendRepository.Delete(userTwoFriend);
 
             await userFriendRepository.SaveChangesAsync();
             return true;
@@ -129,7 +129,7 @@ namespace FriendyFy.Services
 
         public async Task<bool> AcceptFriendRequestAsync(string senderId, string receiverUsername)
         {
-            var friendStatus = this.GetUserFriendStatus(senderId, receiverUsername);
+            var friendStatus = GetUserFriendStatus(senderId, receiverUsername);
 
             if (friendStatus != "received" && friendStatus != "requested")
             {
@@ -138,7 +138,7 @@ namespace FriendyFy.Services
 
             var userOne = userService.GetById(senderId);
             var userTwo = userService.GetByUsername(receiverUsername);
-            if (!this.AreUsersValid(userOne, userTwo))
+            if (!AreUsersValid(userOne, userTwo))
             {
                 return false;
             }
@@ -156,7 +156,7 @@ namespace FriendyFy.Services
             userOneFriend.ModifiedOn = DateTime.UtcNow;
             userTwoFriend.ModifiedOn = DateTime.UtcNow;
 
-            var chat = this.chatRepository
+            var chat = chatRepository
                 .All()
                 .Include(x => x.Users)
                 .FirstOrDefault(x => x.Users.Any(y => y.Id == userOneFriend.CurrentUserId) && x.Users.Any(y => y.Id == userTwoFriend.CurrentUserId) && (x.ChatType == ChatType.NotAccepted || x.ChatType == ChatType.Direct));
@@ -172,8 +172,8 @@ namespace FriendyFy.Services
 
         public string GetUserFriendStatus(string userId, string friendUsername)
         {
-            var user = this.userRepository.All().Include(x => x.Friends).FirstOrDefault(x => x.Id == userId);
-            var friend = this.userRepository.All().FirstOrDefault(x => x.UserName == friendUsername);
+            var user = userRepository.All().Include(x => x.Friends).FirstOrDefault(x => x.Id == userId);
+            var friend = userRepository.All().FirstOrDefault(x => x.UserName == friendUsername);
             if (user == null)
             {
                 return "invalid";
@@ -190,7 +190,8 @@ namespace FriendyFy.Services
                 if (userFriend.IsFriend)
                 {
                     return "friends";
-                }else if (!userFriend.IsFriend && userFriend.RequestSenderId == userId)
+                }
+                if (!userFriend.IsFriend && userFriend.RequestSenderId == userId)
                 {
                     return "requested";
                 }
@@ -202,9 +203,9 @@ namespace FriendyFy.Services
 
         public List<ProfileFriendViewModel> GetUserFriends(string userId, int skip, int count, string loggedIn, string searchQuery)
         {
-            var user = this.userRepository.All().FirstOrDefault(x => x.Id == loggedIn);
+            var user = userRepository.All().FirstOrDefault(x => x.Id == loggedIn);
 
-            return this.userFriendRepository
+            return userFriendRepository
                 .All()
                 .Include(x => x.Friend)
                 .ThenInclude(x => x.Friends)
@@ -215,10 +216,10 @@ namespace FriendyFy.Services
                 .Where(x => string.IsNullOrEmpty(searchQuery) || (x.Friend.FirstName + " " + x.Friend.LastName).ToLower().Contains(searchQuery.ToLower()))
                 .ToList()
                 .OrderBy(x => x.CreatedOn)
-                .Select(x => new ProfileFriendViewModel()
+                .Select(x => new ProfileFriendViewModel
                 {
                     FullName = x.Friend.FirstName + " " + x.Friend.LastName,
-                    ProfileImage = this.blobService.GetBlobUrlAsync(x.Friend.ProfileImage?.Id + x.Friend.ProfileImage?.ImageExtension, GlobalConstants.BlobPictures).GetAwaiter().GetResult(),
+                    ProfileImage = blobService.GetBlobUrlAsync(x.Friend.ProfileImage?.Id + x.Friend.ProfileImage?.ImageExtension, GlobalConstants.BlobPictures).GetAwaiter().GetResult(),
                     Username = x.Friend.UserName,
                     HasReceived = !string.IsNullOrWhiteSpace(loggedIn) && x.Friend.Friends.Any(y => !y.IsFriend && y.FriendId==loggedIn && y.RequestSenderId==x.Id),
                     HasRequested = !string.IsNullOrWhiteSpace(loggedIn) && x.Friend.Friends.Any(y => !y.IsFriend && y.RequestSenderId==loggedIn),
@@ -236,7 +237,7 @@ namespace FriendyFy.Services
 
         public int GetUserFriendsCount(string userId)
         {
-            return this.userFriendRepository
+            return userFriendRepository
                 .All()
                 .Include(x => x.CurrentUser)
                 .Where(x => x.CurrentUser.UserName == userId && x.IsFriend)
@@ -245,7 +246,7 @@ namespace FriendyFy.Services
 
         public List<SidebarFriendRecommendationViewModel> GetFriendRecommendations(string userId)
         {
-            var user = this.userRepository.All()
+            var user = userRepository.All()
                 .Include(x => x.Friends)
                 .Include(x => x.RemoveSuggestionFriends)
                 .FirstOrDefault(x => x.Id == userId);
@@ -253,7 +254,7 @@ namespace FriendyFy.Services
 
             const int takeFriendsCount = 6;
             // TODO optimize the request
-            var recommendations = this.userRepository
+            var recommendations = userRepository
                 .All()
                 .Include(x => x.Friends)
                 .Include(x => x.ProfileImage)
@@ -270,20 +271,20 @@ namespace FriendyFy.Services
                 .OrderByDescending(x => x.Interests.Count(y => user.Interests.Any(z => z.Id == y.Id)) * 0.5 
                 + x.Friends.Where(x => x.IsFriend).Count(y => user.Friends.Any(z => z.FriendId == y.Id)) * 0.1 
                 + rand.Next((int)((-x.Friends.Where(x => x.IsFriend).Count()-x.Interests.Count())*0.2), (int)((x.Friends.Where(x => x.IsFriend).Count() + x.Interests.Count()) * 0.2)))
-                .Select(x => new SidebarFriendRecommendationViewModel()
+                .Select(x => new SidebarFriendRecommendationViewModel
                 {
                     Name = x.FirstName + " " + x.LastName,
                     Username = x.UserName,
                     CommonInterests = x.Interests.Count(y => user.Interests.Any(z => z.Id == y.Id)),
                     MutualFriends = x.Friends.Where(x => x.IsFriend).Count(y => user.Friends.Any(z => z.FriendId == y.FriendId)),
-                    ProfilePhoto = this.blobService.GetBlobUrlAsync(x.ProfileImage?.Id + x.ProfileImage?.ImageExtension, GlobalConstants.BlobPictures).GetAwaiter().GetResult()
+                    ProfilePhoto = blobService.GetBlobUrlAsync(x.ProfileImage?.Id + x.ProfileImage?.ImageExtension, GlobalConstants.BlobPictures).GetAwaiter().GetResult()
                 })
                 .Take(takeFriendsCount)
                 .ToList();
 
            if(recommendations.Count < takeFriendsCount)
             {
-                recommendations.AddRange(this.userRepository
+                recommendations.AddRange(userRepository
                     .All()
                     .Include(x => x.Friends)
                     .Include(x => x.Interests)
@@ -297,13 +298,13 @@ namespace FriendyFy.Services
                     .OrderByDescending(x => x.Interests.Count(y => user.Interests.Any(z => z.Id == y.Id)) * 0.5
                     + x.Friends.Where(x => x.IsFriend).Count(y => user.Friends.Any(z => z.FriendId == y.Id)) * 0.1
                     + rand.Next((int)((-x.Friends.Where(x => x.IsFriend).Count() - x.Interests.Count()) * 0.2), (int)((x.Friends.Where(x => x.IsFriend).Count() + x.Interests.Count()) * 0.2)))
-                    .Select(x => new SidebarFriendRecommendationViewModel()
+                    .Select(x => new SidebarFriendRecommendationViewModel
                     {
                         Name = x.FirstName + " " + x.LastName,
                         Username = x.UserName,
                         CommonInterests = x.Interests.Count(y => user.Interests.Any(z => z.Id == y.Id)),
                         MutualFriends = x.Friends.Where(x => x.IsFriend).Count(y => user.Friends.Any(z => z.FriendId == y.FriendId)),
-                        ProfilePhoto = this.blobService.GetBlobUrlAsync(x.ProfileImage?.Id + x.ProfileImage?.ImageExtension, GlobalConstants.BlobPictures).GetAwaiter().GetResult()
+                        ProfilePhoto = blobService.GetBlobUrlAsync(x.ProfileImage?.Id + x.ProfileImage?.ImageExtension, GlobalConstants.BlobPictures).GetAwaiter().GetResult()
                     })
                     .Take(takeFriendsCount - recommendations.Count())
                     .ToList());
@@ -314,9 +315,9 @@ namespace FriendyFy.Services
 
         public async Task RemovePersonFromSuggestionsAsync(string userId, string removedUsername)
         {
-            var user = this.userService.GetByUsername(removedUsername);
+            var user = userService.GetByUsername(removedUsername);
 
-            var model = new RemoveSuggestionFriend()
+            var model = new RemoveSuggestionFriend
             {
                 BlockedUserId = user.Id,
                 BlockedUser = user,
@@ -324,8 +325,8 @@ namespace FriendyFy.Services
                 UserId = userId
             };
 
-            await this.removeSuggestionRepository.AddAsync(model);
-            await this.removeSuggestionRepository.SaveChangesAsync();
+            await removeSuggestionRepository.AddAsync(model);
+            await removeSuggestionRepository.SaveChangesAsync();
         }
 
         private bool AreUsersValid(ApplicationUser userOne, ApplicationUser userTwo)

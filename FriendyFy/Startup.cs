@@ -1,4 +1,8 @@
+using System;
+using System.Reflection;
+using Azure.Core.Extensions;
 using Azure.Storage.Blobs;
+using Azure.Storage.Queues;
 using FriendyFy.BlobStorage;
 using FriendyFy.Data;
 using FriendyFy.Helpers;
@@ -15,15 +19,11 @@ using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.SignalR;
 using Microsoft.AspNetCore.SpaServices.ReactDevelopmentServer;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.Azure;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
-using System.Reflection;
 using ViewModels;
-using Microsoft.Extensions.Azure;
-using Azure.Storage.Queues;
-using Azure.Core.Extensions;
-using System;
 
 namespace FriendyFy
 {
@@ -58,7 +58,7 @@ namespace FriendyFy
 
 
             services.AddSingleton(x =>
-                new BlobServiceClient(this.Configuration.GetValue<string>("AzureBlobStorage:ConnectionString")));
+                new BlobServiceClient(Configuration.GetValue<string>("AzureBlobStorage:ConnectionString")));
 
             services.AddDatabaseDeveloperPageExceptionFilter();
 
@@ -78,7 +78,7 @@ namespace FriendyFy
             services.AddScoped(typeof(IDeletableEntityRepository<>), typeof(EfDeletableEntityRepository<>));
             services.AddScoped(typeof(IRepository<>), typeof(EfRepository<>));
 
-            services.AddTransient<IEmailSender>(serviceProvider => new SendGridEmailSender(this.Configuration["SendGrid-ApiKey"]));
+            services.AddTransient<IEmailSender>(serviceProvider => new SendGridEmailSender(Configuration["SendGrid-ApiKey"]));
             services.AddTransient<IUserService, UserService>();
             services.AddTransient<IInterestService, InterestService>();
             services.AddTransient<IJwtService, JwtService>();
@@ -132,7 +132,7 @@ namespace FriendyFy
             app.UseRouting();
 
             app.UseCors(options => options
-                .WithOrigins(new[] { "http://localhost:3000" })
+                .WithOrigins("http://localhost:3000")
                 .AllowAnyHeader()
                 .AllowAnyOrigin()
                 .AllowAnyMethod());
@@ -168,10 +168,8 @@ namespace FriendyFy
             {
                 return builder.AddBlobServiceClient(serviceUri);
             }
-            else
-            {
-                return builder.AddBlobServiceClient(serviceUriOrConnectionString);
-            }
+
+            return builder.AddBlobServiceClient(serviceUriOrConnectionString);
         }
         public static IAzureClientBuilder<QueueServiceClient, QueueClientOptions> AddQueueServiceClient(this AzureClientFactoryBuilder builder, string serviceUriOrConnectionString, bool preferMsi)
         {
@@ -179,10 +177,8 @@ namespace FriendyFy
             {
                 return builder.AddQueueServiceClient(serviceUri);
             }
-            else
-            {
-                return builder.AddQueueServiceClient(serviceUriOrConnectionString);
-            }
+
+            return builder.AddQueueServiceClient(serviceUriOrConnectionString);
         }
     }
 }

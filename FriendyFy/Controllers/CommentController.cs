@@ -1,9 +1,9 @@
-﻿using FriendyFy.Data;
-using FriendyFy.Services.Contracts;
-using Microsoft.AspNetCore.Mvc;
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.Threading.Tasks;
+using FriendyFy.Data;
+using FriendyFy.Services.Contracts;
+using Microsoft.AspNetCore.Mvc;
 using ViewModels;
 
 namespace FriendyFy.Controllers
@@ -22,7 +22,7 @@ namespace FriendyFy.Controllers
         [HttpPost("make")]
         public async Task<IActionResult> AddComment(AddCommentDto comment)
         {
-            var user = this.GetUserByToken();
+            var user = GetUserByToken();
             if (user == null)
             {
                 return Unauthorized("You are not signed in!");
@@ -30,26 +30,25 @@ namespace FriendyFy.Controllers
 
             Enum.TryParse(comment.PostType, out PostType postType);
 
-            var commentAdded = await this.commentService.AddCommentAsync(user, comment.Text, comment.PostId, postType);
+            var commentAdded = await commentService.AddCommentAsync(user, comment.Text, comment.PostId, postType);
             if (commentAdded != null)
             {
                 return Ok(commentAdded);
             }
-            else
-            {
-                return BadRequest();
-            };
+
+            return BadRequest();
+            ;
         }
 
         [HttpPost]
         public List<PostCommentViewModel> GetPostComments([FromBody] GetCommentsDto commentDto)
         {
-            var user = this.GetUserByToken();
+            var user = GetUserByToken();
             
             var parsed = Enum.TryParse(commentDto.PostType, out PostType postType);
             if (parsed)
             {
-                return this.commentService.GetCommentsForPost(user?.Id, commentDto.PostId, commentDto.Take, commentDto.Skip, postType);
+                return commentService.GetCommentsForPost(user?.Id, commentDto.PostId, commentDto.Take, commentDto.Skip, postType);
             }
             
             return null;
@@ -58,7 +57,7 @@ namespace FriendyFy.Controllers
         [HttpPost("like")]
         public async Task<IActionResult> LikePost(LikeCommentDto likedCommentDto)
         {
-            var user = this.GetUserByToken();
+            var user = GetUserByToken();
 
             if (user == null)
             {
@@ -69,7 +68,7 @@ namespace FriendyFy.Controllers
             Enum.TryParse(likedCommentDto.PostType, out PostType postType);
             try
             {
-                likes = await this.commentService.LikeCommentAsync(likedCommentDto.CommentId, user, postType);
+                likes = await commentService.LikeCommentAsync(likedCommentDto.CommentId, user, postType);
             }
             catch (Exception)
             {
@@ -80,22 +79,20 @@ namespace FriendyFy.Controllers
             {
                 return Ok(likes);
             }
-            else
-            {
-                return BadRequest();
-            }
+
+            return BadRequest();
         }
 
         [HttpPost("getLikes")]
         public List<PersonListPopupViewModel> GetLikes(GetCommentLikesDto dto)
         {
-            return this.commentService.GetPeopleLikes(dto.CommentId, dto.Take, dto.Skip);
+            return commentService.GetPeopleLikes(dto.CommentId, dto.Take, dto.Skip);
         }
 
         [HttpPost("deleteComment")]
         public async Task<IActionResult> DeleteComment(LikeCommentDto dto)
         {
-            var user = this.GetUserByToken();
+            var user = GetUserByToken();
             
             if (user == null)
             {
@@ -107,7 +104,7 @@ namespace FriendyFy.Controllers
                 return BadRequest();
             }
 
-            if(await this.commentService.DeleteCommentAsync(user.Id, dto.CommentId, postType))
+            if(await commentService.DeleteCommentAsync(user.Id, dto.CommentId, postType))
             {
                 return Ok();
             }

@@ -1,7 +1,7 @@
-﻿using FriendyFy.Data;
+﻿using System.Threading.Tasks;
+using FriendyFy.Data;
 using FriendyFy.Services.Contracts;
 using Microsoft.AspNetCore.SignalR;
-using System.Threading.Tasks;
 
 namespace FriendyFy.Hubs
 {
@@ -20,19 +20,19 @@ namespace FriendyFy.Hubs
         public async Task<bool> SendEventInviteNotification(InviteUserDto dto)
         {
             var userId = Context.UserIdentifier;
-            var user = this.userService.GetById(userId);
+            var user = userService.GetById(userId);
             if (userId == null || userId != user.Id)
             {
                 return false;
             }
 
-            var inviteeId = this.userService.GetByUsername(dto.Username).Id;
+            var inviteeId = userService.GetByUsername(dto.Username).Id;
 
-            var notification = await this.notificationService.CreateNotificationAsync(user, dto.Username, dto.EventId);
+            var notification = await notificationService.CreateNotificationAsync(user, dto.Username, dto.EventId);
 
             if (notification != null)
             {
-                await this.Clients.User(inviteeId).SendAsync(inviteeId, notification);
+                await Clients.User(inviteeId).SendAsync(inviteeId, notification);
             }
 
             return true;

@@ -1,7 +1,7 @@
-﻿using FriendyFy.Data;
-using FriendyFy.Models;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.Threading.Tasks;
+using FriendyFy.Data;
+using FriendyFy.Models;
 using ViewModels;
 using ViewModels.ViewModels;
 

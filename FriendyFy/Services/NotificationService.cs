@@ -1,13 +1,13 @@
-﻿using FriendyFy.BlobStorage;
+﻿using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Threading.Tasks;
+using FriendyFy.BlobStorage;
 using FriendyFy.Common;
 using FriendyFy.Data;
 using FriendyFy.Models;
 using FriendyFy.Services.Contracts;
 using Microsoft.EntityFrameworkCore;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
 using ViewModels.ViewModels;
 
 namespace FriendyFy.Services
@@ -35,24 +35,23 @@ namespace FriendyFy.Services
 
         public async Task<NotificationViewModel> CreateNotificationAsync(ApplicationUser inviter, string inviteeUsername, string eventId)
         {
-            var currEvent = this.eventRepository.AllAsNoTracking()
+            var currEvent = eventRepository.AllAsNoTracking()
                 .Include(x => x.Users)
                 .Where(x => !x.Users.Any(y => y.UserName == inviteeUsername))
                 .Select(x => new
                 {
-                    Id = x.Id,
-                    Name = x.Name
+                    x.Id, x.Name
                 })
                .FirstOrDefault(x => x.Id == eventId);
 
-            var inviteeUser = this.userRepository.AllAsNoTracking().FirstOrDefault(x => x.UserName == inviteeUsername);
+            var inviteeUser = userRepository.AllAsNoTracking().FirstOrDefault(x => x.UserName == inviteeUsername);
 
             if (currEvent == null || inviteeUser == null)
             {
                 return null;
             }
 
-            var existing = this.notificationRepository
+            var existing = notificationRepository
                 .All()
                 .Include(x => x.Invitee)
                 .Where(x => x.EventId == eventId && x.InviterId == inviter.Id && x.Invitee.UserName == inviteeUsername && x.IsAvailable)
@@ -61,11 +60,11 @@ namespace FriendyFy.Services
             if (existing != null)
             {
                 existing.ModifiedOn = DateTime.UtcNow;
-                await this.notificationRepository.SaveChangesAsync();
+                await notificationRepository.SaveChangesAsync();
                 return null;
             }
 
-            var notification = new Notification()
+            var notification = new Notification
             {
                 EventId = eventId,
                 InviteeId = inviteeUser.Id,
@@ -76,12 +75,12 @@ namespace FriendyFy.Services
 
             notification.ModifiedOn = notification.CreatedOn;
 
-            await this.notificationRepository.AddAsync(notification);
-            await this.notificationRepository.SaveChangesAsync();
-            var toReturn = new NotificationViewModel()
+            await notificationRepository.AddAsync(notification);
+            await notificationRepository.SaveChangesAsync();
+            var toReturn = new NotificationViewModel
             {
                 Id = notification.Id,
-                Image = this.blobService.GetBlobUrlAsync(inviter.ProfileImage.Id+inviter.ProfileImage.ImageExtension, GlobalConstants.BlobPictures).GetAwaiter().GetResult(),
+                Image = blobService.GetBlobUrlAsync(inviter.ProfileImage.Id+inviter.ProfileImage.ImageExtension, GlobalConstants.BlobPictures).GetAwaiter().GetResult(),
                 Name = inviter.FirstName,
                 Type = "event",
                 EventName = currEvent.Name,
@@ -96,7 +95,7 @@ namespace FriendyFy.Services
 
         public List<NotificationViewModel> GetNotificationsForUser(string userId, int take, int skip)
         {
-            var notifications = this.notificationRepository
+            var notifications = notificationRepository
                 .AllAsNoTracking()
                 .Include(x => x.Inviter)
                 .ThenInclude(x => x.ProfileImage)
@@ -105,7 +104,7 @@ namespace FriendyFy.Services
                 .OrderByDescending(x => x.CreatedOn)
                 .Skip(skip)
                 .Take(take)
-                .Select(x => new NotificationViewModel()
+                .Select(x => new NotificationViewModel
                 {
                     Id = x.Id,
                     Image = x.Inviter.ProfileImage.Id + x.Inviter.ProfileImage.ImageExtension,
@@ -119,7 +118,7 @@ namespace FriendyFy.Services
                 })
                 .ToList();
 
-            var toSee = this.notificationRepository
+            var toSee = notificationRepository
                 .All()
                 .Where(x => !x.IsSeen)
                 .Where(x => x.InviteeId == userId);
@@ -129,14 +128,14 @@ namespace FriendyFy.Services
                 item.IsSeen = true;
             }
 
-            this.notificationRepository.SaveChangesAsync().GetAwaiter().GetResult();
+            notificationRepository.SaveChangesAsync().GetAwaiter().GetResult();
 
             return notifications
-                .Select(x => new NotificationViewModel()
+                .Select(x => new NotificationViewModel
                 {
                     Id = x.Id,
                     EventName = x.EventName,
-                    Image = this.blobService.GetBlobUrlAsync(x.Image, GlobalConstants.BlobPictures).GetAwaiter().GetResult(),
+                    Image = blobService.GetBlobUrlAsync(x.Image, GlobalConstants.BlobPictures).GetAwaiter().GetResult(),
                     Type = x.Type,
                     Name = x.Name,
                     InviterUsername = x.InviterUsername,
@@ -149,7 +148,7 @@ namespace FriendyFy.Services
 
         public async Task<bool> ChangeEventStatusAsync(string notificationId, ApplicationUser user, bool joinEvent)
         {
-            var notification = this.notificationRepository
+            var notification = notificationRepository
                 .All()
                 .FirstOrDefault(x => x.Id == notificationId);
 
@@ -160,7 +159,7 @@ namespace FriendyFy.Services
 
             if (joinEvent)
             {
-                var success = await this.eventService.JoinEventAsync(notification.EventId, user);
+                var success = await eventService.JoinEventAsync(notification.EventId, user);
                 if (!success)
                 {
                     return false;
@@ -169,7 +168,7 @@ namespace FriendyFy.Services
 
 
             notification.IsAvailable = false;
-            var updated = await this.notificationRepository.SaveChangesAsync();
+            var updated = await notificationRepository.SaveChangesAsync();
             if (updated == 0)
             {
                 return false;
@@ -180,7 +179,7 @@ namespace FriendyFy.Services
 
         public int UnseenNotifications(string userId)
         {
-            return this.notificationRepository
+            return notificationRepository
                 .AllAsNoTracking()
                 .Where(x => x.InviteeId == userId)
                 .Where(x => !x.IsSeen)
@@ -189,19 +188,19 @@ namespace FriendyFy.Services
         
         public async Task<bool> SeeNotificationAsync(string userId, string notificationId)
         {
-            var notification = this.notificationRepository
+            var notification = notificationRepository
                 .All()
                 .FirstOrDefault(x => x.InviteeId == userId && x.Id == notificationId);
 
             notification.IsSeen = true;
-            return await this.notificationRepository.SaveChangesAsync() > 0;
+            return await notificationRepository.SaveChangesAsync() > 0;
         }
 
         public async Task<NotificationViewModel> CreateFriendRequestNotification(ApplicationUser inviter, string inviteeUsername)
         {
-            var inviteeUser = this.userRepository.All().FirstOrDefault(x => x.UserName == inviteeUsername);
+            var inviteeUser = userRepository.All().FirstOrDefault(x => x.UserName == inviteeUsername);
 
-            var existingNotificaiton = this.notificationRepository
+            var existingNotificaiton = notificationRepository
                 .All()
                 .Where(x => x.InviteeId == inviteeUser.Id)
                 .Where(x => x.InviterId == inviter.Id)
@@ -214,7 +213,7 @@ namespace FriendyFy.Services
                 return null;
             }
 
-            var notification = new Notification()
+            var notification = new Notification
             {
                 InviteeId = inviteeUser.Id,
                 InviterId = inviter.Id,
@@ -224,12 +223,12 @@ namespace FriendyFy.Services
 
             notification.ModifiedOn = notification.CreatedOn;
 
-            await this.notificationRepository.AddAsync(notification);
-            await this.notificationRepository.SaveChangesAsync();
-            var toReturn = new NotificationViewModel()
+            await notificationRepository.AddAsync(notification);
+            await notificationRepository.SaveChangesAsync();
+            var toReturn = new NotificationViewModel
             {
                 Id = notification.Id,
-                Image = this.blobService.GetBlobUrlAsync(inviter.ProfileImage.Id + inviter.ProfileImage.ImageExtension, GlobalConstants.BlobPictures).GetAwaiter().GetResult(),
+                Image = blobService.GetBlobUrlAsync(inviter.ProfileImage.Id + inviter.ProfileImage.ImageExtension, GlobalConstants.BlobPictures).GetAwaiter().GetResult(),
                 Name = inviter.FirstName,
                 Type = "profile",
                 EventName = inviter.FirstName+" "+inviter.LastName,
@@ -242,7 +241,7 @@ namespace FriendyFy.Services
 
         public async Task<bool> ChangeUserFriendNotificationStatus(string inviterId, string inviteeId)
         {
-            var existingNotificaiton = this.notificationRepository
+            var existingNotificaiton = notificationRepository
                 .All()
                 .Where(x => x.InviteeId == inviteeId)
                 .Where(x => x.InviterId == inviterId)
@@ -256,7 +255,7 @@ namespace FriendyFy.Services
             }
 
             existingNotificaiton.IsAvailable = false;
-            var result = await this.notificationRepository.SaveChangesAsync();
+            var result = await notificationRepository.SaveChangesAsync();
             return result > 0;
         }
     }

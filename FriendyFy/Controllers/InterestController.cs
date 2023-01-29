@@ -1,7 +1,7 @@
-﻿using FriendyFy.Data;
+﻿using System.Collections.Generic;
+using FriendyFy.Data;
 using FriendyFy.Services.Contracts;
 using Microsoft.AspNetCore.Mvc;
-using System.Collections.Generic;
 
 namespace FriendyFy.Controllers
 {
@@ -16,10 +16,10 @@ namespace FriendyFy.Controllers
             this.interestService = interestService;
         }
 
-        [HttpGet()]
+        [HttpGet]
         public ICollection<InterestDto> GetAllInterests()
         {
-            return this.interestService.GetAllInterests();
+            return interestService.GetAllInterests();
         }
     }
 }

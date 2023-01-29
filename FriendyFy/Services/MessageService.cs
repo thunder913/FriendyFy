@@ -1,10 +1,10 @@
-﻿using FriendyFy.BlobStorage;
+﻿using System.Linq;
+using FriendyFy.BlobStorage;
 using FriendyFy.Common;
 using FriendyFy.Data;
 using FriendyFy.Models;
 using FriendyFy.Services.Contracts;
 using Microsoft.EntityFrameworkCore;
-using System.Linq;
 using ViewModels;
 
 namespace FriendyFy.Services
@@ -22,13 +22,13 @@ namespace FriendyFy.Services
 
         public ChatMessageViewModel GetChatMessageForOtherPeople(string id)
         {
-            var message = this.messageRepository
+            var message = messageRepository
                 .AllAsNoTracking()
                 .Include(x => x.User)
                 .ThenInclude(x => x.ProfileImage)
                 .FirstOrDefault(x => x.Id == id);
 
-            return new ChatMessageViewModel()
+            return new ChatMessageViewModel
             {
                 Date = message.CreatedOn,
                 IsYourMessage = false,
@@ -36,7 +36,7 @@ namespace FriendyFy.Services
                 MessageId = message.Id,
                 Name = message.User.FirstName + " " + message.User.LastName,
                 Username = message.User.UserName,
-                Photo = this.blobService.GetBlobUrlAsync(message.User.ProfileImage?.Id + message.User.ProfileImage?.ImageExtension, GlobalConstants.BlobPictures).GetAwaiter().GetResult(),
+                Photo = blobService.GetBlobUrlAsync(message.User.ProfileImage?.Id + message.User.ProfileImage?.ImageExtension, GlobalConstants.BlobPictures).GetAwaiter().GetResult(),
             };
         }
     }

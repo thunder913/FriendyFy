@@ -1,13 +1,13 @@
-using FriendyFy.Data;
+using System;
 using Azure.Extensions.AspNetCore.Configuration.Secrets;
 using Azure.Identity;
 using Azure.Security.KeyVault.Secrets;
+using FriendyFy.Data;
+using FriendyFy.Messaging;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.Extensions.Configuration;
-using Microsoft.Extensions.Hosting;
-using System;
 using Microsoft.Extensions.DependencyInjection;
-using FriendyFy.Messaging;
+using Microsoft.Extensions.Hosting;
 
 namespace FriendyFy
 {

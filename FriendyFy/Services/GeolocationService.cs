@@ -1,8 +1,8 @@
-﻿using FriendyFy.Services.Contracts;
-using Microsoft.Extensions.Configuration;
-using System.Linq;
+﻿using System.Linq;
 using System.Net;
 using System.Text.Json;
+using FriendyFy.Services.Contracts;
+using Microsoft.Extensions.Configuration;
 using static FriendyFy.Data.GoogleMapsApi.GoogleMapsClasses;
 
 namespace FriendyFy.Services
@@ -18,7 +18,7 @@ namespace FriendyFy.Services
         {
             WebClient webClient = new WebClient();
             webClient.Headers.Add("user-agent", "Mozilla/4.0 (compatible; MSIE 6.0; Windows NT 5.2; .NET CLR 1.0.3705;)");
-            var url = $"https://maps.googleapis.com/maps/api/geocode/json?latlng={latitude},{longiitude}&key={this.configuration["GoogleMapsApiKey"]}";
+            var url = $"https://maps.googleapis.com/maps/api/geocode/json?latlng={latitude},{longiitude}&key={configuration["GoogleMapsApiKey"]}";
             var jsonData = webClient.DownloadData(url);
 
             var googleObject = JsonSerializer.Deserialize<Root>(jsonData);

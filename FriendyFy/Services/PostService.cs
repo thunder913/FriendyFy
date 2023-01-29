@@ -1,14 +1,14 @@
-﻿using FriendyFy.BlobStorage;
+﻿using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Threading.Tasks;
+using FriendyFy.BlobStorage;
 using FriendyFy.Common;
 using FriendyFy.Data;
 using FriendyFy.Models;
 using FriendyFy.Models.Enums;
 using FriendyFy.Services.Contracts;
 using Microsoft.EntityFrameworkCore;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
 using ViewModels;
 using ViewModels.ViewModels;
 
@@ -47,7 +47,7 @@ namespace FriendyFy.Services
             {
                 privacy = PrivacySettings.Public;
             }
-            var post = new Post()
+            var post = new Post
             {
                 Privacy = privacy,
                 Text = makePostDto.PostMessage,
@@ -59,7 +59,7 @@ namespace FriendyFy.Services
 
             if (makePostDto.LocationLat != null && makePostDto.LocationLng != null)
             {
-                post.LocationCity = this.geolocationService.GetUserLocation(Decimal.ToDouble((decimal)makePostDto.LocationLat), Decimal.ToDouble((decimal)makePostDto.LocationLng));
+                post.LocationCity = geolocationService.GetUserLocation(Decimal.ToDouble((decimal)makePostDto.LocationLat), Decimal.ToDouble((decimal)makePostDto.LocationLng));
             }
 
             if (makePostDto.Image != null && !string.IsNullOrWhiteSpace(makePostDto.Image))
@@ -69,8 +69,8 @@ namespace FriendyFy.Services
             }
             foreach (var username in makePostDto.People)
             {
-                var user = this.userService.GetByUsername(username).Id;
-                var userTagged = new PostTagged()
+                var user = userService.GetByUsername(username).Id;
+                var userTagged = new PostTagged
                 {
                     Post = post,
                     UserId = user,
@@ -78,15 +78,15 @@ namespace FriendyFy.Services
                 };
                 post.TaggedPeople.Add(userTagged);
             }
-            await this.postRepository.AddAsync(post);
-            await this.postRepository.SaveChangesAsync();
+            await postRepository.AddAsync(post);
+            await postRepository.SaveChangesAsync();
 
             return true;
         }
 
         public List<PostDetailsViewModel> GetAllPosts(string userId)
         {
-            return this.postRepository
+            return postRepository
                 .All()
                 .OrderByDescending(x => x.CreatedOn)
                 .Include(x => x.Creator)
@@ -110,17 +110,17 @@ namespace FriendyFy.Services
                 .Include(x => x.Repost)
                 .ThenInclude(x => x.TaggedPeople)
                 .ToList()
-                .Select(x => new PostDetailsViewModel()
+                .Select(x => new PostDetailsViewModel
                 {
                     PostId = x.Id,
                     CommentsCount = x.Comments.Count(),
                     CreatedAgo = (int)((DateTime.UtcNow - x.CreatedOn).TotalMinutes),
-                    CreatorImage = this.blobService.GetBlobUrlAsync(x.Creator.ProfileImage?.Id + x.Creator.ProfileImage?.ImageExtension, GlobalConstants.BlobPictures).GetAwaiter().GetResult(),
+                    CreatorImage = blobService.GetBlobUrlAsync(x.Creator.ProfileImage?.Id + x.Creator.ProfileImage?.ImageExtension, GlobalConstants.BlobPictures).GetAwaiter().GetResult(),
                     CreatorName = x.Creator.FirstName + " " + x.Creator.LastName,
                     LikesCount = x.Likes.Count(),
                     PostMessage = x.Text,
                     RepostsCount = x.Reposts.Where(x => !x.IsDeleted).GroupBy(x => x.CreatorId).Count(),
-                    PostImage = this.blobService.GetBlobUrlAsync(x.Image?.Id + x.Image?.ImageExtension, GlobalConstants.BlobPictures).GetAwaiter().GetResult(),
+                    PostImage = blobService.GetBlobUrlAsync(x.Image?.Id + x.Image?.ImageExtension, GlobalConstants.BlobPictures).GetAwaiter().GetResult(),
                     IsLikedByUser = x.Likes.Any(x => x.LikedById == userId),
                     Username = x.Creator.UserName,
                     Latitude = x.Latitude ?? x.Latitude,
@@ -130,17 +130,17 @@ namespace FriendyFy.Services
                     PostType = PostType.Post.ToString(),
                     IsRepost = x.IsRepost,
                     IsUserCreator = x.CreatorId == userId,
-                    Repost = !x.IsRepost ? null : new PostDetailsViewModel()
+                    Repost = !x.IsRepost ? null : new PostDetailsViewModel
                     {
                         PostId = x.Repost.Id,
                         CommentsCount = x.Repost.Comments.Count(),
                         CreatedAgo = (int)((DateTime.UtcNow - x.Repost.CreatedOn).TotalMinutes),
-                        CreatorImage = this.blobService.GetBlobUrlAsync(x.Repost.Creator.ProfileImage?.Id + x.Repost.Creator.ProfileImage?.ImageExtension, GlobalConstants.BlobPictures).GetAwaiter().GetResult(),
+                        CreatorImage = blobService.GetBlobUrlAsync(x.Repost.Creator.ProfileImage?.Id + x.Repost.Creator.ProfileImage?.ImageExtension, GlobalConstants.BlobPictures).GetAwaiter().GetResult(),
                         CreatorName = x.Repost.Creator.FirstName + " " + x.Repost.Creator.LastName,
                         LikesCount = x.Repost.Likes.Count(),
                         PostMessage = x.Repost.Text,
                         RepostsCount = x.Reposts.Where(x => !x.IsDeleted).GroupBy(x => x.CreatorId).Count(),
-                        PostImage = this.blobService.GetBlobUrlAsync(x.Repost.Image?.Id + x.Repost.Image?.ImageExtension, GlobalConstants.BlobPictures).GetAwaiter().GetResult(),
+                        PostImage = blobService.GetBlobUrlAsync(x.Repost.Image?.Id + x.Repost.Image?.ImageExtension, GlobalConstants.BlobPictures).GetAwaiter().GetResult(),
                         IsLikedByUser = x.Repost.Likes.Any(y => y.LikedById == userId),
                         Username = x.Repost.Creator.UserName,
                         Latitude = x.Repost.Latitude ?? x.Repost.Latitude,
@@ -155,7 +155,7 @@ namespace FriendyFy.Services
 
         public async Task<int?> LikePostAsync(string postId, ApplicationUser user)
         {
-            var post = this.postRepository
+            var post = postRepository
                 .All()
                 .Include(x => x.Likes)
                 .FirstOrDefault(x => x.Id == postId);
@@ -172,7 +172,7 @@ namespace FriendyFy.Services
             }
             else
             {
-                var postLike = new PostLike()
+                var postLike = new PostLike
                 {
                     CreatedOn = DateTime.Now,
                     LikedBy = user,
@@ -189,7 +189,7 @@ namespace FriendyFy.Services
 
         public List<PersonListPopupViewModel> GetPeopleLikes(string postId, int take, int skip)
         {
-            var peopleLiked = this.postLikeRepository
+            var peopleLiked = postLikeRepository
                 .AllAsNoTracking()
                 .Include(x => x.LikedBy)
                 .ThenInclude(x => x.ProfileImage)
@@ -198,11 +198,11 @@ namespace FriendyFy.Services
                 .Skip(skip)
                 .Take(take)
                 .ToList()
-                .Select(x => new PersonListPopupViewModel()
+                .Select(x => new PersonListPopupViewModel
                 {
                     Name = x.LikedBy.FirstName + " " + x.LikedBy.LastName,
                     Username = x.LikedBy.UserName,
-                    ProfileImage = this.blobService.GetBlobUrlAsync(x.LikedBy?.ProfileImage?.Id + x.LikedBy?.ProfileImage?.ImageExtension, GlobalConstants.BlobPictures).GetAwaiter().GetResult(),
+                    ProfileImage = blobService.GetBlobUrlAsync(x.LikedBy?.ProfileImage?.Id + x.LikedBy?.ProfileImage?.ImageExtension, GlobalConstants.BlobPictures).GetAwaiter().GetResult(),
                 })
                 .ToList();
 
@@ -211,7 +211,7 @@ namespace FriendyFy.Services
 
         public List<PersonListPopupViewModel> GetTaggedPeople(string postId, int take, int skip)
         {
-            return this.postTaggedRepository
+            return postTaggedRepository
                 .AllAsNoTracking()
                 .Where(x => x.PostId == postId)
                 .Include(x => x.User)
@@ -220,18 +220,18 @@ namespace FriendyFy.Services
                 .Skip(skip)
                 .Take(take)
                 .ToList()
-                .Select(x => new PersonListPopupViewModel()
+                .Select(x => new PersonListPopupViewModel
                 {
                     Name = x.User.FirstName + " " + x.User.LastName,
                     Username = x.User.UserName,
-                    ProfileImage = this.blobService.GetBlobUrlAsync(x.User?.ProfileImage?.Id + x.User?.ProfileImage?.ImageExtension, GlobalConstants.BlobPictures).GetAwaiter().GetResult(),
+                    ProfileImage = blobService.GetBlobUrlAsync(x.User?.ProfileImage?.Id + x.User?.ProfileImage?.ImageExtension, GlobalConstants.BlobPictures).GetAwaiter().GetResult(),
                 })
                 .ToList();
         }
 
         public PostDetailsViewModel GetPostByImageId(string imageId, string userId)
         {
-            var post = this.postRepository.AllAsNoTracking()
+            var post = postRepository.AllAsNoTracking()
                 .Include(x => x.Creator)
                 .ThenInclude(x => x.ProfileImage)
                 .Include(x => x.Image)
@@ -245,17 +245,17 @@ namespace FriendyFy.Services
                 return null;
             }
 
-            var postDetailsViewModel = new PostDetailsViewModel()
+            var postDetailsViewModel = new PostDetailsViewModel
             {
                 PostId = post.Id,
                 CommentsCount = post.Comments.Count(),
                 CreatedAgo = (int)((DateTime.UtcNow - post.CreatedOn).TotalMinutes),
-                CreatorImage = this.blobService.GetBlobUrlAsync(post.Creator.ProfileImage?.Id + post.Creator.ProfileImage?.ImageExtension, GlobalConstants.BlobPictures).GetAwaiter().GetResult(),
+                CreatorImage = blobService.GetBlobUrlAsync(post.Creator.ProfileImage?.Id + post.Creator.ProfileImage?.ImageExtension, GlobalConstants.BlobPictures).GetAwaiter().GetResult(),
                 CreatorName = post.Creator.FirstName + " " + post.Creator.LastName,
                 LikesCount = post.Likes.Count(),
                 PostMessage = post.Text,
                 RepostsCount = post.Reposts.Where(x => !x.IsDeleted).Count(),
-                PostImage = this.blobService.GetBlobUrlAsync(post.Image?.Id + post.Image?.ImageExtension, GlobalConstants.BlobPictures).GetAwaiter().GetResult(),
+                PostImage = blobService.GetBlobUrlAsync(post.Image?.Id + post.Image?.ImageExtension, GlobalConstants.BlobPictures).GetAwaiter().GetResult(),
                 IsLikedByUser = post.Likes.Any(x => x.LikedById == userId),
                 Username = post.Creator.UserName,
                 Latitude = post.Latitude ?? post.Latitude,
@@ -271,7 +271,7 @@ namespace FriendyFy.Services
 
         public async Task<int> RepostAsync(string id, string text, string userId)
         {
-            var eventPost = new Post()
+            var eventPost = new Post
             {
                 CreatedOn = DateTime.UtcNow,
                 CreatorId = userId,
@@ -280,9 +280,9 @@ namespace FriendyFy.Services
                 RepostId = id
             };
 
-            await this.postRepository.AddAsync(eventPost);
-            var added = await this.postRepository.SaveChangesAsync();
-            return this.postRepository.All()
+            await postRepository.AddAsync(eventPost);
+            var added = await postRepository.SaveChangesAsync();
+            return postRepository.All()
                 .Include(x => x.Reposts)
                 .Where(x => !x.IsDeleted)
                 .FirstOrDefault(x => x.Id == id)
@@ -293,7 +293,7 @@ namespace FriendyFy.Services
 
         public List<PersonListPopupViewModel> GetPeopleReposts(string postId, int take, int skip)
         {
-            return this.postRepository
+            return postRepository
                 .AllAsNoTracking()
                 .Include(x => x.Reposts)
                 .ThenInclude(x => x.Creator)
@@ -307,18 +307,18 @@ namespace FriendyFy.Services
                 .Skip(skip)
                 .Take(take)
                 .ToList()
-                .Select(x => new PersonListPopupViewModel()
+                .Select(x => new PersonListPopupViewModel
                 {
                     Name = x.Creator.FirstName + " " + x.Creator.LastName,
                     Username = x.Creator.UserName,
-                    ProfileImage = this.blobService.GetBlobUrlAsync(x.Creator?.ProfileImage?.Id + x.Creator?.ProfileImage?.ImageExtension, GlobalConstants.BlobPictures).GetAwaiter().GetResult(),
+                    ProfileImage = blobService.GetBlobUrlAsync(x.Creator?.ProfileImage?.Id + x.Creator?.ProfileImage?.ImageExtension, GlobalConstants.BlobPictures).GetAwaiter().GetResult(),
                 })
                 .ToList();
         }
 
         public async Task<bool> DeletePostAsync(string postId, string userId)
         {
-            var post = this.postRepository
+            var post = postRepository
                 .All()
                 .Include(x => x.Reposts)
                 .FirstOrDefault(x => x.Id == postId && x.CreatorId == userId);
@@ -329,10 +329,10 @@ namespace FriendyFy.Services
             var reposts = post.Reposts;
             foreach (var eventPost in reposts)
             {
-                this.postRepository.Delete(eventPost);
+                postRepository.Delete(eventPost);
             }
-            this.postRepository.Delete(post);
-            var removed = await this.postRepository.SaveChangesAsync();
+            postRepository.Delete(post);
+            var removed = await postRepository.SaveChangesAsync();
             return removed > 0;
         }
 
@@ -342,13 +342,13 @@ namespace FriendyFy.Services
 
             if (isProfile)
             {
-                posts.AddRange(this.postRepository
+                posts.AddRange(postRepository
                     .All()
                     .Where(x => x.Creator.UserName == userName)
                     .Where(x => !ids.Contains(x.Id))
                     .OrderByDescending(x => x.CreatedOn)
                     .Take(take)
-                    .Select(x => new PostDetailsViewModel()
+                    .Select(x => new PostDetailsViewModel
                     {
                         PostId = x.Id,
                         CommentsCount = x.Comments.Count(),
@@ -368,7 +368,7 @@ namespace FriendyFy.Services
                         PostType = PostType.Post.ToString(),
                         IsRepost = x.IsRepost,
                         IsUserCreator = user == null ? false : x.CreatorId == user.Id,
-                        Repost = !x.IsRepost ? null : new PostDetailsViewModel()
+                        Repost = !x.IsRepost ? null : new PostDetailsViewModel
                         {
                             PostId = x.Repost.Id,
                             CommentsCount = x.Repost.Comments.Count(),
@@ -392,7 +392,7 @@ namespace FriendyFy.Services
             }
             else
             {
-                posts.AddRange(this.postRepository
+                posts.AddRange(postRepository
                     .All()
                     .Where(x => user == null || x.CreatorId != user.Id)
                     .Where(x => !ids.Contains(x.Id))
@@ -400,7 +400,7 @@ namespace FriendyFy.Services
                     ((user != null ? x.Creator.Friends.Count(y => y.Id == user.Id) * 1000 : 0) +
                     (user != null ? x.Creator.Friends.Count(y => y.Id == user.Id) * 100000 : 0)))
                     .Take(take)
-                    .Select(x => new PostDetailsViewModel()
+                    .Select(x => new PostDetailsViewModel
                     {
                         PostId = x.Id,
                         CommentsCount = x.Comments.Count(),
@@ -420,7 +420,7 @@ namespace FriendyFy.Services
                         PostType = PostType.Post.ToString(),
                         IsRepost = x.IsRepost,
                         IsUserCreator = x.CreatorId == user.Id,
-                        Repost = !x.IsRepost ? null : new PostDetailsViewModel()
+                        Repost = !x.IsRepost ? null : new PostDetailsViewModel
                         {
                             PostId = x.Repost.Id,
                             CommentsCount = x.Repost.Comments.Count(),
@@ -442,17 +442,17 @@ namespace FriendyFy.Services
                     })
                     .ToList());
             }
-            var toReturn = posts.Select(x => new PostDetailsViewModel()
-            {
+            var toReturn = posts.Select(x => new PostDetailsViewModel
+                {
                 PostId = x.PostId,
                 CommentsCount = x.CommentsCount,
                 CreatedAgo = x.CreatedAgo,
-                CreatorImage = this.blobService.GetBlobUrlAsync(x.CreatorImage, GlobalConstants.BlobPictures).GetAwaiter().GetResult(),
+                CreatorImage = blobService.GetBlobUrlAsync(x.CreatorImage, GlobalConstants.BlobPictures).GetAwaiter().GetResult(),
                 CreatorName = x.CreatorName,
                 LikesCount = x.LikesCount,
                 PostMessage = x.PostMessage,
                 RepostsCount = x.RepostsCount,
-                PostImage = this.blobService.GetBlobUrlAsync(x.PostImage, GlobalConstants.BlobPictures).GetAwaiter().GetResult(),
+                PostImage = blobService.GetBlobUrlAsync(x.PostImage, GlobalConstants.BlobPictures).GetAwaiter().GetResult(),
                 IsLikedByUser = x.IsLikedByUser,
                 Username = x.Username,
                 Latitude = x.Latitude,
@@ -462,17 +462,17 @@ namespace FriendyFy.Services
                 PostType = x.PostType,
                 IsRepost = x.IsRepost,
                 IsUserCreator = x.IsUserCreator,
-                Repost = !x.IsRepost ? null : new PostDetailsViewModel()
+                Repost = !x.IsRepost ? null : new PostDetailsViewModel
                 {
                     PostId = x.Repost.PostId,
                     CommentsCount = x.Repost.CommentsCount,
                     CreatedAgo = x.Repost.CreatedAgo,
-                    CreatorImage = this.blobService.GetBlobUrlAsync(x.Repost.CreatorImage, GlobalConstants.BlobPictures).GetAwaiter().GetResult(),
+                    CreatorImage = blobService.GetBlobUrlAsync(x.Repost.CreatorImage, GlobalConstants.BlobPictures).GetAwaiter().GetResult(),
                     CreatorName = x.Repost.CreatorName,
                     LikesCount = x.Repost.LikesCount,
                     PostMessage = x.Repost.PostMessage,
                     RepostsCount = x.RepostsCount,
-                    PostImage = this.blobService.GetBlobUrlAsync(x.Repost.PostImage, GlobalConstants.BlobPictures).GetAwaiter().GetResult(),
+                    PostImage = blobService.GetBlobUrlAsync(x.Repost.PostImage, GlobalConstants.BlobPictures).GetAwaiter().GetResult(),
                     IsLikedByUser = x.Repost.IsLikedByUser,
                     Username = x.Repost.Username,
                     Latitude = x.Repost.Latitude,

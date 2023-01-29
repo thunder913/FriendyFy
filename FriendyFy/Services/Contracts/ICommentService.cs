@@ -1,6 +1,6 @@
-﻿using FriendyFy.Models;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.Threading.Tasks;
+using FriendyFy.Models;
 using ViewModels;
 
 namespace FriendyFy.Services.Contracts

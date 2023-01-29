@@ -1,10 +1,10 @@
-﻿using FriendyFy.Mapping;
+﻿using System;
+using System.Collections.Generic;
+using System.ComponentModel.DataAnnotations.Schema;
+using FriendyFy.Mapping;
 using FriendyFy.Models.Common;
 using FriendyFy.Models.Enums;
 using Microsoft.AspNetCore.Identity;
-using System;
-using System.Collections.Generic;
-using System.ComponentModel.DataAnnotations.Schema;
 using ViewModels;
 
 namespace FriendyFy.Models

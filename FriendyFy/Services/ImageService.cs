@@ -1,10 +1,10 @@
-﻿using FriendyFy.BlobStorage;
+﻿using System;
+using System.Threading.Tasks;
+using FriendyFy.BlobStorage;
 using FriendyFy.Data;
 using FriendyFy.Models;
 using FriendyFy.Models.Enums;
 using FriendyFy.Services.Contracts;
-using System;
-using System.Threading.Tasks;
 
 namespace FriendyFy.Services
 {
@@ -22,7 +22,7 @@ namespace FriendyFy.Services
 
         public async Task<Image> AddImageAsync(ImageType imageType)
         {
-            var image = new Image()
+            var image = new Image
             {
                 ImageType = imageType,
                 CreatedOn = DateTime.UtcNow,

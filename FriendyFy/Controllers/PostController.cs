@@ -1,10 +1,10 @@
-﻿using FriendyFy.Data;
-using FriendyFy.Services.Contracts;
-using Microsoft.AspNetCore.Mvc;
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using FriendyFy.Data;
+using FriendyFy.Services.Contracts;
+using Microsoft.AspNetCore.Mvc;
 using ViewModels;
 using ViewModels.ViewModels;
 
@@ -27,13 +27,14 @@ namespace FriendyFy.Controllers
         [HttpPost("make")]
         public async Task<IActionResult> MakePost(MakePostDto makePostDto)
         {
-            var user = this.GetUserByToken();
+            var user = GetUserByToken();
 
             if (user == null)
             {
                 return Unauthorized("You are not signed in!");
             }
-            else if (string.IsNullOrWhiteSpace(makePostDto.Image) && string.IsNullOrWhiteSpace(makePostDto.PostMessage))
+
+            if (string.IsNullOrWhiteSpace(makePostDto.Image) && string.IsNullOrWhiteSpace(makePostDto.PostMessage))
             {
                 return BadRequest("Something went wrong, try again!");
             }
@@ -44,20 +45,20 @@ namespace FriendyFy.Controllers
         [HttpGet("getPosts")]
         public IActionResult GetPosts()
         {
-            var user = this.GetUserByToken();
+            var user = GetUserByToken();
 
             if (user == null)
             {
                 return Unauthorized("You are not signed in!");
             }
 
-            return Json(this.postService.GetAllPosts(user.Id));
+            return Json(postService.GetAllPosts(user.Id));
         }
 
         [HttpPost("likePost")]
         public async Task<IActionResult> LikePost(LikePostDto likePostDto)
         {
-            var user = this.GetUserByToken();
+            var user = GetUserByToken();
 
             if (user == null)
             {
@@ -67,7 +68,7 @@ namespace FriendyFy.Controllers
             int? likes;
             try
             {
-                likes = await this.postService.LikePostAsync(likePostDto.PostId, user);
+                likes = await postService.LikePostAsync(likePostDto.PostId, user);
             }
             catch (Exception)
             {
@@ -78,10 +79,8 @@ namespace FriendyFy.Controllers
             {
                 return Ok(likes);
             }
-            else
-            {
-                return BadRequest();
-            }
+
+            return BadRequest();
         }
 
         [HttpPost("getLikes")]
@@ -94,12 +93,10 @@ namespace FriendyFy.Controllers
             }
             if (postType == PostType.Post)
             {
-                return Ok(this.postService.GetPeopleLikes(dto.PostId, dto.Take, dto.Skip));
+                return Ok(postService.GetPeopleLikes(dto.PostId, dto.Take, dto.Skip));
             }
-            else
-            {
-                return Ok(this.eventService.GetPeopleLikes(dto.PostId, dto.Take, dto.Skip));
-            }
+
+            return Ok(eventService.GetPeopleLikes(dto.PostId, dto.Take, dto.Skip));
         }
 
         [HttpPost("getReposts")]
@@ -112,26 +109,24 @@ namespace FriendyFy.Controllers
             }
             if (postType == PostType.Post)
             {
-                return Ok(this.postService.GetPeopleReposts(dto.PostId, dto.Take, dto.Skip));
+                return Ok(postService.GetPeopleReposts(dto.PostId, dto.Take, dto.Skip));
             }
-            else
-            {
-                return Ok(this.eventService.GetPostReposts(dto.PostId, dto.Take, dto.Skip));
-            }
+
+            return Ok(eventService.GetPostReposts(dto.PostId, dto.Take, dto.Skip));
         }
 
         [HttpPost("getTaggedPeople")]
         public List<PersonListPopupViewModel> GetTaggedPeople(GetPostLikesCount dto)
         {
-            return this.postService.GetTaggedPeople(dto.PostId, dto.Take, dto.Skip);
+            return postService.GetTaggedPeople(dto.PostId, dto.Take, dto.Skip);
         }
 
         [HttpPost("getByImageId")]
         public IActionResult GetPostByImageId(GetByImageIdDto dto)
         {
-            var user = this.GetUserByToken();
+            var user = GetUserByToken();
 
-            var post = this.postService.GetPostByImageId(dto.ImageId, user != null ? user.Id : null);
+            var post = postService.GetPostByImageId(dto.ImageId, user != null ? user.Id : null);
             if (post == null)
             {
                 return BadRequest();
@@ -147,7 +142,7 @@ namespace FriendyFy.Controllers
             {
                 return BadRequest("There was something wrong with the request!");
             }
-            var user = this.GetUserByToken();
+            var user = GetUserByToken();
             if (user == null)
             {
                 return Unauthorized("You are not logged in!");
@@ -155,7 +150,7 @@ namespace FriendyFy.Controllers
 
             if (postType == PostType.Event)
             {
-                var result = await this.eventService.RepostEventAsync(dto.PostId, dto.Text, user.Id);
+                var result = await eventService.RepostEventAsync(dto.PostId, dto.Text, user.Id);
                 if (result > 0)
                 {
                     return Ok(new { reposts = result });
@@ -163,7 +158,7 @@ namespace FriendyFy.Controllers
             }
             else if (postType == PostType.Post)
             {
-                var result = await this.postService.RepostAsync(dto.PostId, dto.Text, user.Id);
+                var result = await postService.RepostAsync(dto.PostId, dto.Text, user.Id);
                 if (result > 0)
                 {
                     return Ok(new { reposts = result });
@@ -181,7 +176,7 @@ namespace FriendyFy.Controllers
                 return BadRequest("There was something wrong with the request!");
             }
 
-            var user = this.GetUserByToken();
+            var user = GetUserByToken();
             if (user == null)
             {
                 return Unauthorized("You are not logged in!");
@@ -190,12 +185,12 @@ namespace FriendyFy.Controllers
             bool deleted = false;
             if (postType == PostType.Post)
             {
-                deleted = await this.postService.DeletePostAsync(dto.PostId, user.Id);
+                deleted = await postService.DeletePostAsync(dto.PostId, user.Id);
 
             }
             else if (postType == PostType.Event)
             {
-                deleted = await this.eventService.DeleteEventPostAsync(dto.PostId, user.Id);
+                deleted = await eventService.DeleteEventPostAsync(dto.PostId, user.Id);
             }
             
             if (deleted)
@@ -207,7 +202,7 @@ namespace FriendyFy.Controllers
         [HttpPost("getFeedPosts")]
         public IActionResult GetFeedPosts(GetFeedData dto)
         {
-            var user = this.GetUserByToken();
+            var user = GetUserByToken();
 
             var data = new List<PostDetailsViewModel>();
             var events = new List<PostDetailsViewModel>();
@@ -218,14 +213,14 @@ namespace FriendyFy.Controllers
             {
                 if (dto.HasEvents)
                 {
-                    events = this.eventService.GetFeedEvents(user, dto.isProfile, dto.Username, toTake, dto.EventIds.Count(), dto.EventIds);
+                    events = eventService.GetFeedEvents(user, dto.isProfile, dto.Username, toTake, dto.EventIds.Count(), dto.EventIds);
                 }
             }
             if (dto.FeedType != "events")
             {
                 if (dto.HasPosts)
                 {
-                    posts = this.postService.GetFeedPosts(user, dto.isProfile, dto.Username, toTake, dto.PostIds.Count(), dto.PostIds);
+                    posts = postService.GetFeedPosts(user, dto.isProfile, dto.Username, toTake, dto.PostIds.Count(), dto.PostIds);
                 }
             }
             bool hasPosts = false, hasEvents = false;
@@ -250,7 +245,7 @@ namespace FriendyFy.Controllers
             {
                 data = data.OrderBy(x => x.CreatedAgo).ToList();
             }
-            return Ok(new FeedViewModel()
+            return Ok(new FeedViewModel
             {
                 Posts = data,
                 HasEvents = hasEvents,

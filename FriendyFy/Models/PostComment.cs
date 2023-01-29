@@ -1,6 +1,6 @@
-﻿using FriendyFy.Models.Common;
-using System;
+﻿using System;
 using System.Collections.Generic;
+using FriendyFy.Models.Common;
 
 namespace FriendyFy.Models
 {

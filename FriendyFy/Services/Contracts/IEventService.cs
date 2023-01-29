@@ -1,8 +1,8 @@
-﻿using FriendyFy.Models;
-using FriendyFy.Models.Enums;
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.Threading.Tasks;
+using FriendyFy.Models;
+using FriendyFy.Models.Enums;
 using ViewModels;
 using ViewModels.ViewModels;
 

@@ -1,8 +1,8 @@
-﻿using FriendyFy.Data;
+﻿using System.Linq;
+using System.Threading.Tasks;
+using FriendyFy.Data;
 using FriendyFy.Services.Contracts;
 using Microsoft.AspNetCore.SignalR;
-using System.Linq;
-using System.Threading.Tasks;
 
 namespace FriendyFy.Hubs
 {
@@ -24,26 +24,26 @@ namespace FriendyFy.Hubs
 
             var userId = Context.UserIdentifier;
 
-            var messageId = await this.chatService.SendChatMessage(dto.ChatId, userId, dto.Message);
+            var messageId = await chatService.SendChatMessage(dto.ChatId, userId, dto.Message);
 
             if (messageId == null)
             {
                 return false;
             }
 
-            var usersInChat = this.chatService.GetChatUserIds(dto.ChatId).Where(x => x != userId).ToList();
+            var usersInChat = chatService.GetChatUserIds(dto.ChatId).Where(x => x != userId).ToList();
 
-            var message = this.messageService.GetChatMessageForOtherPeople(messageId);
+            var message = messageService.GetChatMessageForOtherPeople(messageId);
             if (message == null)
             {
                 return false;
             }
 
-            await this.Clients.Users(usersInChat).SendAsync(dto.ChatId, message);
+            await Clients.Users(usersInChat).SendAsync(dto.ChatId, message);
 
             message.IsYourMessage = true;
             
-            await this.Clients.User(userId).SendAsync(dto.ChatId, message);
+            await Clients.User(userId).SendAsync(dto.ChatId, message);
 
             return true;
         }

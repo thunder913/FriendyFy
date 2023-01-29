@@ -1,9 +1,9 @@
-﻿using SendGrid;
-using SendGrid.Helpers.Mail;
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using SendGrid;
+using SendGrid.Helpers.Mail;
 
 namespace FriendyFy.Messaging
 {
@@ -14,7 +14,7 @@ namespace FriendyFy.Messaging
 
         public SendGridEmailSender(string apiKey)
         {
-            this.client = new SendGridClient(apiKey);
+            client = new SendGridClient(apiKey);
         }
 
         public async Task SendEmailAsync(string from, string fromName, string to, string subject, string htmlContent, IEnumerable<EmailAttachment> attachments = null)
@@ -24,7 +24,7 @@ namespace FriendyFy.Messaging
                 throw new ArgumentException("Subject and message should be provided.");
             }
 
-            var message = this.GetMessageWithData(from, to, fromName, subject, htmlContent);
+            var message = GetMessageWithData(from, to, fromName, subject, htmlContent);
 
             if (attachments?.Any() == true)
             {
@@ -34,7 +34,7 @@ namespace FriendyFy.Messaging
                 }
             }
 
-            await this.client.SendEmailAsync(message);
+            await client.SendEmailAsync(message);
         }
 
 

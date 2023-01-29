@@ -15,7 +15,7 @@ namespace FriendyFy.Helpers
         public string GetUserId(HubConnectionContext connection)
         {
             var jwt = connection.GetHttpContext().Request.Cookies["jwt"]; 
-            var token = this.jwtService.Verify(jwt);
+            var token = jwtService.Verify(jwt);
             var userId = token.Id;
             return userId;
         }

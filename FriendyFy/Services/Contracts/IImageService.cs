@@ -1,6 +1,6 @@
-﻿using FriendyFy.Models;
+﻿using System.Threading.Tasks;
+using FriendyFy.Models;
 using FriendyFy.Models.Enums;
-using System.Threading.Tasks;
 
 namespace FriendyFy.Services.Contracts
 {

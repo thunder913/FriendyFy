@@ -1,9 +1,9 @@
-﻿using FriendyFy.Data;
+﻿using System.Collections.Generic;
+using System.Threading.Tasks;
+using FriendyFy.Data;
 using FriendyFy.Services.Contracts;
 using Microsoft.AspNetCore.Mvc;
 using Newtonsoft.Json;
-using System.Collections.Generic;
-using System.Threading.Tasks;
 
 namespace FriendyFy.Controllers
 {
@@ -20,7 +20,7 @@ namespace FriendyFy.Controllers
         [HttpPost("getChats")]
         public IActionResult GetUserChats(GetChatsDto dto)
         {
-            var user = this.GetUserByToken();
+            var user = GetUserByToken();
 
             var chatIds = new List<string>();
             if (!string.IsNullOrWhiteSpace(dto.ChatIds))
@@ -32,21 +32,20 @@ namespace FriendyFy.Controllers
                 return Unauthorized("You are not signed in!");
             }
 
-            return Ok(this.chatService.GetUserChats(dto.Username, dto.Page, dto.ItemsPerPage, dto.Take, dto.Search, chatIds));
+            return Ok(chatService.GetUserChats(dto.Username, dto.Page, dto.ItemsPerPage, dto.Take, dto.Search, chatIds));
         }
 
         [HttpPost("getChat")]
-        public IActionResult GetUserChat([FromBody] GetChatDto dto)
+        public async Task<IActionResult> GetUserChat([FromBody] GetChatDto dto)
         {
-            var user = this.GetUserByToken();
+            var user = GetUserByToken();
 
             if (user.UserName != dto.Username)
             {
                 return Unauthorized("You are not signed in!");
             }
 
-            var chat = this.chatService.GetChatMessages(user.Id, dto.ChatId, dto.Take, dto.Skip);
-            //await this.SeenMessage(dto.ChatId);
+            var chat = await chatService.GetChatMessagesAsync(user.Id, dto.ChatId, dto.Take, dto.Skip);
 
             return Ok(chat);
         }
@@ -54,14 +53,14 @@ namespace FriendyFy.Controllers
         [HttpPost("seeMessages")]
         public async Task<IActionResult> SeenMessage([FromBody] GetChatDto dto)
         {
-            var user = this.GetUserByToken();
+            var user = GetUserByToken();
 
             if (user == null)
             {
                 return Unauthorized("You are not signed in!");
             }
 
-            return Ok(await this.chatService.SeeMessagesAsync(dto.ChatId, user));
+            return Ok(await chatService.SeeMessagesAsync(dto.ChatId, user));
         }
     }
 }
