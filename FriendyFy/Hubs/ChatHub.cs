@@ -24,13 +24,14 @@ namespace FriendyFy.Hubs
 
             var userId = Context.UserIdentifier;
 
+            //TODO simplify the logic by returning the message object from the sendchatmessage, there is no need of messageService
             var messageId = await chatService.SendChatMessage(dto.ChatId, userId, dto.Message);
 
             if (messageId == null)
             {
                 return false;
             }
-
+            
             var usersInChat = chatService.GetChatUserIds(dto.ChatId).Where(x => x != userId).ToList();
 
             var message = await messageService.GetChatMessageForOtherPeopleAsync(messageId);

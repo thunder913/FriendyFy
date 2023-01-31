@@ -20,7 +20,9 @@ namespace FriendyFy.Hubs
         public async Task<bool> SendEventInviteNotification(InviteUserDto dto)
         {
             var userId = Context.UserIdentifier;
+            
             var user = userService.GetById(userId);
+            
             if (userId == null || userId != user.Id)
             {
                 return false;
