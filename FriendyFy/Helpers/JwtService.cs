@@ -4,13 +4,21 @@ using System.Security.Claims;
 using System.Text;
 using FriendyFy.Common;
 using FriendyFy.Helpers.Contracts;
+using Microsoft.Extensions.Configuration;
 using Microsoft.IdentityModel.Tokens;
 
 namespace FriendyFy.Helpers
 {
     public class JwtService : IJwtService
     {
-        private string secureKey = "8ziG4C6kzcEd7f0YidnlUAQL3JBG7xpWYKidvM8i";
+        private readonly IConfiguration configuration;
+
+        public JwtService(IConfiguration configuration)
+        {
+            this.configuration = configuration;
+        }
+
+        private string secureKey => configuration["JwtSecureKey"];
         public string Generate(string id, string email)
         {
             var symmetricSecurityKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(secureKey));

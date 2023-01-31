@@ -78,7 +78,7 @@ builder.Services.AddSingleton<IUserIdProvider, UserIdProvider>();
 builder.Services.AddScoped(typeof(IDeletableEntityRepository<>), typeof(EfDeletableEntityRepository<>));
 builder.Services.AddScoped(typeof(IRepository<>), typeof(EfRepository<>));
 
-builder.Services.AddTransient<IEmailSender>(serviceProvider => new SendGridEmailSender(builder.Configuration["SendGrid-ApiKey"]));
+builder.Services.AddTransient<IEmailSender>(serviceProvider => new SendGridEmailSender(builder.Configuration["SendGrid-ApiKey1"]));
 builder.Services.AddTransient<IUserService, UserService>();
 builder.Services.AddTransient<IInterestService, InterestService>();
 builder.Services.AddTransient<IJwtService, JwtService>();
