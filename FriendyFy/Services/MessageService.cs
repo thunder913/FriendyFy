@@ -1,5 +1,4 @@
-﻿using System.Linq;
-using System.Threading.Tasks;
+﻿using System.Threading.Tasks;
 using FriendyFy.BlobStorage;
 using FriendyFy.Common;
 using FriendyFy.Data;

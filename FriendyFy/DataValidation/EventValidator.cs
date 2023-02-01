@@ -1,6 +1,4 @@
 ﻿using FriendyFy.Data;
-using FriendyFy.Models;
-using static System.Runtime.InteropServices.JavaScript.JSType;
 using System;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
