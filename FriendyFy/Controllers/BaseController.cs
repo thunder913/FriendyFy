@@ -9,8 +9,8 @@ public class BaseController : Controller
 {
     private IJwtService jwtService { get; set; }
     private IUserService userService { get; set; }
-    protected IJwtService JwtService => jwtService ?? (jwtService = (IJwtService) HttpContext.RequestServices.GetService(typeof(IJwtService)));
-    protected IUserService UserService => userService ?? (userService = (IUserService) HttpContext.RequestServices.GetService(typeof(IUserService)));
+    protected IJwtService JwtService => jwtService ??= (IJwtService) HttpContext.RequestServices.GetService(typeof(IJwtService));
+    protected IUserService UserService => userService ??= (IUserService) HttpContext.RequestServices.GetService(typeof(IUserService));
     protected ApplicationUser GetUserByToken()
     {
         var jwt = Request.Cookies["jwt"];
