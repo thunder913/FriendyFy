@@ -1,6 +1,6 @@
 ﻿using System.Collections.Generic;
 using System.Threading.Tasks;
-using FriendyFy.Data;
+using FriendyFy.Data.Requests;
 using FriendyFy.Services.Contracts;
 using Microsoft.AspNetCore.Mvc;
 using Newtonsoft.Json;
@@ -18,7 +18,7 @@ public class ChatController : BaseController
     }
 
     [HttpPost("getChats")]
-    public IActionResult GetUserChats(GetChatsDto dto)
+    public IActionResult GetUserChats(UserChatsRequest dto)
     {
         var user = GetUserByToken();
             
@@ -37,7 +37,7 @@ public class ChatController : BaseController
     }
 
     [HttpPost("getChat")]
-    public async Task<IActionResult> GetUserChat([FromBody] GetChatDto dto)
+    public async Task<IActionResult> GetUserChat([FromBody] ChatRequest dto)
     {
         var user = GetUserByToken();
 
@@ -52,7 +52,7 @@ public class ChatController : BaseController
     }
 
     [HttpPost("seeMessages")]
-    public async Task<IActionResult> SeenMessage([FromBody] GetChatDto dto)
+    public async Task<IActionResult> SeenMessage([FromBody] ChatRequest dto)
     {
         var user = GetUserByToken();
 

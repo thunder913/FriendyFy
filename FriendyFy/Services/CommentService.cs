@@ -7,6 +7,7 @@ using FriendyFy.Common;
 using FriendyFy.Data;
 using FriendyFy.Models;
 using FriendyFy.Services.Contracts;
+using FriendyFy.ViewModels;
 using Microsoft.EntityFrameworkCore;
 using ViewModels;
 

@@ -1,15 +1,14 @@
 ﻿using System.Collections.Generic;
 using System.Threading.Tasks;
-using FriendyFy.Data;
+using FriendyFy.Data.Requests;
 using FriendyFy.Models;
-using ViewModels;
-using ViewModels.ViewModels;
+using FriendyFy.ViewModels;
 
 namespace FriendyFy.Services.Contracts;
 
 public interface IPostService
 {
-    Task<bool> CreatePostAsync(MakePostDto makePostDto, string userId);
+    Task<bool> CreatePostAsync(CreatePostRequest makePostDto, string userId);
     List<PostDetailsViewModel> GetAllPosts(string userId);
     Task<int?> LikePostAsync(string postId, ApplicationUser user);
     List<PersonListPopupViewModel> GetPeopleLikes(string postId, int take, int skip);

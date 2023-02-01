@@ -1,5 +1,5 @@
 ﻿using System.Collections.Generic;
-using FriendyFy.Data;
+using FriendyFy.Data.Dtos;
 using FriendyFy.Services.Contracts;
 using Microsoft.AspNetCore.Mvc;
 

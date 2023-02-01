@@ -1,8 +1,8 @@
 ﻿using System.Collections.Generic;
 using System.Threading.Tasks;
-using FriendyFy.Data;
+using FriendyFy.Data.Dtos;
 using FriendyFy.Models;
-using ViewModels;
+using FriendyFy.ViewModels;
 
 namespace FriendyFy.Services.Contracts;
 

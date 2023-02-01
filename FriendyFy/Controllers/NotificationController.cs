@@ -1,5 +1,5 @@
 ﻿using System.Threading.Tasks;
-using FriendyFy.Data;
+using FriendyFy.Data.Requests;
 using FriendyFy.Services.Contracts;
 using Microsoft.AspNetCore.Mvc;
 
@@ -17,7 +17,7 @@ public class NotificationController : BaseController
     }
 
     [HttpPost("getForUser")]
-    public async Task<IActionResult> GetNotification(GetNotificationsDto dto)
+    public async Task<IActionResult> GetNotification(NotificationRequest dto)
     {
         var user = GetUserByToken();
             
@@ -81,7 +81,7 @@ public class NotificationController : BaseController
     }
 
     [HttpPost("seeNotification")]
-    public async Task<IActionResult> SeeNotification(SeeNotificationsDto dto)
+    public async Task<IActionResult> SeeNotification(SeeNotificationRequest dto)
     {
         var user = GetUserByToken();
 

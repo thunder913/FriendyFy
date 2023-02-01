@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using System.Threading.Tasks;
 using FriendyFy.Models.Enums;
-using ViewModels.ViewModels;
+using FriendyFy.ViewModels;
 
 namespace FriendyFy.Services.Contracts;
 

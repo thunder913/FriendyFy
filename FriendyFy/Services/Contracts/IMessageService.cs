@@ -1,5 +1,5 @@
 ﻿using System.Threading.Tasks;
-using ViewModels;
+using FriendyFy.ViewModels;
 
 namespace FriendyFy.Services.Contracts;
 

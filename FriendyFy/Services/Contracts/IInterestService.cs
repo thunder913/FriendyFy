@@ -1,6 +1,6 @@
 ﻿using System.Collections.Generic;
 using System.Threading.Tasks;
-using FriendyFy.Data;
+using FriendyFy.Data.Dtos;
 using FriendyFy.Models;
 
 namespace FriendyFy.Services.Contracts;

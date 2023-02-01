@@ -9,19 +9,20 @@ using System.Text.Encodings.Web;
 using System.Threading.Tasks;
 using FriendyFy.BlobStorage;
 using FriendyFy.Common;
-using FriendyFy.Data;
+using FriendyFy.Data.Dtos;
+using FriendyFy.Data.Requests;
 using FriendyFy.DataValidation;
 using FriendyFy.Helpers.Contracts;
 using FriendyFy.Messaging;
 using FriendyFy.Models;
 using FriendyFy.Models.Enums;
 using FriendyFy.Services.Contracts;
+using FriendyFy.ViewModels;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.WebUtilities;
 using Newtonsoft.Json;
-using ViewModels;
 
 namespace FriendyFy.Controllers;
 
@@ -60,7 +61,7 @@ public class AuthController : BaseController
     }
 
     [HttpPost("register")]
-    public async Task<IActionResult> Register(RegisterUserDto userDto)
+    public async Task<IActionResult> Register(RegistrationRequest userDto)
     {
         try
         {
@@ -112,7 +113,7 @@ public class AuthController : BaseController
     }
 
     [HttpPost("login")]
-    public IActionResult Login(LoginUserDto loginUserDto)
+    public IActionResult Login(LoginRequest loginUserDto)
     {
         var user = userService.GetByEmail(loginUserDto.Email);
 
@@ -183,7 +184,7 @@ public class AuthController : BaseController
     }
 
     [HttpPost("ConfirmEmail")]
-    public async Task<IActionResult> ConfirmEmail(ConfirmEmailDto confirmDto)
+    public async Task<IActionResult> ConfirmEmail(ConfirmEmailRequest confirmDto)
     {
         try
         {
@@ -260,7 +261,7 @@ public class AuthController : BaseController
     }
 
     [HttpPost("FinishFirstTimeSetup")]
-    public async Task<IActionResult> FinishFirstTimeSetup([FromForm] FinishFirstTimeSetupDto dto, IFormFile formFile)
+    public async Task<IActionResult> FinishFirstTimeSetup([FromForm] FinishFirstTimeSetupRequest dto, IFormFile formFile)
     {
         var user = GetUserByToken();
             
@@ -293,7 +294,7 @@ public class AuthController : BaseController
     }
 
     [HttpPost("getUserImages")]
-    public IActionResult GetUserImages(GetUserImagesDto dto)
+    public IActionResult GetUserImages(UserImagesRequest dto)
     {
         return Ok(userService.GetUserImages(dto.Username, dto.Take, dto.Skip));
     }
@@ -314,7 +315,7 @@ public class AuthController : BaseController
     }
 
     [HttpPost("editUserData")]
-    public async Task<IActionResult> EditUserData([FromForm] EditUserDataDto dto)
+    public async Task<IActionResult> EditUserData([FromForm] EditUserDataRequest dto)
     {
         var user = GetUserByToken();
         if (user == null || user.Id != dto.UserId)
@@ -345,7 +346,7 @@ public class AuthController : BaseController
     }
 
     [HttpPost("forgotPassword")]
-    public async Task<IActionResult> SendForgottenPasswordEmail(ForgottenPasswordDto dto)
+    public async Task<IActionResult> SendForgottenPasswordEmail(ForgottenPasswordRequest dto)
     {
         var user = await userManager.FindByEmailAsync(dto.Email);
         if (user == null || !(await userManager.IsEmailConfirmedAsync(user)))
@@ -373,7 +374,7 @@ public class AuthController : BaseController
     }
 
     [HttpPost("resetPassword")]
-    public async Task<IActionResult> ResetPassword(ResetPasswordDto dto)
+    public async Task<IActionResult> ResetPassword(ResetPasswordRequest dto)
     {
         var user = await userManager.FindByEmailAsync(dto.Email);
         if (user == null)

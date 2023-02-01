@@ -1,5 +1,5 @@
 ﻿using System.Threading.Tasks;
-using FriendyFy.Data;
+using FriendyFy.Data.Requests;
 using FriendyFy.Services.Contracts;
 using Microsoft.AspNetCore.SignalR;
 
@@ -17,7 +17,7 @@ public class NotificationHub : Hub
         this.notificationService = notificationService;
         this.userService = userService;
     }
-    public async Task<bool> SendEventInviteNotification(InviteUserDto dto)
+    public async Task<bool> SendEventInviteNotification(EventInvitationRequest dto)
     {
         var userId = Context.UserIdentifier;
             

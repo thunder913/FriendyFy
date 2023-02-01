@@ -5,12 +5,13 @@ using System.Threading.Tasks;
 using FriendyFy.BlobStorage;
 using FriendyFy.Common;
 using FriendyFy.Data;
+using FriendyFy.Data.Requests;
 using FriendyFy.Models;
 using FriendyFy.Models.Enums;
 using FriendyFy.Services.Contracts;
+using FriendyFy.ViewModels;
 using Microsoft.EntityFrameworkCore;
 using ViewModels;
-using ViewModels.ViewModels;
 using static System.Decimal;
 
 namespace FriendyFy.Services;
@@ -41,7 +42,7 @@ public class PostService : IPostService
         this.postTaggedRepository = postTaggedRepository;
     }
 
-    public async Task<bool> CreatePostAsync(MakePostDto makePostDto, string userId)
+    public async Task<bool> CreatePostAsync(CreatePostRequest makePostDto, string userId)
     {
         var privacy = PrivacySettings.Private;
         if (makePostDto.PrivacySettings == "everyone")

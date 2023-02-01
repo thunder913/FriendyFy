@@ -1,8 +1,9 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Threading.Tasks;
-using FriendyFy.Data;
+using FriendyFy.Data.Requests;
 using FriendyFy.Services.Contracts;
+using FriendyFy.ViewModels;
 using Microsoft.AspNetCore.Mvc;
 using ViewModels;
 
@@ -20,7 +21,7 @@ public class CommentController : BaseController
     }
 
     [HttpPost("make")]
-    public async Task<IActionResult> AddComment(AddCommentDto comment)
+    public async Task<IActionResult> AddComment(AddCommentRequest comment)
     {
         var user = GetUserByToken();
         if (user == null)
@@ -41,7 +42,7 @@ public class CommentController : BaseController
     }
 
     [HttpPost]
-    public List<PostCommentViewModel> GetPostComments([FromBody] GetCommentsDto commentDto)
+    public List<PostCommentViewModel> GetPostComments([FromBody] PostCommentsRequest commentDto)
     {
         var user = GetUserByToken();
             
@@ -55,7 +56,7 @@ public class CommentController : BaseController
     }
 
     [HttpPost("like")]
-    public async Task<IActionResult> LikePost(LikeCommentDto likedCommentDto)
+    public async Task<IActionResult> LikePost(CommentRequest likedCommentDto)
     {
         var user = GetUserByToken();
 
@@ -84,13 +85,13 @@ public class CommentController : BaseController
     }
 
     [HttpPost("getLikes")]
-    public List<PersonListPopupViewModel> GetLikes(GetCommentLikesDto dto)
+    public List<PersonListPopupViewModel> GetLikes(CommentLikesRequest dto)
     {
         return commentService.GetPeopleLikes(dto.CommentId, dto.Take, dto.Skip);
     }
 
     [HttpPost("deleteComment")]
-    public async Task<IActionResult> DeleteComment(LikeCommentDto dto)
+    public async Task<IActionResult> DeleteComment(CommentRequest dto)
     {
         var user = GetUserByToken();
             

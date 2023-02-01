@@ -3,12 +3,12 @@ using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 using System.Linq;
 using System.Threading.Tasks;
-using FriendyFy.Data;
+using FriendyFy.Data.Requests;
 using FriendyFy.DataValidation;
 using FriendyFy.Services.Contracts;
+using FriendyFy.ViewModels;
 using Microsoft.AspNetCore.Mvc;
 using ViewModels;
-using ViewModels.ViewModels;
 
 namespace FriendyFy.Controllers;
 
@@ -27,7 +27,7 @@ public class PostController : BaseController
     }
 
     [HttpPost("make")]
-    public async Task<IActionResult> MakePost(MakePostDto makePostDto)
+    public async Task<IActionResult> MakePost(CreatePostRequest makePostDto)
     {
         var user = GetUserByToken();
 
@@ -90,7 +90,7 @@ public class PostController : BaseController
     }
 
     [HttpPost("getLikes")]
-    public IActionResult GetLikes(GetPostLikesCount dto)
+    public IActionResult GetLikes(PostLikesRequest dto)
     {
         var parsed = Enum.TryParse(dto.PostType, out PostType postType);
         if (!parsed)
@@ -106,7 +106,7 @@ public class PostController : BaseController
     }
 
     [HttpPost("getReposts")]
-    public IActionResult GetReposts(GetPostLikesCount dto)
+    public IActionResult GetReposts(PostLikesRequest dto)
     {
         var parsed = Enum.TryParse(dto.PostType, out PostType postType);
         if (!parsed)
@@ -122,13 +122,13 @@ public class PostController : BaseController
     }
 
     [HttpPost("getTaggedPeople")]
-    public List<PersonListPopupViewModel> GetTaggedPeople(GetPostLikesCount dto)
+    public List<PersonListPopupViewModel> GetTaggedPeople(PostLikesRequest dto)
     {
         return postService.GetTaggedPeople(dto.PostId, dto.Take, dto.Skip);
     }
 
     [HttpPost("getByImageId")]
-    public async Task<IActionResult> GetPostByImageId(GetByImageIdDto dto)
+    public async Task<IActionResult> GetPostByImageId(PostByImageIdRequest dto)
     {
         var user = GetUserByToken();
 
@@ -141,7 +141,7 @@ public class PostController : BaseController
     }
 
     [HttpPost("repost")]
-    public async Task<IActionResult> Repost(RepostDto dto)
+    public async Task<IActionResult> Repost(RepostRequest dto)
     {
         var parsed = Enum.TryParse(dto.Type, out PostType postType);
         if (!parsed)
@@ -182,7 +182,7 @@ public class PostController : BaseController
     }
 
     [HttpPost("deletePost")]
-    public async Task<IActionResult> DeletePost(DeletePostDto dto)
+    public async Task<IActionResult> DeletePost(DeletePostRequest dto)
     {
         var parsed = Enum.TryParse(dto.PostType, out PostType postType);
         if (!parsed)
@@ -212,7 +212,7 @@ public class PostController : BaseController
     }
 
     [HttpPost("getFeedPosts")]
-    public async Task<IActionResult> GetFeedPosts(GetFeedData dto)
+    public async Task<IActionResult> GetFeedPosts(FeedPostsRequest dto)
     {
         var user = GetUserByToken();
 
@@ -225,14 +225,14 @@ public class PostController : BaseController
         {
             if (dto.HasEvents)
             {
-                events = await eventService.GetFeedEventsAsync(user, dto.isProfile, dto.Username, toTake, dto.EventIds.Count(), dto.EventIds);
+                events = await eventService.GetFeedEventsAsync(user, dto.IsProfile, dto.Username, toTake, dto.EventIds.Count(), dto.EventIds);
             }
         }
         if (dto.FeedType != "events")
         {
             if (dto.HasPosts)
             {
-                posts = postService.GetFeedPosts(user, dto.isProfile, dto.Username, toTake, dto.PostIds.Count(), dto.PostIds);
+                posts = postService.GetFeedPosts(user, dto.IsProfile, dto.Username, toTake, dto.PostIds.Count(), dto.PostIds);
             }
         }
         bool hasPosts = false, hasEvents = false;
@@ -249,7 +249,7 @@ public class PostController : BaseController
         data.AddRange(events);
         data.AddRange(posts);
             
-        if (!dto.isProfile)
+        if (!dto.IsProfile)
         {
             data = data.OrderBy(x => Guid.NewGuid()).ToList();
         }

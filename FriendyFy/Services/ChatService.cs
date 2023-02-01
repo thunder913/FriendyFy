@@ -5,11 +5,12 @@ using System.Threading.Tasks;
 using FriendyFy.BlobStorage;
 using FriendyFy.Common;
 using FriendyFy.Data;
+using FriendyFy.Data.Dtos;
 using FriendyFy.Models;
 using FriendyFy.Models.Enums;
 using FriendyFy.Services.Contracts;
+using FriendyFy.ViewModels;
 using Microsoft.EntityFrameworkCore;
-using ViewModels;
 
 namespace FriendyFy.Services;
 

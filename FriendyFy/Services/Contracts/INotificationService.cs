@@ -1,7 +1,7 @@
 ﻿using System.Collections.Generic;
 using System.Threading.Tasks;
 using FriendyFy.Models;
-using ViewModels.ViewModels;
+using FriendyFy.ViewModels;
 
 namespace FriendyFy.Services.Contracts;
 

@@ -3,13 +3,14 @@ using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 using System.Globalization;
 using System.Threading.Tasks;
-using FriendyFy.Data;
+using FriendyFy.Data.Dtos;
+using FriendyFy.Data.Requests;
 using FriendyFy.DataValidation;
 using FriendyFy.Models.Enums;
 using FriendyFy.Services.Contracts;
+using FriendyFy.ViewModels;
 using Microsoft.AspNetCore.Mvc;
 using Newtonsoft.Json;
-using ViewModels.ViewModels;
 
 namespace FriendyFy.Controllers;
 
@@ -28,7 +29,7 @@ public class EventController : BaseController
     }
 
     [HttpPost("create")]
-    public async Task<IActionResult> CreateEvent(CreateEventDto dto)
+    public async Task<IActionResult> CreateEvent(CreateEventRequest dto)
     {
         var user = GetUserByToken();
  
@@ -108,7 +109,7 @@ public class EventController : BaseController
     }
 
     [HttpPost("share")]
-    public async Task<IActionResult> ShareEvent(ShareEventDto dto)
+    public async Task<IActionResult> ShareEvent(ShareEventRequest dto)
     {
         var user = GetUserByToken();
             
@@ -144,7 +145,7 @@ public class EventController : BaseController
     }
 
     [HttpPost("addImage")]
-    public async Task<IActionResult> AddImage(AddEventImageDto dto)
+    public async Task<IActionResult> AddImage(AddEventImageRequest dto)
     {
         var user = GetUserByToken();
             
@@ -204,7 +205,7 @@ public class EventController : BaseController
     }
 
     [HttpPost("getEventInvitePeople")]
-    public async Task<IActionResult> GetEventInvitePeople(EventInvitePeopleDto dto)
+    public async Task<IActionResult> GetEventInvitePeople(EventInvitePeopleRequest dto)
     {
         var user = GetUserByToken();
 

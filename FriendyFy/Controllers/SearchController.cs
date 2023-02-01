@@ -3,7 +3,8 @@ using System.Collections.Generic;
 using System.Globalization;
 using System.Linq;
 using System.Threading.Tasks;
-using FriendyFy.Data;
+using FriendyFy.Data.Dtos;
+using FriendyFy.Data.Requests;
 using FriendyFy.Models.Enums;
 using FriendyFy.Services.Contracts;
 using Microsoft.AspNetCore.Mvc;
@@ -23,7 +24,7 @@ public class SearchController : BaseController
     }
 
     [HttpPost]
-    public IActionResult GetSearchResults(SearchDto dto)
+    public IActionResult GetSearchResults(SearchResultRequest dto)
     {
         var user = GetUserByToken();
             
@@ -36,7 +37,7 @@ public class SearchController : BaseController
     }
 
     [HttpPost("search")]
-    public async Task<IActionResult> PerformSeach(SearchPageDto dto)
+    public async Task<IActionResult> PerformSearch(SearchRequest dto)
     {
         var user = GetUserByToken();
         var interests = JsonConvert.DeserializeObject<List<InterestDto>>(dto.Interests);

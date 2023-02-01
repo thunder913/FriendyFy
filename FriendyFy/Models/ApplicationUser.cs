@@ -4,8 +4,8 @@ using System.ComponentModel.DataAnnotations.Schema;
 using FriendyFy.Mapping;
 using FriendyFy.Models.Common;
 using FriendyFy.Models.Enums;
+using FriendyFy.ViewModels;
 using Microsoft.AspNetCore.Identity;
-using ViewModels;
 
 namespace FriendyFy.Models;
 

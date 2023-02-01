@@ -1,10 +1,10 @@
 ﻿using System.Threading.Tasks;
-using FriendyFy.Data;
+using FriendyFy.Data.Requests;
 using FriendyFy.Hubs;
 using FriendyFy.Services.Contracts;
+using FriendyFy.ViewModels;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.SignalR;
-using ViewModels;
 
 namespace FriendyFy.Controllers;
 
@@ -92,7 +92,7 @@ public class FriendController : BaseController
     }
 
     [HttpPost("getFriends")]
-    public IActionResult GetFriendsToShow(GetFriendsDto dto)
+    public IActionResult GetFriendsToShow(FriendsRequest dto)
     {
         var user = GetUserByToken();
 

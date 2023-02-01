@@ -25,7 +25,6 @@ using Azure.Storage.Queues;
 using FriendyFy.Hubs;
 using FriendyFy.Mapping;
 using Microsoft.AspNetCore.SpaServices.ReactDevelopmentServer;
-using ViewModels;
 
 var builder = WebApplication.CreateBuilder(args);
 

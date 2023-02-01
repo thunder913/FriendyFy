@@ -3,7 +3,8 @@ using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 using System.Globalization;
 using System.Text.RegularExpressions;
-using FriendyFy.Data;
+using FriendyFy.Data.Dtos;
+using FriendyFy.Data.Requests;
 using FriendyFy.Models;
 using FriendyFy.Models.Enums;
 
@@ -15,7 +16,7 @@ public static class AuthValidator
     private const string NumberRegex = @"\d";
     private const string UpperCaseRegex = @"[A-Z]";
         
-    public static void ValidateRegisterUser(RegisterUserDto userDto)
+    public static void ValidateRegisterUser(RegistrationRequest userDto)
     {
         Regex nameValidator = new Regex(NameRegex);
         TextInfo textInfo = new CultureInfo("en-US", false).TextInfo;
@@ -63,7 +64,7 @@ public static class AuthValidator
         }
     }
 
-    public static void ValidateLoginUser(LoginUserDto userDto, ApplicationUser user)
+    public static void ValidateLoginUser(LoginRequest userDto, ApplicationUser user)
     {
         if (user == null ||
             !BCrypt.Net.BCrypt.Verify(userDto.Password, user.PasswordHash))
@@ -77,7 +78,7 @@ public static class AuthValidator
         }
     }
 
-    public static void ValidateConfirmEmail(ConfirmEmailDto confirmeEmailDto)
+    public static void ValidateConfirmEmail(ConfirmEmailRequest confirmeEmailDto)
     {
         if (confirmeEmailDto.UserId == null || confirmeEmailDto.Code == null)
         {
@@ -98,7 +99,7 @@ public static class AuthValidator
         }
     }
 
-    public static void ValidateFirstTimeSetup(FinishFirstTimeSetupDto setupDto, List<InterestDto> interests)
+    public static void ValidateFirstTimeSetup(FinishFirstTimeSetupRequest setupDto, List<InterestDto> interests)
     {
         if (string.IsNullOrWhiteSpace(setupDto.Quote))
         {
@@ -116,7 +117,7 @@ public static class AuthValidator
         }
     }
 
-    public static void ValidateEditUserData(EditUserDataDto dto, List<InterestDto> interests)
+    public static void ValidateEditUserData(EditUserDataRequest dto, List<InterestDto> interests)
     {
         Regex nameValidator = new Regex(NameRegex);
 

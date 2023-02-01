@@ -4,7 +4,7 @@ using System.Linq;
 using System.Threading.Tasks;
 using FriendyFy.Models.Enums;
 using FriendyFy.Services.Contracts;
-using ViewModels.ViewModels;
+using FriendyFy.ViewModels;
 
 namespace FriendyFy.Services;
 

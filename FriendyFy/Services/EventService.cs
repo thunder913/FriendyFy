@@ -9,6 +9,7 @@ using FriendyFy.Mapping;
 using FriendyFy.Models;
 using FriendyFy.Models.Enums;
 using FriendyFy.Services.Contracts;
+using FriendyFy.ViewModels;
 using Microsoft.EntityFrameworkCore;
 using ViewModels;
 using ViewModels.ViewModels;

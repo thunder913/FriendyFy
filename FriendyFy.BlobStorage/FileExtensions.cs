@@ -4,7 +4,7 @@ namespace FriendyFy.BlobStorage;
 
 public static class FileExtensions
 {
-    private static readonly FileExtensionContentTypeProvider Provider = new FileExtensionContentTypeProvider();
+    private static readonly FileExtensionContentTypeProvider Provider = new();
 
     public static string GetContentType(this string fileName)
     {

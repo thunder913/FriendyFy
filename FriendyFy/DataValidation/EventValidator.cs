@@ -1,15 +1,16 @@
-﻿using FriendyFy.Data;
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 using System.Globalization;
 using FriendyFy.Models.Enums;
+using FriendyFy.Data.Requests;
+using FriendyFy.Data.Dtos;
 
 namespace FriendyFy.DataValidation;
 
 public static class EventValidator
 {
-    public static void ValidateCreateEvent(CreateEventDto eventDto, List<InterestDto> interests)
+    public static void ValidateCreateEvent(CreateEventRequest eventDto, List<InterestDto> interests)
     {
         var privacySettingsParsed = Enum.TryParse(eventDto.PrivacyOptions, out PrivacySettings _);
         var dateParsed = DateTime.TryParseExact(eventDto.Date, "dd/MM/yyyy HH:mm",

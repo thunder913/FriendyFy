@@ -1,6 +1,6 @@
 ﻿using System.Linq;
 using System.Threading.Tasks;
-using FriendyFy.Data;
+using FriendyFy.Data.Requests;
 using FriendyFy.Services.Contracts;
 using Microsoft.AspNetCore.SignalR;
 
@@ -15,7 +15,7 @@ public class ChatHub : Hub
         this.chatService = chatService;
         this.messageService = messageService;
     }
-    public async Task<bool> SendMessage(SendMessageDto dto)
+    public async Task<bool> SendMessage(SendMessageRequest dto)
     {
         if (string.IsNullOrWhiteSpace(dto.Message))
         {

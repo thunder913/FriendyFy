@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Globalization;
 using System.Threading.Tasks;
-using FriendyFy.Data;
+using FriendyFy.Data.Requests;
 using FriendyFy.Models.Enums;
 using FriendyFy.Services.Contracts;
 using Microsoft.AspNetCore.Mvc;
@@ -44,7 +44,7 @@ public class UserController : BaseController
     }
 
     [HttpPost("changeTheme")]
-    public async Task<IActionResult> ChangerUserTheme(ChangeUserThemeDto dto)
+    public async Task<IActionResult> ChangerUserTheme(ChangeUserThemeRequest dto)
     {
         var user = GetUserByToken();
             
