@@ -2,8 +2,6 @@ import React, { useEffect, useState } from 'react';
 import { Route, Switch } from 'react-router';
 import { Layout } from './components/Layout/Layout';
 import Home from './components/Home/Home';
-import ApiAuthorizationRoutes from './components/api-authorization/ApiAuthorizationRoutes';
-import { ApplicationPaths } from './components/api-authorization/ApiAuthorizationConstants';
 import Profile from './components/Profile/Profile';
 import './custom.css'
 import Event from './components/Event/Event'
@@ -76,7 +74,6 @@ function App() {
           <Route path="/cookies" component={Cookies}></Route>
           <Route path="/tos" component={TermsOfService}></Route>
           <Route path="/search-page" component={SearchPage}></Route>
-          <Route path={ApplicationPaths.ApiAuthorizationPrefix} component={ApiAuthorizationRoutes} />
           <Route exact path={['/', '/Auth/Register']} component={Home} />
           <Route path='/Auth/SendForgottenPasswordEmail' component={ResetPassword} />
           <Route component={NotFound}></Route>
