@@ -5,7 +5,7 @@ namespace FriendyFy.Helpers;
 
 public class UserIdProvider : IUserIdProvider
 {
-    private IJwtService jwtService { get; set; }
+    private IJwtService jwtService { get; }
 
     public UserIdProvider(IJwtService jwtService)
     {

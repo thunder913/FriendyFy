@@ -8,8 +8,8 @@ namespace FriendyFy.Hubs;
 
 public class ChatHub : Hub
 {
-    private IChatService chatService { get; set; }
-    private IMessageService messageService { get; set; }
+    private IChatService chatService { get; }
+    private IMessageService messageService { get; }
     public ChatHub(IChatService chatService, IMessageService messageService)
     {
         this.chatService = chatService;

@@ -17,13 +17,13 @@ namespace FriendyFy.Services;
 
 public class PostService : IPostService
 {
-    private IDeletableEntityRepository<Post> postRepository { get; set; }
-    private IRepository<PostTagged> postTaggedRepository { get; set; }
-    private IRepository<PostLike> postLikeRepository { get; set; }
-    private IGeolocationService geolocationService { get; set; }
-    private IBlobService blobService { get; set; }
-    private IImageService imageService { get; set; }
-    private IUserService userService { get; set; }
+    private IDeletableEntityRepository<Post> postRepository { get; }
+    private IRepository<PostTagged> postTaggedRepository { get; }
+    private IRepository<PostLike> postLikeRepository { get; }
+    private IGeolocationService geolocationService { get; }
+    private IBlobService blobService { get; }
+    private IImageService imageService { get; }
+    private IUserService userService { get; }
 
     public PostService(IDeletableEntityRepository<Post> postRepository,
         IBlobService blobService,

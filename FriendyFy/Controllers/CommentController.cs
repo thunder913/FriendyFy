@@ -12,7 +12,7 @@ namespace FriendyFy.Controllers;
 [ApiController]
 public class CommentController : BaseController
 {
-    private ICommentService commentService { get; set; }
+    private ICommentService commentService { get; }
 
     public CommentController(ICommentService commentService)
     {
