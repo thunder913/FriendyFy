@@ -1,7 +1,6 @@
-﻿namespace FriendyFy.Data
+﻿namespace FriendyFy.Data;
+
+public class GetByImageIdDto
 {
-    public class GetByImageIdDto
-    {
-        public string ImageId { get; set; }
-    }
+    public string ImageId { get; set; }
 }

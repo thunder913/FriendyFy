@@ -1,16 +1,15 @@
 ﻿using FriendyFy.Data;
 using Microsoft.Rest;
 
-namespace FriendyFy.DataValidation
+namespace FriendyFy.DataValidation;
+
+public static class PostValidator
 {
-    public static class PostValidator
+    public static void ValidateMakePost(MakePostDto dto)
     {
-        public static void ValidateMakePost(MakePostDto dto)
+        if (string.IsNullOrWhiteSpace(dto.Image) && string.IsNullOrWhiteSpace(dto.PostMessage))
         {
-            if (string.IsNullOrWhiteSpace(dto.Image) && string.IsNullOrWhiteSpace(dto.PostMessage))
-            {
-                throw new ValidationException("Something went wrong, try again!");
-            }
+            throw new ValidationException("Something went wrong, try again!");
         }
     }
 }

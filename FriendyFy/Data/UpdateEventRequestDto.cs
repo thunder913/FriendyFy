@@ -1,7 +1,6 @@
-﻿namespace FriendyFy.Data
+﻿namespace FriendyFy.Data;
+
+public class UpdateEventRequestDto
 {
-    public class UpdateEventRequestDto
-    {
-        public string NotificationId{ get; set; }
-    }
+    public string NotificationId{ get; set; }
 }

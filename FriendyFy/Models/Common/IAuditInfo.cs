@@ -1,11 +1,10 @@
 ﻿using System;
 
-namespace FriendyFy.Models.Common
-{
-    public interface IAuditInfo
-    {
-        DateTime CreatedOn { get; set; }
+namespace FriendyFy.Models.Common;
 
-        DateTime? ModifiedOn { get; set; }
-    }
+public interface IAuditInfo
+{
+    DateTime CreatedOn { get; set; }
+
+    DateTime? ModifiedOn { get; set; }
 }

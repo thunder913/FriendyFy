@@ -1,8 +1,7 @@
-﻿namespace FriendyFy.Data
+﻿namespace FriendyFy.Data;
+
+public class AddEventImageDto
 {
-    public class AddEventImageDto
-    {
-        public string EventId { get; set; }
-        public string Image { get; set; }
-    }
+    public string EventId { get; set; }
+    public string Image { get; set; }
 }

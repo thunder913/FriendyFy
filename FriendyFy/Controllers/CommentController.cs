@@ -6,110 +6,109 @@ using FriendyFy.Services.Contracts;
 using Microsoft.AspNetCore.Mvc;
 using ViewModels;
 
-namespace FriendyFy.Controllers
+namespace FriendyFy.Controllers;
+
+[Route("comment")]
+[ApiController]
+public class CommentController : BaseController
 {
-    [Route("comment")]
-    [ApiController]
-    public class CommentController : BaseController
+    private ICommentService commentService { get; set; }
+
+    public CommentController(ICommentService commentService)
     {
-        private ICommentService commentService { get; set; }
+        this.commentService = commentService;
+    }
 
-        public CommentController(ICommentService commentService)
+    [HttpPost("make")]
+    public async Task<IActionResult> AddComment(AddCommentDto comment)
+    {
+        var user = GetUserByToken();
+        if (user == null)
         {
-            this.commentService = commentService;
+            return Unauthorized("You are not signed in!");
         }
 
-        [HttpPost("make")]
-        public async Task<IActionResult> AddComment(AddCommentDto comment)
+        Enum.TryParse(comment.PostType, out PostType postType);
+
+        var commentAdded = await commentService.AddCommentAsync(user, comment.Text, comment.PostId, postType);
+        if (commentAdded != null)
         {
-            var user = GetUserByToken();
-            if (user == null)
-            {
-                return Unauthorized("You are not signed in!");
-            }
-
-            Enum.TryParse(comment.PostType, out PostType postType);
-
-            var commentAdded = await commentService.AddCommentAsync(user, comment.Text, comment.PostId, postType);
-            if (commentAdded != null)
-            {
-                return Ok(commentAdded);
-            }
-
-            return BadRequest();
-            ;
+            return Ok(commentAdded);
         }
 
-        [HttpPost]
-        public List<PostCommentViewModel> GetPostComments([FromBody] GetCommentsDto commentDto)
-        {
-            var user = GetUserByToken();
+        return BadRequest();
+        ;
+    }
+
+    [HttpPost]
+    public List<PostCommentViewModel> GetPostComments([FromBody] GetCommentsDto commentDto)
+    {
+        var user = GetUserByToken();
             
-            var parsed = Enum.TryParse(commentDto.PostType, out PostType postType);
-            if (parsed)
-            {
-                return commentService.GetCommentsForPost(user?.Id, commentDto.PostId, commentDto.Take, commentDto.Skip, postType);
-            }
+        var parsed = Enum.TryParse(commentDto.PostType, out PostType postType);
+        if (parsed)
+        {
+            return commentService.GetCommentsForPost(user?.Id, commentDto.PostId, commentDto.Take, commentDto.Skip, postType);
+        }
             
-            return null;
+        return null;
+    }
+
+    [HttpPost("like")]
+    public async Task<IActionResult> LikePost(LikeCommentDto likedCommentDto)
+    {
+        var user = GetUserByToken();
+
+        if (user == null)
+        {
+            return Unauthorized("You are not signed in!");
         }
 
-        [HttpPost("like")]
-        public async Task<IActionResult> LikePost(LikeCommentDto likedCommentDto)
+        int? likes;
+        Enum.TryParse(likedCommentDto.PostType, out PostType postType);
+        try
         {
-            var user = GetUserByToken();
-
-            if (user == null)
-            {
-                return Unauthorized("You are not signed in!");
-            }
-
-            int? likes;
-            Enum.TryParse(likedCommentDto.PostType, out PostType postType);
-            try
-            {
-                likes = await commentService.LikeCommentAsync(likedCommentDto.CommentId, user, postType);
-            }
-            catch (Exception)
-            {
-                return BadRequest("There was an error saving your like!");
-            }
-
-            if (likes != null)
-            {
-                return Ok(likes);
-            }
-
-            return BadRequest();
+            likes = await commentService.LikeCommentAsync(likedCommentDto.CommentId, user, postType);
+        }
+        catch (Exception)
+        {
+            return BadRequest("There was an error saving your like!");
         }
 
-        [HttpPost("getLikes")]
-        public List<PersonListPopupViewModel> GetLikes(GetCommentLikesDto dto)
+        if (likes != null)
         {
-            return commentService.GetPeopleLikes(dto.CommentId, dto.Take, dto.Skip);
+            return Ok(likes);
         }
 
-        [HttpPost("deleteComment")]
-        public async Task<IActionResult> DeleteComment(LikeCommentDto dto)
-        {
-            var user = GetUserByToken();
+        return BadRequest();
+    }
+
+    [HttpPost("getLikes")]
+    public List<PersonListPopupViewModel> GetLikes(GetCommentLikesDto dto)
+    {
+        return commentService.GetPeopleLikes(dto.CommentId, dto.Take, dto.Skip);
+    }
+
+    [HttpPost("deleteComment")]
+    public async Task<IActionResult> DeleteComment(LikeCommentDto dto)
+    {
+        var user = GetUserByToken();
             
-            if (user == null)
-            {
-                return Unauthorized();
-            }
-            var parsed = Enum.TryParse(dto.PostType, out PostType postType);
-            if (!parsed)
-            {
-                return BadRequest();
-            }
-
-            if(await commentService.DeleteCommentAsync(user.Id, dto.CommentId, postType))
-            {
-                return Ok();
-            }
-
+        if (user == null)
+        {
+            return Unauthorized();
+        }
+        var parsed = Enum.TryParse(dto.PostType, out PostType postType);
+        if (!parsed)
+        {
             return BadRequest();
         }
+
+        if(await commentService.DeleteCommentAsync(user.Id, dto.CommentId, postType))
+        {
+            return Ok();
+        }
+
+        return BadRequest();
     }
 }

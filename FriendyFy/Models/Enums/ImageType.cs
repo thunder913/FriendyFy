@@ -1,9 +1,8 @@
-﻿namespace FriendyFy.Models.Enums
+﻿namespace FriendyFy.Models.Enums;
+
+public enum ImageType
 {
-    public enum ImageType
-    {
-        ProfileImage,
-        CoverImage,
-        NormalImage
-    }
+    ProfileImage,
+    CoverImage,
+    NormalImage
 }

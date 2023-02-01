@@ -1,9 +1,8 @@
-﻿namespace FriendyFy.BlobStorage
-{
-    public class UploadFileRequest
-    {
-        public string FilePath { get; set; }
+﻿namespace FriendyFy.BlobStorage;
 
-        public string FileName { get; set; }
-    }
+public class UploadFileRequest
+{
+    public string FilePath { get; set; }
+
+    public string FileName { get; set; }
 }

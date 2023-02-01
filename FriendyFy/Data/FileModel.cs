@@ -1,10 +1,9 @@
 ﻿using Microsoft.AspNetCore.Http;
 
-namespace FriendyFy.Data
+namespace FriendyFy.Data;
+
+public class FileModel
 {
-    public class FileModel
-    {
-        public string FileName { get; set; }
-        public IFormFile FormFile { get; set; }
-    }
+    public string FileName { get; set; }
+    public IFormFile FormFile { get; set; }
 }

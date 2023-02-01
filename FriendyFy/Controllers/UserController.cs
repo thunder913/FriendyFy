@@ -7,66 +7,65 @@ using FriendyFy.Services.Contracts;
 using Microsoft.AspNetCore.Mvc;
 using static System.Decimal;
 
-namespace FriendyFy.Controllers
+namespace FriendyFy.Controllers;
+
+[ApiController]
+[Route("user")]
+public class UserController : BaseController
 {
-    [ApiController]
-    [Route("user")]
-    public class UserController : BaseController
+    private IUserService userService { get; set; }
+    private IGeolocationService geolocationService { get; set; }
+
+    public UserController(IGeolocationService geolocationService, IUserService userService)
     {
-        private IUserService userService { get; set; }
-        private IGeolocationService geolocationService { get; set; }
+        this.geolocationService = geolocationService;
+        this.userService = userService;
+    }
 
-        public UserController(IGeolocationService geolocationService, IUserService userService)
+    [HttpPost("getLocation")]
+    public IActionResult GetLocation([FromBody] string userId)
+    {
+        var user = UserService.GetByUsername(userId);
+
+        if (user?.Longitude == null || user?.Latitude == null)
         {
-            this.geolocationService = geolocationService;
-            this.userService = userService;
+            return BadRequest("The user hasn't set his location!");
         }
 
-        [HttpPost("getLocation")]
-        public IActionResult GetLocation([FromBody] string userId)
-        {
-            var user = UserService.GetByUsername(userId);
+        return Ok(new { Location = geolocationService.GetUserLocation(ToDouble((decimal)user.Latitude), ToDouble((decimal)user.Longitude)), user.Latitude, user.Longitude });
+    }
 
-            if (user?.Longitude == null || user?.Latitude == null)
-            {
-                return BadRequest("The user hasn't set his location!");
-            }
+    [HttpPost("getEventsCount")]
+    public IActionResult GetEventsCount([FromBody] string userId)
+    {
+        var count = UserService.GetUserEventsCount(userId);
 
-            return Ok(new { Location = geolocationService.GetUserLocation(ToDouble((decimal)user.Latitude), ToDouble((decimal)user.Longitude)), user.Latitude, user.Longitude });
-        }
+        return Ok(new { count });
+    }
 
-        [HttpPost("getEventsCount")]
-        public IActionResult GetEventsCount([FromBody] string userId)
-        {
-            var count = UserService.GetUserEventsCount(userId);
-
-            return Ok(new { count });
-        }
-
-        [HttpPost("changeTheme")]
-        public async Task<IActionResult> ChangerUserTheme(ChangeUserThemeDto dto)
-        {
-            var user = GetUserByToken();
+    [HttpPost("changeTheme")]
+    public async Task<IActionResult> ChangerUserTheme(ChangeUserThemeDto dto)
+    {
+        var user = GetUserByToken();
             
-            if (user.UserName != dto.Username)
-            {
-                return Unauthorized("You are trying to impersonate a user!");
-            }
-
-            var parsed = Enum.TryParse(CultureInfo.CurrentCulture.TextInfo.ToTitleCase(dto.Theme), out ThemePreference theme);
-            
-            if (!parsed)
-            {
-                return BadRequest("There was an error switching the theme!");
-            }
-
-            var result = await userService.ChangeUserThemeAsync(user, theme);
-            if (result)
-            {
-                return Ok();
-            }
-
-            return BadRequest();
+        if (user.UserName != dto.Username)
+        {
+            return Unauthorized("You are trying to impersonate a user!");
         }
+
+        var parsed = Enum.TryParse(CultureInfo.CurrentCulture.TextInfo.ToTitleCase(dto.Theme), out ThemePreference theme);
+            
+        if (!parsed)
+        {
+            return BadRequest("There was an error switching the theme!");
+        }
+
+        var result = await userService.ChangeUserThemeAsync(user, theme);
+        if (result)
+        {
+            return Ok();
+        }
+
+        return BadRequest();
     }
 }

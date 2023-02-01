@@ -7,69 +7,68 @@ using FriendyFy.Models;
 using FriendyFy.Services.Contracts;
 using Microsoft.EntityFrameworkCore;
 
-namespace FriendyFy.Services
+namespace FriendyFy.Services;
+
+public class InterestService : IInterestService
 {
-    public class InterestService : IInterestService
+    private readonly IDeletableEntityRepository<Interest> interestRepository;
+
+    public InterestService(IDeletableEntityRepository<Interest> interestRepository)
     {
-        private readonly IDeletableEntityRepository<Interest> interestRepository;
+        this.interestRepository = interestRepository;
+    }
 
-        public InterestService(IDeletableEntityRepository<Interest> interestRepository)
+    public async Task<List<Interest>> AddNewInterestsAsync(List<InterestDto> interests)
+    {
+        var allInterests = new List<Interest>();
+        foreach (var item in interests)
         {
-            this.interestRepository = interestRepository;
-        }
-
-        public async Task<List<Interest>> AddNewInterestsAsync(List<InterestDto> interests)
-        {
-            var allInterests = new List<Interest>();
-            foreach (var item in interests)
+            if (item.IsNew)
             {
-                if (item.IsNew)
-                {
-                    allInterests.Add(await AddInterestToDbAsync(item));
-                }
-                else
-                {
-                    allInterests.Add(await GetInterestAsync(item.Id));
-                }
+                allInterests.Add(await AddInterestToDbAsync(item));
             }
-
-            return allInterests;
-        }
-
-        public async Task<Interest> AddInterestToDbAsync(InterestDto interest)
-        {
-            var interestToAdd = new Interest { Name = interest.Label};
-            var interestInDb = await interestRepository.AllAsNoTracking().FirstOrDefaultAsync(x => x.Name == interest.Label);
-            if (interestInDb == null)
+            else
             {
-                interestRepository.Add(interestToAdd);
-                await interestRepository.SaveChangesAsync();
-                return interestToAdd;
+                allInterests.Add(await GetInterestAsync(item.Id));
             }
-
-            return interestInDb;
         }
 
-        public Interest CheckInterestSimillarWord(InterestDto interest)
+        return allInterests;
+    }
+
+    public async Task<Interest> AddInterestToDbAsync(InterestDto interest)
+    {
+        var interestToAdd = new Interest { Name = interest.Label};
+        var interestInDb = await interestRepository.AllAsNoTracking().FirstOrDefaultAsync(x => x.Name == interest.Label);
+        if (interestInDb == null)
         {
-            throw new NotImplementedException();
+            interestRepository.Add(interestToAdd);
+            await interestRepository.SaveChangesAsync();
+            return interestToAdd;
         }
 
-        public ICollection<InterestDto> GetAllInterests()
-        {
-            return interestRepository.All()
-                .Select(x => new InterestDto
-                {
+        return interestInDb;
+    }
+
+    public Interest CheckInterestSimillarWord(InterestDto interest)
+    {
+        throw new NotImplementedException();
+    }
+
+    public ICollection<InterestDto> GetAllInterests()
+    {
+        return interestRepository.All()
+            .Select(x => new InterestDto
+            {
                 Id = x.Id,
                 Label = x.Name
             }).ToList();
-        }
+    }
 
-        public async Task<Interest> GetInterestAsync(int id)
-        {
-            return await interestRepository
-                .All()
-                .FirstOrDefaultAsync(x => x.Id == id);
-        }
+    public async Task<Interest> GetInterestAsync(int id)
+    {
+        return await interestRepository
+            .All()
+            .FirstOrDefaultAsync(x => x.Id == id);
     }
 }

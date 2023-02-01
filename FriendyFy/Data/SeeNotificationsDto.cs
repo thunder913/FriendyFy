@@ -1,7 +1,6 @@
-﻿namespace FriendyFy.Data
+﻿namespace FriendyFy.Data;
+
+public class SeeNotificationsDto
 {
-    public class SeeNotificationsDto
-    {
-        public string NotificationId { get; set; }
-    }
+    public string NotificationId { get; set; }
 }

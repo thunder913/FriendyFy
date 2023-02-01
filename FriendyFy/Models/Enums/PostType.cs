@@ -1,8 +1,7 @@
-﻿namespace ViewModels
+﻿namespace ViewModels;
+
+public enum PostType
 {
-    public enum PostType
-    {
-        Post,
-        Event
-    }
+    Post,
+    Event
 }

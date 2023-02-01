@@ -1,7 +1,6 @@
-﻿namespace FriendyFy.Data
+﻿namespace FriendyFy.Data;
+
+public class LikePostDto
 {
-    public class LikePostDto
-    {
-        public string PostId { get; set; }
-    }
+    public string PostId { get; set; }
 }

@@ -1,7 +1,6 @@
-﻿namespace FriendyFy.Data
+﻿namespace FriendyFy.Data;
+
+public class ShareEventDto
 {
-    public class ShareEventDto
-    {
-        public string EventId { get; set; }
-    }
+    public string EventId { get; set; }
 }

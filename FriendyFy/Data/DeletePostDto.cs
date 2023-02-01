@@ -1,8 +1,7 @@
-﻿namespace FriendyFy.Data
+﻿namespace FriendyFy.Data;
+
+public class DeletePostDto
 {
-    public class DeletePostDto
-    {
-        public string PostId { get; set; }
-        public string PostType { get; set; }
-    }
+    public string PostId { get; set; }
+    public string PostType { get; set; }
 }

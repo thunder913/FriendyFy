@@ -1,8 +1,7 @@
-﻿namespace FriendyFy.Models.Enums
+﻿namespace FriendyFy.Models.Enums;
+
+public enum ThemePreference
 {
-    public enum ThemePreference
-    {
-        Light = 0,
-        Dark = 1
-    }
+    Light = 0,
+    Dark = 1
 }

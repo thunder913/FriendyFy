@@ -1,9 +1,8 @@
-﻿namespace FriendyFy.Models.Enums
+﻿namespace FriendyFy.Models.Enums;
+
+public enum ChatType
 {
-    public enum ChatType
-    {
-        Direct,
-        Group,
-        NotAccepted
-    }
+    Direct,
+    Group,
+    NotAccepted
 }

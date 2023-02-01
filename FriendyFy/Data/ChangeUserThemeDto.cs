@@ -1,8 +1,7 @@
-﻿namespace FriendyFy.Data
+﻿namespace FriendyFy.Data;
+
+public class ChangeUserThemeDto
 {
-    public class ChangeUserThemeDto
-    {
-        public string Theme { get; set; }
-        public string Username { get; set; }
-    }
+    public string Theme { get; set; }
+    public string Username { get; set; }
 }

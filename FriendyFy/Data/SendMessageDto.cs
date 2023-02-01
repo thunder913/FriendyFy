@@ -1,8 +1,7 @@
-﻿namespace FriendyFy.Data
+﻿namespace FriendyFy.Data;
+
+public class SendMessageDto
 {
-    public class SendMessageDto
-    {
-        public string Message { get; set; }
-        public string ChatId { get; set; }
-    }
+    public string Message { get; set; }
+    public string ChatId { get; set; }
 }

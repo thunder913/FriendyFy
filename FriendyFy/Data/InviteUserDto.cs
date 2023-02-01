@@ -1,8 +1,7 @@
-﻿namespace FriendyFy.Data
+﻿namespace FriendyFy.Data;
+
+public class InviteUserDto
 {
-    public class InviteUserDto
-    {
-        public string Username { get; set; }
-        public string EventId { get; set; }
-    }
+    public string Username { get; set; }
+    public string EventId { get; set; }
 }

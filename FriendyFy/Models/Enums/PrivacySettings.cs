@@ -1,8 +1,7 @@
-﻿namespace FriendyFy.Models.Enums
+﻿namespace FriendyFy.Models.Enums;
+
+public enum PrivacySettings
 {
-    public enum PrivacySettings
-    {
-        Private = 0,
-        Public = 1
-    }
+    Private = 0,
+    Public = 1
 }

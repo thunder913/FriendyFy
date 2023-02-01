@@ -1,8 +1,7 @@
-﻿namespace ViewModels.ViewModels
+﻿namespace ViewModels.ViewModels;
+
+public enum SearchResultType
 {
-    public enum SearchResultType
-    {
-        profile,
-        @event
-    }
+    profile,
+    @event
 }

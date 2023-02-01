@@ -1,7 +1,6 @@
-﻿namespace FriendyFy.Services.Contracts
+﻿namespace FriendyFy.Services.Contracts;
+
+public interface IGeolocationService
 {
-    public interface IGeolocationService
-    {
-        public string GetUserLocation(double latitude, double longiitude);
-    }
+    public string GetUserLocation(double latitude, double longiitude);
 }

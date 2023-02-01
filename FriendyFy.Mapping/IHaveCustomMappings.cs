@@ -1,9 +1,8 @@
 ﻿using AutoMapper;
 
-namespace FriendyFy.Mapping
+namespace FriendyFy.Mapping;
+
+public interface IHaveCustomMappings
 {
-    public interface IHaveCustomMappings
-    {
-        void CreateMappings(IProfileExpression configuration);
-    }
+    void CreateMappings(IProfileExpression configuration);
 }

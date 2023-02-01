@@ -1,19 +1,18 @@
 ﻿using Microsoft.AspNetCore.StaticFiles;
 
-namespace FriendyFy.BlobStorage
+namespace FriendyFy.BlobStorage;
+
+public static class FileExtensions
 {
-    public static class FileExtensions
+    private static readonly FileExtensionContentTypeProvider Provider = new FileExtensionContentTypeProvider();
+
+    public static string GetContentType(this string fileName)
     {
-        private static readonly FileExtensionContentTypeProvider Provider = new FileExtensionContentTypeProvider();
-
-        public static string GetContentType(this string fileName)
+        if(!Provider.TryGetContentType(fileName, out var contentType))
         {
-            if(!Provider.TryGetContentType(fileName, out var contentType))
-            {
-                contentType = "application/octet-stream";
-            }
-
-            return contentType;
+            contentType = "application/octet-stream";
         }
+
+        return contentType;
     }
 }

@@ -3,101 +3,100 @@ using FriendyFy.Data;
 using FriendyFy.Services.Contracts;
 using Microsoft.AspNetCore.Mvc;
 
-namespace FriendyFy.Controllers
+namespace FriendyFy.Controllers;
+
+[Route("notification")]
+[ApiController]
+public class NotificationController : BaseController
 {
-    [Route("notification")]
-    [ApiController]
-    public class NotificationController : BaseController
+    private readonly INotificationService notificationService;
+
+    public NotificationController(INotificationService notificationService)
     {
-        private readonly INotificationService notificationService;
+        this.notificationService = notificationService;
+    }
 
-        public NotificationController(INotificationService notificationService)
-        {
-            this.notificationService = notificationService;
-        }
-
-        [HttpPost("getForUser")]
-        public async Task<IActionResult> GetNotification(GetNotificationsDto dto)
-        {
-            var user = GetUserByToken();
+    [HttpPost("getForUser")]
+    public async Task<IActionResult> GetNotification(GetNotificationsDto dto)
+    {
+        var user = GetUserByToken();
             
-            if (user == null || dto.UserId != user.Id)
-            {
-                return Unauthorized("You are not logged in!");
-            }
-
-            return Ok(await notificationService.GetNotificationsForUserAsync(dto.UserId, dto.Take, dto.Skip));
+        if (user == null || dto.UserId != user.Id)
+        {
+            return Unauthorized("You are not logged in!");
         }
 
-        [HttpPost("acceptEvent")]
-        public async Task<IActionResult> AcceptEvent(UpdateEventRequestDto dto)
-        {
-            var user = GetUserByToken();
+        return Ok(await notificationService.GetNotificationsForUserAsync(dto.UserId, dto.Take, dto.Skip));
+    }
+
+    [HttpPost("acceptEvent")]
+    public async Task<IActionResult> AcceptEvent(UpdateEventRequestDto dto)
+    {
+        var user = GetUserByToken();
             
-            if (user == null)
-            {
-                return Unauthorized("You are not logged in!");
-            }
-
-            var result = await notificationService.ChangeEventStatusAsync(dto.NotificationId, user, true);
-            if (result)
-            {
-                return Ok();
-            }
-
-            return BadRequest();
+        if (user == null)
+        {
+            return Unauthorized("You are not logged in!");
         }
 
-        [HttpPost("rejectEvent")]
-        public async Task<IActionResult> RejectEvent(UpdateEventRequestDto dto)
+        var result = await notificationService.ChangeEventStatusAsync(dto.NotificationId, user, true);
+        if (result)
         {
-            var user = GetUserByToken();
+            return Ok();
+        }
+
+        return BadRequest();
+    }
+
+    [HttpPost("rejectEvent")]
+    public async Task<IActionResult> RejectEvent(UpdateEventRequestDto dto)
+    {
+        var user = GetUserByToken();
             
-            if (user == null)
-            {
-                return Unauthorized("You are not logged in!");
-            }
-
-            var result = await notificationService.ChangeEventStatusAsync(dto.NotificationId, user, false);
-            if (result)
-            {
-                return Ok();
-            }
-
-            return BadRequest();
-        }
-
-        [HttpPost("getUnseen")]
-        public async Task<IActionResult> GetUnseenNotifications()
+        if (user == null)
         {
-            var user = GetUserByToken();
-
-            if (user == null)
-            {
-                return Unauthorized("You are not logged in!");
-            }
-
-            return Ok(await notificationService.UnseenNotificationsAsync(user.Id));
+            return Unauthorized("You are not logged in!");
         }
 
-        [HttpPost("seeNotification")]
-        public async Task<IActionResult> SeeNotification(SeeNotificationsDto dto)
+        var result = await notificationService.ChangeEventStatusAsync(dto.NotificationId, user, false);
+        if (result)
         {
-            var user = GetUserByToken();
-
-            if (user == null)
-            {
-                return Unauthorized("You are not logged in!");
-            }
-
-            var result = await notificationService.SeeNotificationAsync(user.Id, dto.NotificationId);
-
-            if (result)
-            {
-                return Ok();
-            }
-
-            return BadRequest();
+            return Ok();
         }
+
+        return BadRequest();
+    }
+
+    [HttpPost("getUnseen")]
+    public async Task<IActionResult> GetUnseenNotifications()
+    {
+        var user = GetUserByToken();
+
+        if (user == null)
+        {
+            return Unauthorized("You are not logged in!");
+        }
+
+        return Ok(await notificationService.UnseenNotificationsAsync(user.Id));
+    }
+
+    [HttpPost("seeNotification")]
+    public async Task<IActionResult> SeeNotification(SeeNotificationsDto dto)
+    {
+        var user = GetUserByToken();
+
+        if (user == null)
+        {
+            return Unauthorized("You are not logged in!");
+        }
+
+        var result = await notificationService.SeeNotificationAsync(user.Id, dto.NotificationId);
+
+        if (result)
+        {
+            return Ok();
+        }
+
+        return BadRequest();
     }
 }

@@ -1,9 +1,8 @@
-﻿namespace FriendyFy.Models.Enums
+﻿namespace FriendyFy.Models.Enums;
+
+public enum Gender
 {
-    public enum Gender
-    {
-        Male,
-        Female,
-        Other
-    }
+    Male,
+    Female,
+    Other
 }

@@ -1,9 +1,8 @@
-﻿namespace FriendyFy.Models.Enums
+﻿namespace FriendyFy.Models.Enums;
+
+public enum ReocurringType
 {
-    public enum ReocurringType
-    {
-        daily,
-        weekly,
-        monthly
-    }
+    daily,
+    weekly,
+    monthly
 }

@@ -1,7 +1,6 @@
-﻿namespace FriendyFy.Data
+﻿namespace FriendyFy.Data;
+
+public class ForgottenPasswordDto
 {
-    public class ForgottenPasswordDto
-    {
-        public string Email { get; set; }
-    }
+    public string Email { get; set; }
 }
