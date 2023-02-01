@@ -11,6 +11,7 @@ using System.Threading.Tasks;
 using FriendyFy.BlobStorage;
 using FriendyFy.Common;
 using FriendyFy.Data;
+using FriendyFy.DataValidation;
 using FriendyFy.Helpers.Contracts;
 using FriendyFy.Mapping;
 using FriendyFy.Messaging;
@@ -22,6 +23,7 @@ using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.WebUtilities;
 using Newtonsoft.Json;
+using NuGet.Packaging.Signing;
 using ViewModels;
 
 namespace FriendyFy.Controllers
@@ -30,10 +32,6 @@ namespace FriendyFy.Controllers
     [ApiController]
     public class AuthController : BaseController
     {
-        private const string NameRegex = @"^[A-Za-z\u00C0-\u1FFF\u2800-\uFFFD 0-9-]+$";
-        private const string NumberRegex = @"\d";
-        private const string UpperCaseRegex = @"[A-Z]";
-
         private readonly IUserService userService;
         private readonly IJwtService jwtService;
         private readonly IEmailSender emailSender;
@@ -67,56 +65,21 @@ namespace FriendyFy.Controllers
         [HttpPost("register")]
         public async Task<IActionResult> Register(RegisterUserDto userDto)
         {
-            Regex nameValidator = new Regex(NameRegex);
-            TextInfo textInfo = new CultureInfo("en-US", false).TextInfo;
-            if (userDto.FirstName.Length > 50 || userDto.FirstName.Length < 2 || !nameValidator.IsMatch(userDto.FirstName))
+            try
             {
-                return BadRequest("The first name is invalid!");
+                AuthValidator.ValidateRegisterUser(userDto);
             }
-            
-            if (userDto.LastName.Length > 50 || userDto.LastName.Length < 2 || !nameValidator.IsMatch(userDto.LastName))
+            catch (ValidationException ex)
             {
-                return BadRequest("The last name is invalid!");
-            }
-            
-            if (!(new EmailAddressAttribute().IsValid(userDto.Email)))
-            {
-                return BadRequest("The email is invalid!");
-            }
-            
-            if (!DateTime.TryParseExact(userDto.Birthday, "dd/MM/yyyy",
-                CultureInfo.InvariantCulture, DateTimeStyles.AdjustToUniversal, out var birthday) ||
-                birthday > DateTime.Now ||
-                birthday < new DateTime(1900, 1, 1))
-            {
-                return BadRequest("The birthday is invalid!");
-            }
-            
-            if (!Enum.TryParse(typeof(Gender), textInfo.ToTitleCase(userDto.Gender), out var gender))
-            {
-                return BadRequest("You must select a gender!");
-            }
-            
-            var passwordNumberRegex = new Regex(NumberRegex);
-            var passwordUpperCaseRegex = new Regex(UpperCaseRegex);
-            
-            if (!passwordNumberRegex.IsMatch(userDto.Password) ||
-                !passwordUpperCaseRegex.IsMatch(userDto.Password) ||
-                userDto.Password.Length < 8)
-            {
-                return BadRequest("The password is invalid!");
+                return BadRequest(ex.Message);
             }
 
+            TextInfo textInfo = new CultureInfo("en-US", false).TextInfo;
             var existingUser = userService.GetByEmail(userDto.Email) != null;
-            
+
             if (existingUser)
             {
                 return BadRequest("There is already a user with this email!");
-            }
-
-            if (!Enum.TryParse(textInfo.ToTitleCase(userDto.Theme), out ThemePreference theme))
-            {
-                return BadRequest("You sent an invalid theme!");
             }
 
             var user = new ApplicationUser
@@ -130,7 +93,7 @@ namespace FriendyFy.Controllers
                 UserName = userService.GenerateUsername(userDto.FirstName, userDto.LastName),
                 CreatedOn = DateTime.UtcNow,
                 EmailConfirmed = false,
-                ThemePreference = theme
+                ThemePreference = Enum.Parse<ThemePreference>(textInfo.ToTitleCase(userDto.Theme))
             };
 
             await userManager.CreateAsync(user);
@@ -156,15 +119,13 @@ namespace FriendyFy.Controllers
         {
             var user = userService.GetByEmail(loginUserDto.Email);
 
-            if (user == null ||
-                !BCrypt.Net.BCrypt.Verify(loginUserDto.Password, user.PasswordHash))
+            try
             {
-                return BadRequest("Invalid credentials!");
+                AuthValidator.ValidateLoginUser(loginUserDto, user);
             }
-
-            if (!user.EmailConfirmed)
+            catch (ValidationException ex)
             {
-                return BadRequest("The email is not confirmed!");
+                return BadRequest(ex.Message);
             }
 
             var jwt = jwtService.Generate(user.Id, user.Email);
@@ -227,26 +188,21 @@ namespace FriendyFy.Controllers
         [HttpPost("ConfirmEmail")]
         public async Task<IActionResult> ConfirmEmail(ConfirmEmailDto confirmDto)
         {
-            if (confirmDto.UserId == null || confirmDto.Code == null)
+            try
             {
-                return BadRequest("Invalid userId or code!");
-            }
+                AuthValidator.ValidateConfirmEmail(confirmDto);
+                var user = await userManager.FindByIdAsync(confirmDto.UserId);
+                AuthValidator.ValidateUserEmailConfirmed(user);
 
-            var user = await userManager.FindByIdAsync(confirmDto.UserId);
-            if (user.EmailConfirmed)
-            {
-                return BadRequest("The email is already activated!");
-            }
-            
-            if (user == null)
-            {
-                return NotFound($"Unable to load user with ID '{confirmDto.UserId}'.");
-            }
+                var code = Encoding.UTF8.GetString(WebEncoders.Base64UrlDecode(confirmDto.Code));
+                var result = await userManager.ConfirmEmailAsync(user!, code);
 
-            var code = Encoding.UTF8.GetString(WebEncoders.Base64UrlDecode(confirmDto.Code));
-            var result = await userManager.ConfirmEmailAsync(user, code);
-            
-            return result.Succeeded ? Ok() : BadRequest("Could not confirm the email!");
+                return result.Succeeded ? Ok() : BadRequest("Could not confirm the email!");
+            }
+            catch (ValidationException ex)
+            {
+                return BadRequest(ex.Message);
+            }
         }
 
         //TODO remove this endpoint if you dont find a use for it
@@ -310,24 +266,21 @@ namespace FriendyFy.Controllers
         public async Task<IActionResult> FinishFirstTimeSetup([FromForm] FinishFirstTimeSetupDto dto, IFormFile formFile)
         {
             var user = GetUserByToken();
-            var interests = JsonConvert.DeserializeObject<List<InterestDto>>(dto.Interests);
-
+            
             if (user == null)
             {
                 return Unauthorized("You are not logged in!");
             }
-            if (interests.Count < 3)
-            {
-                return BadRequest("You must choose at least 3 interests!");
-            }
+            
+            var interests = JsonConvert.DeserializeObject<List<InterestDto>>(dto.Interests);
 
-            if (string.IsNullOrWhiteSpace(dto.Quote))
+            try
             {
-                return BadRequest("You must enter a description/quote!");
+                AuthValidator.ValidateFirstTimeSetup(dto, interests);
             }
-            if(dto.Latitude == null || dto.Longitude == null)
+            catch (ValidationException ex)
             {
-                return BadRequest("You must choose a location!");
+                return BadRequest(ex.Message);
             }
 
             var allInterests = await interestService.AddNewInterestsAsync(interests);
@@ -367,55 +320,29 @@ namespace FriendyFy.Controllers
         public async Task<IActionResult> EditUserData([FromForm] EditUserDataDto dto)
         {
             var user = GetUserByToken();
-            
-            Regex nameValidator = new Regex(NameRegex);
-            
             if (user == null || user.Id != dto.UserId)
             {
                 return Unauthorized("You are not authorized to make such changes, try logging in!");
             }
 
-            if (dto.FirstName.Length > 50 || dto.FirstName.Length < 2 || !nameValidator.IsMatch(dto.FirstName))
-            {
-                return BadRequest("The first name is invalid!");
-            }
-            if (dto.LastName.Length > 50 || dto.LastName.Length < 2 || !nameValidator.IsMatch(dto.LastName))
-            {
-                return BadRequest("The last name is invalid!");
-            }
-            if (!DateTime.TryParseExact(dto.Date, "dd/MM/yyyy",
-                CultureInfo.InvariantCulture, DateTimeStyles.AdjustToUniversal, out var birthday) ||
-                birthday > DateTime.Now ||
-                birthday < new DateTime(1900, 1, 1))
-            {
-                return BadRequest("The birthday is invalid!");
-            };
-
             var interests = JsonConvert.DeserializeObject<List<InterestDto>>(dto.Interests);
 
-            if (user == null)
+            try
             {
-                return Unauthorized("You are not logged in!");
+                AuthValidator.ValidateEditUserData(dto, interests);
             }
-
-            if (interests.Count < 3)
+            catch (ValidationException ex)
             {
-                return BadRequest("You must choose at least 3 interests!");
-            }
-
-            if (string.IsNullOrWhiteSpace(dto.Description))
-            {
-                return BadRequest("You must enter a description/quote!");
-            }
-
-            if (dto.Latitude == null || dto.Longitude == null)
-            {
-                return BadRequest("You must choose a location!");
+                return BadRequest(ex.Message);
             }
 
             var allInterests = await interestService.AddNewInterestsAsync(interests);
 
-            await userService.ChangeUserDataAsync(user, dto.FirstName, dto.LastName, birthday, dto.ChangedProfileImage, dto.ChangedCoverImage, dto.Description, allInterests, dto.Longitude, dto.Latitude, dto.ProfileImage, dto.CoverImage);
+            await userService.ChangeUserDataAsync(user, dto.FirstName, dto.LastName,
+                DateTime.ParseExact(dto.Date, "dd/MM/yyyy", CultureInfo.InvariantCulture, 
+                    DateTimeStyles.AdjustToUniversal), dto.ChangedProfileImage, 
+                dto.ChangedCoverImage, dto.Description, allInterests, dto.Longitude, 
+                dto.Latitude, dto.ProfileImage, dto.CoverImage);
 
             return Ok();
         }
@@ -464,7 +391,6 @@ namespace FriendyFy.Controllers
             {
                 await userService.ResetPassword(user, password);
             }
-
 
             return BadRequest("Something went wrong, try again later!");
         }

@@ -21,15 +21,16 @@ namespace FriendyFy.Controllers
         public IActionResult GetUserChats(GetChatsDto dto)
         {
             var user = GetUserByToken();
-
+            
+            if (user == null || user.UserName != dto.Username)
+            {
+                return Unauthorized("You are not signed in!");
+            }
+            
             var chatIds = new List<string>();
             if (!string.IsNullOrWhiteSpace(dto.ChatIds))
             {
                 chatIds = JsonConvert.DeserializeObject<List<string>>(dto.ChatIds);
-            }
-            if (user.UserName != dto.Username)
-            {
-                return Unauthorized("You are not signed in!");
             }
 
             return Ok(chatService.GetUserChats(dto.Username, dto.Page, dto.ItemsPerPage, dto.Take, dto.Search, chatIds));
@@ -40,7 +41,7 @@ namespace FriendyFy.Controllers
         {
             var user = GetUserByToken();
 
-            if (user.UserName != dto.Username)
+            if (user == null || user.UserName != dto.Username)
             {
                 return Unauthorized("You are not signed in!");
             }

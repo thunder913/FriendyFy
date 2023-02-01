@@ -30,7 +30,6 @@ namespace FriendyFy.Controllers
         {
             var user = GetUserByToken();
             
-            var receiverId = UserService.GetByUsername(dto.UserId).Id;
             if (user == null || dto.UserId == null)
             {
                 return BadRequest("The user cannot be added as a friend!");
@@ -43,6 +42,7 @@ namespace FriendyFy.Controllers
             }
 
             var notification = await notificationService.CreateFriendRequestNotification(user, dto.UserId);
+            var receiverId = UserService.GetByUsername(dto.UserId).Id;
             if (notification != null)
             {
                 await notificationHub.Clients.User(receiverId).SendAsync(receiverId, notification);
@@ -63,7 +63,7 @@ namespace FriendyFy.Controllers
             var result = await friendService.AcceptFriendRequestAsync(user.Id, dto.UserId);
             if (!result)
             {
-                return BadRequest("Cannot acccept friend request!");
+                return BadRequest("Cannot accept friend request!");
             }
 
             await notificationService.ChangeUserFriendNotificationStatus(dto.UserId, user.Id);

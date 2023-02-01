@@ -1,8 +1,10 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.ComponentModel.DataAnnotations;
 using System.Globalization;
 using System.Threading.Tasks;
 using FriendyFy.Data;
+using FriendyFy.DataValidation;
 using FriendyFy.Models.Enums;
 using FriendyFy.Services.Contracts;
 using Microsoft.AspNetCore.Mvc;
@@ -29,66 +31,26 @@ namespace FriendyFy.Controllers
         public async Task<IActionResult> CreateEvent(CreateEventDto dto)
         {
             var user = GetUserByToken();
+ 
             if (user == null)
             {
                 return Unauthorized("You are not signed in!");
             }
             
             var interests = JsonConvert.DeserializeObject<List<InterestDto>>(dto.Interests);
-            var privacySettingsParsed = Enum.TryParse(dto.PrivacyOptions, out PrivacySettings privacySettings);
-            var dateParsed = DateTime.TryParseExact(dto.Date, "dd/MM/yyyy HH:mm",
-                CultureInfo.InvariantCulture, DateTimeStyles.AdjustToUniversal, out var date);
-
-            if (dto.Name.Length < 2)
+            try
             {
-                return BadRequest("The name ccanot be that short!");
+                EventValidator.ValidateCreateEvent(dto, interests);
             }
-
-            if (!dateParsed ||
-                date <= DateTime.Now)
+            catch (ValidationException e)
             {
-                return BadRequest("The event date is invalid!");
+                return BadRequest(e.Message);
             }
-
-            if (interests.Count == 0)
-            {
-                return BadRequest("You must choose some interests!");
-            }
-
-            if (dto.Latitude == null || dto.Longitude == null)
-            {
-                return BadRequest("You must choose a location!");
-            }
-
-            if (string.IsNullOrWhiteSpace(dto.Description))
-            {
-                return BadRequest("Add a description!");
-            }
-
-            if (!privacySettingsParsed)
-            {
-                return BadRequest("The privacy must be either private or public!");
-            }
-            //else if (dto.IsReocurring && !reocurringTypeParsed)
-            //{
-            //    return BadRequest("You have entered an invalid reocurring type!");
-            //}
-
-            if (string.IsNullOrWhiteSpace(dto.Image))
-            {
-                return BadRequest("The profile image is empty!");
-            }
-
-            if (interests.Count > 6)
-            {
-                return BadRequest("The interests cannot be more than 6!");
-            }
-
 
             var allInterests = await interestService.AddNewInterestsAsync(interests);
-            await eventService.CreateEventAsync(dto.Name, date, allInterests, privacySettings, (decimal) dto.Latitude,(decimal) dto.Longitude, dto.Description, dto.Image, user.Id);
+            await eventService.CreateEventAsync(dto.Name, DateTime.ParseExact(dto.Date, "dd/MM/yyyy HH:mm", CultureInfo.InvariantCulture, DateTimeStyles.AdjustToUniversal), 
+                allInterests, Enum.Parse<PrivacySettings>(dto.PrivacyOptions), (decimal) dto.Latitude!,(decimal) dto.Longitude!, dto.Description, dto.Image, user.Id);
             return Ok();
-            //return Ok(await this.chatService.SeeMessagesAsync(dto.ChatId, user));
         }
 
         [HttpPost("getById")]
@@ -167,10 +129,12 @@ namespace FriendyFy.Controllers
         public IActionResult GetNavigationEvents()
         {
             var user = GetUserByToken();
+
             if (user == null)
             {
                 return Unauthorized("You are not logged in!");
             }
+            
             var toReturn = new LeftNavigationEventsViewModel();
             toReturn.AttendingEvents = eventService.GetAttendingEvents(user.UserName);
             toReturn.OrganizedEvents = eventService.GetOrganizedEvents(user.UserName);
@@ -183,6 +147,7 @@ namespace FriendyFy.Controllers
         public async Task<IActionResult> AddImage(AddEventImageDto dto)
         {
             var user = GetUserByToken();
+            
             if (user == null)
             {
                 return Unauthorized("You are not logged in!");
@@ -201,6 +166,7 @@ namespace FriendyFy.Controllers
         public async Task<IActionResult> LeaveEvent(LeaveEventDto dto)
         {
             var user = GetUserByToken();
+            
             if (user == null)
             {
                 return Unauthorized("You are not logged in!");
@@ -218,6 +184,7 @@ namespace FriendyFy.Controllers
         public async Task<IActionResult> DeleteEvent(LeaveEventDto dto)
         {
             var user = GetUserByToken();
+            
             if (user == null)
             {
                 return Unauthorized("You are not logged in!");

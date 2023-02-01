@@ -1,8 +1,10 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.ComponentModel.DataAnnotations;
 using System.Linq;
 using System.Threading.Tasks;
 using FriendyFy.Data;
+using FriendyFy.DataValidation;
 using FriendyFy.Services.Contracts;
 using Microsoft.AspNetCore.Mvc;
 using ViewModels;
@@ -34,11 +36,15 @@ namespace FriendyFy.Controllers
                 return Unauthorized("You are not signed in!");
             }
 
-            if (string.IsNullOrWhiteSpace(makePostDto.Image) && string.IsNullOrWhiteSpace(makePostDto.PostMessage))
+            try
             {
-                return BadRequest("Something went wrong, try again!");
+                PostValidator.ValidateMakePost(makePostDto);
             }
-
+            catch (ValidationException ex)
+            {
+                return BadRequest(ex.Message);
+            }
+            
             return Json(new { success = await postService.CreatePostAsync(makePostDto, user.Id) });
         }
 
@@ -142,26 +148,34 @@ namespace FriendyFy.Controllers
             {
                 return BadRequest("There was something wrong with the request!");
             }
+            
             var user = GetUserByToken();
             if (user == null)
             {
                 return Unauthorized("You are not logged in!");
             }
 
-            if (postType == PostType.Event)
+            switch (postType)
             {
-                var result = await eventService.RepostEventAsync(dto.PostId, dto.Text, user.Id);
-                if (result > 0)
+                case PostType.Event:
                 {
-                    return Ok(new { reposts = result });
+                    var result = await eventService.RepostEventAsync(dto.PostId, dto.Text, user.Id);
+                    if (result > 0)
+                    {
+                        return Ok(new { reposts = result });
+                    }
+
+                    break;
                 }
-            }
-            else if (postType == PostType.Post)
-            {
-                var result = await postService.RepostAsync(dto.PostId, dto.Text, user.Id);
-                if (result > 0)
+                case PostType.Post:
                 {
-                    return Ok(new { reposts = result });
+                    var result = await postService.RepostAsync(dto.PostId, dto.Text, user.Id);
+                    if (result > 0)
+                    {
+                        return Ok(new { reposts = result });
+                    }
+
+                    break;
                 }
             }
             return BadRequest();
@@ -182,19 +196,17 @@ namespace FriendyFy.Controllers
                 return Unauthorized("You are not logged in!");
             }
 
-            bool deleted = false;
-            if (postType == PostType.Post)
+            bool deleted = postType switch
             {
-                deleted = await postService.DeletePostAsync(dto.PostId, user.Id);
+                PostType.Post => await postService.DeletePostAsync(dto.PostId, user.Id),
+                PostType.Event => await eventService.DeleteEventPostAsync(dto.PostId, user.Id),
+                _ => false
+            };
 
-            }
-            else if (postType == PostType.Event)
-            {
-                deleted = await eventService.DeleteEventPostAsync(dto.PostId, user.Id);
-            }
-            
             if (deleted)
-                return Ok(deleted);
+            {
+                return Ok(true);
+            }
 
             return BadRequest();
         }

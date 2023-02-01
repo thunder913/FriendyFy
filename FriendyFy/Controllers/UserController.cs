@@ -5,6 +5,7 @@ using FriendyFy.Data;
 using FriendyFy.Models.Enums;
 using FriendyFy.Services.Contracts;
 using Microsoft.AspNetCore.Mvc;
+using static System.Decimal;
 
 namespace FriendyFy.Controllers
 {
@@ -31,7 +32,7 @@ namespace FriendyFy.Controllers
                 return BadRequest("The user hasn't set his location!");
             }
 
-            return Ok(new { Location = geolocationService.GetUserLocation(Decimal.ToDouble((decimal)user.Latitude), Decimal.ToDouble((decimal)user.Longitude)), user.Latitude, user.Longitude });
+            return Ok(new { Location = geolocationService.GetUserLocation(ToDouble((decimal)user.Latitude), ToDouble((decimal)user.Longitude)), user.Latitude, user.Longitude });
         }
 
         [HttpPost("getEventsCount")]
