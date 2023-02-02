@@ -725,7 +725,7 @@ public class EventService : IEventService
                 .Take(take)
                 .Select(x => new PostDetailsViewModel
                 {
-                    CreatedAgo = (int)((DateTime.UtcNow - x.CreatedOn).TotalMinutes),
+                    CreatedAgo = (int)(DateTime.UtcNow - x.CreatedOn).TotalMinutes,
                     PostId = x.EventId,
                     EventPostId = x.Id,
                     IsRepost = x.IsRepost,
@@ -749,8 +749,8 @@ public class EventService : IEventService
                     EventReocurring = x.Event.ReocurringType.ToString(),
                     IsLikedByUser = user == null ? false : x.Likes.Any(x => x.LikedById == user.Id),
                     RepostsCount = x.Reposts.GroupBy(x => x.CreatorId).Count(),
-                    CommentsCount = x.Comments.Count(),
-                    LikesCount = x.Likes.Count(),
+                    CommentsCount = x.Comments.Count,
+                    LikesCount = x.Likes.Count,
                     PostType = PostType.Event.ToString(),
                     Repost = !x.IsRepost ? null : new PostDetailsViewModel
                     {

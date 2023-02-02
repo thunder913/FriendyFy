@@ -11,6 +11,7 @@ import InfiniteScroll from "react-infinite-scroll-component";
 import Loader from "react-loader-spinner";
 
 const HomePageSignedIn = () => {
+  const [refreshToken, setRefreshToken] = useState(false);
   const { loggedIn, resetUser } = useLoggedIn();
   const [showFirstTimePopUp, setShowFirstTimePopUp] = useState(false);
   const [events, setEvents] = useState([]);
@@ -57,7 +58,7 @@ const HomePageSignedIn = () => {
         setDidFirstTimeRequest(true);
       });
     //eslint-disable-next-line
-  }, [])
+  }, [refreshToken])
 
   return (
     <div className="feed home-feed">
@@ -65,7 +66,8 @@ const HomePageSignedIn = () => {
       {!showFirstTimePopUp ? <div className="main-feed">  <MakePost
         showPostImage={true}
         showCreatePost={true}
-        showCreateEvent={true} />
+        showCreateEvent={true}
+        setRefreshToken={setRefreshToken} />
         <InfiniteScroll
           className={"feed-posts"}
           dataLength={posts.length}
