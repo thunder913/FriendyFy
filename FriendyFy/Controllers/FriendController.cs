@@ -26,7 +26,7 @@ public class FriendController : BaseController
     }
 
     [HttpPost("add")]
-    public async Task<IActionResult> AddFriend(FriendIdDto dto)
+    public async Task<IActionResult> AddFriend(UserIdRequest dto)
     {
         var user = GetUserByToken();
             
@@ -51,7 +51,7 @@ public class FriendController : BaseController
     }
 
     [HttpPost("accept")]
-    public async Task<IActionResult> AcceptFriendRequest(FriendIdDto dto)
+    public async Task<IActionResult> AcceptFriendRequest(UserIdRequest dto)
     {
         var user = GetUserByToken();
             
@@ -71,7 +71,7 @@ public class FriendController : BaseController
     }
 
     [HttpPost("cancel")]
-    public async Task<IActionResult> CancelFriendRequest(FriendIdDto dto)
+    public async Task<IActionResult> CancelFriendRequest(UserIdRequest dto)
     {
         var user = GetUserByToken();
             
@@ -112,7 +112,7 @@ public class FriendController : BaseController
     }
 
     [HttpPost("remove")]
-    public async Task<IActionResult> RemoveFriend(FriendIdDto dto)
+    public async Task<IActionResult> RemoveFriend(UserIdRequest dto)
     {
         var user = GetUserByToken();
             
@@ -131,7 +131,7 @@ public class FriendController : BaseController
     }
 
     [HttpPost("checkFriendStatus")]
-    public async Task<IActionResult> CheckFriendStatus(FriendIdDto dto)
+    public async Task<IActionResult> CheckFriendStatus(UserIdRequest dto)
     {
         var user = GetUserByToken();
             
@@ -157,7 +157,7 @@ public class FriendController : BaseController
     }
 
     [HttpPost("removeSuggestion")]
-    public async Task<IActionResult> GetFriendRecommendations(FriendIdDto dto)
+    public async Task<IActionResult> GetFriendRecommendations(UserIdRequest dto)
     {
         var user = GetUserByToken();
             

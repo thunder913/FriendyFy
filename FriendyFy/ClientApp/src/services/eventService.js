@@ -6,11 +6,11 @@ export function createEvent(name, date, interests, privacyOptions, latitude, lon
     });
 }
 
-export function getEventById(id){
+export function getEventById(eventId){
     return fetch('/event/getById', {
         method: 'POST',
         headers: {'Content-Type': 'application/json'},
-        body: JSON.stringify({id})
+        body: JSON.stringify({eventId})
     })
 }
 

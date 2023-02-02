@@ -383,7 +383,11 @@ public class AuthController : BaseController
             
         if (await userManager.VerifyUserTokenAsync(user, userManager.Options.Tokens.PasswordResetTokenProvider, "ResetPassword", code))
         {
-            await userService.ResetPassword(user, password);
+            var result = await userService.ResetPassword(user, password);
+            if (result)
+            {
+                return Ok();
+            }
         }
 
         return BadRequest("Something went wrong, try again later!");

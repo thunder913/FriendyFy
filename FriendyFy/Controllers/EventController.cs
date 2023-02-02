@@ -55,15 +55,15 @@ public class EventController : BaseController
     }
 
     [HttpPost("getById")]
-    public async Task<IActionResult> GetEventById(GetEventIdDto eventDto)
+    public async Task<IActionResult> GetEventById(EventIdRequest eventDto)
     {
         var user = GetUserByToken();
-        var toReturn = await eventService.GetEventByIdAsync(eventDto.Id, user?.Id);
+        var toReturn = await eventService.GetEventByIdAsync(eventDto.EventId, user?.Id);
         return Ok(toReturn);
     }
         
     [HttpPost("likeEvent")]
-    public async Task<IActionResult> LikeEvent(LikePostDto likePostDto)
+    public async Task<IActionResult> LikeEvent(PostIdRequest likePostDto)
     {
         var user = GetUserByToken();
 
@@ -91,7 +91,7 @@ public class EventController : BaseController
     }
 
     [HttpPost("join")]
-    public async Task<IActionResult> JoinEvent(JoinEventDto dto)
+    public async Task<IActionResult> JoinEvent(EventIdRequest dto)
     {
         var user = GetUserByToken();
             
@@ -109,7 +109,7 @@ public class EventController : BaseController
     }
 
     [HttpPost("share")]
-    public async Task<IActionResult> ShareEvent(ShareEventRequest dto)
+    public async Task<IActionResult> ShareEvent(EventIdRequest dto)
     {
         var user = GetUserByToken();
             
@@ -164,7 +164,7 @@ public class EventController : BaseController
     }
 
     [HttpPost("leaveEvent")]
-    public async Task<IActionResult> LeaveEvent(LeaveEventDto dto)
+    public async Task<IActionResult> LeaveEvent(EventIdRequest dto)
     {
         var user = GetUserByToken();
             
@@ -182,7 +182,7 @@ public class EventController : BaseController
     }
 
     [HttpPost("deleteEvent")]
-    public async Task<IActionResult> DeleteEvent(LeaveEventDto dto)
+    public async Task<IActionResult> DeleteEvent(EventIdRequest dto)
     {
         var user = GetUserByToken();
             

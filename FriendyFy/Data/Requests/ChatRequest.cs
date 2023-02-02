@@ -1,9 +1,7 @@
 ﻿namespace FriendyFy.Data.Requests;
 
-public class ChatRequest
+public class ChatRequest : PaginatedRequest
 {
     public string Username { get; set; }
     public string ChatId { get; set; }
-    public int Take { get; set; }
-    public int Skip { get; set; }
 }

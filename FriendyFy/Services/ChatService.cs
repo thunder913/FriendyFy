@@ -58,7 +58,6 @@ public class ChatService : IChatService
                     : x.Image,
             })
             .ToList();
-
     }
 
     public async Task<ChatViewModel> GetChatMessagesAsync(string userId, string chatId, int take, int skip)

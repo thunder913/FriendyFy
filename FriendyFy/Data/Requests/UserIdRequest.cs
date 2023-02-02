@@ -1,7 +1,6 @@
 ﻿namespace FriendyFy.Data.Requests;
 
-//TODO figure out how to remove
-public class FriendIdDto
+public class UserIdRequest
 {
     public string UserId { get; set; }
 }

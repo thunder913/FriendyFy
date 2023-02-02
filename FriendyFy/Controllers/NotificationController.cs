@@ -30,7 +30,7 @@ public class NotificationController : BaseController
     }
 
     [HttpPost("acceptEvent")]
-    public async Task<IActionResult> AcceptEvent(UpdateEventRequestDto dto)
+    public async Task<IActionResult> AcceptEvent(NotificationIdRequest dto)
     {
         var user = GetUserByToken();
             
@@ -49,7 +49,7 @@ public class NotificationController : BaseController
     }
 
     [HttpPost("rejectEvent")]
-    public async Task<IActionResult> RejectEvent(UpdateEventRequestDto dto)
+    public async Task<IActionResult> RejectEvent(NotificationIdRequest dto)
     {
         var user = GetUserByToken();
             

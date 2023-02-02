@@ -1,7 +1,6 @@
 ﻿namespace FriendyFy.Data.Requests;
 
-//TODO remove
-public class LeaveEventDto
+public class EventIdRequest
 {
     public string EventId { get; set; }
 }

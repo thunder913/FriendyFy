@@ -1,7 +1,6 @@
 ﻿namespace FriendyFy.Data.Requests;
 
-//TODO remove
-public class LikePostDto
+public class PostIdRequest
 {
     public string PostId { get; set; }
 }

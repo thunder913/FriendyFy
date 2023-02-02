@@ -62,7 +62,7 @@ public class PostController : BaseController
     }
 
     [HttpPost("likePost")]
-    public async Task<IActionResult> LikePost(LikePostDto likePostDto)
+    public async Task<IActionResult> LikePost([FromBody] string postId)
     {
         var user = GetUserByToken();
 
@@ -74,7 +74,7 @@ public class PostController : BaseController
         int? likes;
         try
         {
-            likes = await postService.LikePostAsync(likePostDto.PostId, user);
+            likes = await postService.LikePostAsync(postId, user);
         }
         catch (Exception)
         {
@@ -128,7 +128,7 @@ public class PostController : BaseController
     }
 
     [HttpPost("getByImageId")]
-    public async Task<IActionResult> GetPostByImageId(PostByImageIdRequest dto)
+    public async Task<IActionResult> GetPostByImageId(ImageIdRequest dto)
     {
         var user = GetUserByToken();
 

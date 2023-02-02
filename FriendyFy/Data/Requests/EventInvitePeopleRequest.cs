@@ -1,8 +1,6 @@
 ﻿namespace FriendyFy.Data.Requests;
 
-public class EventInvitePeopleRequest
+public class EventInvitePeopleRequest : PaginatedRequest
 {
     public string EventId { get; set; }
-    public int Take { get; set; }
-    public int Skip { get; set; }
 }

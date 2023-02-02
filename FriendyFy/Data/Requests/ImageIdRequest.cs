@@ -1,7 +1,6 @@
 ﻿namespace FriendyFy.Data.Requests;
 
-// TODO remove
-public class PostByImageIdRequest
+public class ImageIdRequest
 {
     public string ImageId { get; set; }
 }
