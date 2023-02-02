@@ -293,6 +293,7 @@ public class FriendService : IFriendService
                     x.Id != user.Id
                     && user.RemoveSuggestionFriends.All(y => y.BlockedUserId != x.Id) && !user.Friends.Any(y => y.FriendId == x.Id
                         && x.Id != user.Id))
+                .Where(x => recommendations.All(y => y.Username != x.UserName))
                 .OrderByDescending(x => x.Interests.Count(y => user.Interests.Any(z => z.Id == y.Id)) * 0.5
                                         + x.Friends.Where(x => x.IsFriend).Count(y => user.Friends.Any(z => z.FriendId == y.Id)) * 0.1
                                         + rand.Next((int)((-x.Friends.Count(x => x.IsFriend) - x.Interests.Count()) * 0.2), (int)((x.Friends.Count(x => x.IsFriend) + x.Interests.Count()) * 0.2)))
