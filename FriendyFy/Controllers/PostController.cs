@@ -62,7 +62,7 @@ public class PostController : BaseController
     }
 
     [HttpPost("likePost")]
-    public async Task<IActionResult> LikePost([FromBody] string postId)
+    public async Task<IActionResult> LikePost([FromBody] PostIdRequest dto)
     {
         var user = GetUserByToken();
 
@@ -74,7 +74,7 @@ public class PostController : BaseController
         int? likes;
         try
         {
-            likes = await postService.LikePostAsync(postId, user);
+            likes = await postService.LikePostAsync(dto.PostId, user);
         }
         catch (Exception)
         {

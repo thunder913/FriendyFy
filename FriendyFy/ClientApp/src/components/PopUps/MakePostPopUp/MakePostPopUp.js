@@ -16,7 +16,7 @@ import { useThemeContext } from '../../../contexts/ThemeContext';
 import OutsideClickHandler from "react-outside-click-handler";
 import { NotificationManager } from 'react-notifications';
 
-const MakePostPopUp = ({ hasImage, show, setShow }) => {
+const MakePostPopUp = ({ hasImage, show, setShow, setRefreshToken }) => {
     const [showImage, setShowImage] = useState(hasImage);
     const [showPeople, setShowPeople] = useState(false);
     const [showMap, setShowMap] = useState(false);
@@ -40,6 +40,7 @@ const MakePostPopUp = ({ hasImage, show, setShow }) => {
                 let result = await (res.json());
                 if (result.success) {
                     setShow(false);
+                    setRefreshToken(prev => !prev);
                     NotificationManager.success('Successfully created a post!', '', 2000);
                 } else {
                     NotificationManager.error('There was an error making the post!', '', 2000);

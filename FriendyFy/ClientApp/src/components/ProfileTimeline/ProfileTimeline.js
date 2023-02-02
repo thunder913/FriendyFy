@@ -11,6 +11,7 @@ import Loader from 'react-loader-spinner';
 
 const ProfileTimeline = () => {
   const { loggedIn } = useLoggedIn();
+  const [refreshToken, setRefreshToken] = useState(false);
   const [events, setEvents] = useState([]);
   const [posts, setPosts] = useState([]);
   const [feed, setFeed] = useState([]);
@@ -64,7 +65,7 @@ const ProfileTimeline = () => {
         setIsFirstTime(false);
       });
     //eslint-disable-next-line
-  }, [userId, feedType])
+  }, [userId, feedType, refreshToken])
 
 
   return (
@@ -76,6 +77,7 @@ const ProfileTimeline = () => {
             showPostImage={false}
             showCreatePost={true}
             showCreateEvent={false}
+            setRefreshToken={setRefreshToken}
           /> : ''}
           <div className="feed-choice">
             <button className={("posts " + (feedType === 'posts' ? 'selected' : ''))} onClick={() => setFeedType('posts')}>POSTS</button>
@@ -99,7 +101,7 @@ const ProfileTimeline = () => {
                 <b>You reached the final {feedType === 'posts' ? 'post' : 'event'}</b>
               </p>
             }>
-            {feed.map(el => (el.postType === 'Event' ? <FeedEvent key={el.postId} eventData={el} /> :
+            {feed.map(el => (el.postType === 'Event' ? <FeedEvent key={el.postId+el.createdAgo} eventData={el} /> :
               !el.isRepost ? <FeedPost key={el.postId} post={el} /> : <FeedPostRepost key={el.postId} post={el} />))}
           </InfiniteScroll>
         </div>

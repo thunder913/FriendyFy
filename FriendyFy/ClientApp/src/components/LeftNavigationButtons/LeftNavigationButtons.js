@@ -39,7 +39,7 @@ const LeftNavigationButtons = () => {
                 <LeftNavigationEvents events={events} setBlockNavScroll={setBlockNavScroll} />
                 <div className="people-you-may-know">
                     {friendsRemaining ? <div className="friend-suggestions">
-                        {friends.map(friend => <FriendSuggestion key={friend.username} friend={friend} setFriendsRemaining={setFriendsRemaining} />)}
+                        {friends.map(friend => <FriendSuggestion key={friend.username} friend={friend} setFriendsRemaining={setFriendsRemaining} setFriends={setFriends}/>)}
                     </div> : ''}
                 </div>
                 <div className="tos">

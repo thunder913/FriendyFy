@@ -3,15 +3,24 @@ import './FriendSuggestion.css';
 import { Link } from 'react-router-dom';
 import { addFriend, removeFriendSuggestion } from '../../services/friendService.js';
 import { NotificationManager } from 'react-notifications';
-const FriendSuggestion = ({ friend, setFriendsRemaining }) => {
+const FriendSuggestion = ({ friend, setFriendsRemaining, setFriends }) => {
     const [show, setShow] = useState(true)
+
+    const removeFriendFromList = (username) => {
+        setShow(false);
+        setFriendsRemaining(prev => prev - 1);
+        setFriends(prev => 
+            prev.filter(function (obj){
+                return obj.username != username;
+            })
+        )
+    }
 
     const addFriendEvent = () => {
         addFriend({ userId: friend.username })
             .then(async res => {
                 if (res.ok) {
-                    setShow(false);
-                    setFriendsRemaining(prev => prev - 1);
+                    removeFriendFromList(friend.username)
                     NotificationManager.success('Successfully sent a friend request!', '', 2000);
                 }else{
                     NotificationManager.error('There was an error sending the friend request!', '', 2000);
@@ -23,8 +32,7 @@ const FriendSuggestion = ({ friend, setFriendsRemaining }) => {
         removeFriendSuggestion({ userId: friend.username })
             .then(async res => {
                 if (res.ok) {
-                    setShow(false);
-                    setFriendsRemaining(prev => prev - 1);
+                    removeFriendFromList(friend.username)
                 }
             })
     }

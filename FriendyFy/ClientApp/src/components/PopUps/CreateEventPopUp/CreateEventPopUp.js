@@ -17,7 +17,7 @@ import { useThemeContext } from "../../../contexts/ThemeContext";
 import OutsideClickHandler from "react-outside-click-handler";
 import { NotificationManager } from 'react-notifications';
 
-const CreateEventPopUp = ({ show, setShow }) => {
+const CreateEventPopUp = ({ show, setShow, setRefreshToken }) => {
     const [privacySettings, setPrivacySettings] = useState('Private');
     // const [reocurringTime, setReocurringTime] = useState('daily');
     const [description, setDescription] = useState('');
@@ -68,6 +68,7 @@ const CreateEventPopUp = ({ show, setShow }) => {
                 .then((res) => {
                     if (res.status === 200) {
                         NotificationManager.success('Successfully created the event!', '', 2000);
+                        setRefreshToken(prev => !prev);
                         setShow(false);
                     }
                 })

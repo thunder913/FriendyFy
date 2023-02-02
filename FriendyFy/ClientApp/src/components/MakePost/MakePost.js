@@ -6,7 +6,7 @@ import MakePostPopUp from '../PopUps/MakePostPopUp/MakePostPopUp.js';
 import './MakePost.css';
 import CreateEventPopUp from '../PopUps/CreateEventPopUp/CreateEventPopUp';
 
-const MakePost = ({showCreatePost ,showPostImage, showCreateEvent}) =>{
+const MakePost = ({showCreatePost ,showPostImage, showCreateEvent, setRefreshToken}) =>{
     const { loggedIn } = useLoggedIn();
     const [showEventPopUp, setShowEventPopUp] = useState(false);
     const [showPostPopUp, setshowPostPopUp] = useState(false);
@@ -49,10 +49,12 @@ const MakePost = ({showCreatePost ,showPostImage, showCreateEvent}) =>{
             show={showPostPopUp}
             setShow={setshowPostPopUp}
             hasImage={postWithImage}
+            setRefreshToken={setRefreshToken}
         />
         <CreateEventPopUp
             show={showEventPopUp}
             setShow={setShowEventPopUp}
+            setRefreshToken={setRefreshToken}
         />
     </section>)
 }
