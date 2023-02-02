@@ -6,6 +6,7 @@ using System.Text.RegularExpressions;
 using System.Threading.Tasks;
 using Azure.Storage.Blobs;
 using Azure.Storage.Blobs.Models;
+using Microsoft.Extensions.Configuration;
 
 namespace FriendyFy.BlobStorage;
 
@@ -77,15 +78,13 @@ public class BlobService : IBlobService
         await blobClient.UploadAsync(filePath, new BlobHttpHeaders { ContentType = filePath.GetContentType() });
     }
         
-    public async Task<string> GetBlobUrlAsync(string name, string blob)
+    public Task<string> GetBlobUrlAsync(string name, string blob)
     {
         if (string.IsNullOrWhiteSpace(name))
         {
             name = "defaultPicture.jpg";
         }
 
-        var containerClient = blobServiceClient.GetBlobContainerClient(blob);
-        var blobClient = containerClient.GetBlobClient(name);
-        return blobClient.Uri.AbsoluteUri;
+        return Task.FromResult(blobServiceClient.Uri + blob + "/" + name);
     }
 }

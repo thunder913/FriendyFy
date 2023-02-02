@@ -6,6 +6,7 @@ using FriendyFy.BlobStorage;
 using FriendyFy.Common;
 using FriendyFy.Data;
 using FriendyFy.Data.Dtos;
+using FriendyFy.Mapping;
 using FriendyFy.Models;
 using FriendyFy.Models.Enums;
 using FriendyFy.Services.Contracts;
@@ -111,9 +112,13 @@ public class ChatService : IChatService
         return model;
     }
 
-    public async Task<string> SendChatMessage(string chatId, string userId, string message)
+    public async Task<ChatMessageViewModel> SendChatMessage(string chatId, string userId, string message)
     {
-        var user = await userRepository.All().FirstOrDefaultAsync(x => x.Id == userId);
+        var user = await userRepository
+            .All()
+            .Include(u => u.ProfileImage)
+            .FirstOrDefaultAsync(x => x.Id == userId);
+        
         var chat = chatRepository.All().Include(x => x.Users).FirstOrDefault(x => x.Id == chatId);
         if (chat == null)
         {
@@ -133,11 +138,17 @@ public class ChatService : IChatService
             UserId = userId,
             SeenBy = { user }
         };
-
+        
         chat.Messages.Add(messageObj);
         await chatRepository.SaveChangesAsync();
 
-        return messageObj.Id;
+        var viewModel = AutoMapperConfig.MapperInstance.Map<Message, ChatMessageViewModel>(messageObj);
+        
+        viewModel.Name = user.FirstName + " " + user.LastName;
+        viewModel.Photo = blobService.GetBlobUrlAsync(user.ProfileImage?.Id + user.ProfileImage?.ImageExtension, GlobalConstants.BlobPictures).GetAwaiter().GetResult();
+        viewModel.Username = user.UserName;
+        
+        return viewModel;
     }
 
     public List<string> GetChatUserIds(string chatId)

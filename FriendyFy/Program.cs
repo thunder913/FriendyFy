@@ -86,7 +86,6 @@ builder.Services.AddTransient<IPostService, PostService>();
 builder.Services.AddTransient<IFriendService, FriendService>();
 builder.Services.AddTransient<IGeolocationService, GeolocationService>();
 builder.Services.AddTransient<IChatService, ChatService>();
-builder.Services.AddTransient<IMessageService, MessageService>();
 builder.Services.AddTransient<ICommentService, CommentService>();
 builder.Services.AddTransient<IEventService, EventService>();
 builder.Services.AddTransient<ISearchService, SearchService>();
@@ -110,7 +109,7 @@ builder.Services.AddAzureClients(x =>
 var app = builder.Build();
 
 // Configure the HTTP request pipeline.
-AutoMapperConfig.RegisterMappings(typeof(ErrorViewModel).GetTypeInfo().Assembly);
+AutoMapperConfig.RegisterMappings(Assembly.GetExecutingAssembly());
 if (app.Environment.IsDevelopment())
 {
     app.UseDeveloperExceptionPage();
