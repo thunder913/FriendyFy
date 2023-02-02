@@ -55,10 +55,6 @@ public class AuthController : BaseController
         this.blobService = blobService;
         this.imageService = imageService;
     }
-    public IActionResult Index()
-    {
-        return View();
-    }
 
     [HttpPost("register")]
     public async Task<IActionResult> Register(RegistrationRequest userDto)
