@@ -27,7 +27,7 @@ const RightNavigation = () => {
         getRandomEvent().then(async res => setRandomEventId(await res.text()))
     }, [])
 
-    if (location.pathname !== '/' && location.pathname !== '/search-page') {
+    if (location.pathname !== '/' && location.pathname !== '/search-page' && location.pathname !== '/Auth/Register') {
         return null;
     }
 

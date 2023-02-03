@@ -24,13 +24,13 @@ const LeftNavigationButtons = () => {
     }, [])
 
     useEffect(() => {
-        if (location.pathname === '/' || location.pathname === '/search-page') {
+        if (location.pathname === '/' || location.pathname === '/search-page' || location.pathname === '/Auth/Register') {
             getNavigationEvents()
                 .then(async res => setEvents(await res.json()))
         }
     }, [location.pathname])
 
-    if (location.pathname !== '/' && location.pathname !== '/search-page') {
+    if (location.pathname !== '/' && location.pathname !== '/search-page' && location.pathname !== '/Auth/Register') {
         return null;
     }
     return (
