@@ -1,13 +1,12 @@
   export function getuserNotifications(userId, take, skip) {
-    return fetch('/notification/getForUser', {
-        method: 'POST',
+    return fetch('/notification?' + new URLSearchParams({userId, take, skip}), {
+        method: 'GET',
         headers: {'Content-Type': 'application/json'},
-        body: JSON.stringify({userId, take, skip})
     });
   }
   
   export function acceptNotificationEvent(notificationId) {
-    return fetch('/notification/acceptEvent', {
+    return fetch('/notification/accept/event', {
         method: 'POST',
         headers: {'Content-Type': 'application/json'},
         body: JSON.stringify({notificationId})
@@ -15,7 +14,7 @@
   }
 
   export function rejectNotificationEvent(notificationId) {
-    return fetch('/notification/rejectEvent', {
+    return fetch('/notification/reject/event', {
         method: 'POST',
         headers: {'Content-Type': 'application/json'},
         body: JSON.stringify({notificationId})
@@ -23,7 +22,7 @@
   }
   
   export function seeNotification(notificationId) {
-    return fetch('/notification/seeNotification', {
+    return fetch('/notification/see', {
         method: 'POST',
         headers: {'Content-Type': 'application/json'},
         body: JSON.stringify({notificationId})
@@ -31,7 +30,7 @@
   }
 
   export function getUnseenCount() {
-    return fetch('/notification/getUnseen', {
-        method: 'POST',
+    return fetch('/notification/unseen', {
+        method: 'GET',
     });
   }

@@ -17,8 +17,8 @@ public class ChatController : BaseController
         this.chatService = chatService;
     }
 
-    [HttpPost("getChats")]
-    public IActionResult GetUserChats(UserChatsRequest dto)
+    [HttpGet("all")]
+    public IActionResult GetUserChats([FromQuery] UserChatsRequest dto)
     {
         var user = GetUserByToken();
             
@@ -36,8 +36,8 @@ public class ChatController : BaseController
         return Ok(chatService.GetUserChats(dto.Username, dto.Page, dto.ItemsPerPage, dto.Take, dto.Search, chatIds));
     }
 
-    [HttpPost("getChat")]
-    public async Task<IActionResult> GetUserChat([FromBody] ChatRequest dto)
+    [HttpGet]
+    public async Task<IActionResult> GetUserChat([FromQuery] ChatRequest dto)
     {
         var user = GetUserByToken();
 
@@ -51,7 +51,7 @@ public class ChatController : BaseController
         return Ok(chat);
     }
 
-    [HttpPost("seeMessages")]
+    [HttpPost("see")]
     public async Task<IActionResult> SeenMessage([FromBody] ChatRequest dto)
     {
         var user = GetUserByToken();

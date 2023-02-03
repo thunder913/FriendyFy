@@ -5,7 +5,7 @@ using Microsoft.AspNetCore.Mvc;
 
 namespace FriendyFy.Controllers;
 
-[Route("api/interest")]
+[Route("interest")]
 [ApiController]
 public class InterestController : Controller
 {

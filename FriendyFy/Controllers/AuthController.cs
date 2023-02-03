@@ -199,24 +199,7 @@ public class AuthController : BaseController
         }
     }
 
-    //TODO remove this endpoint if you dont find a use for it
-    [HttpGet("profilePicture/{username}")]
-    public async Task<string> GetProfilePicture(string username)
-    {
-        var user = userService.GetByUsername(username);
-
-        return await blobService.GetBlobUrlAsync(user.ProfileImage?.Id + user.ProfileImage?.ImageExtension, GlobalConstants.BlobPictures);
-    }
-
-    [HttpGet("coverPicture/{userId}")]
-    public async Task<string> GetCoverPicture(string userId)
-    {
-        var user = userService.GetByUsername(userId);
-
-        return await blobService.GetBlobUrlAsync(user.CoverImage?.Id + user.CoverImage?.ImageExtension, GlobalConstants.BlobPictures);
-    }
-
-    [HttpGet("getUserInformation/{username}")]
+    [HttpGet("userInformation/{username}")]
     public async Task<UserInformationViewModel> GetUserInformation(string username)
     {
         var user = userService.GetByUsername(username);
@@ -236,27 +219,7 @@ public class AuthController : BaseController
         return viewModel;
     }
 
-    [HttpGet("getUserSideInformation/{username}")]
-    public async Task<UserInformationViewModel> GetUserSideInformation(string username)
-    {
-        var user = userService.GetByUsername(username);
-        var coverPicture = await blobService.GetBlobUrlAsync(user.CoverImage?.Id + user.CoverImage?.ImageExtension, GlobalConstants.BlobPictures);
-        var profilePicture = await blobService.GetBlobUrlAsync(user.ProfileImage?.Id + user.ProfileImage?.ImageExtension, GlobalConstants.BlobPictures);
-
-        var viewModel = new UserInformationViewModel
-        {
-            CoverImage = coverPicture,
-            ProfileImage = profilePicture,
-            FirstName = user.FirstName,
-            LastName = user.LastName,
-            Interests = user.Interests.Select(x => new InterestViewModel { Id = x.Id, Label = x.Name }).ToList(),
-            Quote = user.Quote,
-        };
-            
-        return viewModel;
-    }
-
-    [HttpPost("FinishFirstTimeSetup")]
+    [HttpPost("finishFirstTimeSetup")]
     public async Task<IActionResult> FinishFirstTimeSetup([FromForm] FinishFirstTimeSetupRequest dto, IFormFile formFile)
     {
         var user = GetUserByToken();
@@ -289,13 +252,13 @@ public class AuthController : BaseController
         return Ok("success");
     }
 
-    [HttpPost("getUserImages")]
-    public IActionResult GetUserImages(UserImagesRequest dto)
+    [HttpGet("userImages")]
+    public IActionResult UserImages([FromQuery] UserImagesRequest dto)
     {
         return Ok(userService.GetUserImages(dto.Username, dto.Take, dto.Skip));
     }
 
-    [HttpPost("getUserData")]
+    [HttpGet("userData")]
     public async Task<IActionResult> GetUserData()
     {
         var user = GetUserByToken();
@@ -310,7 +273,7 @@ public class AuthController : BaseController
         return Ok(viewmodel);
     }
 
-    [HttpPost("editUserData")]
+    [HttpPatch("userData")]
     public async Task<IActionResult> EditUserData([FromForm] EditUserDataRequest dto)
     {
         var user = GetUserByToken();
@@ -377,7 +340,7 @@ public class AuthController : BaseController
         {
             return BadRequest("There was an error resetting the password!");
         }
-            
+
         var password = BCrypt.Net.BCrypt.HashPassword(dto.Password);
         var code = Encoding.UTF8.GetString(Convert.FromBase64String(dto.Code));
             

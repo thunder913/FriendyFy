@@ -1,5 +1,5 @@
 export function makePost(privacySetting, postMessage, locationLat, locationLng, image, people) {
-    return fetch('/post/make', {
+    return fetch('/post', {
         method: 'POST',
         headers: {'Content-Type': 'application/json'},
         body: JSON.stringify({privacySetting, postMessage, locationLat, locationLng, image, people})
@@ -7,13 +7,13 @@ export function makePost(privacySetting, postMessage, locationLat, locationLng, 
   }
 
   export function getPosts() {
-    return fetch('/post/getPosts', {
+    return fetch('/post', {
         method: 'GET',
     });
   }
 
   export function likePost(postId) {
-    return fetch('/post/likePost', {
+    return fetch('/post/like', {
         method: 'POST',
         headers: {'Content-Type': 'application/json'},
         body: JSON.stringify({postId})
@@ -22,26 +22,23 @@ export function makePost(privacySetting, postMessage, locationLat, locationLng, 
 
   
   export function getPostLikes(postId, postType, skip, take) {
-    return fetch('/post/getLikes', {
-        method: 'POST',
+    return fetch('/post/likes?' + new URLSearchParams({postId, postType, skip, take}), {
+        method: 'GET',
         headers: {'Content-Type': 'application/json'},
-        body: JSON.stringify({postId, postType, take, skip})
     });
   }
 
   export function getTaggedPeople(postId, skip, take) {
-    return fetch('/post/getTaggedPeople', {
-        method: 'POST',
+    return fetch('/post/tagged' + new URLSearchParams({postId, skip, take}), {
+        method: 'GET',
         headers: {'Content-Type': 'application/json'},
-        body: JSON.stringify({postId, take, skip})
     });
   }
 
   export function getPostByImageId(imageId) {
-    return fetch('/post/getByImageId', {
-        method: 'POST',
+    return fetch(`/post/image/${imageId}`, {
+        method: 'GET',
         headers: {'Content-Type': 'application/json'},
-        body: JSON.stringify({imageId})
     });
   }
 
@@ -54,25 +51,23 @@ export function makePost(privacySetting, postMessage, locationLat, locationLng, 
   }
 
   export function getPostReposts(postId, postType, skip, take) {
-    return fetch('/post/getReposts', {
-        method: 'POST',
+    return fetch('/post/reposts?' + new URLSearchParams({postId, postType, skip, take}) , {
+        method: 'GET',
         headers: {'Content-Type': 'application/json'},
-        body: JSON.stringify({postId, postType, take, skip})
     });
   }
 
   export function deletePost(postId, postType) {
-    return fetch('/post/deletePost', {
-        method: 'POST',
+    return fetch('/post', {
+        method: 'DELETE',
         headers: {'Content-Type': 'application/json'},
         body: JSON.stringify({postId, postType})
     });
   }
 
   export function getFeed(eventIds, postIds, isProfile, take, username, hasPosts, hasEvents, feedType) {
-    return fetch('/post/getFeedPosts', {
-        method: 'POST',
+    return fetch('/post/feed?' + new URLSearchParams({eventIds, postIds, isProfile, take, username, hasPosts, hasEvents, feedType}), {
+        method: 'GET',
         headers: {'Content-Type': 'application/json'},
-        body: JSON.stringify({eventIds, postIds, isProfile, take, username, hasPosts, hasEvents, feedType})
     });
   }

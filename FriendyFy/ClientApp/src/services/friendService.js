@@ -1,5 +1,5 @@
 function addFriend(data){
-    return fetch('/friend/add', {
+    return fetch('/friend', {
         method: 'POST',
         headers: {'Content-Type': 'application/json'},
         body: JSON.stringify(data)
@@ -23,46 +23,44 @@ function acceptFriendRequest(data){
 }
 
 function removeFriend(data){
-    return fetch('/friend/remove', {
-        method: 'POST',
+    return fetch('/friend', {
+        method: 'DELETE',
         headers: {'Content-Type': 'application/json'},
         body: JSON.stringify(data)
     });
 }
 
-function checkFriendStatus(data){
-    return fetch('/friend/checkFriendStatus', {
-        method: 'POST',
+function checkFriendStatus(userId){
+    return fetch(`/friend/status/${userId}`, {
+        method: 'GET',
         headers: {'Content-Type': 'application/json'},
-        body: JSON.stringify(data)
     });
 }
 
 function getFriends(userId, count, skip, searchQuery){
-    return fetch('/friend/getFriends', {
-        method: 'POST',
+    return fetch('/friend?' + new URLSearchParams({userId, count, skip, searchQuery}), {
+        method: 'GET',
         headers: {'Content-Type': 'application/json'},
-        body: JSON.stringify({userId, count, skip: skip, searchQuery: searchQuery})
     });
 }
 
 function getRecommendedFriends(){
-    return fetch('/friend/getRecommendations', {
-        method: 'POST',
+    return fetch('/friend/recommendations', {
+        method: 'GET',
     });
 }
 
 function removeFriendSuggestion(data){
-    return fetch('/friend/removeSuggestion', {
-        method: 'POST',
+    return fetch('/friend/suggestion', {
+        method: 'DELETE',
         headers: {'Content-Type': 'application/json'},
         body: JSON.stringify(data)
     });
 }
 
 function getRightNavigationSuggestions(){
-    return fetch('/friend/getRightNavSuggestions', {
-        method: 'POST'
+    return fetch('/friend/suggestions', {
+        method: 'GET'
     });
 }
 

@@ -16,8 +16,8 @@ public class NotificationController : BaseController
         this.notificationService = notificationService;
     }
 
-    [HttpPost("getForUser")]
-    public async Task<IActionResult> GetNotification(NotificationRequest dto)
+    [HttpGet]
+    public async Task<IActionResult> GetNotification([FromQuery] NotificationRequest dto)
     {
         var user = GetUserByToken();
             
@@ -29,7 +29,7 @@ public class NotificationController : BaseController
         return Ok(await notificationService.GetNotificationsForUserAsync(dto.UserId, dto.Take, dto.Skip));
     }
 
-    [HttpPost("acceptEvent")]
+    [HttpPost("accept/event")]
     public async Task<IActionResult> AcceptEvent(NotificationIdRequest dto)
     {
         var user = GetUserByToken();
@@ -48,7 +48,7 @@ public class NotificationController : BaseController
         return BadRequest();
     }
 
-    [HttpPost("rejectEvent")]
+    [HttpPost("reject/event")]
     public async Task<IActionResult> RejectEvent(NotificationIdRequest dto)
     {
         var user = GetUserByToken();
@@ -67,7 +67,7 @@ public class NotificationController : BaseController
         return BadRequest();
     }
 
-    [HttpPost("getUnseen")]
+    [HttpGet("unseen")]
     public async Task<IActionResult> GetUnseenNotifications()
     {
         var user = GetUserByToken();
@@ -80,7 +80,7 @@ public class NotificationController : BaseController
         return Ok(await notificationService.UnseenNotificationsAsync(user.Id));
     }
 
-    [HttpPost("seeNotification")]
+    [HttpPost("see")]
     public async Task<IActionResult> SeeNotification(SeeNotificationRequest dto)
     {
         var user = GetUserByToken();

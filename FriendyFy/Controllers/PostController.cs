@@ -26,7 +26,7 @@ public class PostController : BaseController
         this.eventService = eventService;
     }
 
-    [HttpPost("make")]
+    [HttpPost]
     public async Task<IActionResult> MakePost(CreatePostRequest makePostDto)
     {
         var user = GetUserByToken();
@@ -48,7 +48,7 @@ public class PostController : BaseController
         return Json(new { success = await postService.CreatePostAsync(makePostDto, user.Id) });
     }
 
-    [HttpGet("getPosts")]
+    [HttpGet]
     public IActionResult GetPosts()
     {
         var user = GetUserByToken();
@@ -61,7 +61,7 @@ public class PostController : BaseController
         return Json(postService.GetAllPosts(user.Id));
     }
 
-    [HttpPost("likePost")]
+    [HttpPost("like")]
     public async Task<IActionResult> LikePost([FromBody] PostIdRequest dto)
     {
         var user = GetUserByToken();
@@ -89,8 +89,8 @@ public class PostController : BaseController
         return BadRequest();
     }
 
-    [HttpPost("getLikes")]
-    public IActionResult GetLikes(PostLikesRequest dto)
+    [HttpGet("likes")]
+    public IActionResult GetLikes([FromQuery] PostLikesRequest dto)
     {
         var parsed = Enum.TryParse(dto.PostType, out PostType postType);
         if (!parsed)
@@ -105,8 +105,8 @@ public class PostController : BaseController
         return Ok(eventService.GetPeopleLikes(dto.PostId, dto.Take, dto.Skip));
     }
 
-    [HttpPost("getReposts")]
-    public IActionResult GetReposts(PostLikesRequest dto)
+    [HttpGet("reposts")]
+    public IActionResult GetReposts([FromQuery] PostLikesRequest dto)
     {
         var parsed = Enum.TryParse(dto.PostType, out PostType postType);
         if (!parsed)
@@ -121,18 +121,18 @@ public class PostController : BaseController
         return Ok(eventService.GetPostReposts(dto.PostId, dto.Take, dto.Skip));
     }
 
-    [HttpPost("getTaggedPeople")]
-    public List<PersonListPopupViewModel> GetTaggedPeople(PostLikesRequest dto)
+    [HttpGet("tagged")]
+    public List<PersonListPopupViewModel> GetTaggedPeople([FromQuery] PostLikesRequest dto)
     {
         return postService.GetTaggedPeople(dto.PostId, dto.Take, dto.Skip);
     }
 
-    [HttpPost("getByImageId")]
-    public async Task<IActionResult> GetPostByImageId(ImageIdRequest dto)
+    [HttpGet("image/{id}")]
+    public async Task<IActionResult> GetPostByImageId(string id)
     {
         var user = GetUserByToken();
 
-        var post = await postService.GetPostByImageIdAsync(dto.ImageId, user != null ? user.Id : null);
+        var post = await postService.GetPostByImageIdAsync(id, user != null ? user.Id : null);
         if (post == null)
         {
             return BadRequest();
@@ -181,7 +181,7 @@ public class PostController : BaseController
         return BadRequest();
     }
 
-    [HttpPost("deletePost")]
+    [HttpDelete]
     public async Task<IActionResult> DeletePost(DeletePostRequest dto)
     {
         var parsed = Enum.TryParse(dto.PostType, out PostType postType);
@@ -211,8 +211,8 @@ public class PostController : BaseController
         return BadRequest();
     }
 
-    [HttpPost("getFeedPosts")]
-    public async Task<IActionResult> GetFeedPosts(FeedPostsRequest dto)
+    [HttpGet("feed")]
+    public async Task<IActionResult> GetFeedPosts([FromQuery] FeedPostsRequest dto)
     {
         var user = GetUserByToken();
 

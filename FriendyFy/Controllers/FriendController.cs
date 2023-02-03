@@ -1,4 +1,5 @@
-﻿using System.Threading.Tasks;
+﻿using System.Collections.Specialized;
+using System.Threading.Tasks;
 using FriendyFy.Data.Requests;
 using FriendyFy.Hubs;
 using FriendyFy.Services.Contracts;
@@ -25,7 +26,7 @@ public class FriendController : BaseController
         this.notificationService = notificationService;
     }
 
-    [HttpPost("add")]
+    [HttpPost]
     public async Task<IActionResult> AddFriend(UserIdRequest dto)
     {
         var user = GetUserByToken();
@@ -91,8 +92,8 @@ public class FriendController : BaseController
         return Ok();
     }
 
-    [HttpPost("getFriends")]
-    public IActionResult GetFriendsToShow(FriendsRequest dto)
+    [HttpGet]
+    public IActionResult GetFriendsToShow([FromQuery] FriendsRequest dto)
     {
         var user = GetUserByToken();
 
@@ -111,7 +112,7 @@ public class FriendController : BaseController
         });
     }
 
-    [HttpPost("remove")]
+    [HttpDelete]
     public async Task<IActionResult> RemoveFriend(UserIdRequest dto)
     {
         var user = GetUserByToken();
@@ -130,20 +131,20 @@ public class FriendController : BaseController
         return Ok();
     }
 
-    [HttpPost("checkFriendStatus")]
-    public async Task<IActionResult> CheckFriendStatus(UserIdRequest dto)
+    [HttpGet("status/{id}")]
+    public async Task<IActionResult> CheckFriendStatus(string id)
     {
         var user = GetUserByToken();
             
-        if (user == null || dto.UserId == null)
+        if (user == null || id == null)
         {
             return BadRequest("The user cannot be added as a friend!");
         }
 
-        return Content(await friendService.GetUserFriendStatusAsync(user.Id, dto.UserId));
+        return Content(await friendService.GetUserFriendStatusAsync(user.Id, id));
     }
 
-    [HttpPost("getRecommendations")]
+    [HttpGet("recommendations")]
     public IActionResult GetFriendRecommendations()
     {
         var user = GetUserByToken();
@@ -156,7 +157,7 @@ public class FriendController : BaseController
         return Ok(friendService.GetFriendRecommendations(user.Id));
     }
 
-    [HttpPost("removeSuggestion")]
+    [HttpDelete("suggestion")]
     public async Task<IActionResult> GetFriendRecommendations(UserIdRequest dto)
     {
         var user = GetUserByToken();
@@ -170,7 +171,7 @@ public class FriendController : BaseController
         return Ok();
     }
 
-    [HttpPost("getRightNavSuggestions")]
+    [HttpGet("suggestions")]
     public async Task<IActionResult> GetRightNavRecommendations()
     {
         var user = GetUserByToken();

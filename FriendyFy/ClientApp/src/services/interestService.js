@@ -1,5 +1,5 @@
 function getAllInterests(){
-    return fetch('/api/interest', {
+    return fetch('/interest', {
         method: 'GET'
     })
 }

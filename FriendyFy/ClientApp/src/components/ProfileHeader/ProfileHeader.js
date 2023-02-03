@@ -27,7 +27,7 @@ const ProfileHeader = ({ selected }) => {
     useEffect(() => {
         let location = window.location.pathname;
         if (userId && (location.includes('profile') || location.includes('friends') || location.includes('photos'))) {
-            axios.get("api/getUserInformation/" + userId)
+            axios.get("api/userInformation/" + userId)
                 .then(async (res) => {
                     let user = res.data;
                     await setProfilePicture(user.profileImage);

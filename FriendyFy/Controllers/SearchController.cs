@@ -7,6 +7,7 @@ using FriendyFy.Data.Dtos;
 using FriendyFy.Data.Requests;
 using FriendyFy.Models.Enums;
 using FriendyFy.Services.Contracts;
+using FriendyFy.ViewModels;
 using Microsoft.AspNetCore.Mvc;
 using Newtonsoft.Json;
 
@@ -23,11 +24,16 @@ public class SearchController : BaseController
         this.searchService = searchService;
     }
 
-    [HttpPost]
-    public IActionResult GetSearchResults(SearchResultRequest dto)
+    [HttpGet]
+    public IActionResult GetSearchResults([FromQuery] SearchResultRequest dto)
     {
         var user = GetUserByToken();
-            
+
+        if (string.IsNullOrWhiteSpace(dto.SearchWord))
+        {
+            return Json(new SearchResultsViewModel());
+        }
+        
         string userId = null;
         if (user != null)
         {
@@ -36,7 +42,7 @@ public class SearchController : BaseController
         return Ok(searchService.GetSearchResults(dto.SearchWord, userId, dto.Take, dto.UsersCount, dto.EventsCount));
     }
 
-    [HttpPost("search")]
+    [HttpPost]
     public async Task<IActionResult> PerformSearch(SearchRequest dto)
     {
         var user = GetUserByToken();

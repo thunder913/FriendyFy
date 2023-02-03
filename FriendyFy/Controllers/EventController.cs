@@ -28,7 +28,7 @@ public class EventController : BaseController
         this.eventService = eventService;
     }
 
-    [HttpPost("create")]
+    [HttpPost]
     public async Task<IActionResult> CreateEvent(CreateEventRequest dto)
     {
         var user = GetUserByToken();
@@ -54,15 +54,15 @@ public class EventController : BaseController
         return Ok();
     }
 
-    [HttpPost("getById")]
-    public async Task<IActionResult> GetEventById(EventIdRequest eventDto)
+    [HttpGet("{id}")]
+    public async Task<IActionResult> GetEventById(string id)
     {
         var user = GetUserByToken();
-        var toReturn = await eventService.GetEventByIdAsync(eventDto.EventId, user?.Id);
+        var toReturn = await eventService.GetEventByIdAsync(id, user?.Id);
         return Ok(toReturn);
     }
         
-    [HttpPost("likeEvent")]
+    [HttpPost("like")]
     public async Task<IActionResult> LikeEvent(PostIdRequest likePostDto)
     {
         var user = GetUserByToken();
@@ -126,7 +126,7 @@ public class EventController : BaseController
         return BadRequest();
     }
 
-    [HttpPost("getNavEvents")]
+    [HttpGet("navigationEvents")]
     public IActionResult GetNavigationEvents()
     {
         var user = GetUserByToken();
@@ -144,7 +144,7 @@ public class EventController : BaseController
         return Ok(toReturn);
     }
 
-    [HttpPost("addImage")]
+    [HttpPost("image")]
     public async Task<IActionResult> AddImage(AddEventImageRequest dto)
     {
         var user = GetUserByToken();
@@ -163,7 +163,7 @@ public class EventController : BaseController
         return Ok(result);
     }
 
-    [HttpPost("leaveEvent")]
+    [HttpPost("leave")]
     public async Task<IActionResult> LeaveEvent(EventIdRequest dto)
     {
         var user = GetUserByToken();
@@ -181,7 +181,7 @@ public class EventController : BaseController
         return BadRequest();
     }
 
-    [HttpPost("deleteEvent")]
+    [HttpDelete]
     public async Task<IActionResult> DeleteEvent(EventIdRequest dto)
     {
         var user = GetUserByToken();
@@ -198,14 +198,14 @@ public class EventController : BaseController
         return BadRequest();
     }
 
-    [HttpPost("getRandomEvent")]
+    [HttpGet("random")]
     public async Task<IActionResult> GetRandomEvent()
     {
         return Ok(await eventService.GetRandomEventIdAsync());
     }
 
-    [HttpPost("getEventInvitePeople")]
-    public async Task<IActionResult> GetEventInvitePeople(EventInvitePeopleRequest dto)
+    [HttpGet("invited")]
+    public async Task<IActionResult> GetEventInvitePeople([FromQuery] EventInvitePeopleRequest dto)
     {
         var user = GetUserByToken();
 

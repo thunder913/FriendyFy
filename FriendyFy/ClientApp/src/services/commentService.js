@@ -1,5 +1,5 @@
 export function makeComment(text, postId, postType) {
-    return fetch('/comment/make', {
+    return fetch('/comment', {
         method: 'POST',
         headers: {'Content-Type': 'application/json'},
         body: JSON.stringify({text, postId, postType})
@@ -7,10 +7,9 @@ export function makeComment(text, postId, postType) {
   }
 
   export function getComments(postId, take, skip, postType) {
-    return fetch('/comment', {
-        method: 'POST',
+    return fetch('/comment?' + new URLSearchParams({postId, take, skip, postType}) , {
+        method: 'GET',
         headers: {'Content-Type': 'application/json'},
-        body: JSON.stringify({postId, take, skip, postType})
     });
   }
 
@@ -23,16 +22,15 @@ export function makeComment(text, postId, postType) {
   }
 
   export function getCommentLikes(commentId, skip, take) {
-    return fetch('/comment/getLikes', {
-        method: 'POST',
+    return fetch('/comment/likes?' + new URLSearchParams({commentId, skip, take}), {
+        method: 'GET',
         headers: {'Content-Type': 'application/json'},
-        body: JSON.stringify({commentId, take, skip})
     });
   }
 
   export function deleteComment(commentId, postType) {
     return fetch('/comment/deleteComment', {
-        method: 'POST',
+        method: 'DELETE',
         headers: {'Content-Type': 'application/json'},
         body: JSON.stringify({commentId, postType})
     });

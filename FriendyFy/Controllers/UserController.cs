@@ -22,10 +22,10 @@ public class UserController : BaseController
         this.userService = userService;
     }
 
-    [HttpPost("getLocation")]
-    public IActionResult GetLocation([FromBody] string userId)
+    [HttpGet("{id}/location")]
+    public IActionResult GetLocation(string id)
     {
-        var user = UserService.GetByUsername(userId);
+        var user = UserService.GetByUsername(id);
 
         if (user?.Longitude == null || user?.Latitude == null)
         {
@@ -35,15 +35,15 @@ public class UserController : BaseController
         return Ok(new { Location = geolocationService.GetUserLocation(ToDouble((decimal)user.Latitude), ToDouble((decimal)user.Longitude)), user.Latitude, user.Longitude });
     }
 
-    [HttpPost("getEventsCount")]
-    public IActionResult GetEventsCount([FromBody] string userId)
+    [HttpGet("{id}/events")]
+    public IActionResult GetEventsCount(string id)
     {
-        var count = UserService.GetUserEventsCount(userId);
+        var count = UserService.GetUserEventsCount(id);
 
         return Ok(new { count });
     }
 
-    [HttpPost("changeTheme")]
+    [HttpPost("theme/change")]
     public async Task<IActionResult> ChangerUserTheme(ChangeUserThemeRequest dto)
     {
         var user = GetUserByToken();

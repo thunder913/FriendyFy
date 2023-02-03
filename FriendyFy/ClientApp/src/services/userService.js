@@ -32,31 +32,29 @@ function finishFirstTimeSetup(data){
 }
 
 function getUserLocation(userId){
-    return fetch('/user/getLocation', {
-        method: 'POST',
+    return fetch(`/user/${userId}/location`, {
+        method: 'GET',
         headers: {'Content-Type': 'application/json'},
-        body: JSON.stringify(userId)
     });
 }
 
 function getUserEventsCount(userId){
-    return fetch('/user/getEventsCount', {
-        method: 'POST',
+    return fetch(`/user/${userId}/events`, {
+        method: 'GET',
         headers: {'Content-Type': 'application/json'},
-        body: JSON.stringify(userId)
     });
 }
 
 function getUserImages(username, take, skip){
-    return fetch('/api/getUserImages', {
-        method: 'POST',
+    return fetch('/api/UserImages?' + new URLSearchParams({username, take, skip}), 
+    {
+        method: 'GET',
         headers: {'Content-Type': 'application/json'},
-        body: JSON.stringify({username, take, skip})
     });
 }
 
 function changeUserTheme(username, theme){
-    return fetch('/user/changeTheme', {
+    return fetch('/user/theme/change', {
         method: 'POST',
         headers: {'Content-Type': 'application/json'},
         body: JSON.stringify({username, theme})
@@ -64,8 +62,8 @@ function changeUserTheme(username, theme){
 }
 
 function getUserData(){
-    return fetch('/api/getUserData', {
-        method: 'POST',
+    return fetch('/api/UserData', {
+        method: 'GET',
         headers: {'Content-Type': 'application/json'},
     });
 }
@@ -101,10 +99,6 @@ function resetPassword(email, password, confirmPassword, code){
         body: JSON.stringify({email, password, confirmPassword, code})
     });
 }
-
-
-
-
 
 export {
     getLoggedInUser,

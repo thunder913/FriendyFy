@@ -99,7 +99,7 @@ const Settings = () => {
         // console.log(lastName)
         // console.log(interests, 'interests')
         // console.log(errorMessage);
-        await axios.post("/api/editUserData", formdata).then(() => {
+        await axios.patch("/api/UserData", formdata).then(() => {
             resetUser();
             NotificationManager.success('Successfully updated your details!', '', 4000)
         }).catch(error => {

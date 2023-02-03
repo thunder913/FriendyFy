@@ -1,5 +1,5 @@
 export function createEvent(name, date, interests, privacyOptions, latitude, longitude, description, image, isReocurring = null, reocurringFrequency = null){
-    return fetch('/event/create', {
+    return fetch('/event', {
         method: 'POST',
         headers: {'Content-Type': 'application/json'},
         body: JSON.stringify({name, date, interests, privacyOptions, latitude, longitude, description, image})
@@ -7,15 +7,14 @@ export function createEvent(name, date, interests, privacyOptions, latitude, lon
 }
 
 export function getEventById(eventId){
-    return fetch('/event/getById', {
-        method: 'POST',
+    return fetch(`/event/${eventId}`, {
+        method: 'GET',
         headers: {'Content-Type': 'application/json'},
-        body: JSON.stringify({eventId})
     })
 }
 
 export function likeEvent(eventId) {
-    return fetch('/event/likeEvent', {
+    return fetch('/event/like', {
         method: 'POST',
         headers: {'Content-Type': 'application/json'},
         body: JSON.stringify({postId: eventId})
@@ -39,14 +38,14 @@ export function likeEvent(eventId) {
   }
 
   export function getNavigationEvents() {
-    return fetch('/event/getNavEvents', {
-        method: 'POST',
+    return fetch('/event/navigationEvents', {
+        method: 'GET',
     });
   }
 
 
   export function addImageToEvent(eventId, image) {
-    return fetch('/event/addImage', {
+    return fetch('/event/image', {
         method: 'POST',
         headers: {'Content-Type': 'application/json'},
         body: JSON.stringify({eventId, image})
@@ -54,7 +53,7 @@ export function likeEvent(eventId) {
   }
 
   export function leaveEvent(eventId) {
-    return fetch('/event/leaveEvent', {
+    return fetch('/event/leave', {
         method: 'POST',
         headers: {'Content-Type': 'application/json'},
         body: JSON.stringify({eventId})
@@ -62,23 +61,22 @@ export function likeEvent(eventId) {
   }
 
   export function deleteEvent(eventId) {
-    return fetch('/event/deleteEvent', {
-        method: 'POST',
+    return fetch('/event', {
+        method: 'DELETE',
         headers: {'Content-Type': 'application/json'},
         body: JSON.stringify({eventId})
     });
   }
 
   export function getRandomEvent() {
-    return fetch('/event/getRandomEvent', {
-        method: 'POST'
+    return fetch('/event/random', {
+        method: 'GET'
     });
   }
 
   export function getEventInvitePeople(eventId, skip, take) {
-    return fetch('/event/getEventInvitePeople', {
-        method: 'POST',
+    return fetch('/event/invited?' + new URLSearchParams({eventId, skip, take}), {
+        method: 'GET',
         headers: {'Content-Type': 'application/json'},
-        body: JSON.stringify({eventId, skip, take})
     });
   }

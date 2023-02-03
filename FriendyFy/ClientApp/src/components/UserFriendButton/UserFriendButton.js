@@ -69,7 +69,7 @@ function UserFriendButton({ userId }) {
     }
 
     const renderAddFriend = async () => {
-        await checkFriendStatus({ userId: userId })
+        await checkFriendStatus(userId)
             .then(async res => {
                 let text = await res.text();
                 switch (text) {

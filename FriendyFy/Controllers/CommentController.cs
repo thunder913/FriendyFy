@@ -20,7 +20,7 @@ public class CommentController : BaseController
         this.commentService = commentService;
     }
 
-    [HttpPost("make")]
+    [HttpPost]
     public async Task<IActionResult> AddComment(AddCommentRequest comment)
     {
         var user = GetUserByToken();
@@ -41,8 +41,8 @@ public class CommentController : BaseController
         ;
     }
 
-    [HttpPost]
-    public List<PostCommentViewModel> GetPostComments([FromBody] PostCommentsRequest commentDto)
+    [HttpGet]
+    public List<PostCommentViewModel> GetPostComments([FromQuery] PostCommentsRequest commentDto)
     {
         var user = GetUserByToken();
             
@@ -84,13 +84,13 @@ public class CommentController : BaseController
         return BadRequest();
     }
 
-    [HttpPost("getLikes")]
-    public List<PersonListPopupViewModel> GetLikes(CommentLikesRequest dto)
+    [HttpGet("likes")]
+    public List<PersonListPopupViewModel> GetLikes([FromQuery] CommentLikesRequest dto)
     {
         return commentService.GetPeopleLikes(dto.CommentId, dto.Take, dto.Skip);
     }
 
-    [HttpPost("deleteComment")]
+    [HttpDelete]
     public async Task<IActionResult> DeleteComment(CommentRequest dto)
     {
         var user = GetUserByToken();
