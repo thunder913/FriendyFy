@@ -49,6 +49,8 @@ public class CommentService : ICommentService
             return null;
         }
 
+        PostCommentViewModel viewModel;
+
         switch (postType)
         {
             case PostType.Post:
@@ -71,7 +73,11 @@ public class CommentService : ICommentService
                     postCommentRepository.Add(postComment);
                     await postCommentRepository.SaveChangesAsync();
 
-                    return GetCommentViewModelById(postComment.Id, postType);
+                    var dto = await GetCommentViewModelByIdAsync(postComment.Id, postType);
+
+                    viewModel = mapper.Map<PostCommentViewModel>(dto);
+                    viewModel.CommentorPicture = await blobService.GetBlobUrlAsync(dto.ProfilePicture, GlobalConstants.BlobPictures);
+                    break;
                 }
             case PostType.Event:
                 {
@@ -95,11 +101,17 @@ public class CommentService : ICommentService
                     eventCommentRepository.Add(eventComment);
                     await eventCommentRepository.SaveChangesAsync();
 
-                    return GetCommentViewModelById(eventComment.Id, postType);
+                    var dto = await GetCommentViewModelByIdAsync(eventComment.Id, postType);
+
+                    viewModel = mapper.Map<PostCommentViewModel>(dto);
+                    viewModel.CommentorPicture = await blobService.GetBlobUrlAsync(dto.ProfilePicture, GlobalConstants.BlobPictures);
+                    break;
                 }
             default:
                 return null;
         }
+
+        return viewModel;
     }
 
     public List<PostCommentViewModel> GetCommentsForPost(string userId, string postId, int take, int skip, PostType postType)
@@ -261,57 +273,45 @@ public class CommentService : ICommentService
 
         return viewModel;
     }
-    private PostCommentViewModel GetCommentViewModelById(string commentId, PostType postType)
+
+    private async Task<PostCommentDto> GetCommentViewModelByIdAsync(string commentId, PostType postType)
     {
-        // TODO use dto then viewmodel
         return postType switch
         {
-            PostType.Post => postCommentRepository.AllAsNoTracking()
+            PostType.Post => await postCommentRepository.AllAsNoTracking()
                 .Include(x => x.CommentedBy)
                 .ThenInclude(x => x.ProfileImage)
                 .Where(x => x.Id == commentId)?
-                .ToList()
-                .Select(x => new PostCommentViewModel
+                .Select(x => new PostCommentDto()
                 {
-                    CommentorUsername = x.CommentedBy.UserName,
-                    CommentorName = x.CommentedBy.FirstName + " " + x.CommentedBy.LastName,
-                    CommentorPicture =
-                        blobService.GetBlobUrlAsync(
-                                x.CommentedBy.ProfileImage?.Id + x.CommentedBy.ProfileImage?.ImageExtension,
-                                GlobalConstants.BlobPictures)
-                            .GetAwaiter()
-                            .GetResult(),
+                    UserName = x.CommentedBy.UserName,
+                    Name = x.CommentedBy.FirstName + " " + x.CommentedBy.LastName,
+                    ProfilePicture = x.CommentedBy.ProfileImage.Id + x.CommentedBy.ProfileImage.ImageExtension,
                     CommentText = x.Text,
-                    CreatedAgo = (int)((DateTime.UtcNow - x.CreatedOn).TotalMinutes),
+                    CreatedOn = x.CreatedOn,
                     IsLikedByUser = false,
-                    LikesCount = x.CommentLikes.Count(),
+                    LikesCount = x.CommentLikes.Count,
                     Id = x.Id,
                     PostType = postType.ToString()
                 })
-                .FirstOrDefault(),
-            PostType.Event => eventCommentRepository.AllAsNoTracking()
+                .FirstOrDefaultAsync(),
+            PostType.Event => await eventCommentRepository.AllAsNoTracking()
                 .Include(x => x.CommentedBy)
                 .ThenInclude(x => x.ProfileImage)
                 .Where(x => x.Id == commentId)
-                ?.ToList()
-                .Select(x => new PostCommentViewModel
+                .Select(x => new PostCommentDto()
                 {
-                    CommentorUsername = x.CommentedBy.UserName,
-                    CommentorName = x.CommentedBy.FirstName + " " + x.CommentedBy.LastName,
-                    CommentorPicture =
-                        blobService.GetBlobUrlAsync(
-                                x.CommentedBy.ProfileImage?.Id + x.CommentedBy.ProfileImage?.ImageExtension,
-                                GlobalConstants.BlobPictures)
-                            .GetAwaiter()
-                            .GetResult(),
+                    UserName = x.CommentedBy.UserName,
+                    Name = x.CommentedBy.FirstName + " " + x.CommentedBy.LastName,
+                    ProfilePicture = x.CommentedBy.ProfileImage.Id + x.CommentedBy.ProfileImage.ImageExtension,
                     CommentText = x.Text,
-                    CreatedAgo = (int)((DateTime.UtcNow - x.CreatedOn).TotalMinutes),
+                    CreatedOn = x.CreatedOn,
                     IsLikedByUser = false,
-                    LikesCount = x.CommentLikes.Count(),
+                    LikesCount = x.CommentLikes.Count,
                     Id = x.Id,
                     PostType = postType.ToString()
                 })
-                .FirstOrDefault(),
+                .FirstOrDefaultAsync(),
             _ => null
         };
     }

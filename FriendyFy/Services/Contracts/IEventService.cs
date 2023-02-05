@@ -11,7 +11,6 @@ public interface IEventService
 {
     Task CreateEventAsync(string name, DateTime date, List<Interest> interests, PrivacySettings privacySettings, decimal latitude, decimal longitude, string description, string profileImage, string organizerId);
     Task<EventPageViewModel> GetEventByIdAsync(string id, string userId);
-    List<PostDetailsViewModel> GetEvents(string userId);
     Task<int?> LikeEventAsync(string eventId, ApplicationUser user);
     List<PersonListPopupViewModel> GetPeopleLikes(string eventId, int take, int skip);
     Task<bool> JoinEventAsync(string eventId, ApplicationUser user);

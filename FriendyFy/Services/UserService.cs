@@ -356,8 +356,8 @@ public class UserService : IUserService
         {
             Name = x.Name,
             Username = x.Username,
-            ProfileImage = blobService.GetBlobUrlAsync(x.ProfileImage, GlobalConstants.BlobPictures).GetAwaiter().GetResult()
+            ProfileImage = blobService.GetBlobUrlAsync(x.ProfileImage, GlobalConstants.BlobPictures).GetAwaiter()
+                .GetResult()
         }).ToList();
-
     }
 }
