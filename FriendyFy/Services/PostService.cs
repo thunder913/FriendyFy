@@ -339,13 +339,13 @@ public class PostService : IPostService
         return removed > 0;
     }
 
-    public List<PostDetailsViewModel> GetFeedPosts(ApplicationUser user, bool isProfile, string userName, int take, int skip, List<string> ids)
+    public async Task<List<PostDetailsViewModel>> GetFeedPosts(ApplicationUser user, bool isProfile, string userName, int take, int skip, List<string> ids)
     {
         var posts = new List<PostDetailsViewModel>();
 
         if (isProfile)
         {
-            posts.AddRange(postRepository
+            posts.AddRange(await postRepository
                 .All()
                 .Where(x => x.Creator.UserName == userName)
                 .Where(x => !ids.Contains(x.Id))
@@ -354,96 +354,89 @@ public class PostService : IPostService
                 .Select(x => new PostDetailsViewModel
                 {
                     PostId = x.Id,
-                    CommentsCount = x.Comments.Count(),
-                    CreatedAgo = (int)((DateTime.UtcNow - x.CreatedOn).TotalMinutes),
+                    CommentsCount = x.Comments.Count,
+                    CreatedAgo = (int)(DateTime.UtcNow - x.CreatedOn).TotalMinutes,
                     CreatorImage = x.Creator.ProfileImage.Id + x.Creator.ProfileImage.ImageExtension,
                     CreatorName = x.Creator.FirstName + " " + x.Creator.LastName,
-                    LikesCount = x.Likes.Count(),
+                    LikesCount = x.Likes.Count,
                     PostMessage = x.Text,
-                    RepostsCount = x.Reposts.Where(x => !x.IsDeleted).GroupBy(x => x.CreatorId).Count(),
+                    RepostsCount = x.Reposts.Where(y => !y.IsDeleted).Select(y => y.CreatorId).Distinct().Count(),
                     PostImage = x.Image.Id + x.Image.ImageExtension,
-                    IsLikedByUser = user == null ? false : x.Likes.Any(x => x.LikedById == user.Id),
+                    IsLikedByUser = user != null && x.Likes.Any(y => y.LikedById == user.Id),
                     Username = x.Creator.UserName,
-                    Latitude = x.Latitude ?? x.Latitude,
-                    Longitude = x.Longitude ?? x.Longitude,
+                    Latitude = x.Latitude,
+                    Longitude = x.Longitude,
                     LocationCity = x.LocationCity,
-                    TaggedPeopleCount = x.TaggedPeople.Count(),
-                    PostType = PostType.Post.ToString(),
+                    TaggedPeopleCount = x.TaggedPeople.Count,
                     IsRepost = x.IsRepost,
                     IsUserCreator = user != null && x.CreatorId == user.Id,
                     Repost = !x.IsRepost ? null : new PostDetailsViewModel
                     {
                         PostId = x.Repost.Id,
-                        CommentsCount = x.Repost.Comments.Count(),
-                        CreatedAgo = (int)((DateTime.UtcNow - x.Repost.CreatedOn).TotalMinutes),
+                        CommentsCount = x.Repost.Comments.Count,
+                        CreatedAgo = (int)(DateTime.UtcNow - x.Repost.CreatedOn).TotalMinutes,
                         CreatorImage = x.Repost.Creator.ProfileImage.Id + x.Repost.Creator.ProfileImage.ImageExtension,
                         CreatorName = x.Repost.Creator.FirstName + " " + x.Repost.Creator.LastName,
-                        LikesCount = x.Repost.Likes.Count(),
+                        LikesCount = x.Repost.Likes.Count,
                         PostMessage = x.Repost.Text,
-                        RepostsCount = x.Reposts.Where(x => !x.IsDeleted).GroupBy(x => x.CreatorId).Count(),
+                        RepostsCount = x.Reposts.Where(y => !y.IsDeleted).Select(y => y.CreatorId).Distinct().Count(),
                         PostImage = x.Repost.Image.Id + x.Repost.Image.ImageExtension,
                         IsLikedByUser = user != null && x.Repost.Likes.Any(y => y.LikedById == user.Id),
                         Username = x.Repost.Creator.UserName,
                         Latitude = x.Repost.Latitude ?? x.Repost.Latitude,
                         Longitude = x.Repost.Longitude ?? x.Repost.Longitude,
                         LocationCity = x.Repost.LocationCity,
-                        TaggedPeopleCount = x.Repost.TaggedPeople.Count(),
-                        PostType = PostType.Post.ToString(),
+                        TaggedPeopleCount = x.Repost.TaggedPeople.Count
                     }
                 })
-                .ToList());
+                .ToListAsync());
         }
         else
         {
-            posts.AddRange(postRepository
-                .All()
+            posts.AddRange(await postRepository
+                .AllAsNoTracking()
                 .Where(x => user == null || x.CreatorId != user.Id)
                 .Where(x => !ids.Contains(x.Id))
-                .OrderByDescending(x => EF.Functions.DateDiffSecond(DateTime.UtcNow, x.CreatedOn) / 1000.0 +
-                                        ((user != null ? x.Creator.Friends.Count(y => y.Id == user.Id) * 1000 : 0) +
-                                         (user != null ? x.Creator.Friends.Count(y => y.Id == user.Id) * 100000 : 0)))
                 .Take(take)
                 .Select(x => new PostDetailsViewModel
                 {
                     PostId = x.Id,
-                    CommentsCount = x.Comments.Count(),
-                    CreatedAgo = (int)((DateTime.UtcNow - x.CreatedOn).TotalMinutes),
+                    CommentsCount = x.Comments.Count,
+                    CreatedAgo = (int)(DateTime.UtcNow - x.CreatedOn).TotalMinutes,
                     CreatorImage = x.Creator.ProfileImage.Id + x.Creator.ProfileImage.ImageExtension,
                     CreatorName = x.Creator.FirstName + " " + x.Creator.LastName,
-                    LikesCount = x.Likes.Count(),
+                    LikesCount = x.Likes.Count,
                     PostMessage = x.Text,
-                    RepostsCount = x.Reposts.Where(x => !x.IsDeleted).GroupBy(x => x.CreatorId).Count(),
+                    RepostsCount = x.Reposts.Where(y => !y.IsDeleted).Select(y => y.CreatorId).Distinct().Count(),
                     PostImage = x.Image.Id + x.Image.ImageExtension,
-                    IsLikedByUser = x.Likes.Any(x => x.LikedById == user.Id),
+                    IsLikedByUser = x.Likes.Any(y => y.LikedById == user.Id),
                     Username = x.Creator.UserName,
-                    Latitude = x.Latitude ?? x.Latitude,
-                    Longitude = x.Longitude ?? x.Longitude,
+                    Latitude = x.Latitude,
+                    Longitude = x.Longitude,
                     LocationCity = x.LocationCity,
-                    TaggedPeopleCount = x.TaggedPeople.Count(),
-                    PostType = PostType.Post.ToString(),
+                    TaggedPeopleCount = x.TaggedPeople.Count,
                     IsRepost = x.IsRepost,
                     IsUserCreator = x.CreatorId == user.Id,
                     Repost = !x.IsRepost ? null : new PostDetailsViewModel
                     {
                         PostId = x.Repost.Id,
-                        CommentsCount = x.Repost.Comments.Count(),
-                        CreatedAgo = (int)((DateTime.UtcNow - x.Repost.CreatedOn).TotalMinutes),
+                        CommentsCount = x.Repost.Comments.Count,
+                        CreatedAgo = (int)(DateTime.UtcNow - x.Repost.CreatedOn).TotalMinutes,
                         CreatorImage = x.Repost.Creator.ProfileImage.Id + x.Repost.Creator.ProfileImage.ImageExtension,
                         CreatorName = x.Repost.Creator.FirstName + " " + x.Repost.Creator.LastName,
-                        LikesCount = x.Repost.Likes.Count(),
+                        LikesCount = x.Repost.Likes.Count,
                         PostMessage = x.Repost.Text,
-                        RepostsCount = x.Reposts.Where(x => !x.IsDeleted).GroupBy(x => x.CreatorId).Count(),
+                        RepostsCount = x.Reposts.Where(y => !y.IsDeleted).Select(y => y.CreatorId).Distinct().Count(),
                         PostImage = x.Repost.Image.Id + x.Repost.Image.ImageExtension,
                         IsLikedByUser = x.Repost.Likes.Any(y => y.LikedById == user.Id),
                         Username = x.Repost.Creator.UserName,
-                        Latitude = x.Repost.Latitude ?? x.Repost.Latitude,
-                        Longitude = x.Repost.Longitude ?? x.Repost.Longitude,
+                        Latitude = x.Repost.Latitude,
+                        Longitude = x.Repost.Longitude,
                         LocationCity = x.Repost.LocationCity,
-                        TaggedPeopleCount = x.Repost.TaggedPeople.Count(),
-                        PostType = PostType.Post.ToString(),
+                        TaggedPeopleCount = x.Repost.TaggedPeople.Count,
                     }
                 })
-                .ToList());
+                .ToListAsync());
         }
         var toReturn = posts.Select(x => new PostDetailsViewModel
             {
@@ -462,7 +455,7 @@ public class PostService : IPostService
                 Longitude = x.Longitude,
                 LocationCity = x.LocationCity,
                 TaggedPeopleCount = x.TaggedPeopleCount,
-                PostType = x.PostType,
+                PostType = PostType.Post.ToString(),
                 IsRepost = x.IsRepost,
                 IsUserCreator = x.IsUserCreator,
                 Repost = !x.IsRepost ? null : new PostDetailsViewModel
@@ -482,7 +475,7 @@ public class PostService : IPostService
                     Longitude = x.Repost.Longitude,
                     LocationCity = x.Repost.LocationCity,
                     TaggedPeopleCount = x.Repost.TaggedPeopleCount,
-                    PostType = x.Repost.PostType,
+                    PostType = PostType.Post.ToString(),
                 }
             })
             .ToList();

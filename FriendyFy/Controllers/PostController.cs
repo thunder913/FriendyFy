@@ -232,7 +232,7 @@ public class PostController : BaseController
         {
             if (dto.HasPosts)
             {
-                posts = postService.GetFeedPosts(user, dto.IsProfile, dto.Username, toTake, dto.PostIds.Count(), dto.PostIds);
+                posts = await postService.GetFeedPosts(user, dto.IsProfile, dto.Username, toTake, dto.PostIds.Count(), dto.PostIds);
             }
         }
         bool hasPosts = false, hasEvents = false;
