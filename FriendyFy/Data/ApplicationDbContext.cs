@@ -91,5 +91,9 @@ public class ApplicationDbContext : ApiAuthorizationDbContext<ApplicationUser>
         builder.Entity<Notification>()
             .HasOne(x => x.Event)
             .WithMany(x => x.Notification);
+
+        builder.Entity<Event>()
+            .HasIndex(x => x.Time)
+            .IsClustered(false);
     }
 }
