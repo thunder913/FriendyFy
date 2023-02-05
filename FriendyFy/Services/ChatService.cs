@@ -82,7 +82,6 @@ public class ChatService : IChatService
             chatName = otherUser?.FirstName + " " + otherUser?.LastName;
         }
 
-        // TODO use AutoMapper
         var model = new ChatViewModel
         {
             Image = photo,

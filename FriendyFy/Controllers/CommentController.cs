@@ -85,9 +85,9 @@ public class CommentController : BaseController
     }
 
     [HttpGet("likes")]
-    public List<PersonListPopupViewModel> GetLikes([FromQuery] CommentLikesRequest dto)
+    public async Task<List<PersonListPopupViewModel>> GetLikes([FromQuery] CommentLikesRequest dto)
     {
-        return commentService.GetPeopleLikes(dto.CommentId, dto.Take, dto.Skip);
+        return await commentService.GetPeopleLikesAsync(dto.CommentId, dto.Take, dto.Skip);
     }
 
     [HttpDelete]

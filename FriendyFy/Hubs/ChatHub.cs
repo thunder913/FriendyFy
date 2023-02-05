@@ -22,7 +22,6 @@ public class ChatHub : Hub
 
         var userId = Context.UserIdentifier;
 
-        //TODO simplify the logic by returning the message object from the sendchatmessage, there is no need of messageService
         var viewModel = await chatService.SendChatMessage(dto.ChatId, userId, dto.Message);
 
         if (viewModel == null)
