@@ -18,9 +18,9 @@ public class ChatController : BaseController
     }
 
     [HttpGet("all")]
-    public IActionResult GetUserChats([FromQuery] UserChatsRequest dto)
+    public async Task<IActionResult> GetUserChats([FromQuery] UserChatsRequest dto)
     {
-        var user = GetUserByToken();
+        var user = await GetUserByToken();
             
         if (user == null || user.UserName != dto.Username)
         {
@@ -33,13 +33,13 @@ public class ChatController : BaseController
             chatIds = JsonConvert.DeserializeObject<List<string>>(dto.ChatIds);
         }
 
-        return Ok(chatService.GetUserChats(dto.Username, dto.Page, dto.ItemsPerPage, dto.Take, dto.Search, chatIds));
+        return Ok(await chatService.GetUserChatsAsync(dto.Username, dto.Page, dto.ItemsPerPage, dto.Take, dto.Search, chatIds));
     }
 
     [HttpGet]
     public async Task<IActionResult> GetUserChat([FromQuery] ChatRequest dto)
     {
-        var user = GetUserByToken();
+        var user = await GetUserByToken();
 
         if (user == null || user.UserName != dto.Username)
         {
@@ -54,7 +54,7 @@ public class ChatController : BaseController
     [HttpPost("see")]
     public async Task<IActionResult> SeenMessage([FromBody] ChatRequest dto)
     {
-        var user = GetUserByToken();
+        var user = await GetUserByToken();
 
         if (user == null)
         {

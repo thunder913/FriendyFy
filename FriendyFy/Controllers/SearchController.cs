@@ -25,9 +25,9 @@ public class SearchController : BaseController
     }
 
     [HttpGet]
-    public IActionResult GetSearchResults([FromQuery] SearchResultRequest dto)
+    public async Task<IActionResult> GetSearchResults([FromQuery] SearchResultRequest dto)
     {
-        var user = GetUserByToken();
+        var user = await GetUserByToken();
 
         if (string.IsNullOrWhiteSpace(dto.SearchWord))
         {
@@ -39,13 +39,13 @@ public class SearchController : BaseController
         {
             userId = user.Id;
         }
-        return Ok(searchService.GetSearchResults(dto.SearchWord, userId, dto.Take, dto.UsersCount, dto.EventsCount));
+        return Ok(await searchService.GetSearchResultsAsync(dto.SearchWord, userId, dto.Take, dto.UsersCount, dto.EventsCount));
     }
 
     [HttpPost]
     public async Task<IActionResult> PerformSearch(SearchRequest dto)
     {
-        var user = GetUserByToken();
+        var user = await GetUserByToken();
         var interests = JsonConvert.DeserializeObject<List<InterestDto>>(dto.Interests);
             
         var parsed = Enum.TryParse(dto.Type, out SearchType type);

@@ -23,7 +23,7 @@ public class CommentController : BaseController
     [HttpPost]
     public async Task<IActionResult> AddComment(AddCommentRequest comment)
     {
-        var user = GetUserByToken();
+        var user = await GetUserByToken();
         if (user == null)
         {
             return Unauthorized("You are not signed in!");
@@ -42,9 +42,9 @@ public class CommentController : BaseController
     }
 
     [HttpGet]
-    public List<PostCommentViewModel> GetPostComments([FromQuery] PostCommentsRequest commentDto)
+    public async Task<List<PostCommentViewModel>> GetPostComments([FromQuery] PostCommentsRequest commentDto)
     {
-        var user = GetUserByToken();
+        var user = await GetUserByToken();
             
         var parsed = Enum.TryParse(commentDto.PostType, out PostType postType);
         if (parsed)
@@ -58,7 +58,7 @@ public class CommentController : BaseController
     [HttpPost("like")]
     public async Task<IActionResult> LikePost(CommentRequest likedCommentDto)
     {
-        var user = GetUserByToken();
+        var user = await GetUserByToken();
 
         if (user == null)
         {
@@ -93,7 +93,7 @@ public class CommentController : BaseController
     [HttpDelete]
     public async Task<IActionResult> DeleteComment(CommentRequest dto)
     {
-        var user = GetUserByToken();
+        var user = await GetUserByToken();
             
         if (user == null)
         {

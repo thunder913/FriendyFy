@@ -68,6 +68,7 @@ public class EventService : IEventService
             CreatedOn = DateTime.UtcNow,
             LocationCity = geolocationService.GetUserLocation(ToDouble(latitude), ToDouble(longitude))
         };
+        
         if (profileImage != null && !string.IsNullOrWhiteSpace(profileImage))
         {
             newEvent.ProfileImage = await imageService.AddImageAsync(ImageType.NormalImage);
@@ -133,11 +134,13 @@ public class EventService : IEventService
         {
             toReturn.UserImages.Add(await blobService.GetBlobUrlAsync(item, GlobalConstants.BlobPictures));
         }
+        
         toReturn.UserImages.Add(await blobService.GetBlobUrlAsync(eventWithId.OrganizerImageUrl, GlobalConstants.BlobPictures));
         foreach (var item in eventWithId.Photos.Take(3))
         {
             toReturn.Photos.Add(await blobService.GetBlobUrlAsync(item, GlobalConstants.BlobPictures));
         }
+        
         toReturn.MainPhoto = await blobService.GetBlobUrlAsync(eventWithId.MainPhoto, GlobalConstants.BlobPictures);
 
         return toReturn;
@@ -145,6 +148,7 @@ public class EventService : IEventService
 
     public List<PostDetailsViewModel> GetEvents(string userId)
     {
+        //TODO use dto then viewmmodel, with AutoMapper
         return eventPostRepository
             .AllAsNoTracking()
             .OrderByDescending(x => x.CreatedOn)
@@ -192,9 +196,9 @@ public class EventService : IEventService
                 Latitude = x.Event.Latitude,
                 Longitude = x.Event.Longitude,
                 EventTime = x.Event.Time,
-                LikesCount = x.Likes.Count(),
+                LikesCount = x.Likes.Count,
                 RepostsCount = x.Reposts.GroupBy(x => x.CreatorId).Count(),
-                CommentsCount = x.Comments.Count(),
+                CommentsCount = x.Comments.Count,
                 EventIsReocurring = x.Event.IsReocurring,
                 EventReocurring = x.Event.ReocurringType.ToString(),
                 IsLikedByUser = x.Likes.Any(x => x.LikedById == userId),
@@ -222,9 +226,9 @@ public class EventService : IEventService
                     Latitude = x.Repost.Event.Latitude,
                     Longitude = x.Repost.Event.Longitude,
                     EventTime = x.Repost.Event.Time,
-                    LikesCount = x.Repost.Likes.Count(),
+                    LikesCount = x.Repost.Likes.Count,
                     RepostsCount = x.Repost.Reposts.GroupBy(x => x.CreatorId).Count(),
-                    CommentsCount = x.Repost.Comments.Count(),
+                    CommentsCount = x.Repost.Comments.Count,
                     EventIsReocurring = x.Repost.Event.IsReocurring,
                     EventReocurring = x.Repost.Event.ReocurringType.ToString(),
                     IsLikedByUser = x.Repost.Likes.Any(y => y.LikedById == userId),
@@ -242,6 +246,7 @@ public class EventService : IEventService
             .All()
             .Include(x => x.Likes)
             .FirstOrDefaultAsync(x => x.Id == eventId);
+        
         if (currEvent == null)
         {
             return null;
@@ -266,7 +271,7 @@ public class EventService : IEventService
         await eventRepository.SaveChangesAsync();
 
 
-        return currEvent.Likes.Count();
+        return currEvent.Likes.Count;
     }
 
     public List<PersonListPopupViewModel> GetPeopleLikes(string eventId, int take, int skip)
@@ -294,7 +299,11 @@ public class EventService : IEventService
 
     public async Task<bool> JoinEventAsync(string eventId, ApplicationUser user)
     {
-        var currEvent = eventRepository.All().Include(x => x.Users).FirstOrDefault(x => x.Id == eventId);
+        var currEvent = await eventRepository
+            .All().
+            Include(x => x.Users)
+            .FirstOrDefaultAsync(x => x.Id == eventId);
+        
         if (currEvent == null)
         {
             return false;
@@ -307,7 +316,10 @@ public class EventService : IEventService
 
     public async Task<bool> CreateEventPostAsync(string eventId, string userId)
     {
-        var currEvent = await eventRepository.All().FirstOrDefaultAsync(x => x.Id == eventId);
+        var currEvent = await eventRepository
+            .All()
+            .FirstOrDefaultAsync(x => x.Id == eventId);
+        
         if (currEvent == null)
         {
             return false;
@@ -325,9 +337,10 @@ public class EventService : IEventService
         return saved > 0;
     }
 
-    public List<NavigationEventViewModel> GetAttendingEvents(string username)
+    public async Task<List<NavigationEventViewModel>> GetAttendingEvents(string username)
     {
-        var result = eventRepository
+        //TODO replace magic number 2
+        var result = await eventRepository
             .AllAsNoTracking()
             .Include(x => x.Organizer)
             .ThenInclude(x => x.ProfileImage)
@@ -352,11 +365,12 @@ public class EventService : IEventService
                 x.Latitude,
                 x.Longitude
             })
-            .ToList();
+            .ToListAsync();
 
         var toReturn = new List<NavigationEventViewModel>();
         foreach (var item in result)
         {
+            // TODO use AutoMapper
             var navigationEvent = new NavigationEventViewModel
             {
                 GoingPhotos = item.GoingPhotos.Select(x => blobService.GetBlobUrlAsync(x, GlobalConstants.BlobPictures).GetAwaiter().GetResult()).ToList(),
@@ -376,9 +390,10 @@ public class EventService : IEventService
         return toReturn;
     }
 
-    public List<NavigationEventViewModel> GetOrganizedEvents(string username)
+    public async Task<List<NavigationEventViewModel>> GetOrganizedEventsAsync(string username)
     {
-        var result = eventRepository
+        //TODO replace magic number 2
+        var result = await eventRepository
             .AllAsNoTracking()
             .Include(x => x.Organizer)
             .ThenInclude(x => x.ProfileImage)
@@ -403,11 +418,12 @@ public class EventService : IEventService
                 x.Latitude,
                 x.Longitude
             })
-            .ToList();
+            .ToListAsync();
 
         var toReturn = new List<NavigationEventViewModel>();
         foreach (var item in result)
         {
+            //TODO use AutoMapper
             var navigationEvent = new NavigationEventViewModel
             {
                 GoingPhotos = item.GoingPhotos.Select(x => blobService.GetBlobUrlAsync(x, GlobalConstants.BlobPictures).GetAwaiter().GetResult()).ToList(),
@@ -427,10 +443,10 @@ public class EventService : IEventService
         return toReturn;
     }
 
-    public List<NavigationEventViewModel> GetSuggestedEvents(ApplicationUser user)
+    public async Task<List<NavigationEventViewModel>> GetSuggestedEventsAsync(ApplicationUser user)
     {
-        // todo add better suggesting
-        var result = eventRepository
+        //TODO replace magic number 2
+        var result = await eventRepository
             .AllAsNoTracking()
             .Include(x => x.Organizer)
             .ThenInclude(x => x.ProfileImage)
@@ -439,11 +455,7 @@ public class EventService : IEventService
             .ThenInclude(x => x.ProfileImage)
             .Include(x => x.Users)
             .ThenInclude(x => x.Friends)
-            .Where(x => x.Organizer.UserName != user.UserName && !x.Users.Any(y => y.UserName == user.UserName) && x.Time > DateTime.UtcNow)
-            //.Where(x => 
-            //(x.Latitude < user.Latitude && x.Latitude + 5 > user.Latitude) || (x.Latitude - 5 < user.Latitude && x.Latitude > user.Latitude)
-            //&& (x.Longitude < user.Longitude && x.Longitude + 5 > user.Longitude)
-            //|| (x.Longitude - 5 < user.Longitude && x.Longitude > user.Longitude))
+            .Where(x => x.Organizer.UserName != user.UserName && x.Users.All(y => y.UserName != user.UserName) && x.Time > DateTime.UtcNow)
             .OrderBy(x => x.Time)
             .Take(2)
             .Select(x => new
@@ -462,11 +474,12 @@ public class EventService : IEventService
                 x.Latitude,
                 x.Longitude
             })
-            .ToList();
+            .ToListAsync();
 
         var toReturn = new List<NavigationEventViewModel>();
         foreach (var item in result)
         {
+            //TODO use AutoMapper
             var navigationEvent = new NavigationEventViewModel
             {
                 GoingPhotos = item.GoingPhotos.Select(x => blobService.GetBlobUrlAsync(x, GlobalConstants.BlobPictures).GetAwaiter().GetResult()).ToList(),
@@ -492,6 +505,7 @@ public class EventService : IEventService
             .All()
             .Include(x => x.Images)
             .FirstOrDefaultAsync(x => x.Id == eventId && x.OrganizerId == userId);
+        
         if (currEvent == null || currEvent.Images.Count >= 3)
         {
             return null;
@@ -507,11 +521,8 @@ public class EventService : IEventService
         }
 
         var added = await eventRepository.SaveChangesAsync();
-        if (added > 0)
-        {
-            return imageUrl;
-        }
-        return null;
+        
+        return added > 0 ? imageUrl : null;
     }
 
     public async Task<bool> LeaveEventAsync(string eventId, string userId)
@@ -522,6 +533,7 @@ public class EventService : IEventService
             .FirstOrDefaultAsync(x => x.Id == eventId);
 
         var userInEvent = currEvent?.Users.FirstOrDefault(x => x.Id == userId);
+        
         if (userInEvent == null)
         {
             return false;
@@ -549,6 +561,7 @@ public class EventService : IEventService
             return false;
         }
         var eventPosts = currEvent.EventPosts;
+        
         foreach (var eventPost in eventPosts)
         {
             foreach (var like in eventPost.Likes)
@@ -571,21 +584,23 @@ public class EventService : IEventService
         {
             notificationRepository.Delete(notification);
         }
+        
         eventRepository.Delete(currEvent);
+        
         var removed = await eventRepository.SaveChangesAsync();
+        
         return removed > 0;
     }
 
-    public List<SearchResultViewModel> GetEventSearchViewModel(string search, int take, int skip)
+    public async Task<List<SearchResultViewModel>> GetEventSearchViewModelAsync(string search, int take, int skip)
     {
         var searchWord = search.ToLower();
 
-        var events = eventRepository
+        var events = await eventRepository
             .AllAsNoTracking()
             .Include(x => x.Interests)
             .Include(x => x.ProfileImage)
             .Where(x => x.Name.ToLower().Contains(searchWord)
-                        //|| x.Interests.Any(y => y.Name.ToLower().Contains(searchWord))
                         || string.IsNullOrWhiteSpace(search))
             .OrderBy(x => x.Name)
             .Skip(skip)
@@ -596,7 +611,7 @@ public class EventService : IEventService
                 Image = x.ProfileImage.Id + x.ProfileImage.ImageExtension,
                 x.Name,
             })
-            .ToList();
+            .ToListAsync();
 
         var toReturn = events.Select(x => new SearchResultViewModel
         {
@@ -627,12 +642,13 @@ public class EventService : IEventService
         };
 
         eventPostRepository.Add(eventPost);
-        var added = await eventPostRepository.SaveChangesAsync();
+        await eventPostRepository.SaveChangesAsync();
         return currEvent.Reposts.GroupBy(x => x.CreatorId).Count();
     }
 
     public List<PersonListPopupViewModel> GetPostReposts(string eventId, int take, int skip)
     {
+        // TODO use dto and AutoMapper
         return eventPostRepository
             .AllAsNoTracking()
             .Include(x => x.Reposts)
@@ -672,6 +688,7 @@ public class EventService : IEventService
         {
             return false;
         }
+        
         var reposts = post.Reposts;
         foreach (var eventPost in reposts)
         {
@@ -758,9 +775,9 @@ public class EventService : IEventService
                         CreatorName = x.Repost.Creator.FirstName + " " + x.Repost.Creator.LastName,
                         CreatedAgo = (int)((DateTime.UtcNow - x.Repost.CreatedOn).TotalMinutes),
                         CreatorImage = x.Repost.Creator.ProfileImage.Id + x.Repost.Creator.ProfileImage.ImageExtension,
-                        LikesCount = x.Repost.Likes.Count(),
+                        LikesCount = x.Repost.Likes.Count,
                         RepostsCount = x.Repost.Reposts.GroupBy(x => x.CreatorId).Count(),
-                        CommentsCount = x.Repost.Comments.Count(),
+                        CommentsCount = x.Repost.Comments.Count,
                         IsLikedByUser = user != null && x.Repost.Likes.Any(y => y.LikedById == user.Id),
                         PostType = PostType.Event.ToString(),
                         EventPostId = x.RepostId,
@@ -775,9 +792,6 @@ public class EventService : IEventService
                 .AllAsNoTracking()
                 .Where(x => user == null || x.CreatorId != user.Id)
                 .OrderByDescending(x => x.CreatedOn)
-                //.OrderByDescending(x => EF.Functions.DateDiffSecond(DateTime.UtcNow, x.CreatedOn) / 1000.0 +
-                //((user != null ? x.Event.Users.Count(y => y.Id == user.Id) * 1000 : 0) +
-                //(user != null ? x.Event.Interests.Count(y => interests.Contains(y.Id)) * 1000 : 0)))
                 .Where(x => !ids.Contains(x.Id))
                 .Take(take)
                 .Select(x => new PostDetailsViewModel
@@ -815,9 +829,9 @@ public class EventService : IEventService
                         CreatorName = x.Repost.Creator.FirstName + " " + x.Repost.Creator.LastName,
                         CreatedAgo = (int)((DateTime.UtcNow - x.Repost.CreatedOn).TotalMinutes),
                         CreatorImage = x.Repost.Creator.ProfileImage.Id + x.Repost.Creator.ProfileImage.ImageExtension,
-                        LikesCount = x.Repost.Likes.Count(),
+                        LikesCount = x.Repost.Likes.Count,
                         RepostsCount = x.Repost.Reposts.GroupBy(x => x.CreatorId).Count(),
-                        CommentsCount = x.Repost.Comments.Count(),
+                        CommentsCount = x.Repost.Comments.Count,
                         IsLikedByUser = x.Repost.Likes.Any(y => y.LikedById == user.Id),
                         PostType = PostType.Event.ToString(),
                         EventPostId = x.RepostId,
@@ -827,7 +841,7 @@ public class EventService : IEventService
                 .ToListAsync());
         }
 
-
+        // TODO use AutoMapper
         var toReturn = events.Select(x => new PostDetailsViewModel
             {
                 CommentsCount = x.CommentsCount,
@@ -889,7 +903,7 @@ public class EventService : IEventService
             .Include(x => x.Interests)
             .Include(x => x.ProfileImage)
             .Where(x => (x.Name.ToLower().Contains(searchWord) || string.IsNullOrWhiteSpace(searchWord)))
-            .Where(x => (interestIds.Count() == 0) || (x.Interests.Count(y => interestIds.Contains(y.Id)) == interestIds.Count()))
+            .Where(x => (interestIds.Count == 0) || (x.Interests.Count(y => interestIds.Contains(y.Id)) == interestIds.Count))
             .Where(x => !hasDate || (eventDate.Year == x.Time.Year && eventDate.Month == x.Time.Month && eventDate.Day == x.Time.Day))
             .Where(x => (showOnlyUserEvents == false) || (x.OrganizerId == userId))
             .OrderBy(x => x.Name)
@@ -908,6 +922,7 @@ public class EventService : IEventService
             })
             .ToListAsync();
 
+        //TOOO use AutoMapper
         var toReturn = events.Select(x => new SearchPageResultViewModel
         {
             Id = x.Id,
@@ -934,9 +949,9 @@ public class EventService : IEventService
     public async Task<List<PersonListPopupViewModel>> GetPeopleInviteDtoAsync(string eventId, int take, int skip, ApplicationUser user)
     {
 
-        var currEvent = eventRepository.All()
+        var currEvent = await eventRepository.All()
             .Include(x => x.Users)
-            .FirstOrDefault(x => x.Id == eventId);
+            .FirstOrDefaultAsync(x => x.Id == eventId);
 
         var creatorId = currEvent.OrganizerId;
 

@@ -19,7 +19,7 @@ public class NotificationController : BaseController
     [HttpGet]
     public async Task<IActionResult> GetNotification([FromQuery] NotificationRequest dto)
     {
-        var user = GetUserByToken();
+        var user = await GetUserByToken();
             
         if (user == null || dto.UserId != user.Id)
         {
@@ -32,7 +32,7 @@ public class NotificationController : BaseController
     [HttpPost("accept/event")]
     public async Task<IActionResult> AcceptEvent(NotificationIdRequest dto)
     {
-        var user = GetUserByToken();
+        var user = await GetUserByToken();
             
         if (user == null)
         {
@@ -51,7 +51,7 @@ public class NotificationController : BaseController
     [HttpPost("reject/event")]
     public async Task<IActionResult> RejectEvent(NotificationIdRequest dto)
     {
-        var user = GetUserByToken();
+        var user = await GetUserByToken();
             
         if (user == null)
         {
@@ -70,7 +70,7 @@ public class NotificationController : BaseController
     [HttpGet("unseen")]
     public async Task<IActionResult> GetUnseenNotifications()
     {
-        var user = GetUserByToken();
+        var user = await GetUserByToken();
 
         if (user == null)
         {
@@ -83,7 +83,7 @@ public class NotificationController : BaseController
     [HttpPost("see")]
     public async Task<IActionResult> SeeNotification(SeeNotificationRequest dto)
     {
-        var user = GetUserByToken();
+        var user = await GetUserByToken();
 
         if (user == null)
         {

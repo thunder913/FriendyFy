@@ -20,11 +20,11 @@ public class SearchService : ISearchService
         this.userService = userService;
     }
 
-    public SearchResultsViewModel GetSearchResults(string search, string userId, int take, int skipPeople, int skipEvents)
+    public async Task<SearchResultsViewModel> GetSearchResultsAsync(string search, string userId, int take, int skipPeople, int skipEvents)
     {
         var takeCount = take / 2;
-        var users = userService.GetUserSearchViewModel(search, userId, take/2, skipPeople);
-        var events = eventService.GetEventSearchViewModel(search, take/2, skipEvents);
+        var users = await userService.GetUserSearchViewModelAsync(search, userId, take/2, skipPeople);
+        var events = await eventService.GetEventSearchViewModelAsync(search, take/2, skipEvents);
 
         var hasMoreUsers = true;
         var hasMoreEvents = true;
@@ -40,7 +40,7 @@ public class SearchService : ISearchService
         if (!hasMoreUsers && hasMoreEvents)
         {
             var eventsTake = take - takeCount - users.Count;
-            events.AddRange(eventService.GetEventSearchViewModel(search, eventsTake, skipEvents + events.Count));
+            events.AddRange(await eventService.GetEventSearchViewModelAsync(search, eventsTake, skipEvents + events.Count));
             if (events.Count < eventsTake + takeCount)
             {
                 hasMoreEvents = false;
@@ -49,7 +49,7 @@ public class SearchService : ISearchService
         else if (hasMoreUsers && !hasMoreEvents)
         {
             var usersTake = take - takeCount - events.Count;
-            users.AddRange(userService.GetUserSearchViewModel(search, userId, usersTake, skipPeople + users.Count));
+            users.AddRange(await userService.GetUserSearchViewModelAsync(search, userId, usersTake, skipPeople + users.Count));
             if (users.Count < usersTake + takeCount)
             {
                 hasMoreUsers = false;
@@ -80,6 +80,7 @@ public class SearchService : ISearchService
         var events = new List<SearchPageResultViewModel>();
         var hasMoreUsers = true;
         var hasMoreEvents = true;
+        
         if (searchType == SearchType.Person && !showOnlyUserEvents)
         {
             people.AddRange(await userService.GetSearchPageUsersAsync(take, skipPeople, searchWord, interestIds, userId));

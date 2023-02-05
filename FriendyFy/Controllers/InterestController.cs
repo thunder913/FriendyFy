@@ -1,4 +1,5 @@
 ﻿using System.Collections.Generic;
+using System.Threading.Tasks;
 using FriendyFy.Data.Dtos;
 using FriendyFy.Services.Contracts;
 using Microsoft.AspNetCore.Mvc;
@@ -17,8 +18,8 @@ public class InterestController : Controller
     }
 
     [HttpGet]
-    public ICollection<InterestDto> GetAllInterests()
+    public async Task<ICollection<InterestDto>> GetAllInterests()
     {
-        return interestService.GetAllInterests();
+        return await interestService.GetAllInterestsAsync();
     }
 }

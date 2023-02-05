@@ -16,13 +16,13 @@ public interface IEventService
     List<PersonListPopupViewModel> GetPeopleLikes(string eventId, int take, int skip);
     Task<bool> JoinEventAsync(string eventId, ApplicationUser user);
     Task<bool> CreateEventPostAsync(string eventId, string userId);
-    List<NavigationEventViewModel> GetAttendingEvents(string username);
-    List<NavigationEventViewModel> GetSuggestedEvents(ApplicationUser user);
-    List<NavigationEventViewModel> GetOrganizedEvents(string username);
+    Task<List<NavigationEventViewModel>> GetAttendingEvents(string username);
+    Task<List<NavigationEventViewModel>> GetSuggestedEventsAsync(ApplicationUser user);
+    Task<List<NavigationEventViewModel>> GetOrganizedEventsAsync(string username);
     Task<string> AddImageToEventAsync(string eventId, string userId, string image);
     Task<bool> LeaveEventAsync(string eventId, string userId);
     Task<bool> DeleteEventAsync(string eventId, string userId);
-    List<SearchResultViewModel> GetEventSearchViewModel(string search, int take, int skip);
+    Task<List<SearchResultViewModel>> GetEventSearchViewModelAsync(string search, int take, int skip);
     Task<int> RepostEventAsync(string id, string text, string userId);
     List<PersonListPopupViewModel> GetPostReposts(string eventId, int take, int skip);
     Task<bool> DeleteEventPostAsync(string postId, string userId);

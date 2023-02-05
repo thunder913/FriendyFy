@@ -41,29 +41,24 @@ public class InterestService : IInterestService
     {
         var interestToAdd = new Interest { Name = interest.Label};
         var interestInDb = await interestRepository.AllAsNoTracking().FirstOrDefaultAsync(x => x.Name == interest.Label);
-        if (interestInDb == null)
-        {
-            interestRepository.Add(interestToAdd);
-            await interestRepository.SaveChangesAsync();
-            return interestToAdd;
-        }
+        
+        if (interestInDb != null) return interestInDb;
+        
+        interestRepository.Add(interestToAdd);
+        await interestRepository.SaveChangesAsync();
+        return interestToAdd;
 
-        return interestInDb;
     }
 
-    public Interest CheckInterestSimillarWord(InterestDto interest)
+    public async Task<ICollection<InterestDto>> GetAllInterestsAsync()
     {
-        throw new NotImplementedException();
-    }
-
-    public ICollection<InterestDto> GetAllInterests()
-    {
-        return interestRepository.All()
+        return await interestRepository
+            .All()
             .Select(x => new InterestDto
             {
                 Id = x.Id,
                 Label = x.Name
-            }).ToList();
+            }).ToListAsync();
     }
 
     public async Task<Interest> GetInterestAsync(int id)

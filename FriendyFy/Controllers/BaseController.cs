@@ -1,4 +1,5 @@
-﻿using FriendyFy.Helpers.Contracts;
+﻿using System.Threading.Tasks;
+using FriendyFy.Helpers.Contracts;
 using FriendyFy.Models;
 using FriendyFy.Services.Contracts;
 using Microsoft.AspNetCore.Mvc;
@@ -11,7 +12,7 @@ public class BaseController : Controller
     private IUserService userService { get; set; }
     protected IJwtService JwtService => jwtService ??= (IJwtService) HttpContext.RequestServices.GetService(typeof(IJwtService));
     protected IUserService UserService => userService ??= (IUserService) HttpContext.RequestServices.GetService(typeof(IUserService));
-    protected ApplicationUser GetUserByToken()
+    protected async Task<ApplicationUser> GetUserByToken()
     {
         var jwt = Request.Cookies["jwt"];
         if (jwt == null)
@@ -23,6 +24,6 @@ public class BaseController : Controller
 
         var userId = token.Id;
 
-        return UserService.GetById(userId);
+        return await UserService.GetByIdAsync(userId);
     }
 }

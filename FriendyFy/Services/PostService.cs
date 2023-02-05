@@ -71,7 +71,7 @@ public class PostService : IPostService
         }
         foreach (var username in makePostDto.People)
         {
-            var user = userService.GetByUsername(username).Id;
+            var user = (await userService.GetByUsernameAsync(username)).Id;
             var userTagged = new PostTagged
             {
                 Post = post,
@@ -88,6 +88,7 @@ public class PostService : IPostService
 
     public List<PostDetailsViewModel> GetAllPosts(string userId)
     {
+        // TODO use dto and AutoMapper and make method async
         return postRepository
             .All()
             .OrderByDescending(x => x.CreatedOn)
@@ -191,6 +192,7 @@ public class PostService : IPostService
 
     public List<PersonListPopupViewModel> GetPeopleLikes(string postId, int take, int skip)
     {
+        // TODO use dto and AutoMapper and make method async
         var peopleLiked = postLikeRepository
             .AllAsNoTracking()
             .Include(x => x.LikedBy)
@@ -213,6 +215,7 @@ public class PostService : IPostService
 
     public List<PersonListPopupViewModel> GetTaggedPeople(string postId, int take, int skip)
     {
+        // TODO use dto and AutoMapper and make method async
         return postTaggedRepository
             .AllAsNoTracking()
             .Where(x => x.PostId == postId)
@@ -233,6 +236,7 @@ public class PostService : IPostService
 
     public async Task<PostDetailsViewModel> GetPostByImageIdAsync(string imageId, string userId)
     {
+        // TODO create dto and use AutoMapper
         var post = await postRepository.AllAsNoTracking()
             .Include(x => x.Creator)
             .ThenInclude(x => x.ProfileImage)
@@ -284,7 +288,9 @@ public class PostService : IPostService
         };
 
         postRepository.Add(eventPost);
-        var added = await postRepository.SaveChangesAsync();
+        
+        await postRepository.SaveChangesAsync();
+        
         return postRepository.All()
             .Include(x => x.Reposts)
             .Where(x => !x.IsDeleted)
@@ -296,6 +302,7 @@ public class PostService : IPostService
 
     public List<PersonListPopupViewModel> GetPeopleReposts(string postId, int take, int skip)
     {
+        // TODO use dto and AutoMapper and make method async
         return postRepository
             .AllAsNoTracking()
             .Include(x => x.Reposts)
@@ -325,17 +332,21 @@ public class PostService : IPostService
             .All()
             .Include(x => x.Reposts)
             .FirstOrDefaultAsync(x => x.Id == postId && x.CreatorId == userId);
+        
         if (post == null)
         {
             return false;
         }
+        
         var reposts = post.Reposts;
+        
         foreach (var eventPost in reposts)
         {
             postRepository.Delete(eventPost);
         }
         postRepository.Delete(post);
         var removed = await postRepository.SaveChangesAsync();
+        
         return removed > 0;
     }
 
@@ -343,6 +354,7 @@ public class PostService : IPostService
     {
         var posts = new List<PostDetailsViewModel>();
 
+        // TODO use dto and AutoMapper
         if (isProfile)
         {
             posts.AddRange(await postRepository

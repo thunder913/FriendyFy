@@ -12,7 +12,7 @@ public interface IFriendService
     Task<bool> AcceptFriendRequestAsync(string senderId, string receiverUsername);
     Task<bool> RemoveFriendAsync(string senderId, string receiverUsername);
     List<ProfileFriendViewModel> GetUserFriends(string userId, int skip, int count, string loggedInId, string searchQuery);
-    int GetUserFriendsCount(string userId);
-    List<SidebarFriendRecommendationViewModel> GetFriendRecommendations(string userId);
+    Task<int> GetUserFriendsCountAsync(string userId);
+    Task<List<SidebarFriendRecommendationViewModel>> GetFriendRecommendations(string userId);
     Task RemovePersonFromSuggestionsAsync(string userId, string removedUsername);
 }

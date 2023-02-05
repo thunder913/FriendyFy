@@ -29,7 +29,7 @@ public class FriendController : BaseController
     [HttpPost]
     public async Task<IActionResult> AddFriend(UserIdRequest dto)
     {
-        var user = GetUserByToken();
+        var user = await GetUserByToken();
             
         if (user == null || dto.UserId == null)
         {
@@ -43,7 +43,7 @@ public class FriendController : BaseController
         }
 
         var notification = await notificationService.CreateFriendRequestNotification(user, dto.UserId);
-        var receiverId = UserService.GetByUsername(dto.UserId).Id;
+        var receiverId = (await UserService.GetByUsernameAsync(dto.UserId)).Id;
         if (notification != null)
         {
             await notificationHub.Clients.User(receiverId).SendAsync(receiverId, notification);
@@ -54,7 +54,7 @@ public class FriendController : BaseController
     [HttpPost("accept")]
     public async Task<IActionResult> AcceptFriendRequest(UserIdRequest dto)
     {
-        var user = GetUserByToken();
+        var user = await GetUserByToken();
             
         if (user == null || dto.UserId == null)
         {
@@ -74,7 +74,7 @@ public class FriendController : BaseController
     [HttpPost("cancel")]
     public async Task<IActionResult> CancelFriendRequest(UserIdRequest dto)
     {
-        var user = GetUserByToken();
+        var user = await GetUserByToken();
             
         if (user == null || dto.UserId == null)
         {
@@ -93,9 +93,9 @@ public class FriendController : BaseController
     }
 
     [HttpGet]
-    public IActionResult GetFriendsToShow([FromQuery] FriendsRequest dto)
+    public async Task<IActionResult> GetFriendsToShow([FromQuery] FriendsRequest dto)
     {
-        var user = GetUserByToken();
+        var user = await GetUserByToken();
 
         if (dto == null || dto.UserId == null)
         {
@@ -103,7 +103,7 @@ public class FriendController : BaseController
         }
 
         var friends = friendService.GetUserFriends(dto.UserId, dto.Skip, dto.Count, user != null ? user.Id : null, dto.SearchQuery);
-        var friendsCount = friendService.GetUserFriendsCount(dto.UserId);
+        var friendsCount = await friendService.GetUserFriendsCountAsync(dto.UserId);
 
         return Ok(new ProfileSidebarFriendsViewModel
         {
@@ -115,7 +115,7 @@ public class FriendController : BaseController
     [HttpDelete]
     public async Task<IActionResult> RemoveFriend(UserIdRequest dto)
     {
-        var user = GetUserByToken();
+        var user = await GetUserByToken();
             
         if (user == null || dto.UserId == null)
         {
@@ -134,7 +134,7 @@ public class FriendController : BaseController
     [HttpGet("status/{id}")]
     public async Task<IActionResult> CheckFriendStatus(string id)
     {
-        var user = GetUserByToken();
+        var user = await GetUserByToken();
             
         if (user == null || id == null)
         {
@@ -145,22 +145,22 @@ public class FriendController : BaseController
     }
 
     [HttpGet("recommendations")]
-    public IActionResult GetFriendRecommendations()
+    public async Task<IActionResult> GetFriendRecommendations()
     {
-        var user = GetUserByToken();
+        var user = await GetUserByToken();
             
         if (user == null)
         {
             return BadRequest("You are not current logged in!");
         }
 
-        return Ok(friendService.GetFriendRecommendations(user.Id));
+        return Ok(await friendService.GetFriendRecommendations(user.Id));
     }
 
     [HttpDelete("suggestion")]
     public async Task<IActionResult> GetFriendRecommendations(UserIdRequest dto)
     {
-        var user = GetUserByToken();
+        var user = await GetUserByToken();
             
         if (user == null)
         {
@@ -174,7 +174,7 @@ public class FriendController : BaseController
     [HttpGet("suggestions")]
     public async Task<IActionResult> GetRightNavRecommendations()
     {
-        var user = GetUserByToken();
+        var user = await GetUserByToken();
             
         if (user == null)
         {

@@ -141,7 +141,7 @@ public class AuthController : BaseController
     {
         try
         {
-            var user = GetUserByToken();
+            var user = await GetUserByToken();
 
             if (user is null)
             {
@@ -202,7 +202,7 @@ public class AuthController : BaseController
     [HttpGet("userInformation/{username}")]
     public async Task<UserInformationViewModel> GetUserInformation(string username)
     {
-        var user = userService.GetByUsername(username);
+        var user = await userService.GetByUsernameAsync(username);
         var coverPicture = await blobService.GetBlobUrlAsync(user.CoverImage?.Id + user.CoverImage?.ImageExtension, GlobalConstants.BlobPictures);
         var profilePicture = await blobService.GetBlobUrlAsync(user.ProfileImage?.Id + user.ProfileImage?.ImageExtension, GlobalConstants.BlobPictures);
 
@@ -222,7 +222,7 @@ public class AuthController : BaseController
     [HttpPost("finishFirstTimeSetup")]
     public async Task<IActionResult> FinishFirstTimeSetup([FromForm] FinishFirstTimeSetupRequest dto, IFormFile formFile)
     {
-        var user = GetUserByToken();
+        var user = await GetUserByToken();
             
         if (user == null)
         {
@@ -253,15 +253,15 @@ public class AuthController : BaseController
     }
 
     [HttpGet("userImages")]
-    public IActionResult UserImages([FromQuery] UserImagesRequest dto)
+    public async Task<IActionResult> UserImages([FromQuery] UserImagesRequest dto)
     {
-        return Ok(userService.GetUserImages(dto.Username, dto.Take, dto.Skip));
+        return Ok(await userService.GetUserImagesAsync(dto.Username, dto.Take, dto.Skip));
     }
 
     [HttpGet("userData")]
     public async Task<IActionResult> GetUserData()
     {
-        var user = GetUserByToken();
+        var user = await GetUserByToken();
 
         if (user == null)
         {
@@ -276,7 +276,7 @@ public class AuthController : BaseController
     [HttpPatch("userData")]
     public async Task<IActionResult> EditUserData([FromForm] EditUserDataRequest dto)
     {
-        var user = GetUserByToken();
+        var user = await GetUserByToken();
         if (user == null || user.Id != dto.UserId)
         {
             return Unauthorized("You are not authorized to make such changes, try logging in!");

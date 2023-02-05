@@ -31,7 +31,7 @@ public class EventController : BaseController
     [HttpPost]
     public async Task<IActionResult> CreateEvent(CreateEventRequest dto)
     {
-        var user = GetUserByToken();
+        var user = await GetUserByToken();
  
         if (user == null)
         {
@@ -57,7 +57,7 @@ public class EventController : BaseController
     [HttpGet("{id}")]
     public async Task<IActionResult> GetEventById(string id)
     {
-        var user = GetUserByToken();
+        var user = await GetUserByToken();
         var toReturn = await eventService.GetEventByIdAsync(id, user?.Id);
         return Ok(toReturn);
     }
@@ -65,7 +65,7 @@ public class EventController : BaseController
     [HttpPost("like")]
     public async Task<IActionResult> LikeEvent(PostIdRequest likePostDto)
     {
-        var user = GetUserByToken();
+        var user = await GetUserByToken();
 
         if (user == null)
         {
@@ -93,7 +93,7 @@ public class EventController : BaseController
     [HttpPost("join")]
     public async Task<IActionResult> JoinEvent(EventIdRequest dto)
     {
-        var user = GetUserByToken();
+        var user = await GetUserByToken();
             
         if (user == null)
         {
@@ -111,7 +111,7 @@ public class EventController : BaseController
     [HttpPost("share")]
     public async Task<IActionResult> ShareEvent(EventIdRequest dto)
     {
-        var user = GetUserByToken();
+        var user = await GetUserByToken();
             
         if (user == null)
         {
@@ -127,9 +127,9 @@ public class EventController : BaseController
     }
 
     [HttpGet("navigationEvents")]
-    public IActionResult GetNavigationEvents()
+    public async Task<IActionResult> GetNavigationEvents()
     {
-        var user = GetUserByToken();
+        var user = await GetUserByToken();
 
         if (user == null)
         {
@@ -137,9 +137,9 @@ public class EventController : BaseController
         }
             
         var toReturn = new LeftNavigationEventsViewModel();
-        toReturn.AttendingEvents = eventService.GetAttendingEvents(user.UserName);
-        toReturn.OrganizedEvents = eventService.GetOrganizedEvents(user.UserName);
-        toReturn.SuggestedEvents = eventService.GetSuggestedEvents(user);
+        toReturn.AttendingEvents = await eventService.GetAttendingEvents(user.UserName);
+        toReturn.OrganizedEvents = await eventService.GetOrganizedEventsAsync(user.UserName);
+        toReturn.SuggestedEvents = await eventService.GetSuggestedEventsAsync(user);
 
         return Ok(toReturn);
     }
@@ -147,7 +147,7 @@ public class EventController : BaseController
     [HttpPost("image")]
     public async Task<IActionResult> AddImage(AddEventImageRequest dto)
     {
-        var user = GetUserByToken();
+        var user = await GetUserByToken();
             
         if (user == null)
         {
@@ -166,7 +166,7 @@ public class EventController : BaseController
     [HttpPost("leave")]
     public async Task<IActionResult> LeaveEvent(EventIdRequest dto)
     {
-        var user = GetUserByToken();
+        var user = await GetUserByToken();
             
         if (user == null)
         {
@@ -184,7 +184,7 @@ public class EventController : BaseController
     [HttpDelete]
     public async Task<IActionResult> DeleteEvent(EventIdRequest dto)
     {
-        var user = GetUserByToken();
+        var user = await GetUserByToken();
             
         if (user == null)
         {
@@ -207,7 +207,7 @@ public class EventController : BaseController
     [HttpGet("invited")]
     public async Task<IActionResult> GetEventInvitePeople([FromQuery] EventInvitePeopleRequest dto)
     {
-        var user = GetUserByToken();
+        var user = await GetUserByToken();
 
         if (user == null)
         {

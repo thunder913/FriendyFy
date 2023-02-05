@@ -29,7 +29,7 @@ public class PostController : BaseController
     [HttpPost]
     public async Task<IActionResult> MakePost(CreatePostRequest makePostDto)
     {
-        var user = GetUserByToken();
+        var user = await GetUserByToken();
 
         if (user == null)
         {
@@ -49,9 +49,9 @@ public class PostController : BaseController
     }
 
     [HttpGet]
-    public IActionResult GetPosts()
+    public async Task<IActionResult> GetPosts()
     {
-        var user = GetUserByToken();
+        var user = await GetUserByToken();
 
         if (user == null)
         {
@@ -64,7 +64,7 @@ public class PostController : BaseController
     [HttpPost("like")]
     public async Task<IActionResult> LikePost([FromBody] PostIdRequest dto)
     {
-        var user = GetUserByToken();
+        var user = await GetUserByToken();
 
         if (user == null)
         {
@@ -130,7 +130,7 @@ public class PostController : BaseController
     [HttpGet("image/{id}")]
     public async Task<IActionResult> GetPostByImageId(string id)
     {
-        var user = GetUserByToken();
+        var user = await GetUserByToken();
 
         var post = await postService.GetPostByImageIdAsync(id, user != null ? user.Id : null);
         if (post == null)
@@ -149,7 +149,7 @@ public class PostController : BaseController
             return BadRequest("There was something wrong with the request!");
         }
             
-        var user = GetUserByToken();
+        var user = await GetUserByToken();
         if (user == null)
         {
             return Unauthorized("You are not logged in!");
@@ -190,7 +190,7 @@ public class PostController : BaseController
             return BadRequest("There was something wrong with the request!");
         }
 
-        var user = GetUserByToken();
+        var user = await GetUserByToken();
         if (user == null)
         {
             return Unauthorized("You are not logged in!");
@@ -214,7 +214,7 @@ public class PostController : BaseController
     [HttpGet("feed")]
     public async Task<IActionResult> GetFeedPosts([FromQuery] FeedPostsRequest dto)
     {
-        var user = GetUserByToken();
+        var user = await GetUserByToken();
 
         var data = new List<PostDetailsViewModel>();
         var events = new List<PostDetailsViewModel>();

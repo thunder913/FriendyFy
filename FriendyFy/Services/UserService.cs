@@ -60,10 +60,11 @@ public class UserService : IUserService
         }
 
         bool freeName = false;
+        // TODO check if this while is relevant
         while (freeName)
         {
             var currentName = username.ToString() + number;
-            if (GetByUsername(currentName) == null)
+            if (GetByUsernameAsync(currentName) == null)
             {
                 break;
             }
@@ -79,32 +80,32 @@ public class UserService : IUserService
         return userRepository.All().FirstOrDefault(x => x.Email == email);
     }
 
-    public ApplicationUser GetById(string id)
+    public async Task<ApplicationUser> GetByIdAsync(string id)
     {
-        return userRepository.All()
+        return await userRepository.All()
             .Include(x => x.Friends)
             .Include(x => x.ProfileImage)
             .Include(x => x.CoverImage)
             .Include(x => x.Interests)
-            .FirstOrDefault(x => x.Id == id);
+            .FirstOrDefaultAsync(x => x.Id == id);
     }
 
-    public ApplicationUser GetByUsername(string username)
+    public async Task<ApplicationUser> GetByUsernameAsync(string username)
     {
-        return userRepository.All()
+        return await userRepository.All()
             .Include(x => x.Interests)
             .Include(x => x.Friends)
             .Include(x => x.ProfileImage)
             .Include(x => x.CoverImage)
-            .FirstOrDefault(x => x.UserName == username && username != null);
+            .FirstOrDefaultAsync(x => x.UserName == username && username != null);
     }
 
-    public int GetUserEventsCount(string username)
+    public async Task<int> GetUserEventsCountAsync(string username)
     {
-        return userRepository.All()
+        return (await userRepository.All()
             .Include(x => x.Events)
             .Include(x => x.EventsOrganized)
-            .FirstOrDefault(x => x.UserName == username && username != null)!
+            .FirstOrDefaultAsync(x => x.UserName == username && username != null))
             .Events
             .Count(x => x.Time < DateTime.UtcNow);
     }
@@ -120,12 +121,13 @@ public class UserService : IUserService
         user.Longitude = longitude;
         user.Latitude = latitude;
         user.FinishedFirstTimeLogin = true;
+
         await userRepository.SaveChangesAsync();
     }
 
-    public List<DisplayImageViewModel> GetUserImages(string username, int take, int skip)
+    public async Task<List<DisplayImageViewModel>> GetUserImagesAsync(string username, int take, int skip)
     {
-        var images = postRepository
+        var images = await postRepository
             .AllAsNoTracking()
             .Include(x => x.Creator)
             .Include(x => x.Image)
@@ -138,7 +140,7 @@ public class UserService : IUserService
                 ImageId = x.Image.Id,
                 ImageInUrl = x.Image.Id + x.Image.ImageExtension
             })
-            .ToList();
+            .ToListAsync();
 
         var toReturn = images.Select(x => new DisplayImageViewModel
         {
@@ -149,17 +151,14 @@ public class UserService : IUserService
         return toReturn;
     }
 
-    public List<SearchResultViewModel> GetUserSearchViewModel(string search, string userId, int take, int skip)
+    public async Task<List<SearchResultViewModel>> GetUserSearchViewModelAsync(string search, string userId, int take, int skip)
     {
         var searchWord = search.ToLower();
-        var users = userRepository
+        var users = await userRepository
             .AllAsNoTracking()
             .Include(x => x.Interests)
             .Include(x => x.ProfileImage)
-            .Where(x => (string.IsNullOrWhiteSpace(search) || (x.FirstName + " " + x.LastName).ToLower().Contains(searchWord)
-                            //|| x.Interests.Any(y => y.Name.ToLower().Contains(searchWord))
-                        )
-                        && x.Id != userId)
+            .Where(x => (string.IsNullOrWhiteSpace(search) || (x.FirstName + " " + x.LastName).ToLower().Contains(searchWord)) && x.Id != userId)
             .Where(x => x.FinishedFirstTimeLogin)
             .OrderBy(x => x.UserName)
             .Skip(skip)
@@ -170,7 +169,7 @@ public class UserService : IUserService
                 Name = x.FirstName + " " + x.LastName,
                 Image = x.ProfileImage.Id + x.ProfileImage.ImageExtension,
             })
-            .ToList();
+            .ToListAsync();
 
         var toReturn = users.Select(x => new SearchResultViewModel
         {
@@ -194,6 +193,7 @@ public class UserService : IUserService
         var blocked = user.RemoveSuggestionFriends.Select(y => y.BlockedUserId).ToArray();
         var userInterests = user.Interests.Select(y => y.Id).ToArray();
 
+        // TODO remove magic number
         var users = await userRepository
             .AllAsNoTracking()
             .Include(x => x.Interests)
@@ -201,9 +201,10 @@ public class UserService : IUserService
             .Include(x => x.Friends)
             .Include(x => x.Events)
             .ThenInclude(x => x.Users)
-            .Where(x => x.Id != userId && !blocked.Any(y => y == x.Id)
-                                       && !(x.Friends.Any(y => y.FriendId == x.Id && y.CurrentUserId == userId) || x.Friends.Any(y => y.CurrentUserId == x.Id && y.FriendId == userId)))
-            .OrderByDescending(x => x.Events.Where(x => x.Time < DateTime.UtcNow).Count(y => y.Users.Any(z => z.Id == userId)) + 
+            .Where(x => x.Id != userId && blocked.All(y => y != x.Id)
+                                       && !(x.Friends.Any(y => y.FriendId == x.Id && y.CurrentUserId == userId) 
+                                            || x.Friends.Any(y => y.CurrentUserId == x.Id && y.FriendId == userId)))
+            .OrderByDescending(x => x.Events.Where(x => x.Time < DateTime.UtcNow).Count(y => y.Users.Any(z => z.Id == userId)) +
                                     x.Friends.Where(x => x.IsFriend).Count(y => y.Id == userId) * 2 +
                                     x.Interests.Count(y => userInterests.Any(z => z == y.Id)))
             .Take(4)
@@ -262,8 +263,8 @@ public class UserService : IUserService
         return viewmodel;
     }
 
-    public async Task ChangeUserDataAsync(ApplicationUser user, string firstName, string lastName, 
-        DateTime birthday, bool hasNewProfileImage, bool hasNewCoverImage, string description, 
+    public async Task ChangeUserDataAsync(ApplicationUser user, string firstName, string lastName,
+        DateTime birthday, bool hasNewProfileImage, bool hasNewCoverImage, string description,
         List<Interest> interests, decimal? longitude, decimal? latitude, string newProfilePicture = null, string newCoverImage = null)
     {
         user.FirstName = firstName;

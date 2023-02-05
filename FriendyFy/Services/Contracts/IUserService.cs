@@ -13,15 +13,15 @@ public interface IUserService
 
     ApplicationUser GetByEmail(string email);
 
-    ApplicationUser GetById(string id);
+    Task<ApplicationUser> GetByIdAsync(string id);
 
     string GenerateUsername(string firstName, string lastName);
 
-    ApplicationUser GetByUsername(string username);
+    Task<ApplicationUser> GetByUsernameAsync(string username);
     Task SetUserFirstTimeLoginAsync(ApplicationUser user, Image profileImage, Image coverImage, string quote, List<Interest> interests, decimal? longitude, decimal? latitude);
-    int GetUserEventsCount(string username);
-    List<DisplayImageViewModel> GetUserImages(string username, int take, int skip);
-    List<SearchResultViewModel> GetUserSearchViewModel(string search, string userId, int take, int skip);
+    Task<int> GetUserEventsCountAsync(string username);
+    Task<List<DisplayImageViewModel>> GetUserImagesAsync(string username, int take, int skip);
+    Task<List<SearchResultViewModel>> GetUserSearchViewModelAsync(string search, string userId, int take, int skip);
     Task<List<RightNavigationRecommendationViewModel>> GetEventUserRecommendationsAsync(string userId);
     Task<bool> ChangeUserThemeAsync(ApplicationUser user, ThemePreference theme);
     Task<UserDataViewModel> GetUserDataAsync(ApplicationUser user);

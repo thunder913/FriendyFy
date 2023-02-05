@@ -44,7 +44,7 @@ public class NotificationService : INotificationService
             })
             .FirstOrDefaultAsync(x => x.Id == eventId);
 
-        var inviteeUser = userRepository.AllAsNoTracking().FirstOrDefault(x => x.UserName == inviteeUsername);
+        var inviteeUser = await userRepository.AllAsNoTracking().FirstOrDefaultAsync(x => x.UserName == inviteeUsername);
 
         if (currEvent == null || inviteeUser == null)
         {
@@ -94,6 +94,7 @@ public class NotificationService : INotificationService
 
     public async Task<List<NotificationViewModel>> GetNotificationsForUserAsync(string userId, int take, int skip)
     {
+        // TODO create dto and map it to the viewmodel using AutoMapper
         var notifications = await notificationRepository
             .AllAsNoTracking()
             .Include(x => x.Inviter)
@@ -127,7 +128,7 @@ public class NotificationService : INotificationService
             item.IsSeen = true;
         }
 
-        notificationRepository.SaveChangesAsync().GetAwaiter().GetResult();
+        await notificationRepository.SaveChangesAsync();
 
         return notifications
             .Select(x => new NotificationViewModel

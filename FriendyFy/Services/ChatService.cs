@@ -29,9 +29,9 @@ public class ChatService : IChatService
         this.userRepository = userRepository;
     }
 
-    public List<ChatFooterUserDto> GetUserChats(string username, int page, int itemsPerPage,int items, string search, List<string> chatIds)
+    public async Task<List<ChatFooterUserDto>> GetUserChatsAsync(string username, int page, int itemsPerPage,int items, string search, List<string> chatIds)
     {
-        return chatRepository
+        return await chatRepository
             .AllAsNoTracking()
             .Include(x => x.Messages)
             .ThenInclude(x => x.SeenBy)
@@ -44,26 +44,24 @@ public class ChatService : IChatService
             .OrderBy(x => x.Id)
             .Skip(items*page)
             .Take(items)
-            // TODO remove this tolist
-            .ToList()
             .Select(x => new ChatFooterUserDto
             {
                 ChatId = x.Id,
-                Name = x.ChatType == ChatType.Direct ? x.Users.FirstOrDefault(y => y.UserName != username)?.FirstName : x.Name,
-                FullName = x.ChatType == ChatType.Direct ? x.Users.FirstOrDefault(y => y.UserName != username)?.FirstName + " " + x.Users.FirstOrDefault(y => y.UserName != username)?.LastName : x.Name,
+                Name = x.ChatType == ChatType.Direct ? x.Users.FirstOrDefault(y => y.UserName != username).FirstName : x.Name,
+                FullName = x.ChatType == ChatType.Direct ? x.Users.FirstOrDefault(y => y.UserName != username).FirstName + " " + x.Users.FirstOrDefault(y => y.UserName != username).LastName : x.Name,
                 IsActive = false,
                 NewMessages = x.Messages.Count - x.Messages.Count(y => y.SeenBy.Any(y => y.UserName == username)),
                 Picture = x.ChatType == ChatType.Direct
-                    ? blobService.GetBlobUrlAsync(x.Users.FirstOrDefault(y => y.UserName != username)?.ProfileImage?.Id + x.Users.FirstOrDefault(y => y.UserName != username)?.ProfileImage?.ImageExtension, GlobalConstants.BlobPictures).GetAwaiter().GetResult()
+                    ? blobService.GetBlobUrlAsync(x.Users.FirstOrDefault(y => y.UserName != username).ProfileImage.Id + x.Users.FirstOrDefault(y => y.UserName != username).ProfileImage.ImageExtension, GlobalConstants.BlobPictures).GetAwaiter().GetResult()
                     : x.Image,
             })
-            .ToList();
+            .ToListAsync();
     }
 
     public async Task<ChatViewModel> GetChatMessagesAsync(string userId, string chatId, int take, int skip)
     {
         var chat = await chatRepository
-            .All()
+            .AllAsNoTracking()
             .Include(x => x.Messages)
             .ThenInclude(x => x.SeenBy)
             .Include(x => x.Messages)
@@ -80,10 +78,11 @@ public class ChatService : IChatService
         {
             var otherUser = chat.Users.FirstOrDefault(x => x.Id != userId);
 
-            photo = blobService.GetBlobUrlAsync(otherUser.ProfileImage?.Id + otherUser.ProfileImage?.ImageExtension, GlobalConstants.BlobPictures).GetAwaiter().GetResult();
-            chatName = otherUser.FirstName + " " + otherUser.LastName;
+            photo = blobService.GetBlobUrlAsync(otherUser?.ProfileImage?.Id + otherUser?.ProfileImage?.ImageExtension, GlobalConstants.BlobPictures).GetAwaiter().GetResult();
+            chatName = otherUser?.FirstName + " " + otherUser?.LastName;
         }
 
+        // TODO use AutoMapper
         var model = new ChatViewModel
         {
             Image = photo,
@@ -93,7 +92,6 @@ public class ChatService : IChatService
                 .OrderByDescending(x => x.CreatedOn)
                 .Skip(skip)
                 .Take(take)
-                // Reordering them on the FE
                 .OrderByDescending(x => x.CreatedOn)
                 .Select(x => new ChatMessageViewModel
                 {
@@ -114,7 +112,7 @@ public class ChatService : IChatService
     public async Task<ChatMessageViewModel> SendChatMessage(string chatId, string userId, string message)
     {
         var user = await userRepository
-            .All()
+            .AllAsNoTracking()
             .Include(u => u.ProfileImage)
             .FirstOrDefaultAsync(x => x.Id == userId);
         

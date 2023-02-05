@@ -44,6 +44,7 @@ public class CommentService : ICommentService
             return null;
         }
 
+        //TODO use AutoMapper
         switch (postType)
         {
             case PostType.Post:
@@ -125,8 +126,8 @@ public class CommentService : ICommentService
                 .ThenInclude(x => x.ProfileImage)
                 .Include(x => x.Comments)
                 .ThenInclude(x => x.CommentLikes)
-                .FirstOrDefault(x => x.Id == postId)
-                ?.Comments.OrderByDescending(x => x.CreatedOn)
+                .FirstOrDefault(x => x.Id == postId)?
+                .Comments.OrderByDescending(x => x.CreatedOn)
                 .Skip(skip)
                 .Take(take)
                 .Select(x => new PostCommentViewModel
@@ -181,23 +182,24 @@ public class CommentService : ICommentService
 
     public async Task<int?> LikeCommentAsync(string commentId, ApplicationUser user, PostType postType)
     {
-        PostComment comment = null;
+        PostComment postComment = null;
         EventComment eventComment = null;
         CommentLike existingLike = null;
+        
         switch (postType)
         {
             case PostType.Post:
             {
-                comment = await postCommentRepository
+                postComment = await postCommentRepository
                     .All()
                     .Include(x => x.CommentLikes)
                     .FirstOrDefaultAsync(x => x.Id == commentId);
                 
-                if (comment == null)
+                if (postComment == null)
                 {
                     return null;
                 }
-                existingLike = comment.CommentLikes.FirstOrDefault(x => x.LikedById == user.Id);
+                existingLike = postComment.CommentLikes.FirstOrDefault(x => x.LikedById == user.Id);
                 break;
             }
             case PostType.Event:
@@ -206,10 +208,12 @@ public class CommentService : ICommentService
                     .All()
                     .Include(x => x.CommentLikes)
                     .FirstOrDefaultAsync(x => x.Id == commentId);
+                
                 if (eventComment == null)
                 {
                     return null;
                 }
+                
                 existingLike = eventComment.CommentLikes.FirstOrDefault(x => x.LikedById == user.Id);
                 break;
             }
@@ -225,12 +229,12 @@ public class CommentService : ICommentService
             {
                 CreatedOn = DateTime.Now,
                 LikedBy = user,
-                Comment = comment,
+                Comment = postComment,
             };
 
             if (postType == PostType.Post)
             {
-                comment?.CommentLikes.Add(commentLike);
+                postComment?.CommentLikes.Add(commentLike);
             }
             else
             {
@@ -240,11 +244,12 @@ public class CommentService : ICommentService
         await postCommentRepository.SaveChangesAsync();
 
 
-        return postType == PostType.Post ? comment?.CommentLikes.Count : eventComment?.CommentLikes.Count;
+        return postType == PostType.Post ? postComment?.CommentLikes.Count : eventComment?.CommentLikes.Count;
     }
 
     public List<PersonListPopupViewModel> GetPeopleLikes(string commentId, int take, int skip)
     {
+        // TODO use dto and then map to viewmodel
         var peopleLiked = commentLikeRepository
             .AllAsNoTracking()
             .Include(x => x.LikedBy)
@@ -266,6 +271,7 @@ public class CommentService : ICommentService
     }
     private PostCommentViewModel GetCommentViewModelById(string commentId, PostType postType)
     {
+        // TODO use dto then viewmodel
         return postType switch
         {
             PostType.Post => postCommentRepository.AllAsNoTracking()
@@ -324,8 +330,10 @@ public class CommentService : ICommentService
         {
             case PostType.Event:
             {
-                var comment = eventCommentRepository.All()
-                    .FirstOrDefault(x => x.Id == commentId && x.CommentedById == userId);
+                var comment = await eventCommentRepository
+                    .All()
+                    .FirstOrDefaultAsync(x => x.Id == commentId && x.CommentedById == userId);
+                
                 if (comment != null)
                 {
                     eventCommentRepository.Delete(comment);
@@ -335,8 +343,10 @@ public class CommentService : ICommentService
             }
             case PostType.Post:
             {
-                var comment = postCommentRepository.All()
-                    .FirstOrDefault(x => x.Id == commentId && x.CommentedById == userId);
+                var comment = await postCommentRepository
+                    .All()
+                    .FirstOrDefaultAsync(x => x.Id == commentId && x.CommentedById == userId);
+                
                 if (comment != null)
                 {
                     postCommentRepository.Delete(comment);

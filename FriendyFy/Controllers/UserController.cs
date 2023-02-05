@@ -23,9 +23,9 @@ public class UserController : BaseController
     }
 
     [HttpGet("{id}/location")]
-    public IActionResult GetLocation(string id)
+    public async Task<IActionResult> GetLocation(string id)
     {
-        var user = UserService.GetByUsername(id);
+        var user = await UserService.GetByUsernameAsync(id);
 
         if (user?.Longitude == null || user?.Latitude == null)
         {
@@ -36,9 +36,9 @@ public class UserController : BaseController
     }
 
     [HttpGet("{id}/events")]
-    public IActionResult GetEventsCount(string id)
+    public async Task<IActionResult> GetEventsCount(string id)
     {
-        var count = UserService.GetUserEventsCount(id);
+        var count = await UserService.GetUserEventsCountAsync(id);
 
         return Ok(new { count });
     }
@@ -46,7 +46,7 @@ public class UserController : BaseController
     [HttpPost("theme/change")]
     public async Task<IActionResult> ChangerUserTheme(ChangeUserThemeRequest dto)
     {
-        var user = GetUserByToken();
+        var user = await GetUserByToken();
             
         if (user.UserName != dto.Username)
         {

@@ -21,14 +21,14 @@ public class NotificationHub : Hub
     {
         var userId = Context.UserIdentifier;
             
-        var user = userService.GetById(userId);
+        var user = await userService.GetByIdAsync(userId);
             
         if (userId == null || userId != user.Id)
         {
             return false;
         }
 
-        var inviteeId = userService.GetByUsername(dto.Username).Id;
+        var inviteeId = (await userService.GetByUsernameAsync(dto.Username)).Id;
 
         var notification = await notificationService.CreateNotificationAsync(user, dto.Username, dto.EventId);
 
