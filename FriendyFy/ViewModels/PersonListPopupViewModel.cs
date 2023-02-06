@@ -22,5 +22,9 @@ public class PersonListPopupViewModel : IMapFrom<PersonLikeDto>, IHaveCustomMapp
             .ForMember(x => x.Name, y => y.MapFrom(z => z.FirstName + " " + z.LastName))
             .ForMember(x => x.Username, y => y.MapFrom(z => z.UserName))
             .ForMember(x => x.IsInvited, y => y.Ignore());
+
+        configuration.CreateMap<PersonRepostDto, PersonListPopupViewModel>()
+            .ForMember(x => x.ProfileImage, y => y.Ignore())
+            .ForMember(x => x.IsInvited, y => y.MapFrom(z => z.Name));
     }
 }

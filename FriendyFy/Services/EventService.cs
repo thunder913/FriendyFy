@@ -532,8 +532,7 @@ public class EventService : IEventService
 
     public List<PersonListPopupViewModel> GetPostReposts(string eventId, int take, int skip)
     {
-        // TODO use dto and AutoMapper
-        return eventPostRepository
+        var userReposts = eventPostRepository
             .AllAsNoTracking()
             .Include(x => x.Reposts)
             .ThenInclude(x => x.Creator)
@@ -545,14 +544,24 @@ public class EventService : IEventService
             .OrderByDescending(x => x.CreatedOn)
             .Skip(skip)
             .Take(take)
-            .ToList()
-            .Select(x => new PersonListPopupViewModel
+            .Select(x => new PersonRepostDto
             {
                 Name = x.Creator.FirstName + " " + x.Creator.LastName,
-                Username = x.Creator.UserName,
-                ProfileImage = blobService.GetBlobUrlAsync(x.Creator?.ProfileImage?.Id + x.Creator?.ProfileImage?.ImageExtension, GlobalConstants.BlobPictures).GetAwaiter().GetResult(),
+                UserName = x.Creator.UserName,
+                ProfileImageName = x.Creator.ProfileImage.Id + x.Creator.ProfileImage.ImageExtension,
             })
             .ToList();
+
+        var viewModel = userReposts.Select(x =>
+        {
+            var mapped = mapper.Map<PersonListPopupViewModel>(x);
+            mapped.ProfileImage = blobService.GetBlobUrlAsync(x.ProfileImageName, GlobalConstants.BlobPictures)
+                .GetAwaiter().GetResult();
+            
+            return mapped;
+        }).ToList();
+
+        return viewModel;
     }
 
     public async Task<bool> DeleteEventPostAsync(string postId, string userId)
@@ -614,7 +623,7 @@ public class EventService : IEventService
         {
         }
 
-        var events = new List<PostDetailsViewModel>();
+        var events = new List<PostDetailsDto>();
 
         if (isProfile)
         {
@@ -624,7 +633,7 @@ public class EventService : IEventService
                 .Where(x => !ids.Contains(x.Id))
                 .OrderByDescending(x => x.CreatedOn)
                 .Take(take)
-                .Select(x => new PostDetailsViewModel
+                .Select(x => new PostDetailsDto()
                 {
                     CreatedAgo = (int)(DateTime.UtcNow - x.CreatedOn).TotalMinutes,
                     PostId = x.EventId,
@@ -634,8 +643,8 @@ public class EventService : IEventService
                     IsUserCreator = user != null && x.CreatorId == user.Id,
                     Username = x.Creator.UserName,
                     CreatorName = x.Creator.FirstName + " " + x.Creator.LastName,
-                    CreatorImage = x.Creator.ProfileImage.Id + x.Creator.ProfileImage.ImageExtension,
-                    EventImage = x.Event.ProfileImage.Id + x.Event.ProfileImage.ImageExtension,
+                    CreatorImageName = x.Creator.ProfileImage.Id + x.Creator.ProfileImage.ImageExtension,
+                    EventImageName = x.Event.ProfileImage.Id + x.Event.ProfileImage.ImageExtension,
                     EventTitle = x.Event.Name,
                     EventInterests = x.Event.Interests.Select(y => new InterestViewModel
                     {
@@ -653,19 +662,19 @@ public class EventService : IEventService
                     CommentsCount = x.Comments.Count,
                     LikesCount = x.Likes.Count,
                     PostType = PostType.Event.ToString(),
-                    Repost = !x.IsRepost ? null : new PostDetailsViewModel
+                    Repost = !x.IsRepost ? null : new PostDetailsDto
                     {
                         Username = x.Repost.Creator.UserName,
                         CreatorName = x.Repost.Creator.FirstName + " " + x.Repost.Creator.LastName,
                         CreatedAgo = (int)((DateTime.UtcNow - x.Repost.CreatedOn).TotalMinutes),
-                        CreatorImage = x.Repost.Creator.ProfileImage.Id + x.Repost.Creator.ProfileImage.ImageExtension,
+                        CreatorImageName = x.Repost.Creator.ProfileImage.Id + x.Repost.Creator.ProfileImage.ImageExtension,
                         LikesCount = x.Repost.Likes.Count,
                         RepostsCount = x.Repost.Reposts.GroupBy(x => x.CreatorId).Count(),
                         CommentsCount = x.Repost.Comments.Count,
                         IsLikedByUser = user != null && x.Repost.Likes.Any(y => y.LikedById == user.Id),
                         PostType = PostType.Event.ToString(),
                         EventPostId = x.RepostId,
-                        EventImage = x.Event.ProfileImage.Id + x.Event.ProfileImage.ImageExtension
+                        EventImageName = x.Event.ProfileImage.Id + x.Event.ProfileImage.ImageExtension
                     }
                 })
                 .ToListAsync());
@@ -678,9 +687,9 @@ public class EventService : IEventService
                 .OrderByDescending(x => x.CreatedOn)
                 .Where(x => !ids.Contains(x.Id))
                 .Take(take)
-                .Select(x => new PostDetailsViewModel
+                .Select(x => new PostDetailsDto
                 {
-                    CreatedAgo = (int)((DateTime.UtcNow - x.CreatedOn).TotalMinutes),
+                    CreatedAgo = (int)(DateTime.UtcNow - x.CreatedOn).TotalMinutes,
                     PostId = x.EventId,
                     EventPostId = x.Id,
                     IsRepost = x.IsRepost,
@@ -688,8 +697,8 @@ public class EventService : IEventService
                     IsUserCreator = x.CreatorId == user.Id,
                     Username = x.Creator.UserName,
                     CreatorName = x.Creator.FirstName + " " + x.Creator.LastName,
-                    CreatorImage = x.Creator.ProfileImage.Id + x.Creator.ProfileImage.ImageExtension,
-                    EventImage = x.Event.ProfileImage.Id + x.Event.ProfileImage.ImageExtension,
+                    CreatorImageName = x.Creator.ProfileImage.Id + x.Creator.ProfileImage.ImageExtension,
+                    EventImageName = x.Event.ProfileImage.Id + x.Event.ProfileImage.ImageExtension,
                     EventTitle = x.Event.Name,
                     EventInterests = x.Event.Interests.Select(y => new InterestViewModel
                     {
@@ -707,75 +716,41 @@ public class EventService : IEventService
                     CommentsCount = x.Comments.Count,
                     LikesCount = x.Likes.Count,
                     PostType = PostType.Event.ToString(),
-                    Repost = !x.IsRepost ? null : new PostDetailsViewModel
+                    Repost = !x.IsRepost ? null : new PostDetailsDto
                     {
                         Username = x.Repost.Creator.UserName,
                         CreatorName = x.Repost.Creator.FirstName + " " + x.Repost.Creator.LastName,
                         CreatedAgo = (int)((DateTime.UtcNow - x.Repost.CreatedOn).TotalMinutes),
-                        CreatorImage = x.Repost.Creator.ProfileImage.Id + x.Repost.Creator.ProfileImage.ImageExtension,
+                        CreatorImageName = x.Repost.Creator.ProfileImage.Id + x.Repost.Creator.ProfileImage.ImageExtension,
                         LikesCount = x.Repost.Likes.Count,
                         RepostsCount = x.Repost.Reposts.GroupBy(x => x.CreatorId).Count(),
                         CommentsCount = x.Repost.Comments.Count,
                         IsLikedByUser = x.Repost.Likes.Any(y => y.LikedById == user.Id),
                         PostType = PostType.Event.ToString(),
                         EventPostId = x.RepostId,
-                        EventImage = x.Event.ProfileImage.Id + x.Event.ProfileImage.ImageExtension
+                        EventImageName = x.Event.ProfileImage.Id + x.Event.ProfileImage.ImageExtension
                     }
                 })
                 .ToListAsync());
         }
 
-        // TODO use AutoMapper
-        var toReturn = events.Select(x => new PostDetailsViewModel
-            {
-                CommentsCount = x.CommentsCount,
-                CreatedAgo = x.CreatedAgo,
-                CreatorImage = blobService.GetBlobUrlAsync(x.CreatorImage, GlobalConstants.BlobPictures).GetAwaiter().GetResult(),
-                CreatorName = x.CreatorName,
-                EventInterests = x.EventInterests,
-                EventIsReocurring = x.EventIsReocurring,
-                EventPostId = x.EventPostId,
-                EventReocurring = x.EventReocurring,
-                EventTime = x.EventTime,
-                EventTitle = x.EventTitle,
-                IsLikedByUser = x.IsLikedByUser,
-                IsRepost = x.IsRepost,
-                IsUserCreator = x.IsUserCreator,
-                Latitude = x.Latitude,
-                LikesCount = x.LikesCount,
-                LocationCity = x.LocationCity,
-                Longitude = x.Longitude,
-                PostId = x.PostId,
-                PostMessage = x.PostMessage,
-                PostType = x.PostType,
-                RepostsCount = x.RepostsCount,
-                Username = x.Username,
-                EventImage = blobService.GetBlobUrlAsync(x.EventImage, GlobalConstants.BlobPictures).GetAwaiter().GetResult(),
-                Repost = !x.IsRepost ? null : new PostDetailsViewModel
-                {
-                    Username = x.Repost.Username,
-                    CreatorName = x.Repost.CreatorName,
-                    CreatedAgo = x.Repost.CreatedAgo,
-                    CreatorImage = blobService.GetBlobUrlAsync(x.Repost.CreatorImage, GlobalConstants.BlobPictures).GetAwaiter().GetResult(),
-                    EventTitle = x.EventTitle,
-                    EventInterests = x.EventInterests,
-                    LocationCity = x.LocationCity,
-                    Latitude = x.Latitude,
-                    Longitude = x.Longitude,
-                    EventTime = x.EventTime,
-                    PostId = x.PostId,
-                    LikesCount = x.Repost.LikesCount,
-                    RepostsCount = x.Repost.RepostsCount,
-                    CommentsCount = x.Repost.CommentsCount,
-                    IsLikedByUser = x.Repost.IsLikedByUser,
-                    PostType = PostType.Event.ToString(),
-                    EventPostId = x.Repost.EventPostId,
-                    EventImage = blobService.GetBlobUrlAsync(x.EventImage, GlobalConstants.BlobPictures).GetAwaiter().GetResult(),
-                }
-            })
-            .ToList();
+        return events.Select(x =>
+        {
+            var mapped = mapper.Map<PostDetailsViewModel>(x);
+            mapped.Repost = mapper.Map<PostDetailsViewModel>(x.Repost);
+            mapped.CreatorImage = blobService.GetBlobUrlAsync(x.CreatorImageName, GlobalConstants.BlobPictures)
+                .GetAwaiter().GetResult();
+            mapped.EventImage = blobService.GetBlobUrlAsync(x.EventImageName, GlobalConstants.BlobPictures)
+                .GetAwaiter().GetResult();
+            mapped.Repost.EventImage = blobService
+                .GetBlobUrlAsync(x.Repost.EventImageName, GlobalConstants.BlobPictures)
+                .GetAwaiter().GetResult();
+            mapped.Repost.CreatorImage = blobService
+                .GetBlobUrlAsync(x.Repost.CreatorImageName, GlobalConstants.BlobPictures)
+                .GetAwaiter().GetResult();
 
-        return toReturn;
+            return mapped;
+        }).ToList();
     }
 
     public async Task<List<SearchPageResultViewModel>> GetSearchPageEventsAsync(int skip, int take, string searchWord, List<int> interestIds, bool showOnlyUserEvents, DateTime eventDate, bool hasDate, string userId)

@@ -141,7 +141,7 @@ public class FriendController : BaseController
             return BadRequest("The user cannot be added as a friend!");
         }
 
-        return Content(await friendService.GetUserFriendStatusAsync(user.Id, id));
+        return Content((await friendService.GetUserFriendStatusAsync(user.Id, id)).ToString());
     }
 
     [HttpGet("recommendations")]

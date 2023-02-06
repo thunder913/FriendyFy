@@ -41,8 +41,7 @@ public class FriendService : IFriendService
     {
         var friendStatus = await GetUserFriendStatusAsync(senderId, receiverUsername);
 
-        // TODO make enum
-        if (friendStatus != "no-friends")
+        if (friendStatus != FriendStatus.NoFriends)
         {
             return false;
         }
@@ -80,8 +79,7 @@ public class FriendService : IFriendService
     {
         var friendStatus = await GetUserFriendStatusAsync(senderId, receiverUsername);
         
-        // TODO make enum
-        if (friendStatus != "received" && friendStatus != "requested")
+        if (friendStatus != FriendStatus.Received && friendStatus != FriendStatus.Requested)
         {
             return false;
         }
@@ -108,8 +106,7 @@ public class FriendService : IFriendService
     {
         var friendStatus = await GetUserFriendStatusAsync(senderId, receiverUsername);
 
-        // TODO make enum
-        if (friendStatus != "friends")
+        if (friendStatus != FriendStatus.Friends)
         {
             return false;
         }
@@ -136,8 +133,7 @@ public class FriendService : IFriendService
     {
         var friendStatus = await GetUserFriendStatusAsync(senderId, receiverUsername);
 
-        // TODO make enum
-        if (friendStatus != "received" && friendStatus != "requested")
+        if (friendStatus != FriendStatus.Received && friendStatus != FriendStatus.Requested)
         {
             return false;
         }
@@ -177,19 +173,18 @@ public class FriendService : IFriendService
         return true;
     } 
 
-    public async Task<string> GetUserFriendStatusAsync(string userId, string friendUsername)
+    public async Task<FriendStatus> GetUserFriendStatusAsync(string userId, string friendUsername)
     {
-        // TODO make enum
         var user = await userRepository.All().Include(x => x.Friends).FirstOrDefaultAsync(x => x.Id == userId);
         var friend = userRepository.All().FirstOrDefault(x => x.UserName == friendUsername);
         if (user == null)
         {
-            return "invalid";
+            return FriendStatus.Invalid;
         }
 
         if(user.Id == friend?.Id)
         {
-            return "same-user";
+            return FriendStatus.SameUser;
         }
 
         var userFriend = user.Friends.FirstOrDefault(x => x.FriendId == friend.Id);
@@ -197,16 +192,16 @@ public class FriendService : IFriendService
         {
             if (userFriend.IsFriend)
             {
-                return "friends";
+                return FriendStatus.Friends;
             }
             if (!userFriend.IsFriend && userFriend.RequestSenderId == userId)
             {
-                return "requested";
+                return FriendStatus.Requested;
             }
-            return "received";
+            return FriendStatus.Received;
         }
 
-        return "no-friends";
+        return FriendStatus.NoFriends;
     }
 
     public List<ProfileFriendViewModel> GetUserFriends(string userId, int skip, int count, string loggedIn, string searchQuery)
@@ -214,31 +209,31 @@ public class FriendService : IFriendService
         var user = userRepository.All().FirstOrDefault(x => x.Id == loggedIn);
         
         // TODO use dto and AutoMapper
+        // TODO figure out what is wrong with this request -> user.Friends, maybe can be integrated in the request itself and remove user request
         return userFriendRepository
             .All()
-            .Include(x => x.Friend)
-            .ThenInclude(x => x.Friends)
-            .Include(x => x.Friend)
-            .ThenInclude(x => x.ProfileImage)
-            .Include(x => x.CurrentUser)
-            .Where(x => x.CurrentUser.UserName==userId && x.IsFriend)
+            .Where(x => x.CurrentUser.UserName==userId && !x.IsFriend)
             .Where(x => string.IsNullOrEmpty(searchQuery) || (x.Friend.FirstName + " " + x.Friend.LastName).ToLower().Contains(searchQuery.ToLower()))
             .OrderBy(x => x.CreatedOn)
-            .ToList()
             .Select(x => new ProfileFriendViewModel
             {
                 FullName = x.Friend.FirstName + " " + x.Friend.LastName,
-                ProfileImage = blobService.GetBlobUrlAsync(x.Friend.ProfileImage?.Id + x.Friend.ProfileImage?.ImageExtension, GlobalConstants.BlobPictures).GetAwaiter().GetResult(),
+                //ProfileImage = blobService.GetBlobUrlAsync(x.Friend.ProfileImage.Id + x.Friend.ProfileImage.ImageExtension, GlobalConstants.BlobPictures).GetAwaiter().GetResult(),
                 Username = x.Friend.UserName,
-                HasReceived = !string.IsNullOrWhiteSpace(loggedIn) && x.Friend.Friends.Any(y => !y.IsFriend && y.FriendId==loggedIn && y.RequestSenderId==x.Id),
-                HasRequested = !string.IsNullOrWhiteSpace(loggedIn) && x.Friend.Friends.Any(y => !y.IsFriend && y.RequestSenderId==loggedIn),
-                IsFriend = !string.IsNullOrWhiteSpace(loggedIn) && x.Friend.Friends.Any(y => y.IsFriend && y.FriendId==loggedIn),
-                MutualFriends = !string.IsNullOrWhiteSpace(loggedIn) ? x.Friend.Friends.Where(x => x.IsFriend).Count(y => y.CurrentUserId != loggedIn && y.FriendId != loggedIn && user.Friends.Where(x => x.IsFriend).Any(z => z.FriendId == y.FriendId)) : -1,
+                HasReceived = !string.IsNullOrWhiteSpace(loggedIn) && x.Friend.Friends.Any(y => !y.IsFriend && y.FriendId == loggedIn && y.RequestSenderId == x.Id),
+                HasRequested = !string.IsNullOrWhiteSpace(loggedIn) && x.Friend.Friends.Any(y => !y.IsFriend && y.RequestSenderId == loggedIn),
+                IsFriend = !string.IsNullOrWhiteSpace(loggedIn) && x.Friend.Friends.Any(y => y.IsFriend && y.FriendId == loggedIn),
+                MutualFriends = !string.IsNullOrWhiteSpace(loggedIn) 
+                    ? x.Friend.Friends.Count(y => y.IsFriend == true 
+                                                  && y.CurrentUserId != loggedIn 
+                                                  && y.FriendId != loggedIn
+                                                  && user.Friends.Where(y => y.IsFriend).Any(z => z.FriendId == y.FriendId)) 
+                    : -1,
                 IsLoggedUser = x.Friend.Id == loggedIn
             })
-            .OrderByDescending(x => x.IsFriend)
-            .ThenByDescending(x => x.HasRequested)
-            .ThenByDescending(x => x.HasReceived)
+            //.OrderByDescending(x => x.IsFriend)
+            //.ThenByDescending(x => x.HasRequested)
+            //.ThenByDescending(x => x.HasReceived)
             .Skip(skip)
             .Take(count)
             .ToList();

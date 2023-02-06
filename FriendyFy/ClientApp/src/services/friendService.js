@@ -38,7 +38,8 @@ function checkFriendStatus(userId){
 }
 
 function getFriends(userId, count, skip, searchQuery){
-    return fetch('/friend?' + new URLSearchParams({userId, count, skip, searchQuery}), {
+    let query = searchQuery ?? '';
+    return fetch('/friend?' + new URLSearchParams({userId, count, skip, query}), {
         method: 'GET',
         headers: {'Content-Type': 'application/json'},
     });

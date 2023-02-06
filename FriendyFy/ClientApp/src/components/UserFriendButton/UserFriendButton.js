@@ -61,7 +61,7 @@ function UserFriendButton({ userId }) {
         removeFriend({ userId: userId })
             .then(async res => {
                 if (res.ok) {
-                    setFriendText("no-friends");
+                    setFriendText("NoFriends");
                     NotificationManager.success('Successfully removed friend!', '', 2000);
                 }
                 await renderAddFriend();
@@ -73,19 +73,19 @@ function UserFriendButton({ userId }) {
             .then(async res => {
                 let text = await res.text();
                 switch (text) {
-                    case 'friends':
+                    case 'Friends':
                         setFriendText("Friends")
                         break;
-                    case 'requested':
+                    case 'Requested':
                         setFriendText("Requested")
                         break;
-                    case 'received':
+                    case 'Received':
                         setFriendText("Received")
                         break;
-                    case 'no-friends':
+                    case 'NoFriends':
                         setFriendText("Add Friend")
                         break;
-                    case 'same-user':
+                    case 'SameUser':
                         setFriendText("Manage")
                         break;
                     default:
