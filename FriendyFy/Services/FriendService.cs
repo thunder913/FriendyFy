@@ -207,12 +207,13 @@ public class FriendService : IFriendService
     public List<ProfileFriendViewModel> GetUserFriends(string userId, int skip, int count, string loggedIn, string searchQuery)
     {
         var user = userRepository.All().FirstOrDefault(x => x.Id == loggedIn);
-        
+
+        searchQuery ??= string.Empty;
+
         // TODO use dto and AutoMapper
-        // TODO figure out what is wrong with this request -> user.Friends, maybe can be integrated in the request itself and remove user request
         return userFriendRepository
             .All()
-            .Where(x => x.CurrentUser.UserName==userId && !x.IsFriend)
+            .Where(x => x.CurrentUser.UserName == userId && x.IsFriend)
             .Where(x => string.IsNullOrEmpty(searchQuery) || (x.Friend.FirstName + " " + x.Friend.LastName).ToLower().Contains(searchQuery.ToLower()))
             .OrderBy(x => x.CreatedOn)
             .Select(x => new ProfileFriendViewModel
@@ -224,16 +225,16 @@ public class FriendService : IFriendService
                 HasRequested = !string.IsNullOrWhiteSpace(loggedIn) && x.Friend.Friends.Any(y => !y.IsFriend && y.RequestSenderId == loggedIn),
                 IsFriend = !string.IsNullOrWhiteSpace(loggedIn) && x.Friend.Friends.Any(y => y.IsFriend && y.FriendId == loggedIn),
                 MutualFriends = !string.IsNullOrWhiteSpace(loggedIn) 
-                    ? x.Friend.Friends.Count(y => y.IsFriend == true 
-                                                  && y.CurrentUserId != loggedIn 
-                                                  && y.FriendId != loggedIn
-                                                  && user.Friends.Where(y => y.IsFriend).Any(z => z.FriendId == y.FriendId)) 
+                    ? x.Friend.Friends.Count(y => y.IsFriend == true // is friends
+                                                  && y.CurrentUserId != loggedIn // is not logged in user
+                                                  && y.FriendId == loggedIn // is not logged in user
+                                                  /*&& user.Friends.Where(y => y.IsFriend).Any(z => z.FriendId == y.FriendId)*/) 
                     : -1,
                 IsLoggedUser = x.Friend.Id == loggedIn
             })
-            //.OrderByDescending(x => x.IsFriend)
-            //.ThenByDescending(x => x.HasRequested)
-            //.ThenByDescending(x => x.HasReceived)
+            .OrderByDescending(x => x.IsFriend)
+            .ThenByDescending(x => x.HasRequested)
+            .ThenByDescending(x => x.HasReceived)
             .Skip(skip)
             .Take(count)
             .ToList();
