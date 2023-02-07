@@ -13,8 +13,8 @@ namespace FriendyFy.Controllers;
 [Route("user")]
 public class UserController : BaseController
 {
-    private IUserService userService { get; }
-    private IGeolocationService geolocationService { get; }
+    private readonly IUserService userService;
+    private readonly IGeolocationService geolocationService;
 
     public UserController(IGeolocationService geolocationService, IUserService userService)
     {

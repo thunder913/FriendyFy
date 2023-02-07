@@ -45,11 +45,11 @@ public class UserService : IUserService
         var rand = new Random();
         var numbers = rand.Next(1, 10);
 
-        var username = new StringBuilder();
-        username.Append(firstName);
-        username.Append(".");
-        username.Append(lastName);
-        username.Append(".");
+        var username = new StringBuilder()
+            .Append(firstName)
+            .Append(".")
+            .Append(lastName)
+            .Append(".");
 
         var number = 0;
         while (numbers > 0)

@@ -18,13 +18,13 @@ namespace FriendyFy.Services;
 
 public class FriendService : IFriendService
 {
-    private IRepository<UserFriend> userFriendRepository { get; }
+    private readonly IRepository<UserFriend> userFriendRepository;
     private readonly IDeletableEntityRepository<ApplicationUser> userRepository;
     private readonly IDeletableEntityRepository<Chat> chatRepository;
     private readonly IMapper mapper;
-    private IUserService userService { get; }
-    private IBlobService blobService { get; }
-    private IRepository<RemoveSuggestionFriend> removeSuggestionRepository { get; }
+    private readonly IUserService userService;
+    private readonly IBlobService blobService;
+    private readonly IRepository<RemoveSuggestionFriend> removeSuggestionRepository;
     public FriendService(IRepository<UserFriend> userFriendRepository, 
         IDeletableEntityRepository<ApplicationUser> userRepository, 
         IUserService userService,

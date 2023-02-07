@@ -111,7 +111,7 @@ public class ChatService : IChatService
     public async Task<ChatMessageViewModel> SendChatMessage(string chatId, string userId, string message)
     {
         var user = await userRepository
-            .AllAsNoTracking()
+            .All()
             .Include(u => u.ProfileImage)
             .FirstOrDefaultAsync(x => x.Id == userId);
         

@@ -10,7 +10,7 @@ namespace FriendyFy.Services;
 // TODO use httpclient
 public class GeolocationService : IGeolocationService
 {
-    private IConfiguration configuration { get; }
+    private readonly IConfiguration configuration;
     public GeolocationService(IConfiguration configuration)
     {
         this.configuration = configuration;

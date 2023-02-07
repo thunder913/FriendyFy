@@ -7,13 +7,11 @@ namespace FriendyFy.Hubs;
 
 public class NotificationHub : Hub
 {
-    private readonly IEventService eventService;
     private readonly INotificationService notificationService;
     private readonly IUserService userService;
 
-    public NotificationHub(IEventService eventService, INotificationService notificationService, IUserService userService)
+    public NotificationHub(INotificationService notificationService, IUserService userService)
     {
-        this.eventService = eventService;
         this.notificationService = notificationService;
         this.userService = userService;
     }
