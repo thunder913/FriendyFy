@@ -255,19 +255,19 @@ public class CommentService : ICommentService
             .OrderByDescending(x => x.CreatedOn)
             .Skip(skip)
             .Take(take)
-            .Select(x => new PersonLikeDto()
+            .Select(x => new PersonPopUpDto()
             {
                 UserName = x.LikedBy.UserName,
                 FirstName = x.LikedBy.FirstName,
                 LastName = x.LikedBy.LastName,
-                ProfilePicture = x.LikedBy.ProfileImage.Id + x.LikedBy.ProfileImage.ImageExtension,
+                ProfilePictureName = x.LikedBy.ProfileImage.Id + x.LikedBy.ProfileImage.ImageExtension,
             })
             .ToListAsync();
 
         var viewModel = peopleLikedDto.Select(x =>
         {
-            var viewModel = mapper.Map<PersonLikeDto, PersonListPopupViewModel>(x);
-            viewModel.ProfileImage = blobService.GetBlobUrlAsync(x.ProfilePicture, GlobalConstants.BlobPictures).GetAwaiter().GetResult();
+            var viewModel = mapper.Map<PersonPopUpDto, PersonListPopupViewModel>(x);
+            viewModel.ProfileImage = blobService.GetBlobUrlAsync(x.ProfilePictureName, GlobalConstants.BlobPictures).GetAwaiter().GetResult();
             return viewModel;
         }).ToList();
 

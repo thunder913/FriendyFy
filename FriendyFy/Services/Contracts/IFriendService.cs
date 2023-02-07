@@ -14,6 +14,6 @@ public interface IFriendService
     Task<bool> RemoveFriendAsync(string senderId, string receiverUsername);
     List<ProfileFriendViewModel> GetUserFriends(string userId, int skip, int count, string loggedInId, string searchQuery);
     Task<int> GetUserFriendsCountAsync(string userId);
-    Task<List<SidebarFriendRecommendationViewModel>> GetFriendRecommendations(string userId);
+    Task<List<SidebarFriendRecommendationViewModel>> GetFriendRecommendationsAsync(string userId);
     Task RemovePersonFromSuggestionsAsync(string userId, string removedUsername);
 }

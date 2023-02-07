@@ -154,7 +154,7 @@ public class FriendController : BaseController
             return BadRequest("You are not current logged in!");
         }
 
-        return Ok(await friendService.GetFriendRecommendations(user.Id));
+        return Ok(await friendService.GetFriendRecommendationsAsync(user.Id));
     }
 
     [HttpDelete("suggestion")]

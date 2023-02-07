@@ -44,6 +44,10 @@ public class ApplicationDbContext : ApiAuthorizationDbContext<ApplicationUser>
             .HasMany(x => x.RemoveSuggestionFriends)
             .WithOne(x => x.User);
 
+        builder.Entity<ApplicationUser>()
+            .HasMany(x => x.BlockedUserSuggestions)
+            .WithOne(x => x.BlockedUser);
+
         builder.Entity<Chat>()
             .HasMany(x => x.Users)
             .WithMany(x => x.Chats);

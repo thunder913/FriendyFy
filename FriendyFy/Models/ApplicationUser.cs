@@ -31,6 +31,7 @@ public class ApplicationUser : IdentityUser, IAuditInfo, IDeletableEntity, IMapT
     public Image CoverImage { get; set; }
     public ICollection<Image> Photos { get; set; } = new HashSet<Image>();
     public ICollection<RemoveSuggestionFriend> RemoveSuggestionFriends { get; set; } = new HashSet<RemoveSuggestionFriend>();
+    public ICollection<RemoveSuggestionFriend> BlockedUserSuggestions { get; set; } = new HashSet<RemoveSuggestionFriend>();
     public ICollection<Chat> Chats { get; set; } = new HashSet<Chat>();
     public ICollection<Message> ReadMessages { get; set; } = new HashSet<Message>();
     public ICollection<Message> Messages { get; set; } = new HashSet<Message>();

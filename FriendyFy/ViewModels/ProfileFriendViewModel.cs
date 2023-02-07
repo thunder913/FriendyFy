@@ -1,6 +1,10 @@
-﻿namespace FriendyFy.ViewModels;
+﻿using AutoMapper;
+using FriendyFy.Data.Dtos;
+using FriendyFy.Mapping;
 
-public class ProfileFriendViewModel
+namespace FriendyFy.ViewModels;
+
+public class ProfileFriendViewModel : IMapFrom<ProfileFriendDto>, IHaveCustomMappings
 {
     public string Username { get; set; }
     public string ProfileImage { get; set; }
@@ -10,4 +14,9 @@ public class ProfileFriendViewModel
     public bool HasRequested { get; set; }
     public bool HasReceived { get; set; }
     public bool IsLoggedUser { get; set; }
+    public void CreateMappings(IProfileExpression configuration)
+    {
+        configuration.CreateMap<ProfileFriendDto, ProfileFriendViewModel>()
+            .ForMember(x => x.ProfileImage, y => y.Ignore());
+    }
 }

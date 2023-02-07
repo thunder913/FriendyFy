@@ -737,16 +737,19 @@ public class EventService : IEventService
         return events.Select(x =>
         {
             var mapped = mapper.Map<PostDetailsViewModel>(x);
-            mapped.Repost = mapper.Map<PostDetailsViewModel>(x.Repost);
+            if (x.Repost != null)
+            {
+                mapped.Repost = mapper.Map<PostDetailsViewModel>(x.Repost);
+                mapped.Repost.EventImage = blobService
+                    .GetBlobUrlAsync(x.Repost.EventImageName, GlobalConstants.BlobPictures)
+                    .GetAwaiter().GetResult();
+                mapped.Repost.CreatorImage = blobService
+                    .GetBlobUrlAsync(x.Repost.CreatorImageName, GlobalConstants.BlobPictures)
+                    .GetAwaiter().GetResult();
+            }
             mapped.CreatorImage = blobService.GetBlobUrlAsync(x.CreatorImageName, GlobalConstants.BlobPictures)
                 .GetAwaiter().GetResult();
             mapped.EventImage = blobService.GetBlobUrlAsync(x.EventImageName, GlobalConstants.BlobPictures)
-                .GetAwaiter().GetResult();
-            mapped.Repost.EventImage = blobService
-                .GetBlobUrlAsync(x.Repost.EventImageName, GlobalConstants.BlobPictures)
-                .GetAwaiter().GetResult();
-            mapped.Repost.CreatorImage = blobService
-                .GetBlobUrlAsync(x.Repost.CreatorImageName, GlobalConstants.BlobPictures)
                 .GetAwaiter().GetResult();
 
             return mapped;

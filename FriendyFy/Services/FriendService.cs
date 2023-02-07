@@ -2,14 +2,18 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using AutoMapper;
 using FriendyFy.BlobStorage;
 using FriendyFy.Common;
 using FriendyFy.Data;
+using FriendyFy.Data.Dtos;
+using FriendyFy.Mapping;
 using FriendyFy.Models;
 using FriendyFy.Models.Enums;
 using FriendyFy.Services.Contracts;
 using FriendyFy.ViewModels;
 using Microsoft.EntityFrameworkCore;
+using NuGet.Packaging;
 
 namespace FriendyFy.Services;
 
@@ -18,7 +22,7 @@ public class FriendService : IFriendService
     private IRepository<UserFriend> userFriendRepository { get; }
     private readonly IDeletableEntityRepository<ApplicationUser> userRepository;
     private readonly IDeletableEntityRepository<Chat> chatRepository;
-
+    private readonly IMapper mapper;
     private IUserService userService { get; }
     private IBlobService blobService { get; }
     private IRepository<RemoveSuggestionFriend> removeSuggestionRepository { get; }
@@ -35,6 +39,7 @@ public class FriendService : IFriendService
         this.blobService = blobService;
         this.removeSuggestionRepository = removeSuggestionRepository;
         this.chatRepository = chatRepository;
+        mapper = AutoMapperConfig.MapperInstance;
     }
 
     public async Task<bool> AddFriendToUserAsync(string senderId, string receiverUsername)
@@ -206,29 +211,26 @@ public class FriendService : IFriendService
 
     public List<ProfileFriendViewModel> GetUserFriends(string userId, int skip, int count, string loggedIn, string searchQuery)
     {
-        var user = userRepository.All().FirstOrDefault(x => x.Id == loggedIn);
-
+        // Setting to string.Empty, otherwise it is "null" in the sql query
         searchQuery ??= string.Empty;
 
-        // TODO use dto and AutoMapper
-        return userFriendRepository
+        var dtos = userFriendRepository
             .All()
             .Where(x => x.CurrentUser.UserName == userId && x.IsFriend)
             .Where(x => string.IsNullOrEmpty(searchQuery) || (x.Friend.FirstName + " " + x.Friend.LastName).ToLower().Contains(searchQuery.ToLower()))
             .OrderBy(x => x.CreatedOn)
-            .Select(x => new ProfileFriendViewModel
+            .Select(x => new ProfileFriendDto
             {
                 FullName = x.Friend.FirstName + " " + x.Friend.LastName,
-                //ProfileImage = blobService.GetBlobUrlAsync(x.Friend.ProfileImage.Id + x.Friend.ProfileImage.ImageExtension, GlobalConstants.BlobPictures).GetAwaiter().GetResult(),
+                ProfileImageName = x.Friend.ProfileImage.Id + x.Friend.ProfileImage.ImageExtension,
                 Username = x.Friend.UserName,
                 HasReceived = !string.IsNullOrWhiteSpace(loggedIn) && x.Friend.Friends.Any(y => !y.IsFriend && y.FriendId == loggedIn && y.RequestSenderId == x.Id),
                 HasRequested = !string.IsNullOrWhiteSpace(loggedIn) && x.Friend.Friends.Any(y => !y.IsFriend && y.RequestSenderId == loggedIn),
                 IsFriend = !string.IsNullOrWhiteSpace(loggedIn) && x.Friend.Friends.Any(y => y.IsFriend && y.FriendId == loggedIn),
                 MutualFriends = !string.IsNullOrWhiteSpace(loggedIn) 
-                    ? x.Friend.Friends.Count(y => y.IsFriend == true // is friends
-                                                  && y.CurrentUserId != loggedIn // is not logged in user
-                                                  && y.FriendId == loggedIn // is not logged in user
-                                                  /*&& user.Friends.Where(y => y.IsFriend).Any(z => z.FriendId == y.FriendId)*/) 
+                    ? x.Friend.Friends.Count(y => y.IsFriend == true
+                                                  && y.CurrentUserId != loggedIn
+                                                  && y.FriendId == loggedIn) 
                     : -1,
                 IsLoggedUser = x.Friend.Id == loggedIn
             })
@@ -238,6 +240,17 @@ public class FriendService : IFriendService
             .Skip(skip)
             .Take(count)
             .ToList();
+
+        var viewmodel = dtos.Select(x =>
+        {
+            var model = mapper.Map<ProfileFriendViewModel>(x);
+            model.ProfileImage = blobService
+                .GetBlobUrlAsync(x.ProfileImageName, GlobalConstants.BlobPictures)
+                .GetAwaiter().GetResult();
+            return model;
+        }).ToList();
+
+        return viewmodel; 
     }
 
     public async Task<int> GetUserFriendsCountAsync(string userId)
@@ -248,75 +261,76 @@ public class FriendService : IFriendService
             .CountAsync(x => x.CurrentUser.UserName == userId && x.IsFriend);
     }
 
-    public async Task<List<SidebarFriendRecommendationViewModel>> GetFriendRecommendations(string userId)
+    public async Task<List<SidebarFriendRecommendationViewModel>> GetFriendRecommendationsAsync(string userId)
     {
         var user = await userRepository.All()
             .Include(x => x.Friends)
             .Include(x => x.RemoveSuggestionFriends)
             .FirstOrDefaultAsync(x => x.Id == userId);
-        var rand = new Random();
 
         const int takeFriendsCount = 6;
-        // TODO optimize the request, use DTO and AutoMapper
-        var recommendations = userRepository
+        
+        var recommendations = await userRepository
             .All()
-            .Include(x => x.Friends)
-            .Include(x => x.ProfileImage)
-            .Include(x => x.Interests)
-            .Include(x => x.RemoveSuggestionFriends)
             .Where(x =>
-                x.Id != user.Id
-                && !user.RemoveSuggestionFriends.Select(y => y.Id).Contains(x.Id)
+                x.Id != userId
+                && x.BlockedUserSuggestions.All(y => y.UserId != userId)
                 && ((x.Latitude < user.Latitude && x.Latitude + 5 > user.Latitude) || (x.Latitude - 5 < user.Latitude && x.Latitude > user.Latitude))
                 && ((x.Longitude < user.Longitude && x.Longitude + 5 > user.Longitude) || (x.Longitude - 5 < user.Longitude && x.Longitude > user.Longitude))
-                && !user.Friends.Select(y => y.Id).Contains(x.Id)
-            )
+                && x.Friends.All(y => y.CurrentUserId != userId && y.FriendId != userId) 
+                )
             .Take(takeFriendsCount)
-            .ToList()
-
-            .OrderByDescending(x => x.Interests.Count(y => user.Interests.Any(z => z.Id == y.Id)) * 0.5 
-                                    + x.Friends.Where(x => x.IsFriend).Count(y => user.Friends.Any(z => z.FriendId == y.Id)) * 0.1 
-                                    + rand.Next((int)((-x.Friends.Count(x => x.IsFriend)-x.Interests.Count)*0.2), (int)((x.Friends.Count(x => x.IsFriend) + x.Interests.Count) * 0.2)))
-            .Select(x => new SidebarFriendRecommendationViewModel
+            .OrderByDescending(x => x.Interests.Count(y => user.Interests.Select(z => z.Id).Contains(y.Id)) * 0.5 
+                                    + x.Friends.Where(x => x.IsFriend).Count(y => y.FriendId == userId || y.CurrentUserId == userId) * 0.1 
+                                    + (int)((-x.Friends.Count(y => y.IsFriend)-x.Interests.Count)*0.2) 
+                                    + (int)((x.Friends.Count(y => y.IsFriend) + x.Interests.Count) * 0.2))
+            .Select(x => new FriendRecommendationDto
             {
                 Name = x.FirstName + " " + x.LastName,
                 Username = x.UserName,
-                CommonInterests = x.Interests.Count(y => user.Interests.Any(z => z.Id == y.Id)),
-                MutualFriends = x.Friends.Where(x => x.IsFriend).Count(y => user.Friends.Any(z => z.FriendId == y.FriendId)),
-                ProfilePhoto = blobService.GetBlobUrlAsync(x.ProfileImage?.Id + x.ProfileImage?.ImageExtension, GlobalConstants.BlobPictures).GetAwaiter().GetResult()
+                CommonInterests = x.Interests.Count(y => user.Interests.Select(z => z.Id).Contains(y.Id)),
+                MutualFriends = x.Friends.Where(x => x.IsFriend).Count(y => user.Friends.Select(z => z.FriendId).Contains(y.FriendId)),
+                ProfilePhotoName = x.ProfileImage.Id + x.ProfileImage.ImageExtension
             })
-            .ToList();
+            .ToListAsync();
 
         if(recommendations.Count < takeFriendsCount)
         {
-            // TODO use dto and AutoMapper
-            recommendations.AddRange(userRepository
+            recommendations.AddRange(await userRepository
                 .All()
-                .Include(x => x.Friends)
-                .Include(x => x.Interests)
-                .Include(x => x.RemoveSuggestionFriends)
                 .Where(x =>
                     x.Id != user.Id
-                    && !user.RemoveSuggestionFriends.Select(y => y.BlockedUserId).Contains(x.Id) 
-                    && !user.Friends.Select(y => y.FriendId).Contains(x.Id))
+                    && x.BlockedUserSuggestions.All(y => y.UserId != userId)
+                    && x.Friends.All(y => y.CurrentUserId != userId && y.FriendId != userId))
                 .Where(x => !recommendations.Select(y => y.Username).Contains(x.UserName))
                 .Take(takeFriendsCount - recommendations.Count)
-                .ToList()
-                .OrderByDescending(x => x.Interests.Count(y => user.Interests.Any(z => z.Id == y.Id)) * 0.5
-                                        + x.Friends.Where(x => x.IsFriend).Count(y => user.Friends.Any(z => z.FriendId == y.Id)) * 0.1
-                                        + rand.Next((int)((-x.Friends.Count(x => x.IsFriend) - x.Interests.Count) * 0.2), (int)((x.Friends.Count(x => x.IsFriend) + x.Interests.Count) * 0.2)))
-                .Select(x => new SidebarFriendRecommendationViewModel
+                .OrderByDescending(x => x.Interests.Count(y => user.Interests.Select(z => z.Id).Contains(y.Id)) * 0.5
+                                        + x.Friends.Where(x => x.IsFriend).Count(y => y.FriendId == userId || y.CurrentUserId == userId) * 0.1
+                                        + (int)((-x.Friends.Count(y => y.IsFriend) - x.Interests.Count) * 0.2)
+                                        + (int)((x.Friends.Count(y => y.IsFriend) + x.Interests.Count) * 0.2))
+                .Select(x => new FriendRecommendationDto
                 {
                     Name = x.FirstName + " " + x.LastName,
                     Username = x.UserName,
-                    CommonInterests = x.Interests.Count(y => user.Interests.Any(z => z.Id == y.Id)),
-                    MutualFriends = x.Friends.Where(x => x.IsFriend).Count(y => user.Friends.Any(z => z.FriendId == y.FriendId)),
-                    ProfilePhoto = blobService.GetBlobUrlAsync(x.ProfileImage?.Id + x.ProfileImage?.ImageExtension, GlobalConstants.BlobPictures).GetAwaiter().GetResult()
+                    CommonInterests = x.Interests.Count(y => user.Interests.Select(z => z.Id).Contains(y.Id)),
+                    MutualFriends = x.Friends.Where(x => x.IsFriend).Count(y => user.Friends.Select(z => z.FriendId).Contains(y.FriendId)),
+                    ProfilePhotoName = x.ProfileImage.Id + x.ProfileImage.ImageExtension
                 })
-                .ToList());
+                .ToListAsync());
         }
 
-        return recommendations;
+        var viewModel = recommendations
+            .Select(x =>
+            {
+                var viewModel = mapper.Map<SidebarFriendRecommendationViewModel>(x);
+                viewModel.ProfilePhoto = blobService
+                    .GetBlobUrlAsync(x.ProfilePhotoName, GlobalConstants.BlobPictures)
+                    .GetAwaiter().GetResult();
+                return viewModel;
+            })
+            .ToList();
+
+        return viewModel;
     }
 
     public async Task RemovePersonFromSuggestionsAsync(string userId, string removedUsername)

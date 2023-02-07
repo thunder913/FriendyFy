@@ -90,7 +90,7 @@ public class PostController : BaseController
     }
 
     [HttpGet("likes")]
-    public IActionResult GetLikes([FromQuery] PostLikesRequest dto)
+    public async Task<IActionResult> GetLikes([FromQuery] PostLikesRequest dto)
     {
         var parsed = Enum.TryParse(dto.PostType, out PostType postType);
         if (!parsed)
@@ -99,14 +99,14 @@ public class PostController : BaseController
         }
         if (postType == PostType.Post)
         {
-            return Ok(postService.GetPeopleLikes(dto.PostId, dto.Take, dto.Skip));
+            return Ok(await postService.GetPeopleLikesAsync(dto.PostId, dto.Take, dto.Skip));
         }
 
         return Ok(eventService.GetPeopleLikes(dto.PostId, dto.Take, dto.Skip));
     }
 
     [HttpGet("reposts")]
-    public IActionResult GetReposts([FromQuery] PostLikesRequest dto)
+    public async Task<IActionResult> GetReposts([FromQuery] PostLikesRequest dto)
     {
         var parsed = Enum.TryParse(dto.PostType, out PostType postType);
         if (!parsed)
@@ -115,16 +115,16 @@ public class PostController : BaseController
         }
         if (postType == PostType.Post)
         {
-            return Ok(postService.GetPeopleReposts(dto.PostId, dto.Take, dto.Skip));
+            return Ok(await postService.GetPeopleRepostsAsync(dto.PostId, dto.Take, dto.Skip));
         }
 
         return Ok(eventService.GetPostReposts(dto.PostId, dto.Take, dto.Skip));
     }
 
     [HttpGet("tagged")]
-    public List<PersonListPopupViewModel> GetTaggedPeople([FromQuery] PostLikesRequest dto)
+    public async Task<List<PersonListPopupViewModel>> GetTaggedPeople([FromQuery] PostLikesRequest dto)
     {
-        return postService.GetTaggedPeople(dto.PostId, dto.Take, dto.Skip);
+        return await postService.GetTaggedPeopleAsync(dto.PostId, dto.Take, dto.Skip);
     }
 
     [HttpGet("image/{id}")]

@@ -2,9 +2,12 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using AutoMapper;
 using FriendyFy.BlobStorage;
 using FriendyFy.Common;
 using FriendyFy.Data;
+using FriendyFy.Data.Dtos;
+using FriendyFy.Mapping;
 using FriendyFy.Models;
 using FriendyFy.Services.Contracts;
 using FriendyFy.ViewModels;
@@ -19,7 +22,7 @@ public class NotificationService : INotificationService
     private readonly IDeletableEntityRepository<ApplicationUser> userRepository;
     private readonly IBlobService blobService;
     private readonly IEventService eventService;
-
+    private readonly IMapper mapper;
     public NotificationService(IRepository<Notification> notificationRepository, 
         IDeletableEntityRepository<Event> eventRepository, 
         IDeletableEntityRepository<ApplicationUser> userRepository,
@@ -31,6 +34,7 @@ public class NotificationService : INotificationService
         this.userRepository = userRepository;
         this.blobService = blobService;
         this.eventService = eventService;
+        mapper = AutoMapperConfig.MapperInstance;
     }
 
     public async Task<NotificationViewModel> CreateNotificationAsync(ApplicationUser inviter, string inviteeUsername, string eventId)
@@ -94,7 +98,6 @@ public class NotificationService : INotificationService
 
     public async Task<List<NotificationViewModel>> GetNotificationsForUserAsync(string userId, int take, int skip)
     {
-        // TODO create dto and map it to the viewmodel using AutoMapper
         var notifications = await notificationRepository
             .AllAsNoTracking()
             .Include(x => x.Inviter)
@@ -104,10 +107,10 @@ public class NotificationService : INotificationService
             .OrderByDescending(x => x.CreatedOn)
             .Skip(skip)
             .Take(take)
-            .Select(x => new NotificationViewModel
+            .Select(x => new NotificationDto
             {
                 Id = x.Id,
-                Image = x.Inviter.ProfileImage.Id + x.Inviter.ProfileImage.ImageExtension,
+                ImageName = x.Inviter.ProfileImage.Id + x.Inviter.ProfileImage.ImageExtension,
                 Name = x.Inviter.FirstName,
                 Type = x.Event != null ? "event" : "profile",
                 EventName = x.Event.Name,
@@ -118,32 +121,16 @@ public class NotificationService : INotificationService
             })
             .ToListAsync();
 
-        var toSee = notificationRepository
-            .All()
-            .Where(x => !x.IsSeen)
-            .Where(x => x.InviteeId == userId);
-
-        foreach (var item in toSee)
-        {
-            item.IsSeen = true;
-        }
-
         await notificationRepository.SaveChangesAsync();
 
         return notifications
-            .Select(x => new NotificationViewModel
+            .Select(x =>
             {
-                Id = x.Id,
-                EventName = x.EventName,
-                Image = blobService.GetBlobUrlAsync(x.Image, GlobalConstants.BlobPictures).GetAwaiter().GetResult(),
-                Type = x.Type,
-                Name = x.Name,
-                InviterUsername = x.InviterUsername,
-                Date = x.Date,
-                EventId = x.EventId,
-                IsAvailable = x.IsAvailable
-            })
-            .ToList();
+                var model = mapper.Map<NotificationViewModel>(x);
+                model.Image = blobService.GetBlobUrlAsync(x.ImageName, GlobalConstants.BlobPictures).GetAwaiter()
+                    .GetResult();
+                return model;
+            }).ToList();
     }
 
     public async Task<bool> ChangeEventStatusAsync(string notificationId, ApplicationUser user, bool joinEvent)

@@ -40,7 +40,6 @@ public class UserService : IUserService
         return user;
     }
 
-    // TODO check how this works
     public string GenerateUsername(string firstName, string lastName)
     {
         var rand = new Random();
@@ -59,12 +58,11 @@ public class UserService : IUserService
             numbers--;
         }
 
-        bool freeName = false;
-        // TODO check if this while is relevant
-        while (freeName)
+        while (true)
         {
             var currentName = username.ToString() + number;
-            if (GetByUsernameAsync(currentName) == null)
+            var user = userRepository.All().FirstOrDefault(x => x.UserName == currentName);
+            if (user == null)
             {
                 break;
             }
@@ -193,21 +191,16 @@ public class UserService : IUserService
         var blocked = user.RemoveSuggestionFriends.Select(y => y.BlockedUserId).ToArray();
         var userInterests = user.Interests.Select(y => y.Id).ToArray();
 
-        // TODO remove magic number
+        const int usersToTake = 4;
         var users = await userRepository
             .AllAsNoTracking()
-            .Include(x => x.Interests)
-            .Include(x => x.ProfileImage)
-            .Include(x => x.Friends)
-            .Include(x => x.Events)
-            .ThenInclude(x => x.Users)
             .Where(x => x.Id != userId && blocked.All(y => y != x.Id)
                                        && !(x.Friends.Any(y => y.FriendId == x.Id && y.CurrentUserId == userId) 
                                             || x.Friends.Any(y => y.CurrentUserId == x.Id && y.FriendId == userId)))
             .OrderByDescending(x => x.Events.Where(x => x.Time < DateTime.UtcNow).Count(y => y.Users.Any(z => z.Id == userId)) +
                                     x.Friends.Where(x => x.IsFriend).Count(y => y.Id == userId) * 2 +
                                     x.Interests.Count(y => userInterests.Any(z => z == y.Id)))
-            .Take(4)
+            .Take(usersToTake)
             .Select(x => new RightNavigationRecommendationViewModel
             {
                 EventsTogether = x.Events.Where(x => x.Time < DateTime.UtcNow).Count(y => y.Users.Any(z => z.Id == userId)),

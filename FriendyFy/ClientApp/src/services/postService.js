@@ -19,7 +19,6 @@ export function makePost(privacySetting, postMessage, locationLat, locationLng, 
         body: JSON.stringify({postId})
     });
   }
-
   
   export function getPostLikes(postId, postType, skip, take) {
     return fetch('/post/likes?' + new URLSearchParams({postId, postType, skip, take}), {

@@ -2,10 +2,13 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using AutoMapper;
 using FriendyFy.BlobStorage;
 using FriendyFy.Common;
 using FriendyFy.Data;
+using FriendyFy.Data.Dtos;
 using FriendyFy.Data.Requests;
+using FriendyFy.Mapping;
 using FriendyFy.Models;
 using FriendyFy.Models.Enums;
 using FriendyFy.Services.Contracts;
@@ -13,6 +16,7 @@ using FriendyFy.ViewModels;
 using Microsoft.EntityFrameworkCore;
 using ViewModels;
 using static System.Decimal;
+using static IdentityModel.OidcConstants;
 
 namespace FriendyFy.Services;
 
@@ -25,6 +29,7 @@ public class PostService : IPostService
     private IBlobService blobService { get; }
     private IImageService imageService { get; }
     private IUserService userService { get; }
+    private readonly IMapper mapper;
 
     public PostService(IDeletableEntityRepository<Post> postRepository,
         IBlobService blobService,
@@ -40,6 +45,7 @@ public class PostService : IPostService
         this.postLikeRepository = postLikeRepository;
         this.geolocationService = geolocationService;
         this.postTaggedRepository = postTaggedRepository;
+        mapper = AutoMapperConfig.MapperInstance;
     }
 
     public async Task<bool> CreatePostAsync(CreatePostRequest makePostDto, string userId)
@@ -88,72 +94,71 @@ public class PostService : IPostService
 
     public List<PostDetailsViewModel> GetAllPosts(string userId)
     {
-        // TODO use dto and AutoMapper and make method async
-        return postRepository
+        var dtos = postRepository
             .All()
             .OrderByDescending(x => x.CreatedOn)
-            .Include(x => x.Creator)
-            .ThenInclude(x => x.ProfileImage)
-            .Include(x => x.Image)
-            .Include(x => x.Likes)
-            .Include(x => x.Comments)
-            .Include(x => x.Reposts)
-            .Include(x => x.TaggedPeople)
-            .Include(x => x.Repost)
-            .ThenInclude(x => x.Creator)
-            .ThenInclude(x => x.ProfileImage)
-            .Include(x => x.Repost)
-            .ThenInclude(x => x.Image)
-            .Include(x => x.Repost)
-            .ThenInclude(x => x.Likes)
-            .Include(x => x.Repost)
-            .ThenInclude(x => x.Comments)
-            .Include(x => x.Repost)
-            .ThenInclude(x => x.Reposts)
-            .Include(x => x.Repost)
-            .ThenInclude(x => x.TaggedPeople)
-            .ToList()
-            .Select(x => new PostDetailsViewModel
+            .Select(x => new PostDetailsDto
             {
                 PostId = x.Id,
-                CommentsCount = x.Comments.Count(),
+                CommentsCount = x.Comments.Count,
                 CreatedAgo = (int)((DateTime.UtcNow - x.CreatedOn).TotalMinutes),
-                CreatorImage = blobService.GetBlobUrlAsync(x.Creator.ProfileImage?.Id + x.Creator.ProfileImage?.ImageExtension, GlobalConstants.BlobPictures).GetAwaiter().GetResult(),
+                CreatorImageName = x.Creator.ProfileImage.Id + x.Creator.ProfileImage.ImageExtension,
                 CreatorName = x.Creator.FirstName + " " + x.Creator.LastName,
-                LikesCount = x.Likes.Count(),
+                LikesCount = x.Likes.Count,
                 PostMessage = x.Text,
                 RepostsCount = x.Reposts.Where(x => !x.IsDeleted).GroupBy(x => x.CreatorId).Count(),
-                PostImage = blobService.GetBlobUrlAsync(x.Image?.Id + x.Image?.ImageExtension, GlobalConstants.BlobPictures).GetAwaiter().GetResult(),
-                IsLikedByUser = x.Likes.Any(x => x.LikedById == userId),
+                PostImageName = x.Image.Id + x.Image.ImageExtension,
+                IsLikedByUser = x.Likes.Any(y => y.LikedById == userId),
                 Username = x.Creator.UserName,
                 Latitude = x.Latitude ?? x.Latitude,
                 Longitude = x.Longitude ?? x.Longitude,
                 LocationCity = x.LocationCity,
-                TaggedPeopleCount = x.TaggedPeople.Count(),
+                TaggedPeopleCount = x.TaggedPeople.Count,
                 PostType = PostType.Post.ToString(),
                 IsRepost = x.IsRepost,
                 IsUserCreator = x.CreatorId == userId,
-                Repost = !x.IsRepost ? null : new PostDetailsViewModel
+                Repost = !x.IsRepost ? null : new PostDetailsDto
                 {
                     PostId = x.Repost.Id,
-                    CommentsCount = x.Repost.Comments.Count(),
+                    CommentsCount = x.Repost.Comments.Count,
                     CreatedAgo = (int)((DateTime.UtcNow - x.Repost.CreatedOn).TotalMinutes),
-                    CreatorImage = blobService.GetBlobUrlAsync(x.Repost.Creator.ProfileImage?.Id + x.Repost.Creator.ProfileImage?.ImageExtension, GlobalConstants.BlobPictures).GetAwaiter().GetResult(),
+                    CreatorImageName = x.Repost.Creator.ProfileImage.Id + x.Repost.Creator.ProfileImage.ImageExtension,
                     CreatorName = x.Repost.Creator.FirstName + " " + x.Repost.Creator.LastName,
-                    LikesCount = x.Repost.Likes.Count(),
+                    LikesCount = x.Repost.Likes.Count,
                     PostMessage = x.Repost.Text,
-                    RepostsCount = x.Reposts.Where(x => !x.IsDeleted).GroupBy(x => x.CreatorId).Count(),
-                    PostImage = blobService.GetBlobUrlAsync(x.Repost.Image?.Id + x.Repost.Image?.ImageExtension, GlobalConstants.BlobPictures).GetAwaiter().GetResult(),
+                    RepostsCount = x.Reposts.Where(y => !y.IsDeleted).GroupBy(y => y.CreatorId).Count(),
+                    PostImageName = x.Repost.Image.Id + x.Repost.Image.ImageExtension,
                     IsLikedByUser = x.Repost.Likes.Any(y => y.LikedById == userId),
                     Username = x.Repost.Creator.UserName,
                     Latitude = x.Repost.Latitude ?? x.Repost.Latitude,
                     Longitude = x.Repost.Longitude ?? x.Repost.Longitude,
                     LocationCity = x.Repost.LocationCity,
-                    TaggedPeopleCount = x.Repost.TaggedPeople.Count(),
+                    TaggedPeopleCount = x.Repost.TaggedPeople.Count,
                     PostType = PostType.Post.ToString(),
                 }
             })
-            .ToList();
+        .ToList();
+        
+        //TODO extract a method for it and reuse it
+        var viewModel = dtos.Select(x =>
+        {
+            var mapped = mapper.Map<PostDetailsViewModel>(x);
+            mapped.Repost = mapper.Map<PostDetailsViewModel>(x.Repost);
+            mapped.CreatorImage = blobService.GetBlobUrlAsync(x.CreatorImageName, GlobalConstants.BlobPictures)
+                .GetAwaiter().GetResult();
+            mapped.PostImage = blobService.GetBlobUrlAsync(x.PostImageName, GlobalConstants.BlobPictures)
+                .GetAwaiter().GetResult();
+            mapped.Repost.PostImage = blobService
+                .GetBlobUrlAsync(x.Repost.PostImageName, GlobalConstants.BlobPictures)
+                .GetAwaiter().GetResult();
+            mapped.Repost.CreatorImage = blobService
+                .GetBlobUrlAsync(x.Repost.CreatorImageName, GlobalConstants.BlobPictures)
+                .GetAwaiter().GetResult();
+
+            return mapped;
+        }).ToList();
+
+        return viewModel;
     }
 
     public async Task<int?> LikePostAsync(string postId, ApplicationUser user)
@@ -190,90 +195,101 @@ public class PostService : IPostService
         return post.Likes.Count;
     }
 
-    public List<PersonListPopupViewModel> GetPeopleLikes(string postId, int take, int skip)
+    public async Task<List<PersonListPopupViewModel>> GetPeopleLikesAsync(string postId, int take, int skip)
     {
-        // TODO use dto and AutoMapper and make method async
-        var peopleLiked = postLikeRepository
+        // TODO extract (similar with GetTaggedPeopleAsync)
+        var peopleLiked = await postLikeRepository
             .AllAsNoTracking()
-            .Include(x => x.LikedBy)
-            .ThenInclude(x => x.ProfileImage)
             .Where(x => x.PostId == postId)
             .OrderByDescending(x => x.CreatedOn)
             .Skip(skip)
             .Take(take)
-            .ToList()
-            .Select(x => new PersonListPopupViewModel
+            .Select(x => new PersonPopUpDto
             {
-                Name = x.LikedBy.FirstName + " " + x.LikedBy.LastName,
-                Username = x.LikedBy.UserName,
-                ProfileImage = blobService.GetBlobUrlAsync(x.LikedBy?.ProfileImage?.Id + x.LikedBy?.ProfileImage?.ImageExtension, GlobalConstants.BlobPictures).GetAwaiter().GetResult(),
+                UserName = x.LikedBy.UserName,
+                FirstName = x.LikedBy.FirstName,
+                LastName = x.LikedBy.LastName,
+                ProfilePictureName = x.LikedBy.ProfileImage.Id + x.LikedBy.ProfileImage.ImageExtension,
             })
-            .ToList();
+            .ToListAsync();
 
-        return peopleLiked;
+        var viewModel = peopleLiked.Select(x =>
+        {
+            var model = mapper.Map<PersonListPopupViewModel>(x);
+            model.ProfileImage = blobService.GetBlobUrlAsync(x.ProfilePictureName, GlobalConstants.BlobPictures)
+                .GetAwaiter().GetResult();
+            return model;
+        }).ToList();
+        
+        return viewModel;
     }
 
-    public List<PersonListPopupViewModel> GetTaggedPeople(string postId, int take, int skip)
+    public async Task<List<PersonListPopupViewModel>> GetTaggedPeopleAsync(string postId, int take, int skip)
     {
-        // TODO use dto and AutoMapper and make method async
-        return postTaggedRepository
+        var dtos = await postTaggedRepository
             .AllAsNoTracking()
             .Where(x => x.PostId == postId)
-            .Include(x => x.User)
-            .ThenInclude(x => x.ProfileImage)
             .OrderByDescending(x => x.CreatedOn)
             .Skip(skip)
             .Take(take)
-            .ToList()
-            .Select(x => new PersonListPopupViewModel
+            .Select(x => new PersonPopUpDto
             {
-                Name = x.User.FirstName + " " + x.User.LastName,
-                Username = x.User.UserName,
-                ProfileImage = blobService.GetBlobUrlAsync(x.User?.ProfileImage?.Id + x.User?.ProfileImage?.ImageExtension, GlobalConstants.BlobPictures).GetAwaiter().GetResult(),
+                UserName = x.User.UserName,
+                FirstName = x.User.FirstName,
+                LastName = x.User.LastName,
+                ProfilePictureName = x.User.ProfileImage.Id + x.User.ProfileImage.ImageExtension,
             })
-            .ToList();
+            .ToListAsync();
+
+        var viewModel = dtos.Select(x =>
+        {
+            var model = mapper.Map<PersonListPopupViewModel>(x);
+            model.ProfileImage = blobService.GetBlobUrlAsync(x.ProfilePictureName, GlobalConstants.BlobPictures)
+                .GetAwaiter().GetResult();
+            return model;
+        }).ToList();
+
+        return viewModel;
     }
 
     public async Task<PostDetailsViewModel> GetPostByImageIdAsync(string imageId, string userId)
     {
-        // TODO create dto and use AutoMapper
-        var post = await postRepository.AllAsNoTracking()
-            .Include(x => x.Creator)
-            .ThenInclude(x => x.ProfileImage)
-            .Include(x => x.Image)
-            .Include(x => x.Likes)
-            .Include(x => x.Comments)
-            .Include(x => x.Reposts)
-            .Include(x => x.TaggedPeople)
-            .FirstOrDefaultAsync(x => x.Image.Id == imageId && x.IsRepost == false);
-            
-        if (post == null)
+        var dto = await postRepository.AllAsNoTracking()
+            .Where(x => x.IsRepost == false && x.Image.Id == imageId)
+            .Select(x => new PostDetailsDto
+            {
+                PostId = x.Id,
+                CommentsCount = x.Comments.Count,
+                CreatedAgo = (int)((DateTime.UtcNow - x.CreatedOn).TotalMinutes),
+                CreatorImageName = x.Creator.ProfileImage.Id + x.Creator.ProfileImage.ImageExtension,
+                CreatorName = x.Creator.FirstName + " " + x.Creator.LastName,
+                LikesCount = x.Likes.Count,
+                PostMessage = x.Text,
+                RepostsCount = x.Reposts.GroupBy(y => y.CreatorId).Count(),
+                PostImageName = x.Image.Id + x.Image.ImageExtension,
+                IsLikedByUser = x.Likes.Any(y => y.LikedById == userId),
+                Username = x.Creator.UserName,
+                Latitude = x.Latitude,
+                Longitude = x.Longitude,
+                LocationCity = x.LocationCity,
+                TaggedPeopleCount = x.TaggedPeople.Count,
+                PostType = PostType.Post.ToString(),
+                IsRepost = false
+            })
+            .FirstOrDefaultAsync();
+        
+        if (dto == null)
         {
             return null;
         }
 
-        var postDetailsViewModel = new PostDetailsViewModel
-        {
-            PostId = post.Id,
-            CommentsCount = post.Comments.Count(),
-            CreatedAgo = (int)((DateTime.UtcNow - post.CreatedOn).TotalMinutes),
-            CreatorImage = blobService.GetBlobUrlAsync(post.Creator.ProfileImage?.Id + post.Creator.ProfileImage?.ImageExtension, GlobalConstants.BlobPictures).GetAwaiter().GetResult(),
-            CreatorName = post.Creator.FirstName + " " + post.Creator.LastName,
-            LikesCount = post.Likes.Count(),
-            PostMessage = post.Text,
-            RepostsCount = post.Reposts.Count(x => !x.IsDeleted),
-            PostImage = blobService.GetBlobUrlAsync(post.Image?.Id + post.Image?.ImageExtension, GlobalConstants.BlobPictures).GetAwaiter().GetResult(),
-            IsLikedByUser = post.Likes.Any(x => x.LikedById == userId),
-            Username = post.Creator.UserName,
-            Latitude = post.Latitude ?? post.Latitude,
-            Longitude = post.Longitude ?? post.Longitude,
-            LocationCity = post.LocationCity,
-            TaggedPeopleCount = post.TaggedPeople.Count(),
-            PostType = PostType.Post.ToString(),
-            IsRepost = false,
-        };
+        var viewModel = mapper.Map<PostDetailsViewModel>(dto);
+        viewModel.CreatorImage = blobService.GetBlobUrlAsync(dto.CreatorImageName, GlobalConstants.BlobPictures)
+            .GetAwaiter().GetResult();
+        viewModel.PostImage = blobService.GetBlobUrlAsync(dto.PostImageName, GlobalConstants.BlobPictures)
+            .GetAwaiter().GetResult();
 
-        return postDetailsViewModel;
+        return viewModel;
     }
 
     public async Task<int> RepostAsync(string id, string text, string userId)
@@ -300,30 +316,38 @@ public class PostService : IPostService
             .Count();
     }
 
-    public List<PersonListPopupViewModel> GetPeopleReposts(string postId, int take, int skip)
+    public async Task<List<PersonListPopupViewModel>> GetPeopleRepostsAsync(string postId, int take, int skip)
     {
-        // TODO use dto and AutoMapper and make method async
-        return postRepository
+        var data = await postRepository
             .AllAsNoTracking()
-            .Include(x => x.Reposts)
-            .ThenInclude(x => x.Creator)
+            .Include(x => x.Creator)
             .ThenInclude(x => x.ProfileImage)
-            .FirstOrDefault(x => x.Id == postId)?
-            .Reposts
-            .Where(x => !x.IsDeleted)
+            .Where(x => x.RepostId == postId && x.IsRepost)
             .GroupBy(x => x.CreatorId)
+            .ToListAsync();
+
+        var dtos = data
             .Select(x => x.First())
             .OrderByDescending(x => x.CreatedOn)
             .Skip(skip)
             .Take(take)
-            .ToList()
-            .Select(x => new PersonListPopupViewModel
+            .Select(x => new PersonPopUpDto
             {
-                Name = x.Creator.FirstName + " " + x.Creator.LastName,
-                Username = x.Creator.UserName,
-                ProfileImage = blobService.GetBlobUrlAsync(x.Creator?.ProfileImage?.Id + x.Creator?.ProfileImage?.ImageExtension, GlobalConstants.BlobPictures).GetAwaiter().GetResult(),
-            })
-            .ToList();
+                UserName = x.Creator.UserName,
+                FirstName = x.Creator.FirstName,
+                LastName = x.Creator.LastName,
+                ProfilePictureName = x.Creator.ProfileImage.Id + x.Creator.ProfileImage.ImageExtension
+            });
+
+        var viewModel = dtos.Select(x =>
+            {
+                var model = mapper.Map<PersonListPopupViewModel>(x);
+                model.ProfileImage = blobService.GetBlobUrlAsync(x.ProfilePictureName, GlobalConstants.BlobPictures)
+                    .GetAwaiter().GetResult();
+                return model;
+            }).ToList();
+
+        return viewModel;
     }
 
     public async Task<bool> DeletePostAsync(string postId, string userId)
@@ -352,9 +376,8 @@ public class PostService : IPostService
 
     public async Task<List<PostDetailsViewModel>> GetFeedPosts(ApplicationUser user, bool isProfile, string userName, int take, int skip, List<string> ids)
     {
-        var posts = new List<PostDetailsViewModel>();
+        var posts = new List<PostDetailsDto>();
 
-        // TODO use dto and AutoMapper
         if (isProfile)
         {
             posts.AddRange(await postRepository
@@ -363,17 +386,17 @@ public class PostService : IPostService
                 .Where(x => !ids.Contains(x.Id))
                 .OrderByDescending(x => x.CreatedOn)
                 .Take(take)
-                .Select(x => new PostDetailsViewModel
+                .Select(x => new PostDetailsDto
                 {
                     PostId = x.Id,
                     CommentsCount = x.Comments.Count,
                     CreatedAgo = (int)(DateTime.UtcNow - x.CreatedOn).TotalMinutes,
-                    CreatorImage = x.Creator.ProfileImage.Id + x.Creator.ProfileImage.ImageExtension,
+                    CreatorImageName = x.Creator.ProfileImage.Id + x.Creator.ProfileImage.ImageExtension,
                     CreatorName = x.Creator.FirstName + " " + x.Creator.LastName,
                     LikesCount = x.Likes.Count,
                     PostMessage = x.Text,
                     RepostsCount = x.Reposts.Where(y => !y.IsDeleted).Select(y => y.CreatorId).Distinct().Count(),
-                    PostImage = x.Image.Id + x.Image.ImageExtension,
+                    PostImageName = x.Image.Id + x.Image.ImageExtension,
                     IsLikedByUser = user != null && x.Likes.Any(y => y.LikedById == user.Id),
                     Username = x.Creator.UserName,
                     Latitude = x.Latitude,
@@ -382,23 +405,24 @@ public class PostService : IPostService
                     TaggedPeopleCount = x.TaggedPeople.Count,
                     IsRepost = x.IsRepost,
                     IsUserCreator = user != null && x.CreatorId == user.Id,
-                    Repost = !x.IsRepost ? null : new PostDetailsViewModel
+                    PostType = PostType.Post.ToString(),
+                    Repost = !x.IsRepost ? null : new PostDetailsDto
                     {
                         PostId = x.Repost.Id,
                         CommentsCount = x.Repost.Comments.Count,
                         CreatedAgo = (int)(DateTime.UtcNow - x.Repost.CreatedOn).TotalMinutes,
-                        CreatorImage = x.Repost.Creator.ProfileImage.Id + x.Repost.Creator.ProfileImage.ImageExtension,
+                        CreatorImageName = x.Repost.Creator.ProfileImage.Id + x.Repost.Creator.ProfileImage.ImageExtension,
                         CreatorName = x.Repost.Creator.FirstName + " " + x.Repost.Creator.LastName,
                         LikesCount = x.Repost.Likes.Count,
                         PostMessage = x.Repost.Text,
                         RepostsCount = x.Reposts.Where(y => !y.IsDeleted).Select(y => y.CreatorId).Distinct().Count(),
-                        PostImage = x.Repost.Image.Id + x.Repost.Image.ImageExtension,
+                        PostImageName = x.Repost.Image.Id + x.Repost.Image.ImageExtension,
                         IsLikedByUser = user != null && x.Repost.Likes.Any(y => y.LikedById == user.Id),
                         Username = x.Repost.Creator.UserName,
                         Latitude = x.Repost.Latitude ?? x.Repost.Latitude,
                         Longitude = x.Repost.Longitude ?? x.Repost.Longitude,
                         LocationCity = x.Repost.LocationCity,
-                        TaggedPeopleCount = x.Repost.TaggedPeople.Count
+                        TaggedPeopleCount = x.Repost.TaggedPeople.Count,
                     }
                 })
                 .ToListAsync());
@@ -410,17 +434,17 @@ public class PostService : IPostService
                 .Where(x => user == null || x.CreatorId != user.Id)
                 .Where(x => !ids.Contains(x.Id))
                 .Take(take)
-                .Select(x => new PostDetailsViewModel
+                .Select(x => new PostDetailsDto
                 {
                     PostId = x.Id,
                     CommentsCount = x.Comments.Count,
                     CreatedAgo = (int)(DateTime.UtcNow - x.CreatedOn).TotalMinutes,
-                    CreatorImage = x.Creator.ProfileImage.Id + x.Creator.ProfileImage.ImageExtension,
+                    CreatorImageName = x.Creator.ProfileImage.Id + x.Creator.ProfileImage.ImageExtension,
                     CreatorName = x.Creator.FirstName + " " + x.Creator.LastName,
                     LikesCount = x.Likes.Count,
                     PostMessage = x.Text,
                     RepostsCount = x.Reposts.Where(y => !y.IsDeleted).Select(y => y.CreatorId).Distinct().Count(),
-                    PostImage = x.Image.Id + x.Image.ImageExtension,
+                    PostImageName = x.Image.Id + x.Image.ImageExtension,
                     IsLikedByUser = x.Likes.Any(y => y.LikedById == user.Id),
                     Username = x.Creator.UserName,
                     Latitude = x.Latitude,
@@ -429,17 +453,18 @@ public class PostService : IPostService
                     TaggedPeopleCount = x.TaggedPeople.Count,
                     IsRepost = x.IsRepost,
                     IsUserCreator = x.CreatorId == user.Id,
-                    Repost = !x.IsRepost ? null : new PostDetailsViewModel
+                    PostType = PostType.Post.ToString(),
+                    Repost = !x.IsRepost ? null : new PostDetailsDto
                     {
                         PostId = x.Repost.Id,
                         CommentsCount = x.Repost.Comments.Count,
                         CreatedAgo = (int)(DateTime.UtcNow - x.Repost.CreatedOn).TotalMinutes,
-                        CreatorImage = x.Repost.Creator.ProfileImage.Id + x.Repost.Creator.ProfileImage.ImageExtension,
+                        CreatorImageName = x.Repost.Creator.ProfileImage.Id + x.Repost.Creator.ProfileImage.ImageExtension,
                         CreatorName = x.Repost.Creator.FirstName + " " + x.Repost.Creator.LastName,
                         LikesCount = x.Repost.Likes.Count,
                         PostMessage = x.Repost.Text,
                         RepostsCount = x.Reposts.Where(y => !y.IsDeleted).Select(y => y.CreatorId).Distinct().Count(),
-                        PostImage = x.Repost.Image.Id + x.Repost.Image.ImageExtension,
+                        PostImageName = x.Repost.Image.Id + x.Repost.Image.ImageExtension,
                         IsLikedByUser = x.Repost.Likes.Any(y => y.LikedById == user.Id),
                         Username = x.Repost.Creator.UserName,
                         Latitude = x.Repost.Latitude,
@@ -450,49 +475,28 @@ public class PostService : IPostService
                 })
                 .ToListAsync());
         }
-        var toReturn = posts.Select(x => new PostDetailsViewModel
-            {
-                PostId = x.PostId,
-                CommentsCount = x.CommentsCount,
-                CreatedAgo = x.CreatedAgo,
-                CreatorImage = blobService.GetBlobUrlAsync(x.CreatorImage, GlobalConstants.BlobPictures).GetAwaiter().GetResult(),
-                CreatorName = x.CreatorName,
-                LikesCount = x.LikesCount,
-                PostMessage = x.PostMessage,
-                RepostsCount = x.RepostsCount,
-                PostImage = blobService.GetBlobUrlAsync(x.PostImage, GlobalConstants.BlobPictures).GetAwaiter().GetResult(),
-                IsLikedByUser = x.IsLikedByUser,
-                Username = x.Username,
-                Latitude = x.Latitude,
-                Longitude = x.Longitude,
-                LocationCity = x.LocationCity,
-                TaggedPeopleCount = x.TaggedPeopleCount,
-                PostType = PostType.Post.ToString(),
-                IsRepost = x.IsRepost,
-                IsUserCreator = x.IsUserCreator,
-                Repost = !x.IsRepost ? null : new PostDetailsViewModel
-                {
-                    PostId = x.Repost.PostId,
-                    CommentsCount = x.Repost.CommentsCount,
-                    CreatedAgo = x.Repost.CreatedAgo,
-                    CreatorImage = blobService.GetBlobUrlAsync(x.Repost.CreatorImage, GlobalConstants.BlobPictures).GetAwaiter().GetResult(),
-                    CreatorName = x.Repost.CreatorName,
-                    LikesCount = x.Repost.LikesCount,
-                    PostMessage = x.Repost.PostMessage,
-                    RepostsCount = x.RepostsCount,
-                    PostImage = blobService.GetBlobUrlAsync(x.Repost.PostImage, GlobalConstants.BlobPictures).GetAwaiter().GetResult(),
-                    IsLikedByUser = x.Repost.IsLikedByUser,
-                    Username = x.Repost.Username,
-                    Latitude = x.Repost.Latitude,
-                    Longitude = x.Repost.Longitude,
-                    LocationCity = x.Repost.LocationCity,
-                    TaggedPeopleCount = x.Repost.TaggedPeopleCount,
-                    PostType = PostType.Post.ToString(),
-                }
-            })
-            .ToList();
 
-        return toReturn;
+        // TODO extract somehow
+        return posts.Select(x =>
+        {
+            var mapped = mapper.Map<PostDetailsViewModel>(x);
+            if (x.Repost != null)
+            {
+                mapped.Repost = mapper.Map<PostDetailsViewModel>(x.Repost);
+                mapped.Repost.PostImage = blobService
+                    .GetBlobUrlAsync(x.Repost.PostImageName, GlobalConstants.BlobPictures)
+                    .GetAwaiter().GetResult();
+                mapped.Repost.CreatorImage = blobService
+                    .GetBlobUrlAsync(x.Repost.CreatorImageName, GlobalConstants.BlobPictures)
+                    .GetAwaiter().GetResult();
+            }
+            mapped.CreatorImage = blobService.GetBlobUrlAsync(x.CreatorImageName, GlobalConstants.BlobPictures)
+                .GetAwaiter().GetResult();
+            mapped.PostImage = blobService.GetBlobUrlAsync(x.PostImageName, GlobalConstants.BlobPictures)
+                .GetAwaiter().GetResult();
+
+            return mapped;
+        }).ToList();
     }
 
 }
