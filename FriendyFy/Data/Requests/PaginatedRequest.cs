@@ -1,8 +1,7 @@
-﻿namespace FriendyFy.Data.Requests
+﻿namespace FriendyFy.Data.Requests;
+
+public class PaginatedRequest
 {
-    public class PaginatedRequest
-    {
-        public int Take { get; set; }
-        public int Skip { get; set; }
-    }
+    public int Take { get; set; }
+    public int Skip { get; set; }
 }
