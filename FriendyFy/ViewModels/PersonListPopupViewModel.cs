@@ -1,11 +1,6 @@
-﻿using System.ComponentModel;
-using AutoMapper;
-using FriendyFy.BlobStorage;
-using FriendyFy.Common;
-using FriendyFy.Data;
+﻿using AutoMapper;
 using FriendyFy.Data.Dtos;
 using FriendyFy.Mapping;
-using Microsoft.Extensions.DependencyInjection;
 
 namespace FriendyFy.ViewModels;
 

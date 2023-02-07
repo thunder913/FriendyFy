@@ -15,11 +15,11 @@ public class GeolocationService : IGeolocationService
     {
         this.configuration = configuration;
     }
-    public string GetUserLocation(double latitude, double longiitude)
+    public string GetUserLocation(double latitude, double longitude)
     {
         WebClient webClient = new WebClient();
         webClient.Headers.Add("user-agent", "Mozilla/4.0 (compatible; MSIE 6.0; Windows NT 5.2; .NET CLR 1.0.3705;)");
-        var url = $"https://maps.googleapis.com/maps/api/geocode/json?latlng={latitude},{longiitude}&key={configuration["GoogleMapsApiKey"]}";
+        var url = $"https://maps.googleapis.com/maps/api/geocode/json?latlng={latitude},{longitude}&key={configuration["GoogleMapsApiKey"]}";
         var jsonData = webClient.DownloadData(url);
 
         var googleObject = JsonSerializer.Deserialize<Root>(jsonData);

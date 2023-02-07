@@ -1,5 +1,4 @@
-﻿using System.Collections.Specialized;
-using System.Threading.Tasks;
+﻿using System.Threading.Tasks;
 using FriendyFy.Data.Requests;
 using FriendyFy.Hubs;
 using FriendyFy.Services.Contracts;

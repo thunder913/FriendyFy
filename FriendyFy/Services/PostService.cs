@@ -16,7 +16,6 @@ using FriendyFy.ViewModels;
 using Microsoft.EntityFrameworkCore;
 using ViewModels;
 using static System.Decimal;
-using static IdentityModel.OidcConstants;
 
 namespace FriendyFy.Services;
 
