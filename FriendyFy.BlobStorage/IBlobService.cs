@@ -11,5 +11,5 @@ public interface IBlobService
     public Task UploadContentBlobAsync(string content, string fileName, string blob);
     public Task DeleteBlobAsync(string blobName, string blob);
     public Task UploadBase64StringAsync(string content, string fileName, string blob);
-    public Task<string> GetBlobUrlAsync(string name, string blob);
+    public string GetBlobUrl(string name, string blob);
 }

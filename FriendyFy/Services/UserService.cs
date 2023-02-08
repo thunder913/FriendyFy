@@ -143,7 +143,7 @@ public class UserService : IUserService
         var toReturn = images.Select(x => new DisplayImageViewModel
         {
             ImageId = x.ImageId,
-            ImageUrl = blobService.GetBlobUrlAsync(x.ImageInUrl, GlobalConstants.BlobPictures).GetAwaiter().GetResult(),
+            ImageUrl = blobService.GetBlobUrl(x.ImageInUrl, GlobalConstants.BlobPictures),
         }).ToList();
 
         return toReturn;
@@ -169,7 +169,7 @@ public class UserService : IUserService
         var toReturn = users.Select(x => new SearchResultViewModel
         {
             Id = x.Id,
-            ImageUrl = blobService.GetBlobUrlAsync(x.Image, GlobalConstants.BlobPictures).GetAwaiter().GetResult(),
+            ImageUrl = blobService.GetBlobUrl(x.Image, GlobalConstants.BlobPictures),
             Name = x.Name,
             Type = SearchResultType.profile.ToString()
         }).ToList();
@@ -211,7 +211,7 @@ public class UserService : IUserService
         {
             EventsTogether = x.EventsTogether,
             Name = x.Name,
-            ProfilePhoto = blobService.GetBlobUrlAsync(x.ProfilePhoto, GlobalConstants.BlobPictures).GetAwaiter().GetResult(),
+            ProfilePhoto = blobService.GetBlobUrl(x.ProfilePhoto, GlobalConstants.BlobPictures),
             Username = x.Username
         }).ToList();
     }
@@ -247,8 +247,8 @@ public class UserService : IUserService
             })
             .FirstOrDefaultAsync();
 
-        viewmodel.ProfilePhoto = blobService.GetBlobUrlAsync(user.ProfileImage?.Id + user.ProfileImage?.ImageExtension, GlobalConstants.BlobPictures).GetAwaiter().GetResult();
-        viewmodel.CoverPhoto = blobService.GetBlobUrlAsync(user.CoverImage?.Id + user.CoverImage?.ImageExtension, GlobalConstants.BlobPictures).GetAwaiter().GetResult();
+        viewmodel.ProfilePhoto = blobService.GetBlobUrl(user.ProfileImage?.Id + user.ProfileImage?.ImageExtension, GlobalConstants.BlobPictures);
+        viewmodel.CoverPhoto = blobService.GetBlobUrl(user.CoverImage?.Id + user.CoverImage?.ImageExtension, GlobalConstants.BlobPictures);
 
         return viewmodel;
     }
@@ -316,7 +316,7 @@ public class UserService : IUserService
         var toReturn = users.Select(x => new SearchPageResultViewModel
         {
             Id = x.Id,
-            ImageUrl = blobService.GetBlobUrlAsync(x.Image, GlobalConstants.BlobPictures).GetAwaiter().GetResult(),
+            ImageUrl = blobService.GetBlobUrl(x.Image, GlobalConstants.BlobPictures),
             Name = x.Name,
             Type = SearchResultType.profile.ToString(),
             MutualFriends = x.MutualFriends,
@@ -341,8 +341,7 @@ public class UserService : IUserService
         {
             Name = x.Name,
             Username = x.Username,
-            ProfileImage = blobService.GetBlobUrlAsync(x.ProfileImage, GlobalConstants.BlobPictures).GetAwaiter()
-                .GetResult()
+            ProfileImage = blobService.GetBlobUrl(x.ProfileImage, GlobalConstants.BlobPictures)
         }).ToList();
     }
 }

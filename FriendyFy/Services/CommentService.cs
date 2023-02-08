@@ -76,7 +76,7 @@ public class CommentService : ICommentService
                     var dto = await GetCommentViewModelByIdAsync(postComment.Id, postType);
 
                     viewModel = mapper.Map<PostCommentViewModel>(dto);
-                    viewModel.CommentorPicture = await blobService.GetBlobUrlAsync(dto.ProfilePicture, GlobalConstants.BlobPictures);
+                    viewModel.CommentorPicture = blobService.GetBlobUrl(dto.ProfilePicture, GlobalConstants.BlobPictures);
                     break;
                 }
             case PostType.Event:
@@ -104,7 +104,7 @@ public class CommentService : ICommentService
                     var dto = await GetCommentViewModelByIdAsync(eventComment.Id, postType);
 
                     viewModel = mapper.Map<PostCommentViewModel>(dto);
-                    viewModel.CommentorPicture = await blobService.GetBlobUrlAsync(dto.ProfilePicture, GlobalConstants.BlobPictures);
+                    viewModel.CommentorPicture = blobService.GetBlobUrl(dto.ProfilePicture, GlobalConstants.BlobPictures);
                     break;
                 }
             default:
@@ -125,7 +125,8 @@ public class CommentService : ICommentService
                 .Include(x => x.Comments)
                 .ThenInclude(x => x.CommentLikes)
                 .FirstOrDefault(x => x.Id == postId)?
-                .Comments.OrderByDescending(x => x.CreatedOn)
+                .Comments
+                .OrderByDescending(x => x.CreatedOn)
                 .Skip(skip)
                 .Take(take)
                 .Select(x => new PostCommentViewModel
@@ -133,15 +134,13 @@ public class CommentService : ICommentService
                     CommentorUsername = x.CommentedBy.UserName,
                     CommentorName = x.CommentedBy.FirstName + " " + x.CommentedBy.LastName,
                     CommentorPicture =
-                        blobService.GetBlobUrlAsync(
+                        blobService.GetBlobUrl(
                                 x.CommentedBy.ProfileImage?.Id + x.CommentedBy.ProfileImage?.ImageExtension,
-                                GlobalConstants.BlobPictures)
-                            .GetAwaiter()
-                            .GetResult(),
+                                GlobalConstants.BlobPictures),
                     CommentText = x.Text,
-                    CreatedAgo = (int)((DateTime.UtcNow - x.CreatedOn).TotalMinutes),
+                    CreatedAgo = (int)(DateTime.UtcNow - x.CreatedOn).TotalMinutes,
                     IsLikedByUser = x.CommentLikes.Any(y => y.LikedById == userId),
-                    LikesCount = x.CommentLikes.Count(),
+                    LikesCount = x.CommentLikes.Count,
                     Id = x.Id,
                     PostType = postType.ToString(),
                 })
@@ -161,15 +160,13 @@ public class CommentService : ICommentService
                     CommentorUsername = x.CommentedBy.UserName,
                     CommentorName = x.CommentedBy.FirstName + " " + x.CommentedBy.LastName,
                     CommentorPicture =
-                        blobService.GetBlobUrlAsync(
+                        blobService.GetBlobUrl(
                                 x.CommentedBy.ProfileImage?.Id + x.CommentedBy.ProfileImage?.ImageExtension,
-                                GlobalConstants.BlobPictures)
-                            .GetAwaiter()
-                            .GetResult(),
+                                GlobalConstants.BlobPictures),
                     CommentText = x.Text,
-                    CreatedAgo = (int)((DateTime.UtcNow - x.CreatedOn).TotalMinutes),
+                    CreatedAgo = (int)(DateTime.UtcNow - x.CreatedOn).TotalMinutes,
                     IsLikedByUser = x.CommentLikes.Any(y => y.LikedById == userId),
-                    LikesCount = x.CommentLikes.Count(),
+                    LikesCount = x.CommentLikes.Count,
                     Id = x.Id,
                     PostType = postType.ToString(),
                 })
@@ -262,12 +259,14 @@ public class CommentService : ICommentService
             })
             .ToListAsync();
 
-        var viewModel = peopleLikedDto.Select(x =>
-        {
-            var viewModel = mapper.Map<PersonPopUpDto, PersonListPopupViewModel>(x);
-            viewModel.ProfileImage = blobService.GetBlobUrlAsync(x.ProfilePictureName, GlobalConstants.BlobPictures).GetAwaiter().GetResult();
-            return viewModel;
-        }).ToList();
+        var viewModel = peopleLikedDto
+            .Select(x =>
+            {
+                var viewModel = mapper.Map<PersonPopUpDto, PersonListPopupViewModel>(x);
+                viewModel.ProfileImage = blobService.GetBlobUrl(x.ProfilePictureName, GlobalConstants.BlobPictures);
+                return viewModel;
+            })
+            .ToList();
 
         return viewModel;
     }

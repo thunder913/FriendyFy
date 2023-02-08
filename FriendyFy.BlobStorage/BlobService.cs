@@ -77,13 +77,13 @@ public class BlobService : IBlobService
         await blobClient.UploadAsync(filePath, new BlobHttpHeaders { ContentType = filePath.GetContentType() });
     }
         
-    public Task<string> GetBlobUrlAsync(string name, string blob)
+    public string GetBlobUrl(string name, string blob)
     {
         if (string.IsNullOrWhiteSpace(name))
         {
             name = "defaultPicture.jpg";
         }
 
-        return Task.FromResult(blobServiceClient.Uri + blob + "/" + name);
+        return blobServiceClient.Uri + blob + "/" + name;
     }
 }

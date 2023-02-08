@@ -139,8 +139,7 @@ public class PostService : IPostService
         .ToList();
 
         var viewModel = dtos
-            .Select(async x => await MapToPostViewModelAsync(x))
-            .Select(x => x.Result)
+            .Select(MapToPostViewModel)
             .ToList();
 
         return viewModel;
@@ -198,8 +197,7 @@ public class PostService : IPostService
             .ToListAsync();
 
         var viewModel = peopleLiked
-            .Select(async x => await MapToPersonPopUpAsync(x))
-            .Select(x => x.Result)
+            .Select(MapToPersonPopUp)
             .ToList();
 
         return viewModel;
@@ -223,8 +221,7 @@ public class PostService : IPostService
             .ToListAsync();
 
         var viewModel = dtos
-            .Select(async x => await MapToPersonPopUpAsync(x))
-            .Select(x => x.Result)
+            .Select(MapToPersonPopUp)
             .ToList();
 
         return viewModel;
@@ -262,8 +259,8 @@ public class PostService : IPostService
         }
 
         var viewModel = mapper.Map<PostDetailsViewModel>(dto);
-        viewModel.CreatorImage = await blobService.GetBlobUrlAsync(dto.CreatorImageName, GlobalConstants.BlobPictures);
-        viewModel.PostImage = await blobService.GetBlobUrlAsync(dto.PostImageName, GlobalConstants.BlobPictures);
+        viewModel.CreatorImage = blobService.GetBlobUrl(dto.CreatorImageName, GlobalConstants.BlobPictures);
+        viewModel.PostImage = blobService.GetBlobUrl(dto.PostImageName, GlobalConstants.BlobPictures);
 
         return viewModel;
     }
@@ -317,8 +314,7 @@ public class PostService : IPostService
             .ToList();
 
         var viewModel = dtos
-            .Select(async x => await MapToPersonPopUpAsync(x))
-            .Select(x => x.Result)
+            .Select(MapToPersonPopUp)
             .ToList();
 
         return viewModel;
@@ -452,33 +448,32 @@ public class PostService : IPostService
 
         return
             posts
-                .Select(async x => await MapToPostViewModelAsync(x))
-                .Select(x => x.Result)
+                .Select(MapToPostViewModel)
                 .ToList();
     }
 
 
-    private async Task<PostDetailsViewModel> MapToPostViewModelAsync(PostDetailsDto post)
+    private PostDetailsViewModel MapToPostViewModel(PostDetailsDto post)
     {
         var mapped = mapper.Map<PostDetailsViewModel>(post);
 
         if (post.Repost != null)
         {
             mapped.Repost = mapper.Map<PostDetailsViewModel>(post.Repost);
-            mapped.Repost.PostImage = await blobService.GetBlobUrlAsync(post.Repost.PostImageName, GlobalConstants.BlobPictures);
-            mapped.Repost.CreatorImage = await blobService.GetBlobUrlAsync(post.Repost.CreatorImageName, GlobalConstants.BlobPictures);
+            mapped.Repost.PostImage = blobService.GetBlobUrl(post.Repost.PostImageName, GlobalConstants.BlobPictures);
+            mapped.Repost.CreatorImage = blobService.GetBlobUrl(post.Repost.CreatorImageName, GlobalConstants.BlobPictures);
         }
 
-        mapped.CreatorImage = await blobService.GetBlobUrlAsync(post.CreatorImageName, GlobalConstants.BlobPictures);
-        mapped.PostImage = await blobService.GetBlobUrlAsync(post.PostImageName, GlobalConstants.BlobPictures);
+        mapped.CreatorImage = blobService.GetBlobUrl(post.CreatorImageName, GlobalConstants.BlobPictures);
+        mapped.PostImage = blobService.GetBlobUrl(post.PostImageName, GlobalConstants.BlobPictures);
 
         return mapped;
     }
 
-    private async Task<PersonListPopupViewModel> MapToPersonPopUpAsync(PersonPopUpDto dto)
+    private PersonListPopupViewModel MapToPersonPopUp(PersonPopUpDto dto)
     {
         var viewModel = mapper.Map<PersonListPopupViewModel>(dto);
-        viewModel.ProfileImage = await blobService.GetBlobUrlAsync(dto.ProfilePictureName, GlobalConstants.BlobPictures);
+        viewModel.ProfileImage = blobService.GetBlobUrl(dto.ProfilePictureName, GlobalConstants.BlobPictures);
         return viewModel;
     }
 }

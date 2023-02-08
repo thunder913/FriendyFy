@@ -129,16 +129,16 @@ public class EventService : IEventService
         var toReturn = mapper.Map<EventPageViewModel>(eventWithId);
         foreach (var item in eventWithId.UserImages.Take(8))
         {
-            toReturn.UserImages.Add(await blobService.GetBlobUrlAsync(item, GlobalConstants.BlobPictures));
+            toReturn.UserImages.Add(blobService.GetBlobUrl(item, GlobalConstants.BlobPictures));
         }
         
-        toReturn.UserImages.Add(await blobService.GetBlobUrlAsync(eventWithId.OrganizerImageUrl, GlobalConstants.BlobPictures));
+        toReturn.UserImages.Add(blobService.GetBlobUrl(eventWithId.OrganizerImageUrl, GlobalConstants.BlobPictures));
         foreach (var item in eventWithId.Photos.Take(3))
         {
-            toReturn.Photos.Add(await blobService.GetBlobUrlAsync(item, GlobalConstants.BlobPictures));
+            toReturn.Photos.Add(blobService.GetBlobUrl(item, GlobalConstants.BlobPictures));
         }
         
-        toReturn.MainPhoto = await blobService.GetBlobUrlAsync(eventWithId.MainPhoto, GlobalConstants.BlobPictures);
+        toReturn.MainPhoto = blobService.GetBlobUrl(eventWithId.MainPhoto, GlobalConstants.BlobPictures);
 
         return toReturn;
     }
@@ -194,13 +194,14 @@ public class EventService : IEventService
             })
             .ToListAsync();
 
-        var toReturn = peopleLiked.Select(x =>
-        {
-            var model = mapper.Map<PersonListPopupViewModel>(x);
-            model.ProfileImage = blobService.GetBlobUrlAsync(x.ProfilePictureName, GlobalConstants.BlobPictures)
-                .GetAwaiter().GetResult();
-            return model;
-        }).ToList();
+        var toReturn = peopleLiked
+            .Select(x =>
+            {
+                var model = mapper.Map<PersonListPopupViewModel>(x);
+                model.ProfileImage = blobService.GetBlobUrl(x.ProfilePictureName, GlobalConstants.BlobPictures);
+                return model;
+            })
+            .ToList();
 
         return toReturn;
     }
@@ -280,7 +281,7 @@ public class EventService : IEventService
             var addedImage = await imageService.AddImageAsync(ImageType.NormalImage);
             await blobService.UploadBase64StringAsync(image, addedImage?.Id + addedImage?.ImageExtension, GlobalConstants.BlobPictures);
             currEvent.Images.Add(addedImage);
-            imageUrl = await blobService.GetBlobUrlAsync(addedImage?.Id + addedImage?.ImageExtension, GlobalConstants.BlobPictures);
+            imageUrl = blobService.GetBlobUrl(addedImage?.Id + addedImage?.ImageExtension, GlobalConstants.BlobPictures);
         }
 
         var added = await eventRepository.SaveChangesAsync();
@@ -377,7 +378,7 @@ public class EventService : IEventService
         var toReturn = events.Select(x => new SearchResultViewModel
         {
             Id = x.Id,
-            ImageUrl = blobService.GetBlobUrlAsync(x.Image, GlobalConstants.BlobPictures).GetAwaiter().GetResult(),
+            ImageUrl = blobService.GetBlobUrl(x.Image, GlobalConstants.BlobPictures),
             Name = x.Name,
             Type = SearchResultType.@event.ToString()
         }).ToList();
@@ -429,14 +430,15 @@ public class EventService : IEventService
             })
             .ToList();
 
-        var viewModel = userReposts.Select(x =>
-        {
-            var mapped = mapper.Map<PersonListPopupViewModel>(x);
-            mapped.ProfileImage = blobService.GetBlobUrlAsync(x.ProfileImageName, GlobalConstants.BlobPictures)
-                .GetAwaiter().GetResult();
-            
-            return mapped;
-        }).ToList();
+        var viewModel = userReposts
+            .Select(x =>
+            {
+                var mapped = mapper.Map<PersonListPopupViewModel>(x);
+                mapped.ProfileImage = blobService.GetBlobUrl(x.ProfileImageName, GlobalConstants.BlobPictures);
+                
+                return mapped;
+            })
+            .ToList();
 
         return viewModel;
     }
@@ -612,26 +614,25 @@ public class EventService : IEventService
                 .ToListAsync());
         }
 
-        return events.Select(x =>
-        {
-            var mapped = mapper.Map<PostDetailsViewModel>(x);
-            if (x.Repost != null)
+        return events
+            .Select(x =>
             {
-                mapped.Repost = mapper.Map<PostDetailsViewModel>(x.Repost);
-                mapped.Repost.EventImage = blobService
-                    .GetBlobUrlAsync(x.Repost.EventImageName, GlobalConstants.BlobPictures)
-                    .GetAwaiter().GetResult();
-                mapped.Repost.CreatorImage = blobService
-                    .GetBlobUrlAsync(x.Repost.CreatorImageName, GlobalConstants.BlobPictures)
-                    .GetAwaiter().GetResult();
-            }
-            mapped.CreatorImage = blobService.GetBlobUrlAsync(x.CreatorImageName, GlobalConstants.BlobPictures)
-                .GetAwaiter().GetResult();
-            mapped.EventImage = blobService.GetBlobUrlAsync(x.EventImageName, GlobalConstants.BlobPictures)
-                .GetAwaiter().GetResult();
+                var mapped = mapper.Map<PostDetailsViewModel>(x);
+                if (x.Repost != null)
+                {
+                    mapped.Repost = mapper.Map<PostDetailsViewModel>(x.Repost);
+                    mapped.Repost.EventImage = blobService
+                        .GetBlobUrl(x.Repost.EventImageName, GlobalConstants.BlobPictures);
+                    mapped.Repost.CreatorImage = blobService
+                        .GetBlobUrl(x.Repost.CreatorImageName, GlobalConstants.BlobPictures);
+                }
 
-            return mapped;
-        }).ToList();
+                mapped.CreatorImage = blobService.GetBlobUrl(x.CreatorImageName, GlobalConstants.BlobPictures);
+                mapped.EventImage = blobService.GetBlobUrl(x.EventImageName, GlobalConstants.BlobPictures);
+
+                return mapped;
+            })
+            .ToList();
     }
 
     public async Task<List<SearchPageResultViewModel>> GetSearchPageEventsAsync(int skip, int take, string searchWord, List<int> interestIds, bool showOnlyUserEvents, DateTime eventDate, bool hasDate, string userId)
@@ -660,14 +661,16 @@ public class EventService : IEventService
             })
             .ToListAsync();
 
-        var toReturn = events.Select(x => new SearchPageResultViewModel
-        {
-            Id = x.Id,
-            ImageUrl = blobService.GetBlobUrlAsync(x.Image, GlobalConstants.BlobPictures).GetAwaiter().GetResult(),
-            Name = x.Name,
-            Type = SearchResultType.@event.ToString(),
-            Interests = x.Interests
-        }).ToList();
+        var toReturn = events
+            .Select(x => new SearchPageResultViewModel
+            {
+                Id = x.Id,
+                ImageUrl = blobService.GetBlobUrl(x.Image, GlobalConstants.BlobPictures),
+                Name = x.Name,
+                Type = SearchResultType.@event.ToString(),
+                Interests = x.Interests
+            })
+            .ToList();
 
         return toReturn;
     }
@@ -743,8 +746,8 @@ public class EventService : IEventService
         {
             var navigationEvent = mapper.Map<NavigationEventViewModel>(item);
             navigationEvent.GoingPhotos = item.GoingPhotosNames.Select(x =>
-                blobService.GetBlobUrlAsync(x, GlobalConstants.BlobPictures).GetAwaiter().GetResult()).ToList();
-            navigationEvent.GoingPhotos.Add(await blobService.GetBlobUrlAsync(item.OrganizerImageName, GlobalConstants.BlobPictures));
+                blobService.GetBlobUrl(x, GlobalConstants.BlobPictures)).ToList();
+            navigationEvent.GoingPhotos.Add(blobService.GetBlobUrl(item.OrganizerImageName, GlobalConstants.BlobPictures));
 
             toReturn.Add(navigationEvent);
         }

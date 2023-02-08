@@ -155,8 +155,8 @@ public class AuthController : BaseController
                 FirstName = user.FirstName,
                 LastName = user.LastName,
                 UserName = user.UserName,
-                CoverPhoto = await blobService.GetBlobUrlAsync(user.CoverImage?.Id + user.CoverImage?.ImageExtension, GlobalConstants.BlobPictures),
-                ProfilePhoto = await blobService.GetBlobUrlAsync(user.ProfileImage?.Id + user.ProfileImage?.ImageExtension, GlobalConstants.BlobPictures),
+                CoverPhoto = blobService.GetBlobUrl(user.CoverImage?.Id + user.CoverImage?.ImageExtension, GlobalConstants.BlobPictures),
+                ProfilePhoto = blobService.GetBlobUrl(user.ProfileImage?.Id + user.ProfileImage?.ImageExtension, GlobalConstants.BlobPictures),
                 IsDark = user.ThemePreference == ThemePreference.Dark,
             };
 
@@ -203,8 +203,8 @@ public class AuthController : BaseController
     public async Task<UserInformationViewModel> GetUserInformation(string username)
     {
         var user = await userService.GetByUsernameAsync(username);
-        var coverPicture = await blobService.GetBlobUrlAsync(user.CoverImage?.Id + user.CoverImage?.ImageExtension, GlobalConstants.BlobPictures);
-        var profilePicture = await blobService.GetBlobUrlAsync(user.ProfileImage?.Id + user.ProfileImage?.ImageExtension, GlobalConstants.BlobPictures);
+        var coverPicture = blobService.GetBlobUrl(user.CoverImage?.Id + user.CoverImage?.ImageExtension, GlobalConstants.BlobPictures);
+        var profilePicture = blobService.GetBlobUrl(user.ProfileImage?.Id + user.ProfileImage?.ImageExtension, GlobalConstants.BlobPictures);
 
         var viewModel = new UserInformationViewModel
         {

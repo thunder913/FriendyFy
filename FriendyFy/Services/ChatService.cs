@@ -48,7 +48,7 @@ public class ChatService : IChatService
                 IsActive = false,
                 NewMessages = x.Messages.Count - x.Messages.Count(y => y.SeenBy.Any(y => y.UserName == username)),
                 Picture = x.ChatType == ChatType.Direct
-                    ? blobService.GetBlobUrlAsync(x.Users.FirstOrDefault(y => y.UserName != username).ProfileImage.Id + x.Users.FirstOrDefault(y => y.UserName != username).ProfileImage.ImageExtension, GlobalConstants.BlobPictures).GetAwaiter().GetResult()
+                    ? blobService.GetBlobUrl(x.Users.FirstOrDefault(y => y.UserName != username).ProfileImage.Id + x.Users.FirstOrDefault(y => y.UserName != username).ProfileImage.ImageExtension, GlobalConstants.BlobPictures)
                     : x.Image,
             })
             .ToListAsync();
@@ -74,7 +74,7 @@ public class ChatService : IChatService
         {
             var otherUser = chat.Users.FirstOrDefault(x => x.Id != userId);
 
-            photo = blobService.GetBlobUrlAsync(otherUser?.ProfileImage?.Id + otherUser?.ProfileImage?.ImageExtension, GlobalConstants.BlobPictures).GetAwaiter().GetResult();
+            photo = blobService.GetBlobUrl(otherUser?.ProfileImage?.Id + otherUser?.ProfileImage?.ImageExtension, GlobalConstants.BlobPictures);
             chatName = otherUser?.FirstName + " " + otherUser?.LastName;
         }
 
@@ -93,7 +93,7 @@ public class ChatService : IChatService
                     Date = x.CreatedOn,
                     Message = x.Text,
                     Name = x.User.FirstName + " " + x.User.LastName,
-                    Photo = blobService.GetBlobUrlAsync(x.User.ProfileImage?.Id + x.User.ProfileImage?.ImageExtension, GlobalConstants.BlobPictures).GetAwaiter().GetResult(),
+                    Photo = blobService.GetBlobUrl(x.User.ProfileImage?.Id + x.User.ProfileImage?.ImageExtension, GlobalConstants.BlobPictures),
                     IsYourMessage = x.User.Id == userId,
                     MessageId = x.Id,
                     Username = x.User.UserName
@@ -137,7 +137,7 @@ public class ChatService : IChatService
         var viewModel = AutoMapperConfig.MapperInstance.Map<Message, ChatMessageViewModel>(messageObj);
         
         viewModel.Name = user.FirstName + " " + user.LastName;
-        viewModel.Photo = blobService.GetBlobUrlAsync(user.ProfileImage?.Id + user.ProfileImage?.ImageExtension, GlobalConstants.BlobPictures).GetAwaiter().GetResult();
+        viewModel.Photo = blobService.GetBlobUrl(user.ProfileImage?.Id + user.ProfileImage?.ImageExtension, GlobalConstants.BlobPictures);
         viewModel.Username = user.UserName;
         
         return viewModel;

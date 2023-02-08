@@ -251,8 +251,7 @@ public class FriendService : IFriendService
         {
             var model = mapper.Map<ProfileFriendViewModel>(x);
             model.ProfileImage = blobService
-                .GetBlobUrlAsync(x.ProfileImageName, GlobalConstants.BlobPictures)
-                .GetAwaiter().GetResult();
+                .GetBlobUrl(x.ProfileImageName, GlobalConstants.BlobPictures);
             return model;
         }).ToList();
 
@@ -330,8 +329,7 @@ public class FriendService : IFriendService
             {
                 var viewModel = mapper.Map<SidebarFriendRecommendationViewModel>(x);
                 viewModel.ProfilePhoto = blobService
-                    .GetBlobUrlAsync(x.ProfilePhotoName, GlobalConstants.BlobPictures)
-                    .GetAwaiter().GetResult();
+                    .GetBlobUrl(x.ProfilePhotoName, GlobalConstants.BlobPictures);
                 return viewModel;
             })
             .ToList();

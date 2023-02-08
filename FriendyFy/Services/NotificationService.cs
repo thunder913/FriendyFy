@@ -83,7 +83,7 @@ public class NotificationService : INotificationService
         var toReturn = new NotificationViewModel
         {
             Id = notification.Id,
-            Image = blobService.GetBlobUrlAsync(inviter.ProfileImage.Id+inviter.ProfileImage.ImageExtension, GlobalConstants.BlobPictures).GetAwaiter().GetResult(),
+            Image = blobService.GetBlobUrl(inviter.ProfileImage.Id + inviter.ProfileImage.ImageExtension, GlobalConstants.BlobPictures),
             Name = inviter.FirstName,
             Type = "event",
             EventName = currEvent.Name,
@@ -124,8 +124,7 @@ public class NotificationService : INotificationService
             .Select(x =>
             {
                 var model = mapper.Map<NotificationViewModel>(x);
-                model.Image = blobService.GetBlobUrlAsync(x.ImageName, GlobalConstants.BlobPictures).GetAwaiter()
-                    .GetResult();
+                model.Image = blobService.GetBlobUrl(x.ImageName, GlobalConstants.BlobPictures);
                 return model;
             }).ToList();
     }
@@ -209,7 +208,7 @@ public class NotificationService : INotificationService
         var toReturn = new NotificationViewModel
         {
             Id = notification.Id,
-            Image = blobService.GetBlobUrlAsync(inviter.ProfileImage.Id + inviter.ProfileImage.ImageExtension, GlobalConstants.BlobPictures).GetAwaiter().GetResult(),
+            Image = blobService.GetBlobUrl(inviter.ProfileImage.Id + inviter.ProfileImage.ImageExtension, GlobalConstants.BlobPictures),
             Name = inviter.FirstName,
             Type = "profile",
             EventName = inviter.FirstName+" "+inviter.LastName,
