@@ -198,12 +198,7 @@ public class PostService : IPostService
             .ToListAsync();
 
         var viewModel = peopleLiked
-            .Select(async x =>
-            {
-                var model = mapper.Map<PersonListPopupViewModel>(x);
-                model.ProfileImage = await blobService.GetBlobUrlAsync(x.ProfilePictureName, GlobalConstants.BlobPictures);
-                return model;
-            })
+            .Select(async x => await MapToPersonPopUpAsync(x))
             .Select(x => x.Result)
             .ToList();
 
@@ -228,12 +223,7 @@ public class PostService : IPostService
             .ToListAsync();
 
         var viewModel = dtos
-            .Select(async x =>
-            {
-                var model = mapper.Map<PersonListPopupViewModel>(x);
-                model.ProfileImage = await blobService.GetBlobUrlAsync(x.ProfilePictureName, GlobalConstants.BlobPictures);
-                return model;
-            })
+            .Select(async x => await MapToPersonPopUpAsync(x))
             .Select(x => x.Result)
             .ToList();
 
@@ -327,12 +317,7 @@ public class PostService : IPostService
             .ToList();
 
         var viewModel = dtos
-            .Select(async x =>
-            {
-                var model = mapper.Map<PersonListPopupViewModel>(x);
-                model.ProfileImage = await blobService.GetBlobUrlAsync(x.ProfilePictureName, GlobalConstants.BlobPictures);
-                return model;
-            })
+            .Select(async x => await MapToPersonPopUpAsync(x))
             .Select(x => x.Result)
             .ToList();
 
@@ -488,5 +473,12 @@ public class PostService : IPostService
         mapped.PostImage = await blobService.GetBlobUrlAsync(post.PostImageName, GlobalConstants.BlobPictures);
 
         return mapped;
+    }
+
+    private async Task<PersonListPopupViewModel> MapToPersonPopUpAsync(PersonPopUpDto dto)
+    {
+        var viewModel = mapper.Map<PersonListPopupViewModel>(dto);
+        viewModel.ProfileImage = await blobService.GetBlobUrlAsync(dto.ProfilePictureName, GlobalConstants.BlobPictures);
+        return viewModel;
     }
 }
