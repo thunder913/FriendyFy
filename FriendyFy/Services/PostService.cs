@@ -137,25 +137,11 @@ public class PostService : IPostService
                 }
             })
         .ToList();
-        
-        //TODO extract a method for it and reuse it
-        var viewModel = dtos.Select(x =>
-        {
-            var mapped = mapper.Map<PostDetailsViewModel>(x);
-            mapped.Repost = mapper.Map<PostDetailsViewModel>(x.Repost);
-            mapped.CreatorImage = blobService.GetBlobUrlAsync(x.CreatorImageName, GlobalConstants.BlobPictures)
-                .GetAwaiter().GetResult();
-            mapped.PostImage = blobService.GetBlobUrlAsync(x.PostImageName, GlobalConstants.BlobPictures)
-                .GetAwaiter().GetResult();
-            mapped.Repost.PostImage = blobService
-                .GetBlobUrlAsync(x.Repost.PostImageName, GlobalConstants.BlobPictures)
-                .GetAwaiter().GetResult();
-            mapped.Repost.CreatorImage = blobService
-                .GetBlobUrlAsync(x.Repost.CreatorImageName, GlobalConstants.BlobPictures)
-                .GetAwaiter().GetResult();
 
-            return mapped;
-        }).ToList();
+        var viewModel = dtos
+            .Select(async x => await MapToPostViewModelAsync(x))
+            .Select(x => x.Result)
+            .ToList();
 
         return viewModel;
     }
@@ -196,7 +182,6 @@ public class PostService : IPostService
 
     public async Task<List<PersonListPopupViewModel>> GetPeopleLikesAsync(string postId, int take, int skip)
     {
-        // TODO extract (similar with GetTaggedPeopleAsync)
         var peopleLiked = await postLikeRepository
             .AllAsNoTracking()
             .Where(x => x.PostId == postId)
@@ -212,14 +197,16 @@ public class PostService : IPostService
             })
             .ToListAsync();
 
-        var viewModel = peopleLiked.Select(x =>
-        {
-            var model = mapper.Map<PersonListPopupViewModel>(x);
-            model.ProfileImage = blobService.GetBlobUrlAsync(x.ProfilePictureName, GlobalConstants.BlobPictures)
-                .GetAwaiter().GetResult();
-            return model;
-        }).ToList();
-        
+        var viewModel = peopleLiked
+            .Select(async x =>
+            {
+                var model = mapper.Map<PersonListPopupViewModel>(x);
+                model.ProfileImage = await blobService.GetBlobUrlAsync(x.ProfilePictureName, GlobalConstants.BlobPictures);
+                return model;
+            })
+            .Select(x => x.Result)
+            .ToList();
+
         return viewModel;
     }
 
@@ -240,13 +227,15 @@ public class PostService : IPostService
             })
             .ToListAsync();
 
-        var viewModel = dtos.Select(x =>
-        {
-            var model = mapper.Map<PersonListPopupViewModel>(x);
-            model.ProfileImage = blobService.GetBlobUrlAsync(x.ProfilePictureName, GlobalConstants.BlobPictures)
-                .GetAwaiter().GetResult();
-            return model;
-        }).ToList();
+        var viewModel = dtos
+            .Select(async x =>
+            {
+                var model = mapper.Map<PersonListPopupViewModel>(x);
+                model.ProfileImage = await blobService.GetBlobUrlAsync(x.ProfilePictureName, GlobalConstants.BlobPictures);
+                return model;
+            })
+            .Select(x => x.Result)
+            .ToList();
 
         return viewModel;
     }
@@ -276,17 +265,15 @@ public class PostService : IPostService
                 IsRepost = false
             })
             .FirstOrDefaultAsync();
-        
+
         if (dto == null)
         {
             return null;
         }
 
         var viewModel = mapper.Map<PostDetailsViewModel>(dto);
-        viewModel.CreatorImage = blobService.GetBlobUrlAsync(dto.CreatorImageName, GlobalConstants.BlobPictures)
-            .GetAwaiter().GetResult();
-        viewModel.PostImage = blobService.GetBlobUrlAsync(dto.PostImageName, GlobalConstants.BlobPictures)
-            .GetAwaiter().GetResult();
+        viewModel.CreatorImage = await blobService.GetBlobUrlAsync(dto.CreatorImageName, GlobalConstants.BlobPictures);
+        viewModel.PostImage = await blobService.GetBlobUrlAsync(dto.PostImageName, GlobalConstants.BlobPictures);
 
         return viewModel;
     }
@@ -303,9 +290,9 @@ public class PostService : IPostService
         };
 
         postRepository.Add(eventPost);
-        
+
         await postRepository.SaveChangesAsync();
-        
+
         return postRepository.All()
             .Include(x => x.Reposts)
             .Where(x => !x.IsDeleted)
@@ -319,6 +306,8 @@ public class PostService : IPostService
     {
         var data = await postRepository
             .AllAsNoTracking()
+            .Include(x => x.Creator)
+            .ThenInclude(x => x.ProfileImage)
             .Where(x => x.RepostId == postId && x.IsRepost)
             .GroupBy(x => x.CreatorId)
             .ToListAsync();
@@ -334,15 +323,18 @@ public class PostService : IPostService
                 FirstName = x.Creator.FirstName,
                 LastName = x.Creator.LastName,
                 ProfilePictureName = x.Creator.ProfileImage.Id + x.Creator.ProfileImage.ImageExtension
-            });
+            })
+            .ToList();
 
-        var viewModel = dtos.Select(x =>
+        var viewModel = dtos
+            .Select(async x =>
             {
                 var model = mapper.Map<PersonListPopupViewModel>(x);
-                model.ProfileImage = blobService.GetBlobUrlAsync(x.ProfilePictureName, GlobalConstants.BlobPictures)
-                    .GetAwaiter().GetResult();
+                model.ProfileImage = await blobService.GetBlobUrlAsync(x.ProfilePictureName, GlobalConstants.BlobPictures);
                 return model;
-            }).ToList();
+            })
+            .Select(x => x.Result)
+            .ToList();
 
         return viewModel;
     }
@@ -353,21 +345,21 @@ public class PostService : IPostService
             .All()
             .Include(x => x.Reposts)
             .FirstOrDefaultAsync(x => x.Id == postId && x.CreatorId == userId);
-        
+
         if (post == null)
         {
             return false;
         }
-        
+
         var reposts = post.Reposts;
-        
+
         foreach (var eventPost in reposts)
         {
             postRepository.Delete(eventPost);
         }
         postRepository.Delete(post);
         var removed = await postRepository.SaveChangesAsync();
-        
+
         return removed > 0;
     }
 
@@ -473,27 +465,28 @@ public class PostService : IPostService
                 .ToListAsync());
         }
 
-        // TODO extract somehow
-        return posts.Select(x =>
-        {
-            var mapped = mapper.Map<PostDetailsViewModel>(x);
-            if (x.Repost != null)
-            {
-                mapped.Repost = mapper.Map<PostDetailsViewModel>(x.Repost);
-                mapped.Repost.PostImage = blobService
-                    .GetBlobUrlAsync(x.Repost.PostImageName, GlobalConstants.BlobPictures)
-                    .GetAwaiter().GetResult();
-                mapped.Repost.CreatorImage = blobService
-                    .GetBlobUrlAsync(x.Repost.CreatorImageName, GlobalConstants.BlobPictures)
-                    .GetAwaiter().GetResult();
-            }
-            mapped.CreatorImage = blobService.GetBlobUrlAsync(x.CreatorImageName, GlobalConstants.BlobPictures)
-                .GetAwaiter().GetResult();
-            mapped.PostImage = blobService.GetBlobUrlAsync(x.PostImageName, GlobalConstants.BlobPictures)
-                .GetAwaiter().GetResult();
-
-            return mapped;
-        }).ToList();
+        return
+            posts
+                .Select(async x => await MapToPostViewModelAsync(x))
+                .Select(x => x.Result)
+                .ToList();
     }
 
+
+    private async Task<PostDetailsViewModel> MapToPostViewModelAsync(PostDetailsDto post)
+    {
+        var mapped = mapper.Map<PostDetailsViewModel>(post);
+
+        if (post.Repost != null)
+        {
+            mapped.Repost = mapper.Map<PostDetailsViewModel>(post.Repost);
+            mapped.Repost.PostImage = await blobService.GetBlobUrlAsync(post.Repost.PostImageName, GlobalConstants.BlobPictures);
+            mapped.Repost.CreatorImage = await blobService.GetBlobUrlAsync(post.Repost.CreatorImageName, GlobalConstants.BlobPictures);
+        }
+
+        mapped.CreatorImage = await blobService.GetBlobUrlAsync(post.CreatorImageName, GlobalConstants.BlobPictures);
+        mapped.PostImage = await blobService.GetBlobUrlAsync(post.PostImageName, GlobalConstants.BlobPictures);
+
+        return mapped;
+    }
 }

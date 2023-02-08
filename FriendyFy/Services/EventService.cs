@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Linq.Expressions;
 using System.Threading.Tasks;
 using AutoMapper;
 using FriendyFy.BlobStorage;
@@ -246,124 +247,19 @@ public class EventService : IEventService
 
     public async Task<List<NavigationEventViewModel>> GetAttendingEvents(string username)
     {
-        const int attendingEventsCount = 2;
-        
-        var result = await eventRepository
-            .AllAsNoTracking()
-            .Where(x => (x.Organizer.UserName == username || x.Users.Any(y => y.UserName == username)) && x.Time > DateTime.UtcNow)
-            .OrderBy(x => x.Time)
-            .Take(attendingEventsCount)
-            .Select(x => new EventDto
-            {
-                Interests = x.Interests.Take(6).Select(y => new InterestViewModel
-                {
-                    Id = y.Id,
-                    Label = y.Name,
-                }).ToList(),
-                Id = x.Id,
-                Location = x.LocationCity,
-                Name = x.Name,
-                Time = x.Time,
-                GoingPhotosNames = x.Users.Select(y => y.ProfileImage.Id + y.ProfileImage.ImageExtension),
-                OrganizerImageName = x.Organizer.ProfileImage.Id + x.Organizer.ProfileImage.ImageExtension,
-                Latitude = x.Latitude,
-                Longitude = x.Longitude
-            })
-            .ToListAsync();
-
-        var toReturn = new List<NavigationEventViewModel>();
-        foreach (var item in result)
-        {
-            var navigationEvent = mapper.Map<NavigationEventViewModel>(item);
-            navigationEvent.GoingPhotos = item.GoingPhotosNames.Select(x =>
-                blobService.GetBlobUrlAsync(x, GlobalConstants.BlobPictures).GetAwaiter().GetResult()).ToList();
-            navigationEvent.GoingPhotos.Add(await blobService.GetBlobUrlAsync(item.OrganizerImageName, GlobalConstants.BlobPictures));
-
-            toReturn.Add(navigationEvent);
-        }
-
-        return toReturn;
+        return await GetEventsAsync(x => (x.Organizer.UserName == username || x.Users.Any(y => y.UserName == username)) && x.Time > DateTime.UtcNow);
     }
 
     public async Task<List<NavigationEventViewModel>> GetOrganizedEventsAsync(string username)
     {
-        const int organizedEventsCount = 2;
-        var result = await eventRepository
-            .AllAsNoTracking()
-            .Where(x => x.Organizer.UserName == username && x.Time > DateTime.UtcNow)
-            .OrderBy(x => x.Time)
-            .Take(organizedEventsCount)
-            .Select(x => new EventDto
-            {
-                Interests = x.Interests.Take(6).Select(y => new InterestViewModel
-                {
-                    Id = y.Id,
-                    Label = y.Name,
-                }).ToList(),
-                Id = x.Id,
-                Location = x.LocationCity,
-                Name = x.Name,
-                Time = x.Time,
-                GoingPhotosNames = x.Users.Select(y => y.ProfileImage.Id + y.ProfileImage.ImageExtension),
-                OrganizerImageName = x.Organizer.ProfileImage.Id + x.Organizer.ProfileImage.ImageExtension,
-                Latitude = x.Latitude,
-                Longitude = x.Longitude
-            })
-            .ToListAsync();
-
-        var toReturn = new List<NavigationEventViewModel>();
-        foreach (var item in result)
-        {
-            var navigationEvent = mapper.Map<NavigationEventViewModel>(item);
-            navigationEvent.GoingPhotos = item.GoingPhotosNames.Select(x =>
-                blobService.GetBlobUrlAsync(x, GlobalConstants.BlobPictures).GetAwaiter().GetResult()).ToList();
-            navigationEvent.GoingPhotos.Add(await blobService.GetBlobUrlAsync(item.OrganizerImageName, GlobalConstants.BlobPictures));
-
-            toReturn.Add(navigationEvent);
-        }
-
-        return toReturn;
+        return await GetEventsAsync(x => x.Organizer.UserName == username && x.Time > DateTime.UtcNow);
     }
 
     public async Task<List<NavigationEventViewModel>> GetSuggestedEventsAsync(ApplicationUser user)
     {
-        const int SuggestedEventsCount = 2;
-        
-        var result = await eventRepository
-            .AllAsNoTracking()
-            .Where(x => x.Organizer.UserName != user.UserName && x.Users.All(y => y.UserName != user.UserName) && x.Time > DateTime.UtcNow)
-            .OrderBy(x => x.Time)
-            .Take(SuggestedEventsCount)
-            .Select(x => new EventDto
-            {
-                Interests = x.Interests.Take(6).Select(y => new InterestViewModel
-                {
-                    Id = y.Id,
-                    Label = y.Name,
-                }).ToList(),
-                Id = x.Id,
-                Location = x.LocationCity,
-                Name = x.Name,
-                Time = x.Time,
-                GoingPhotosNames = x.Users.Select(y => y.ProfileImage.Id + y.ProfileImage.ImageExtension),
-                OrganizerImageName = x.Organizer.ProfileImage.Id + x.Organizer.ProfileImage.ImageExtension,
-                Latitude = x.Latitude,
-                Longitude = x.Longitude
-            })
-            .ToListAsync();
-
-        var toReturn = new List<NavigationEventViewModel>();
-        foreach (var item in result)
-        {
-            var navigationEvent = mapper.Map<NavigationEventViewModel>(item);
-            navigationEvent.GoingPhotos = item.GoingPhotosNames.Select(x =>
-                blobService.GetBlobUrlAsync(x, GlobalConstants.BlobPictures).GetAwaiter().GetResult()).ToList();
-            navigationEvent.GoingPhotos.Add(await blobService.GetBlobUrlAsync(item.OrganizerImageName, GlobalConstants.BlobPictures));
-
-            toReturn.Add(navigationEvent);
-        }
-
-        return toReturn;
+        return await GetEventsAsync(x =>
+            x.Organizer.UserName != user.UserName && x.Users.All(y => y.UserName != user.UserName) &&
+            x.Time > DateTime.UtcNow);
     }
 
     public async Task<string> AddImageToEventAsync(string eventId, string userId, string image)
@@ -813,5 +709,46 @@ public class EventService : IEventService
             .ToList();
 
         return await userService.GetInvitePeoplePopUpAsync(usersToInvite);
+    }
+
+    private async Task<List<NavigationEventViewModel>> GetEventsAsync(Expression<Func<Event, bool>> func)
+    {
+        const int count = 2;
+
+        var result = await eventRepository
+            .AllAsNoTracking()
+            .Where(func)
+            .OrderBy(x => x.Time)
+            .Take(count)
+            .Select(x => new EventDto
+            {
+                Interests = x.Interests.Take(6).Select(y => new InterestViewModel
+                {
+                    Id = y.Id,
+                    Label = y.Name,
+                }).ToList(),
+                Id = x.Id,
+                Location = x.LocationCity,
+                Name = x.Name,
+                Time = x.Time,
+                GoingPhotosNames = x.Users.Select(y => y.ProfileImage.Id + y.ProfileImage.ImageExtension),
+                OrganizerImageName = x.Organizer.ProfileImage.Id + x.Organizer.ProfileImage.ImageExtension,
+                Latitude = x.Latitude,
+                Longitude = x.Longitude
+            })
+            .ToListAsync();
+
+        var toReturn = new List<NavigationEventViewModel>();
+        foreach (var item in result)
+        {
+            var navigationEvent = mapper.Map<NavigationEventViewModel>(item);
+            navigationEvent.GoingPhotos = item.GoingPhotosNames.Select(x =>
+                blobService.GetBlobUrlAsync(x, GlobalConstants.BlobPictures).GetAwaiter().GetResult()).ToList();
+            navigationEvent.GoingPhotos.Add(await blobService.GetBlobUrlAsync(item.OrganizerImageName, GlobalConstants.BlobPictures));
+
+            toReturn.Add(navigationEvent);
+        }
+
+        return toReturn;
     }
 }
