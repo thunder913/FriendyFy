@@ -100,9 +100,6 @@ public class NotificationService : INotificationService
     {
         var notifications = await notificationRepository
             .AllAsNoTracking()
-            .Include(x => x.Inviter)
-            .ThenInclude(x => x.ProfileImage)
-            .Include(x => x.Event)
             .Where(x => x.InviteeId == userId)
             .OrderByDescending(x => x.CreatedOn)
             .Skip(skip)

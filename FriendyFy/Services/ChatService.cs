@@ -33,10 +33,6 @@ public class ChatService : IChatService
     {
         return await chatRepository
             .AllAsNoTracking()
-            .Include(x => x.Messages)
-            .ThenInclude(x => x.SeenBy)
-            .Include(x => x.Users)
-            .ThenInclude(x => x.ProfileImage)
             .Where(x => x.Users.Any(y => y.UserName == username))
             .Where(x => x.ChatType != ChatType.NotAccepted)
             .Where(x => string.IsNullOrWhiteSpace(search) || (x.Users.Where(y => y.UserName != username).Any(y => (y.FirstName+" "+y.LastName).ToLower().Contains(search.ToLower()))))

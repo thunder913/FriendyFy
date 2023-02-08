@@ -95,13 +95,6 @@ public class EventService : IEventService
         var mapper = AutoMapperConfig.MapperInstance;
         var eventWithId = await eventRepository
             .AllAsNoTracking()
-            .Include(x => x.Interests)
-            .Include(x => x.Users)
-            .ThenInclude(x => x.ProfileImage)
-            .Include(x => x.Organizer)
-            .ThenInclude(x => x.ProfileImage)
-            .Include(x => x.Images)
-            .Include(x => x.ProfileImage)
             .Select(x => new EventPageMapperDto
             {
                 Id = x.Id,
@@ -183,34 +176,39 @@ public class EventService : IEventService
         return currEvent.Likes.Count;
     }
 
-    public List<PersonListPopupViewModel> GetPeopleLikes(string eventId, int take, int skip)
+    public async Task<List<PersonListPopupViewModel>> GetPeopleLikesAsync(string eventId, int take, int skip)
     {
-        var peopleLiked = eventLikeRepository
+        var peopleLiked = await eventLikeRepository
             .AllAsNoTracking()
-            .Include(x => x.EventPost)
-            .Include(x => x.LikedBy)
-            .ThenInclude(x => x.ProfileImage)
             .Where(x => x.EventPost.Id == eventId)
             .OrderByDescending(x => x.CreatedOn)
             .Skip(skip)
             .Take(take)
-            .ToList()
-            .Select(x => new PersonListPopupViewModel
+            .Select(x => new PersonPopUpDto
             {
-                Name = x.LikedBy.FirstName + " " + x.LikedBy.LastName,
-                Username = x.LikedBy.UserName,
-                ProfileImage = blobService.GetBlobUrlAsync(x.LikedBy?.ProfileImage?.Id + x.LikedBy?.ProfileImage?.ImageExtension, GlobalConstants.BlobPictures).GetAwaiter().GetResult(),
+                FirstName = x.LikedBy.FirstName,
+                LastName = x.LikedBy.LastName,
+                UserName = x.LikedBy.UserName,
+                ProfilePictureName = x.LikedBy.ProfileImage.Id + x.LikedBy.ProfileImage.ImageExtension
             })
-            .ToList();
+            .ToListAsync();
 
-        return peopleLiked;
+        var toReturn = peopleLiked.Select(x =>
+        {
+            var model = mapper.Map<PersonListPopupViewModel>(x);
+            model.ProfileImage = blobService.GetBlobUrlAsync(x.ProfilePictureName, GlobalConstants.BlobPictures)
+                .GetAwaiter().GetResult();
+            return model;
+        }).ToList();
+
+        return toReturn;
     }
 
     public async Task<bool> JoinEventAsync(string eventId, ApplicationUser user)
     {
         var currEvent = await eventRepository
-            .All().
-            Include(x => x.Users)
+            .All()
+            .Include(x => x.Users)
             .FirstOrDefaultAsync(x => x.Id == eventId);
         
         if (currEvent == null)
@@ -252,10 +250,6 @@ public class EventService : IEventService
         
         var result = await eventRepository
             .AllAsNoTracking()
-            .Include(x => x.Organizer)
-            .ThenInclude(x => x.ProfileImage)
-            .Include(x => x.Users)
-            .ThenInclude(x => x.ProfileImage)
             .Where(x => (x.Organizer.UserName == username || x.Users.Any(y => y.UserName == username)) && x.Time > DateTime.UtcNow)
             .OrderBy(x => x.Time)
             .Take(attendingEventsCount)
@@ -296,10 +290,6 @@ public class EventService : IEventService
         const int organizedEventsCount = 2;
         var result = await eventRepository
             .AllAsNoTracking()
-            .Include(x => x.Organizer)
-            .ThenInclude(x => x.ProfileImage)
-            .Include(x => x.Users)
-            .ThenInclude(x => x.ProfileImage)
             .Where(x => x.Organizer.UserName == username && x.Time > DateTime.UtcNow)
             .OrderBy(x => x.Time)
             .Take(organizedEventsCount)
@@ -341,13 +331,6 @@ public class EventService : IEventService
         
         var result = await eventRepository
             .AllAsNoTracking()
-            .Include(x => x.Organizer)
-            .ThenInclude(x => x.ProfileImage)
-            .Include(x => x.Interests)
-            .Include(x => x.Users)
-            .ThenInclude(x => x.ProfileImage)
-            .Include(x => x.Users)
-            .ThenInclude(x => x.Friends)
             .Where(x => x.Organizer.UserName != user.UserName && x.Users.All(y => y.UserName != user.UserName) && x.Time > DateTime.UtcNow)
             .OrderBy(x => x.Time)
             .Take(SuggestedEventsCount)
@@ -482,8 +465,6 @@ public class EventService : IEventService
 
         var events = await eventRepository
             .AllAsNoTracking()
-            .Include(x => x.Interests)
-            .Include(x => x.ProfileImage)
             .Where(x => x.Name.ToLower().Contains(searchWord)
                         || string.IsNullOrWhiteSpace(search))
             .OrderBy(x => x.Name)
@@ -577,6 +558,7 @@ public class EventService : IEventService
             .Include(x => x.Reposts)
             .ThenInclude(x => x.Likes)
             .FirstOrDefaultAsync(x => x.Id == postId && x.CreatorId == userId);
+        
         if (post == null)
         {
             return false;
@@ -762,8 +744,6 @@ public class EventService : IEventService
 
         var events = await eventRepository
             .AllAsNoTracking()
-            .Include(x => x.Interests)
-            .Include(x => x.ProfileImage)
             .Where(x => (x.Name.ToLower().Contains(searchWord) || string.IsNullOrWhiteSpace(searchWord)))
             .Where(x => (interestIds.Count == 0) || (x.Interests.Count(y => interestIds.Contains(y.Id)) == interestIds.Count))
             .Where(x => !hasDate || (eventDate.Year == x.Time.Year && eventDate.Month == x.Time.Month && eventDate.Day == x.Time.Day))
@@ -784,7 +764,6 @@ public class EventService : IEventService
             })
             .ToListAsync();
 
-        //TOOO use AutoMapper
         var toReturn = events.Select(x => new SearchPageResultViewModel
         {
             Id = x.Id,

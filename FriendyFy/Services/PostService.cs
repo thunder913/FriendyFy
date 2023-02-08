@@ -319,8 +319,6 @@ public class PostService : IPostService
     {
         var data = await postRepository
             .AllAsNoTracking()
-            .Include(x => x.Creator)
-            .ThenInclude(x => x.ProfileImage)
             .Where(x => x.RepostId == postId && x.IsRepost)
             .GroupBy(x => x.CreatorId)
             .ToListAsync();

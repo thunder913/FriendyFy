@@ -249,8 +249,6 @@ public class CommentService : ICommentService
     {
         var peopleLikedDto = await commentLikeRepository
             .AllAsNoTracking()
-            .Include(x => x.LikedBy)
-            .ThenInclude(x => x.ProfileImage)
             .Where(x => x.CommentId == commentId || x.EventCommentId == commentId)
             .OrderByDescending(x => x.CreatedOn)
             .Skip(skip)
@@ -279,8 +277,6 @@ public class CommentService : ICommentService
         return postType switch
         {
             PostType.Post => await postCommentRepository.AllAsNoTracking()
-                .Include(x => x.CommentedBy)
-                .ThenInclude(x => x.ProfileImage)
                 .Where(x => x.Id == commentId)?
                 .Select(x => new PostCommentDto()
                 {
@@ -296,8 +292,6 @@ public class CommentService : ICommentService
                 })
                 .FirstOrDefaultAsync(),
             PostType.Event => await eventCommentRepository.AllAsNoTracking()
-                .Include(x => x.CommentedBy)
-                .ThenInclude(x => x.ProfileImage)
                 .Where(x => x.Id == commentId)
                 .Select(x => new PostCommentDto()
                 {

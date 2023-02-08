@@ -179,8 +179,15 @@ public class FriendService : IFriendService
 
     public async Task<FriendStatus> GetUserFriendStatusAsync(string userId, string friendUsername)
     {
-        var user = await userRepository.All().Include(x => x.Friends).FirstOrDefaultAsync(x => x.Id == userId);
-        var friend = userRepository.All().FirstOrDefault(x => x.UserName == friendUsername);
+        var user = await userRepository
+            .All()
+            .Include(x => x.Friends)
+            .FirstOrDefaultAsync(x => x.Id == userId);
+        
+        var friend = userRepository
+            .All()
+            .FirstOrDefault(x => x.UserName == friendUsername);
+        
         if (user == null)
         {
             return FriendStatus.Invalid;

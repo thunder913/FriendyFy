@@ -152,10 +152,7 @@ public class UserService : IUserService
     public async Task<List<SearchResultViewModel>> GetUserSearchViewModelAsync(string search, string userId, int take, int skip)
     {
         var searchWord = search.ToLower();
-        var users = await userRepository
-            .AllAsNoTracking()
-            .Include(x => x.Interests)
-            .Include(x => x.ProfileImage)
+        var users = await userRepository.AllAsNoTracking()
             .Where(x => (string.IsNullOrWhiteSpace(search) || (x.FirstName + " " + x.LastName).ToLower().Contains(searchWord)) && x.Id != userId)
             .Where(x => x.FinishedFirstTimeLogin)
             .OrderBy(x => x.UserName)
@@ -300,11 +297,6 @@ public class UserService : IUserService
         searchWord = searchWord.ToLower();
         var users = await userRepository
             .AllAsNoTracking()
-            .Include(x => x.Interests)
-            .Include(x => x.ProfileImage)
-            .Include(x => x.Friends)
-            .ThenInclude(x => x.Friend)
-            .ThenInclude(x => x.Friends)
             .Where(x => (string.IsNullOrWhiteSpace(searchWord) || (x.FirstName + " " + x.LastName).ToLower().Contains(searchWord)))
             .Where(x => (interestIds.Count == 0) || (x.Interests.Count(y => interestIds.Contains(y.Id)) == interestIds.Count()))
             .Where(x => x.Id != userId)

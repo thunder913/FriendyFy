@@ -102,7 +102,7 @@ public class PostController : BaseController
             return Ok(await postService.GetPeopleLikesAsync(dto.PostId, dto.Take, dto.Skip));
         }
 
-        return Ok(eventService.GetPeopleLikes(dto.PostId, dto.Take, dto.Skip));
+        return Ok(await eventService.GetPeopleLikesAsync(dto.PostId, dto.Take, dto.Skip));
     }
 
     [HttpGet("reposts")]
