@@ -6,7 +6,7 @@ export function getChats(username, page, take, search, itemsPerPage, chatIds) {
   }
 
   export function getChat(username, chatId, take, skip) {
-    return fetch('/chat?' + new URLSearchParams({username, chatId, take, skip}), {
+    return fetch('/chat/user?' + new URLSearchParams({username, chatId, take, skip}), {
         method: 'GET',
         headers: {'Content-Type': 'application/json'},
     });

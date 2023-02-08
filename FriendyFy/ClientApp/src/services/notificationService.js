@@ -1,5 +1,5 @@
   export function getuserNotifications(userId, take, skip) {
-    return fetch('/notification?' + new URLSearchParams({userId, take, skip}), {
+    return fetch('/notification/user?' + new URLSearchParams({userId, take, skip}), {
         method: 'GET',
         headers: {'Content-Type': 'application/json'},
     });

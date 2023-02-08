@@ -16,7 +16,7 @@ public class NotificationController : BaseController
         this.notificationService = notificationService;
     }
 
-    [HttpGet]
+    [HttpGet("user")]
     public async Task<IActionResult> GetNotification([FromQuery] NotificationRequest dto)
     {
         var user = await GetUserByToken();

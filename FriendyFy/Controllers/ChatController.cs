@@ -36,14 +36,14 @@ public class ChatController : BaseController
         return Ok(await chatService.GetUserChatsAsync(dto.Username, dto.Page, dto.ItemsPerPage, dto.Take, dto.Search, chatIds));
     }
 
-    [HttpGet]
+    [HttpGet("user")]
     public async Task<IActionResult> GetUserChat([FromQuery] ChatRequest dto)
     {
         var user = await GetUserByToken();
 
         if (user == null || user.UserName != dto.Username)
         {
-            return Unauthorized("You are not signed in!");
+            return Unauthorized("You are not signed in!!");
         }
 
         var chat = await chatService.GetChatMessagesAsync(user.Id, dto.ChatId, dto.Take, dto.Skip);
