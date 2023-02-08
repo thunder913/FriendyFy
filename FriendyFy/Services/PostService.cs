@@ -66,7 +66,7 @@ public class PostService : IPostService
 
         if (makePostDto.LocationLat != null && makePostDto.LocationLng != null)
         {
-            post.LocationCity = geolocationService.GetUserLocation(ToDouble((decimal)makePostDto.LocationLat), ToDouble((decimal)makePostDto.LocationLng));
+            post.LocationCity = await geolocationService.GetUserLocationAsync(ToDouble((decimal)makePostDto.LocationLat), ToDouble((decimal)makePostDto.LocationLng));
         }
 
         if (makePostDto.Image != null && !string.IsNullOrWhiteSpace(makePostDto.Image))

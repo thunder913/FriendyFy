@@ -1,6 +1,8 @@
-﻿namespace FriendyFy.Services.Contracts;
+﻿using System.Threading.Tasks;
+
+namespace FriendyFy.Services.Contracts;
 
 public interface IGeolocationService
 {
-    public string GetUserLocation(double latitude, double longiitude);
+    Task<string> GetUserLocationAsync(double latitude, double longitude);
 }

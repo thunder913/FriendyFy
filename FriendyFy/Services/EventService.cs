@@ -69,7 +69,7 @@ public class EventService : IEventService
             Description = description,
             OrganizerId = organizerId,
             CreatedOn = DateTime.UtcNow,
-            LocationCity = geolocationService.GetUserLocation(ToDouble(latitude), ToDouble(longitude))
+            LocationCity = await geolocationService.GetUserLocationAsync(ToDouble(latitude), ToDouble(longitude))
         };
         
         if (profileImage != null && !string.IsNullOrWhiteSpace(profileImage))
