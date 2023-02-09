@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 using System.Linq;
 using System.Threading.Tasks;
+using FriendyFy.Common;
 using FriendyFy.Data.Requests;
 using FriendyFy.DataValidation;
 using FriendyFy.Services.Contracts;
@@ -29,11 +30,11 @@ public class PostController : BaseController
     [HttpPost]
     public async Task<IActionResult> MakePost(CreatePostRequest makePostDto)
     {
-        var user = await GetUserByToken();
+        var userId = GetUserIdByToken();
 
-        if (user == null)
+        if (string.IsNullOrWhiteSpace(userId))
         {
-            return Unauthorized("You are not signed in!");
+            return Unauthorized(GlobalConstants.NotSignedInMessage);
         }
 
         try
@@ -45,36 +46,36 @@ public class PostController : BaseController
             return BadRequest(ex.Message);
         }
             
-        return Json(new { success = await postService.CreatePostAsync(makePostDto, user.Id) });
+        return Json(new { success = await postService.CreatePostAsync(makePostDto, userId) });
     }
 
     [HttpGet]
     public async Task<IActionResult> GetPosts()
     {
-        var user = await GetUserByToken();
+        var userId = GetUserIdByToken();
 
-        if (user == null)
+        if (string.IsNullOrWhiteSpace(userId))
         {
-            return Unauthorized("You are not signed in!");
+            return Unauthorized(GlobalConstants.NotSignedInMessage);
         }
 
-        return Json(postService.GetAllPosts(user.Id));
+        return Json(postService.GetAllPosts(userId));
     }
 
     [HttpPost("like")]
     public async Task<IActionResult> LikePost([FromBody] PostIdRequest dto)
     {
-        var user = await GetUserByToken();
+        var userId = GetUserIdByToken();
 
-        if (user == null)
+        if (string.IsNullOrWhiteSpace(userId))
         {
-            return Unauthorized("You are not signed in!");
+            return Unauthorized(GlobalConstants.NotSignedInMessage);
         }
 
         int? likes;
         try
         {
-            likes = await postService.LikePostAsync(dto.PostId, user.Id);
+            likes = await postService.LikePostAsync(dto.PostId, userId);
         }
         catch (Exception)
         {
@@ -148,9 +149,9 @@ public class PostController : BaseController
         {
             return BadRequest("There was something wrong with the request!");
         }
-            
-        var user = await GetUserByToken();
-        if (user == null)
+
+        var userId = GetUserIdByToken();
+        if (string.IsNullOrWhiteSpace(userId))
         {
             return Unauthorized("You are not logged in!");
         }
@@ -159,7 +160,7 @@ public class PostController : BaseController
         {
             case PostType.Event:
             {
-                var result = await eventService.RepostEventAsync(dto.PostId, dto.Text, user.Id);
+                var result = await eventService.RepostEventAsync(dto.PostId, dto.Text, userId);
                 if (result > 0)
                 {
                     return Ok(new { reposts = result });
@@ -169,7 +170,7 @@ public class PostController : BaseController
             }
             case PostType.Post:
             {
-                var result = await postService.RepostAsync(dto.PostId, dto.Text, user.Id);
+                var result = await postService.RepostAsync(dto.PostId, dto.Text, userId);
                 if (result > 0)
                 {
                     return Ok(new { reposts = result });
@@ -190,16 +191,16 @@ public class PostController : BaseController
             return BadRequest("There was something wrong with the request!");
         }
 
-        var user = await GetUserByToken();
-        if (user == null)
+        var userId = GetUserIdByToken();
+        if (string.IsNullOrWhiteSpace(userId))
         {
             return Unauthorized("You are not logged in!");
         }
 
         bool deleted = postType switch
         {
-            PostType.Post => await postService.DeletePostAsync(dto.PostId, user.Id),
-            PostType.Event => await eventService.DeleteEventPostAsync(dto.PostId, user.Id),
+            PostType.Post => await postService.DeletePostAsync(dto.PostId, userId),
+            PostType.Event => await eventService.DeleteEventPostAsync(dto.PostId, userId),
             _ => false
         };
 

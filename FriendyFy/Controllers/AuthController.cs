@@ -261,14 +261,14 @@ public class AuthController : BaseController
     [HttpGet("userData")]
     public async Task<IActionResult> GetUserData()
     {
-        var user = await GetUserByToken();
+        var userId = GetUserIdByToken();
 
-        if (user == null)
+        if (string.IsNullOrWhiteSpace(userId))
         {
             return Unauthorized();
         }
 
-        var viewmodel = await userService.GetUserDataAsync(user);
+        var viewmodel = await userService.GetUserDataAsync(userId);
 
         return Ok(viewmodel);
     }

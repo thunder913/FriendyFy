@@ -24,7 +24,7 @@ public interface IUserService
     Task<List<SearchResultViewModel>> GetUserSearchViewModelAsync(string search, string userId, int take, int skip);
     Task<List<RightNavigationRecommendationViewModel>> GetEventUserRecommendationsAsync(string userId);
     Task<bool> ChangeUserThemeAsync(ApplicationUser user, ThemePreference theme);
-    Task<UserDataViewModel> GetUserDataAsync(ApplicationUser user);
+    Task<UserDataViewModel> GetUserDataAsync(string userId);
 
     Task ChangeUserDataAsync(ApplicationUser user, string firstName, string lastName,
         DateTime birthday, bool hasNewProfileImage, bool hasNewCoverImage, string description,

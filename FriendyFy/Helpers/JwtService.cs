@@ -38,14 +38,6 @@ public class JwtService : IJwtService
             signingCredentials: credentials);
 
         return new JwtSecurityTokenHandler().WriteToken(token);
-
-
-        //var header = new JwtHeader(credentials);
-
-        //var payload = new JwtPayload(id, null, null, null, DateTime.Today.AddDays(1));
-        //var securityToken = new JwtSecurityToken(header, payload);
-
-        //return new JwtSecurityTokenHandler().WriteToken(securityToken);
     }
 
     public JwtSecurityToken Verify(string jwt)

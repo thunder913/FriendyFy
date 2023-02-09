@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Threading.Tasks;
+using FriendyFy.Common;
 using FriendyFy.Data.Requests;
 using FriendyFy.Services.Contracts;
 using FriendyFy.ViewModels;
@@ -23,15 +24,15 @@ public class CommentController : BaseController
     [HttpPost]
     public async Task<IActionResult> AddComment(AddCommentRequest comment)
     {
-        var user = await GetUserByToken();
-        if (user == null)
+        var userId = GetUserIdByToken();
+        if (string.IsNullOrWhiteSpace(userId))
         {
-            return Unauthorized("You are not signed in!");
+            return Unauthorized(GlobalConstants.NotSignedInMessage);
         }
 
         Enum.TryParse(comment.PostType, out PostType postType);
 
-        var commentAdded = await commentService.AddCommentAsync(user.Id, comment.Text, comment.PostId, postType);
+        var commentAdded = await commentService.AddCommentAsync(userId, comment.Text, comment.PostId, postType);
         if (commentAdded != null)
         {
             return Ok(commentAdded);
@@ -44,12 +45,12 @@ public class CommentController : BaseController
     [HttpGet]
     public async Task<List<PostCommentViewModel>> GetPostComments([FromQuery] PostCommentsRequest commentDto)
     {
-        var user = await GetUserByToken();
-            
+        var userId = GetUserIdByToken();
         var parsed = Enum.TryParse(commentDto.PostType, out PostType postType);
+        
         if (parsed)
         {
-            return commentService.GetCommentsForPost(user?.Id, commentDto.PostId, commentDto.Take, commentDto.Skip, postType);
+            return commentService.GetCommentsForPost(userId, commentDto.PostId, commentDto.Take, commentDto.Skip, postType);
         }
             
         return null;
@@ -58,18 +59,18 @@ public class CommentController : BaseController
     [HttpPost("like")]
     public async Task<IActionResult> LikePost(CommentRequest likedCommentDto)
     {
-        var user = await GetUserByToken();
+        var userId = GetUserIdByToken();
 
-        if (user == null)
+        if (string.IsNullOrWhiteSpace(userId))
         {
-            return Unauthorized("You are not signed in!");
+            return Unauthorized(GlobalConstants.NotSignedInMessage);
         }
 
         int? likes;
         Enum.TryParse(likedCommentDto.PostType, out PostType postType);
         try
         {
-            likes = await commentService.LikeCommentAsync(likedCommentDto.CommentId, user.Id, postType);
+            likes = await commentService.LikeCommentAsync(likedCommentDto.CommentId, userId, postType);
         }
         catch (Exception)
         {
@@ -93,9 +94,9 @@ public class CommentController : BaseController
     [HttpDelete]
     public async Task<IActionResult> DeleteComment(CommentRequest dto)
     {
-        var user = await GetUserByToken();
-            
-        if (user == null)
+        var userId = GetUserIdByToken();
+
+        if (string.IsNullOrWhiteSpace(userId))
         {
             return Unauthorized();
         }
@@ -105,7 +106,7 @@ public class CommentController : BaseController
             return BadRequest();
         }
 
-        if(await commentService.DeleteCommentAsync(user.Id, dto.CommentId, postType))
+        if(await commentService.DeleteCommentAsync(userId, dto.CommentId, postType))
         {
             return Ok();
         }

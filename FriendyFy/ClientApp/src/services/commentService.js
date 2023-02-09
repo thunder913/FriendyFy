@@ -29,7 +29,7 @@ export function makeComment(text, postId, postType) {
   }
 
   export function deleteComment(commentId, postType) {
-    return fetch('/comment/deleteComment', {
+    return fetch('/comment', {
         method: 'DELETE',
         headers: {'Content-Type': 'application/json'},
         body: JSON.stringify({commentId, postType})

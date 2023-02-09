@@ -19,9 +19,9 @@ public class NotificationController : BaseController
     [HttpGet("user")]
     public async Task<IActionResult> GetNotification([FromQuery] NotificationRequest dto)
     {
-        var user = await GetUserByToken();
-            
-        if (user == null || dto.UserId != user.Id)
+        var userId = GetUserIdByToken();
+
+        if (string.IsNullOrWhiteSpace(userId) || dto.UserId != userId)
         {
             return Unauthorized("You are not logged in!");
         }
@@ -70,27 +70,27 @@ public class NotificationController : BaseController
     [HttpGet("unseen")]
     public async Task<IActionResult> GetUnseenNotifications()
     {
-        var user = await GetUserByToken();
+        var userId = GetUserIdByToken();
 
-        if (user == null)
+        if (string.IsNullOrWhiteSpace(userId))
         {
             return Unauthorized("You are not logged in!");
         }
 
-        return Ok(await notificationService.UnseenNotificationsAsync(user.Id));
+        return Ok(await notificationService.UnseenNotificationsAsync(userId));
     }
 
     [HttpPost("see")]
     public async Task<IActionResult> SeeNotification(SeeNotificationRequest dto)
     {
-        var user = await GetUserByToken();
+        var userId = GetUserIdByToken();
 
-        if (user == null)
+        if (string.IsNullOrWhiteSpace(userId))
         {
             return Unauthorized("You are not logged in!");
         }
 
-        var result = await notificationService.SeeNotificationAsync(user.Id, dto.NotificationId);
+        var result = await notificationService.SeeNotificationAsync(userId, dto.NotificationId);
 
         if (result)
         {

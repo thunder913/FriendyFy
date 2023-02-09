@@ -26,4 +26,17 @@ public class BaseController : Controller
 
         return await UserService.GetByIdAsync(userId);
     }
+
+    protected string GetUserIdByToken()
+    {
+        var jwt = Request.Cookies["jwt"];
+        if (jwt == null)
+        {
+            return null;
+        }
+
+        var token = JwtService.Verify(jwt);
+
+        return token.Id;
+    }
 }

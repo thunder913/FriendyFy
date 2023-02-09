@@ -3,9 +3,12 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using AutoMapper;
 using FriendyFy.BlobStorage;
 using FriendyFy.Common;
 using FriendyFy.Data;
+using FriendyFy.Data.Dtos;
+using FriendyFy.Mapping;
 using FriendyFy.Models;
 using FriendyFy.Models.Enums;
 using FriendyFy.Services.Contracts;
@@ -21,6 +24,7 @@ public class UserService : IUserService
     private readonly IDeletableEntityRepository<Post> postRepository;
     private readonly IBlobService blobService;
     private readonly IImageService imageService;
+    private readonly IMapper mapper;
 
     public UserService(IDeletableEntityRepository<ApplicationUser> userRepository,
         IDeletableEntityRepository<Post> postRepository,
@@ -31,6 +35,7 @@ public class UserService : IUserService
         this.postRepository = postRepository;
         this.blobService = blobService;
         this.imageService = imageService;
+        mapper = AutoMapperConfig.MapperInstance;
     }
     public async Task<ApplicationUser> CreateAsync(ApplicationUser user)
     {
@@ -223,15 +228,15 @@ public class UserService : IUserService
         return result > 0;
     }
 
-    public async Task<UserDataViewModel> GetUserDataAsync(ApplicationUser user)
+    public async Task<UserDataViewModel> GetUserDataAsync(string userId)
     {
-        var viewmodel = await userRepository
+        var dto = await userRepository
             .AllAsNoTracking()
-            .Where(x => x.Id == user.Id)
+            .Where(x => x.Id == userId)
             .Include(x => x.Interests)
             .Include(x => x.ProfileImage)
             .Include(x => x.CoverImage)
-            .Select(x => new UserDataViewModel
+            .Select(x => new UserDataDto
             {
                 Birthday = x.BirthDate.ToString("MM/dd/yyyy"),
                 FirstName = x.FirstName,
@@ -243,12 +248,15 @@ public class UserService : IUserService
                 }).ToList(),
                 Latitude = x.Latitude,
                 Longitude = x.Longitude,
-                Quote = x.Quote
+                Quote = x.Quote,
+                ProfilePhotoName = x.ProfileImage.Id + x.ProfileImage.ImageExtension,
+                CoverPhotoName = x.CoverImage.Id + x.CoverImage.ImageExtension,
             })
             .FirstOrDefaultAsync();
 
-        viewmodel.ProfilePhoto = blobService.GetBlobUrl(user.ProfileImage?.Id + user.ProfileImage?.ImageExtension, GlobalConstants.BlobPictures);
-        viewmodel.CoverPhoto = blobService.GetBlobUrl(user.CoverImage?.Id + user.CoverImage?.ImageExtension, GlobalConstants.BlobPictures);
+        var viewmodel = mapper.Map<UserDataViewModel>(dto);
+        viewmodel.ProfilePhoto = blobService.GetBlobUrl(dto.ProfilePhotoName, GlobalConstants.BlobPictures);
+        viewmodel.CoverPhoto = blobService.GetBlobUrl(dto.CoverPhotoName, GlobalConstants.BlobPictures);
 
         return viewmodel;
     }

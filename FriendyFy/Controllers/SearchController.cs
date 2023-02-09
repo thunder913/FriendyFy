@@ -27,25 +27,20 @@ public class SearchController : BaseController
     [HttpGet]
     public async Task<IActionResult> GetSearchResults([FromQuery] SearchResultRequest dto)
     {
-        var user = await GetUserByToken();
+        var userId = GetUserIdByToken();
 
         if (string.IsNullOrWhiteSpace(dto.SearchWord))
         {
             return Json(new SearchResultsViewModel());
         }
         
-        string userId = null;
-        if (user != null)
-        {
-            userId = user.Id;
-        }
         return Ok(await searchService.GetSearchResultsAsync(dto.SearchWord, userId, dto.Take, dto.UsersCount, dto.EventsCount));
     }
 
     [HttpPost]
     public async Task<IActionResult> PerformSearch(SearchRequest dto)
     {
-        var user = await GetUserByToken();
+        var userId = GetUserIdByToken();
         var interests = JsonConvert.DeserializeObject<List<InterestDto>>(dto.Interests);
             
         var parsed = Enum.TryParse(dto.Type, out SearchType type);
@@ -55,7 +50,7 @@ public class SearchController : BaseController
         }
         var parsedDate = DateTime.TryParseExact(dto.EventDate, "dd/MM/yyyy", CultureInfo.InvariantCulture, DateTimeStyles.None, out DateTime date);
 
-        var result = await searchService.PerformSearchAsync(dto.Take, dto.SkipPeople, dto.SkipEvents, dto.SearchWord, interests.Where(x => x.IsNew == false).Select(x => x.Id).ToList(), type, dto.ShowOnlyUserEvents, date, parsedDate, user?.Id);
+        var result = await searchService.PerformSearchAsync(dto.Take, dto.SkipPeople, dto.SkipEvents, dto.SearchWord, interests.Where(x => x.IsNew == false).Select(x => x.Id).ToList(), type, dto.ShowOnlyUserEvents, date, parsedDate, userId);
 
         return Ok(result);
     }

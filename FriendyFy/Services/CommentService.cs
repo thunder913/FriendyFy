@@ -223,7 +223,7 @@ public class CommentService : ICommentService
             var commentLike = new CommentLike
             {
                 CreatedOn = DateTime.Now,
-                LikedBy = userId,
+                LikedById = userId,
                 Comment = postComment,
             };
 

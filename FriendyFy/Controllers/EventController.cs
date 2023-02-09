@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 using System.Globalization;
 using System.Threading.Tasks;
+using FriendyFy.Common;
 using FriendyFy.Data.Dtos;
 using FriendyFy.Data.Requests;
 using FriendyFy.DataValidation;
@@ -31,11 +32,11 @@ public class EventController : BaseController
     [HttpPost]
     public async Task<IActionResult> CreateEvent(CreateEventRequest dto)
     {
-        var user = await GetUserByToken();
- 
-        if (user == null)
+        var userId = GetUserIdByToken();
+
+        if (string.IsNullOrWhiteSpace(userId))
         {
-            return Unauthorized("You are not signed in!");
+            return Unauthorized(GlobalConstants.NotSignedInMessage);
         }
             
         var interests = JsonConvert.DeserializeObject<List<InterestDto>>(dto.Interests);
@@ -50,32 +51,32 @@ public class EventController : BaseController
 
         var allInterests = await interestService.AddNewInterestsAsync(interests);
         await eventService.CreateEventAsync(dto.Name, DateTime.ParseExact(dto.Date, "dd/MM/yyyy HH:mm", CultureInfo.InvariantCulture, DateTimeStyles.AdjustToUniversal), 
-            allInterests, Enum.Parse<PrivacySettings>(dto.PrivacyOptions), (decimal) dto.Latitude!,(decimal) dto.Longitude!, dto.Description, dto.Image, user.Id);
+            allInterests, Enum.Parse<PrivacySettings>(dto.PrivacyOptions), (decimal) dto.Latitude!,(decimal) dto.Longitude!, dto.Description, dto.Image, userId);
         return Ok();
     }
 
     [HttpGet("{id}")]
     public async Task<IActionResult> GetEventById(string id)
     {
-        var user = await GetUserByToken();
-        var toReturn = await eventService.GetEventByIdAsync(id, user?.Id);
-        return Ok(toReturn);
+        var userId = GetUserIdByToken();
+        
+        return Ok(await eventService.GetEventByIdAsync(id, userId));
     }
         
     [HttpPost("like")]
     public async Task<IActionResult> LikeEvent(PostIdRequest likePostDto)
     {
-        var user = await GetUserByToken();
+        var userId = GetUserIdByToken();
 
-        if (user == null)
+        if (string.IsNullOrWhiteSpace(userId))
         {
-            return Unauthorized("You are not signed in!");
+            return Unauthorized(GlobalConstants.NotSignedInMessage);
         }
 
         int? likes;
         try
         {
-            likes = await eventService.LikeEventAsync(likePostDto.PostId, user.Id);
+            likes = await eventService.LikeEventAsync(likePostDto.PostId, userId);
         }
         catch (Exception)
         {
@@ -111,14 +112,14 @@ public class EventController : BaseController
     [HttpPost("share")]
     public async Task<IActionResult> ShareEvent(EventIdRequest dto)
     {
-        var user = await GetUserByToken();
-            
-        if (user == null)
+        var userId = GetUserIdByToken();
+
+        if (string.IsNullOrWhiteSpace(userId))
         {
             return Unauthorized("You are not logged in!");
         }
 
-        var success = await eventService.CreateEventPostAsync(dto.EventId, user.Id);
+        var success = await eventService.CreateEventPostAsync(dto.EventId, userId);
         if (success)
         {
             return Ok();
@@ -147,14 +148,14 @@ public class EventController : BaseController
     [HttpPost("image")]
     public async Task<IActionResult> AddImage(AddEventImageRequest dto)
     {
-        var user = await GetUserByToken();
-            
-        if (user == null)
+        var userId = GetUserIdByToken();
+
+        if (string.IsNullOrWhiteSpace(userId))
         {
             return Unauthorized("You are not logged in!");
         }
 
-        var result = await eventService.AddImageToEventAsync(dto.EventId, user.Id, dto.Image);
+        var result = await eventService.AddImageToEventAsync(dto.EventId, userId, dto.Image);
         if (string.IsNullOrWhiteSpace(result))
         {
             return BadRequest("Something went wrong, try again!");
@@ -166,14 +167,14 @@ public class EventController : BaseController
     [HttpPost("leave")]
     public async Task<IActionResult> LeaveEvent(EventIdRequest dto)
     {
-        var user = await GetUserByToken();
-            
-        if (user == null)
+        var userId = GetUserIdByToken();
+
+        if (string.IsNullOrWhiteSpace(userId))
         {
             return Unauthorized("You are not logged in!");
         }
 
-        var removed = await eventService.LeaveEventAsync(dto.EventId, user.Id);
+        var removed = await eventService.LeaveEventAsync(dto.EventId, userId);
         if (removed)
         {
             return Ok();
@@ -184,14 +185,14 @@ public class EventController : BaseController
     [HttpDelete]
     public async Task<IActionResult> DeleteEvent(EventIdRequest dto)
     {
-        var user = await GetUserByToken();
-            
-        if (user == null)
+        var userId = GetUserIdByToken();
+
+        if (string.IsNullOrWhiteSpace(userId))
         {
             return Unauthorized("You are not logged in!");
         }
 
-        var deleted = await eventService.DeleteEventAsync(dto.EventId, user.Id);
+        var deleted = await eventService.DeleteEventAsync(dto.EventId, userId);
         if(deleted)
             return Ok(deleted);
 

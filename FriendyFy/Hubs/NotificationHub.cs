@@ -21,7 +21,7 @@ public class NotificationHub : Hub
             
         var user = await userService.GetByIdAsync(userId);
             
-        if (userId == null || userId != user.Id)
+        if (string.IsNullOrWhiteSpace(userId) || userId != user.Id)
         {
             return false;
         }

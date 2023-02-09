@@ -53,55 +53,55 @@ public class FriendController : BaseController
     [HttpPost("accept")]
     public async Task<IActionResult> AcceptFriendRequest(UserIdRequest dto)
     {
-        var user = await GetUserByToken();
-            
-        if (user == null || dto.UserId == null)
+        var userId = GetUserIdByToken();
+
+        if (string.IsNullOrWhiteSpace(userId) || dto.UserId == null)
         {
             return BadRequest("The user cannot be added as a friend!");
         }
 
-        var result = await friendService.AcceptFriendRequestAsync(user.Id, dto.UserId);
+        var result = await friendService.AcceptFriendRequestAsync(userId, dto.UserId);
         if (!result)
         {
             return BadRequest("Cannot accept friend request!");
         }
 
-        await notificationService.ChangeUserFriendNotificationStatus(dto.UserId, user.Id);
+        await notificationService.ChangeUserFriendNotificationStatus(dto.UserId, userId);
         return Ok();
     }
 
     [HttpPost("cancel")]
     public async Task<IActionResult> CancelFriendRequest(UserIdRequest dto)
     {
-        var user = await GetUserByToken();
-            
-        if (user == null || dto.UserId == null)
+        var userId = GetUserIdByToken();
+
+        if (string.IsNullOrWhiteSpace(userId) || dto.UserId == null)
         {
             return BadRequest("The friend request cannot be cancelled!");
         }
 
-        var result = await friendService.CancelFriendRequestAsync(user.Id, dto.UserId);
+        var result = await friendService.CancelFriendRequestAsync(userId, dto.UserId);
         if (!result)
         {
             return BadRequest("Cannot cancel friend request!");
         }
 
-        await notificationService.ChangeUserFriendNotificationStatus(dto.UserId, user.Id);
-        await notificationService.ChangeUserFriendNotificationStatus(user.Id, dto.UserId);
+        await notificationService.ChangeUserFriendNotificationStatus(dto.UserId, userId);
+        await notificationService.ChangeUserFriendNotificationStatus(userId, dto.UserId);
         return Ok();
     }
 
     [HttpGet]
     public async Task<IActionResult> GetFriendsToShow([FromQuery] FriendsRequest dto)
     {
-        var user = await GetUserByToken();
+        var userId = GetUserIdByToken();
 
         if (dto == null || dto.UserId == null)
         {
             return BadRequest("Invalid user!");
         }
 
-        var friends = friendService.GetUserFriends(dto.UserId, dto.Skip, dto.Count, user != null ? user.Id : null, dto.SearchQuery);
+        var friends = friendService.GetUserFriends(dto.UserId, dto.Skip, dto.Count, string.IsNullOrWhiteSpace(userId) ? null : userId, dto.SearchQuery);
         var friendsCount = await friendService.GetUserFriendsCountAsync(dto.UserId);
 
         return Ok(new ProfileSidebarFriendsViewModel
@@ -114,14 +114,14 @@ public class FriendController : BaseController
     [HttpDelete]
     public async Task<IActionResult> RemoveFriend(UserIdRequest dto)
     {
-        var user = await GetUserByToken();
-            
-        if (user == null || dto.UserId == null)
+        var userId = GetUserIdByToken();
+
+        if (string.IsNullOrWhiteSpace(userId) || dto.UserId == null)
         {
             return BadRequest("The friend cannot be removed!");
         }
 
-        var result = await friendService.RemoveFriendAsync(user.Id, dto.UserId);
+        var result = await friendService.RemoveFriendAsync(userId, dto.UserId);
         if (!result)
         {
             return BadRequest("Cannot remove friend!");
@@ -133,14 +133,14 @@ public class FriendController : BaseController
     [HttpGet("status/{id}")]
     public async Task<IActionResult> CheckFriendStatus(string id)
     {
-        var user = await GetUserByToken();
-            
-        if (user == null || id == null)
+        var userId = GetUserIdByToken();
+
+        if (string.IsNullOrWhiteSpace(userId) || id == null)
         {
             return BadRequest("The user cannot be added as a friend!");
         }
 
-        return Content((await friendService.GetUserFriendStatusAsync(user.Id, id)).ToString());
+        return Content((await friendService.GetUserFriendStatusAsync(userId, id)).ToString());
     }
 
     [HttpGet("recommendations")]
@@ -159,27 +159,27 @@ public class FriendController : BaseController
     [HttpDelete("suggestion")]
     public async Task<IActionResult> GetFriendRecommendations(UserIdRequest dto)
     {
-        var user = await GetUserByToken();
-            
-        if (user == null)
+        var userId = GetUserIdByToken();
+
+        if (string.IsNullOrWhiteSpace(userId))
         {
             return BadRequest("You are not current logged in!");
         }
 
-        await friendService.RemovePersonFromSuggestionsAsync(user.Id, dto.UserId);
+        await friendService.RemovePersonFromSuggestionsAsync(userId, dto.UserId);
         return Ok();
     }
 
     [HttpGet("suggestions")]
     public async Task<IActionResult> GetRightNavRecommendations()
     {
-        var user = await GetUserByToken();
-            
-        if (user == null)
+        var userId = GetUserIdByToken();
+
+        if (string.IsNullOrWhiteSpace(userId))
         {
             return BadRequest();
         }
 
-        return Ok(await UserService.GetEventUserRecommendationsAsync(user.Id));
+        return Ok(await UserService.GetEventUserRecommendationsAsync(userId));
     }
 }

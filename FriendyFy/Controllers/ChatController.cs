@@ -1,7 +1,9 @@
 ﻿using System.Collections.Generic;
 using System.Threading.Tasks;
+using FriendyFy.Common;
 using FriendyFy.Data.Requests;
 using FriendyFy.Services.Contracts;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Newtonsoft.Json;
 
@@ -24,7 +26,7 @@ public class ChatController : BaseController
             
         if (user == null || user.UserName != dto.Username)
         {
-            return Unauthorized("You are not signed in!");
+            return Unauthorized(GlobalConstants.NotSignedInMessage);
         }
             
         var chatIds = new List<string>();
@@ -43,7 +45,7 @@ public class ChatController : BaseController
 
         if (user == null || user.UserName != dto.Username)
         {
-            return Unauthorized("You are not signed in!!");
+            return Unauthorized(GlobalConstants.NotSignedInMessage);
         }
 
         var chat = await chatService.GetChatMessagesAsync(user.Id, dto.ChatId, dto.Take, dto.Skip);
@@ -58,7 +60,7 @@ public class ChatController : BaseController
 
         if (user == null)
         {
-            return Unauthorized("You are not signed in!");
+            return Unauthorized(GlobalConstants.NotSignedInMessage);
         }
 
         return Ok(await chatService.SeeMessagesAsync(dto.ChatId, user));
