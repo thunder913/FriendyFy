@@ -346,6 +346,8 @@ public class PostService : IPostService
 
     public async Task<List<PostDetailsViewModel>> GetFeedPosts(ApplicationUser user, bool isProfile, string userName, int take, int skip, List<string> ids)
     {
+        ids ??= new();
+
         var posts = new List<PostDetailsDto>();
 
         if (isProfile)

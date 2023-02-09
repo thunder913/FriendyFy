@@ -499,10 +499,8 @@ public class EventService : IEventService
 
     public async Task<List<PostDetailsViewModel>> GetFeedEventsAsync(ApplicationUser user, bool isProfile, string userName, int take, int skip, List<string> ids)
     {
-        if (user != null)
-        {
-        }
-
+        ids ??= new();
+        
         var events = new List<PostDetailsDto>();
 
         if (isProfile)

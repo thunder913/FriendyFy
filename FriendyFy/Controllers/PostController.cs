@@ -213,27 +213,32 @@ public class PostController : BaseController
     }
 
     [HttpGet("feed")]
-    public async Task<IActionResult> GetFeedPosts([FromQuery] FeedPostsRequest dto)
+    public async Task<IActionResult> GetFeedPosts([FromQuery] FeedPostsRequest request)
     {
+        request.PostIds = request.PostIds.FirstOrDefault()?.Split(",").ToList();
+        request.EventIds = request.EventIds.FirstOrDefault()?.Split(",").ToList();
+        
         var user = await GetUserByToken();
 
         var data = new List<PostDetailsViewModel>();
         var events = new List<PostDetailsViewModel>();
         var posts = new List<PostDetailsViewModel>();
-        var toTake = dto.Take / 2;
-            
-        if (dto.FeedType != "posts")
+        var toTake = request.Take / 2;
+
+        if (request.FeedType != "posts")
         {
-            if (dto.HasEvents)
+            if (request.HasEvents)
             {
-                events = await eventService.GetFeedEventsAsync(user, dto.IsProfile, dto.Username, toTake, dto.EventIds.Count(), dto.EventIds);
+                var skipCount = request.EventIds?.Count ?? 0;
+                events = await eventService.GetFeedEventsAsync(user, request.IsProfile, request.Username, toTake, skipCount, request.EventIds);
             }
         }
-        if (dto.FeedType != "events")
+        if (request.FeedType != "events")
         {
-            if (dto.HasPosts)
+            if (request.HasPosts)
             {
-                posts = await postService.GetFeedPosts(user, dto.IsProfile, dto.Username, toTake, dto.PostIds.Count(), dto.PostIds);
+                var skipCount = request.PostIds?.Count ?? 0;
+                posts = await postService.GetFeedPosts(user, request.IsProfile, request.Username, toTake, skipCount, request.PostIds);
             }
         }
         bool hasPosts = false, hasEvents = false;
@@ -250,7 +255,7 @@ public class PostController : BaseController
         data.AddRange(events);
         data.AddRange(posts);
             
-        if (!dto.IsProfile)
+        if (!request.IsProfile)
         {
             data = data.OrderBy(x => Guid.NewGuid()).ToList();
         }
