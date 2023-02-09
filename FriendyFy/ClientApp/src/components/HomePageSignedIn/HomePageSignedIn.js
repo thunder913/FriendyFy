@@ -58,7 +58,7 @@ const HomePageSignedIn = () => {
         setDidFirstTimeRequest(true);
       });
     //eslint-disable-next-line
-  }, [refreshToken])
+  }, [])
 
   return (
     <div className="feed home-feed">
@@ -66,8 +66,7 @@ const HomePageSignedIn = () => {
       {!showFirstTimePopUp ? <div className="main-feed">  <MakePost
         showPostImage={true}
         showCreatePost={true}
-        showCreateEvent={true}
-        setRefreshToken={setRefreshToken} />
+        showCreateEvent={true} />
         <InfiniteScroll
           className={"feed-posts"}
           dataLength={posts.length}

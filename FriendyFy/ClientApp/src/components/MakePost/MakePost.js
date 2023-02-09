@@ -54,7 +54,6 @@ const MakePost = ({showCreatePost ,showPostImage, showCreateEvent, setRefreshTok
         <CreateEventPopUp
             show={showEventPopUp}
             setShow={setShowEventPopUp}
-            setRefreshToken={setRefreshToken}
         />
     </section>)
 }

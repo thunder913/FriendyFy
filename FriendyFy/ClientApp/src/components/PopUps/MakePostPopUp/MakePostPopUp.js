@@ -40,7 +40,9 @@ const MakePostPopUp = ({ hasImage, show, setShow, setRefreshToken }) => {
                 let result = await (res.json());
                 if (result.success) {
                     setShow(false);
-                    setRefreshToken(prev => !prev);
+                    if(typeof setRefreshToken === 'function'){
+                        setRefreshToken(prev => !prev);
+                    }
                     NotificationManager.success('Successfully created a post!', '', 2000);
                 } else {
                     NotificationManager.error('There was an error making the post!', '', 2000);
