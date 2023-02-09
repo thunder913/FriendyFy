@@ -4,8 +4,4 @@
     <TargetFramework>net7.0</TargetFramework>
   </PropertyGroup>
 
-  <ItemGroup>
-    <ProjectReference Include="..\FriendyFy.Mapping\FriendyFy.Mapping.csproj" />
-  </ItemGroup>
-
 </Project>
