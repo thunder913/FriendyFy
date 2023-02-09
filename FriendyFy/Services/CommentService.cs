@@ -42,7 +42,7 @@ public class CommentService : ICommentService
         mapper = AutoMapperConfig.MapperInstance;
     }
 
-    public async Task<PostCommentViewModel> AddCommentAsync(ApplicationUser user, string comment, string postId, PostType postType)
+    public async Task<PostCommentViewModel> AddCommentAsync(string userId, string comment, string postId, PostType postType)
     {
         if (string.IsNullOrWhiteSpace(comment))
         {
@@ -64,7 +64,7 @@ public class CommentService : ICommentService
 
                     var postComment = new PostComment
                     {
-                        CommentedBy = user,
+                        CommentedById = userId,
                         CreatedOn = DateTime.UtcNow,
                         PostId = postId,
                         Text = comment,
@@ -92,7 +92,7 @@ public class CommentService : ICommentService
 
                     var eventComment = new EventComment
                     {
-                        CommentedBy = user,
+                        CommentedById = userId,
                         CreatedOn = DateTime.UtcNow,
                         EventPostId = currEvent.Id,
                         Text = comment,
@@ -175,7 +175,7 @@ public class CommentService : ICommentService
         };
     }
 
-    public async Task<int?> LikeCommentAsync(string commentId, ApplicationUser user, PostType postType)
+    public async Task<int?> LikeCommentAsync(string commentId, string userId, PostType postType)
     {
         PostComment postComment = null;
         EventComment eventComment = null;
@@ -194,7 +194,7 @@ public class CommentService : ICommentService
                     {
                         return null;
                     }
-                    existingLike = postComment.CommentLikes.FirstOrDefault(x => x.LikedById == user.Id);
+                    existingLike = postComment.CommentLikes.FirstOrDefault(x => x.LikedById == userId);
                     break;
                 }
             case PostType.Event:
@@ -209,7 +209,7 @@ public class CommentService : ICommentService
                         return null;
                     }
 
-                    existingLike = eventComment.CommentLikes.FirstOrDefault(x => x.LikedById == user.Id);
+                    existingLike = eventComment.CommentLikes.FirstOrDefault(x => x.LikedById == userId);
                     break;
                 }
         }
@@ -223,7 +223,7 @@ public class CommentService : ICommentService
             var commentLike = new CommentLike
             {
                 CreatedOn = DateTime.Now,
-                LikedBy = user,
+                LikedBy = userId,
                 Comment = postComment,
             };
 

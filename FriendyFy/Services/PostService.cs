@@ -145,7 +145,7 @@ public class PostService : IPostService
         return viewModel;
     }
 
-    public async Task<int?> LikePostAsync(string postId, ApplicationUser user)
+    public async Task<int?> LikePostAsync(string postId, string userId)
     {
         var post = await postRepository
             .All()
@@ -157,7 +157,7 @@ public class PostService : IPostService
             return null;
         }
 
-        var existingLike = post.Likes.FirstOrDefault(x => x.LikedById == user.Id);
+        var existingLike = post.Likes.FirstOrDefault(x => x.LikedById == userId);
         if (existingLike != null)
         {
             postLikeRepository.Delete(existingLike);
@@ -167,7 +167,7 @@ public class PostService : IPostService
             var postLike = new PostLike
             {
                 CreatedOn = DateTime.Now,
-                LikedBy = user,
+                LikedById = userId,
                 Post = post,
             };
 

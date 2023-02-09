@@ -10,7 +10,7 @@ public interface IPostService
 {
     Task<bool> CreatePostAsync(CreatePostRequest makePostDto, string userId);
     List<PostDetailsViewModel> GetAllPosts(string userId);
-    Task<int?> LikePostAsync(string postId, ApplicationUser user);
+    Task<int?> LikePostAsync(string postId, string userId);
     Task<List<PersonListPopupViewModel>> GetPeopleLikesAsync(string postId, int take, int skip);
     Task<List<PersonListPopupViewModel>> GetTaggedPeopleAsync(string postId, int take, int skip);
     Task<PostDetailsViewModel> GetPostByImageIdAsync(string imageId, string userId);

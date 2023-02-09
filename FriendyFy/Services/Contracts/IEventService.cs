@@ -11,12 +11,12 @@ public interface IEventService
 {
     Task CreateEventAsync(string name, DateTime date, List<Interest> interests, PrivacySettings privacySettings, decimal latitude, decimal longitude, string description, string profileImage, string organizerId);
     Task<EventPageViewModel> GetEventByIdAsync(string id, string userId);
-    Task<int?> LikeEventAsync(string eventId, ApplicationUser user);
+    Task<int?> LikeEventAsync(string eventId, string userId);
     Task<List<PersonListPopupViewModel>> GetPeopleLikesAsync(string eventId, int take, int skip);
     Task<bool> JoinEventAsync(string eventId, ApplicationUser user);
     Task<bool> CreateEventPostAsync(string eventId, string userId);
     Task<List<NavigationEventViewModel>> GetAttendingEvents(string username);
-    Task<List<NavigationEventViewModel>> GetSuggestedEventsAsync(ApplicationUser user);
+    Task<List<NavigationEventViewModel>> GetSuggestedEventsAsync(string username);
     Task<List<NavigationEventViewModel>> GetOrganizedEventsAsync(string username);
     Task<string> AddImageToEventAsync(string eventId, string userId, string image);
     Task<bool> LeaveEventAsync(string eventId, string userId);

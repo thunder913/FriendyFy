@@ -74,7 +74,7 @@ public class PostController : BaseController
         int? likes;
         try
         {
-            likes = await postService.LikePostAsync(dto.PostId, user);
+            likes = await postService.LikePostAsync(dto.PostId, user.Id);
         }
         catch (Exception)
         {

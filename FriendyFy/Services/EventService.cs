@@ -143,7 +143,7 @@ public class EventService : IEventService
         return toReturn;
     }
 
-    public async Task<int?> LikeEventAsync(string eventId, ApplicationUser user)
+    public async Task<int?> LikeEventAsync(string eventId, string userId)
     {
         var currEvent = await eventPostRepository
             .All()
@@ -155,7 +155,7 @@ public class EventService : IEventService
             return null;
         }
 
-        var existingLike = currEvent.Likes.FirstOrDefault(x => x.LikedById == user.Id);
+        var existingLike = currEvent.Likes.FirstOrDefault(x => x.LikedById == userId);
         if (existingLike != null)
         {
             eventLikeRepository.Delete(existingLike);
@@ -165,7 +165,7 @@ public class EventService : IEventService
             var eventLike = new EventLike
             {
                 CreatedOn = DateTime.Now,
-                LikedBy = user,
+                LikedById = userId,
                 EventPost = currEvent,
             };
 
@@ -256,10 +256,10 @@ public class EventService : IEventService
         return await GetEventsAsync(x => x.Organizer.UserName == username && x.Time > DateTime.UtcNow);
     }
 
-    public async Task<List<NavigationEventViewModel>> GetSuggestedEventsAsync(ApplicationUser user)
+    public async Task<List<NavigationEventViewModel>> GetSuggestedEventsAsync(string username)
     {
         return await GetEventsAsync(x =>
-            x.Organizer.UserName != user.UserName && x.Users.All(y => y.UserName != user.UserName) &&
+            x.Organizer.UserName != username && x.Users.All(y => y.UserName != username) &&
             x.Time > DateTime.UtcNow);
     }
 

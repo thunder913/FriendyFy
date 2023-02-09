@@ -75,7 +75,7 @@ public class EventController : BaseController
         int? likes;
         try
         {
-            likes = await eventService.LikeEventAsync(likePostDto.PostId, user);
+            likes = await eventService.LikeEventAsync(likePostDto.PostId, user.Id);
         }
         catch (Exception)
         {
@@ -139,7 +139,7 @@ public class EventController : BaseController
         var toReturn = new LeftNavigationEventsViewModel();
         toReturn.AttendingEvents = await eventService.GetAttendingEvents(user.UserName);
         toReturn.OrganizedEvents = await eventService.GetOrganizedEventsAsync(user.UserName);
-        toReturn.SuggestedEvents = await eventService.GetSuggestedEventsAsync(user);
+        toReturn.SuggestedEvents = await eventService.GetSuggestedEventsAsync(user.UserName);
 
         return Ok(toReturn);
     }

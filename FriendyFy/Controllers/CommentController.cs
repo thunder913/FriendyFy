@@ -31,7 +31,7 @@ public class CommentController : BaseController
 
         Enum.TryParse(comment.PostType, out PostType postType);
 
-        var commentAdded = await commentService.AddCommentAsync(user, comment.Text, comment.PostId, postType);
+        var commentAdded = await commentService.AddCommentAsync(user.Id, comment.Text, comment.PostId, postType);
         if (commentAdded != null)
         {
             return Ok(commentAdded);
@@ -69,7 +69,7 @@ public class CommentController : BaseController
         Enum.TryParse(likedCommentDto.PostType, out PostType postType);
         try
         {
-            likes = await commentService.LikeCommentAsync(likedCommentDto.CommentId, user, postType);
+            likes = await commentService.LikeCommentAsync(likedCommentDto.CommentId, user.Id, postType);
         }
         catch (Exception)
         {
