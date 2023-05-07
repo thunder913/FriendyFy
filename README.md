@@ -57,8 +57,8 @@ Users can:
 
 ## :hammer_and_wrench: Built With
 ### Back End (.NET)
-- ASP.NET Core 5.0
-- Entity Framework (EF) Core 5.0
+- ASP.NET Core 7.0
+- Entity Framework (EF) Core 7.0
 - Razor View Engine
 - ASP.NET Identity System
 - Web API
