@@ -65,8 +65,10 @@ public class ApplicationDbContext : ApiAuthorizationDbContext<ApplicationUser>
             .WithMany(x => x.Messages);
 
         builder.Entity<PostLike>()
-            .HasIndex(x => new { x.LikedById, x.PostId})
-            .IsUnique();
+            .HasKey(x => new { x.LikedById, x.PostId });
+        
+        builder.Entity<PostTagged>()
+            .HasKey(x => new { x.UserId, x.PostId });
 
         builder.Entity<ApplicationUser>()
             .HasMany(x => x.EventsOrganized)

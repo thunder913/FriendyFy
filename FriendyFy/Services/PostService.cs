@@ -168,7 +168,7 @@ public class PostService : IPostService
             {
                 CreatedOn = DateTime.Now,
                 LikedById = userId,
-                Post = post,
+                Post = post
             };
 
             post.Likes.Add(postLike);
@@ -403,6 +403,7 @@ public class PostService : IPostService
         {
             posts.AddRange(await postRepository
                 .AllAsNoTracking()
+                .Where(x => x.Creator.Friends.Any(y => y.FriendId == user.Id && y.IsFriend))
                 .Where(x => user == null || x.CreatorId != user.Id)
                 .Where(x => !ids.Contains(x.Id))
                 .Take(take)

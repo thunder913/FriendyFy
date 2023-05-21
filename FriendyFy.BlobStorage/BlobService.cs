@@ -57,16 +57,16 @@ public class BlobService : IBlobService
         await blobClient.UploadAsync(memoryStream, new BlobHttpHeaders { ContentType = fileName.GetContentType() });
     }
 
-    public async Task UploadBase64StringAsync(string content, string fileName, string blob)
+    public async Task UploadBase64StringAsync(string content, string blobName, string blobContainerName)
     {
-        var containerClient = blobServiceClient.GetBlobContainerClient(blob);
-        var blobClient = containerClient.GetBlobClient(fileName);
+        var containerClient = blobServiceClient.GetBlobContainerClient(blobContainerName);
+        var blobClient = containerClient.GetBlobClient(blobName);
         Regex regex = new Regex(UploadRegex);
         content = regex.Replace(content, string.Empty);
         var bytes = Convert.FromBase64String(content);
 
         using var memoryStream = new MemoryStream(bytes);
-        await blobClient.UploadAsync(memoryStream, new BlobHttpHeaders { ContentType = fileName.GetContentType() });
+        await blobClient.UploadAsync(memoryStream, new BlobHttpHeaders { ContentType = blobName.GetContentType() });
     }
 
     public async Task UploadFileBlobAsync(string filePath, string fileName, string blob)

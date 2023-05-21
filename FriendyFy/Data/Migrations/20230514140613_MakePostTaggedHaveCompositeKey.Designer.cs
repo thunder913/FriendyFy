@@ -4,6 +4,7 @@ using FriendyFy.Data;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 #nullable disable
@@ -11,9 +12,11 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace FriendyFy.Data.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    partial class ApplicationDbContextModelSnapshot : ModelSnapshot
+    [Migration("20230514140613_MakePostTaggedHaveCompositeKey")]
+    partial class MakePostTaggedHaveCompositeKey
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -34,7 +37,7 @@ namespace FriendyFy.Data.Migrations
 
                     b.HasIndex("UsersId");
 
-                    b.ToTable("ApplicationUserChat", (string)null);
+                    b.ToTable("ApplicationUserChat");
                 });
 
             modelBuilder.Entity("ApplicationUserEvent", b =>
@@ -49,7 +52,7 @@ namespace FriendyFy.Data.Migrations
 
                     b.HasIndex("UsersId");
 
-                    b.ToTable("ApplicationUserEvent", (string)null);
+                    b.ToTable("ApplicationUserEvent");
                 });
 
             modelBuilder.Entity("ApplicationUserGroup", b =>
@@ -64,7 +67,7 @@ namespace FriendyFy.Data.Migrations
 
                     b.HasIndex("UsersId");
 
-                    b.ToTable("ApplicationUserGroup", (string)null);
+                    b.ToTable("ApplicationUserGroup");
                 });
 
             modelBuilder.Entity("ApplicationUserInterest", b =>
@@ -79,7 +82,7 @@ namespace FriendyFy.Data.Migrations
 
                     b.HasIndex("UsersId");
 
-                    b.ToTable("ApplicationUserInterest", (string)null);
+                    b.ToTable("ApplicationUserInterest");
                 });
 
             modelBuilder.Entity("ApplicationUserMessage", b =>
@@ -94,7 +97,7 @@ namespace FriendyFy.Data.Migrations
 
                     b.HasIndex("SeenById");
 
-                    b.ToTable("ApplicationUserMessage", (string)null);
+                    b.ToTable("ApplicationUserMessage");
                 });
 
             modelBuilder.Entity("Duende.IdentityServer.EntityFramework.Entities.DeviceFlowCodes", b =>
@@ -250,7 +253,7 @@ namespace FriendyFy.Data.Migrations
 
                     b.HasIndex("InterestsId");
 
-                    b.ToTable("EventInterest", (string)null);
+                    b.ToTable("EventInterest");
                 });
 
             modelBuilder.Entity("FriendyFy.Models.ApplicationUser", b =>
@@ -395,7 +398,7 @@ namespace FriendyFy.Data.Migrations
 
                     b.HasKey("Id");
 
-                    b.ToTable("Chat", (string)null);
+                    b.ToTable("Chat");
                 });
 
             modelBuilder.Entity("FriendyFy.Models.CommentLike", b =>
@@ -426,7 +429,7 @@ namespace FriendyFy.Data.Migrations
 
                     b.HasIndex("LikedById");
 
-                    b.ToTable("CommentLike", (string)null);
+                    b.ToTable("CommentLike");
                 });
 
             modelBuilder.Entity("FriendyFy.Models.Event", b =>
@@ -494,7 +497,7 @@ namespace FriendyFy.Data.Migrations
 
                     SqlServerIndexBuilderExtensions.IsClustered(b.HasIndex("Time"), false);
 
-                    b.ToTable("Events", (string)null);
+                    b.ToTable("Events");
                 });
 
             modelBuilder.Entity("FriendyFy.Models.EventComment", b =>
@@ -523,7 +526,7 @@ namespace FriendyFy.Data.Migrations
 
                     b.HasIndex("EventPostId");
 
-                    b.ToTable("EventComment", (string)null);
+                    b.ToTable("EventComment");
                 });
 
             modelBuilder.Entity("FriendyFy.Models.EventLike", b =>
@@ -549,7 +552,7 @@ namespace FriendyFy.Data.Migrations
 
                     b.HasIndex("LikedById");
 
-                    b.ToTable("EventLike", (string)null);
+                    b.ToTable("EventLike");
                 });
 
             modelBuilder.Entity("FriendyFy.Models.EventPost", b =>
@@ -586,7 +589,7 @@ namespace FriendyFy.Data.Migrations
 
                     b.HasIndex("RepostId");
 
-                    b.ToTable("EventPost", (string)null);
+                    b.ToTable("EventPost");
                 });
 
             modelBuilder.Entity("FriendyFy.Models.Group", b =>
@@ -619,7 +622,7 @@ namespace FriendyFy.Data.Migrations
 
                     b.HasIndex("ChatId");
 
-                    b.ToTable("Group", (string)null);
+                    b.ToTable("Group");
                 });
 
             modelBuilder.Entity("FriendyFy.Models.Image", b =>
@@ -652,7 +655,7 @@ namespace FriendyFy.Data.Migrations
 
                     b.HasIndex("EventId");
 
-                    b.ToTable("Image", (string)null);
+                    b.ToTable("Image");
                 });
 
             modelBuilder.Entity("FriendyFy.Models.Interest", b =>
@@ -680,7 +683,7 @@ namespace FriendyFy.Data.Migrations
 
                     b.HasKey("Id");
 
-                    b.ToTable("Interests", (string)null);
+                    b.ToTable("Interests");
                 });
 
             modelBuilder.Entity("FriendyFy.Models.Message", b =>
@@ -715,7 +718,7 @@ namespace FriendyFy.Data.Migrations
 
                     b.HasIndex("UserId");
 
-                    b.ToTable("Message", (string)null);
+                    b.ToTable("Message");
                 });
 
             modelBuilder.Entity("FriendyFy.Models.Notification", b =>
@@ -755,7 +758,7 @@ namespace FriendyFy.Data.Migrations
 
                     b.HasIndex("InviterId");
 
-                    b.ToTable("Notification", (string)null);
+                    b.ToTable("Notification");
                 });
 
             modelBuilder.Entity("FriendyFy.Models.Post", b =>
@@ -815,7 +818,7 @@ namespace FriendyFy.Data.Migrations
 
                     b.HasIndex("RepostId");
 
-                    b.ToTable("Posts", (string)null);
+                    b.ToTable("Posts");
                 });
 
             modelBuilder.Entity("FriendyFy.Models.PostComment", b =>
@@ -844,31 +847,35 @@ namespace FriendyFy.Data.Migrations
 
                     b.HasIndex("PostId");
 
-                    b.ToTable("PostComment", (string)null);
+                    b.ToTable("PostComment");
                 });
 
             modelBuilder.Entity("FriendyFy.Models.PostLike", b =>
                 {
-                    b.Property<string>("LikedById")
-                        .HasColumnType("nvarchar(450)");
-
-                    b.Property<string>("PostId")
+                    b.Property<string>("Id")
                         .HasColumnType("nvarchar(450)");
 
                     b.Property<DateTime>("CreatedOn")
                         .HasColumnType("datetime2");
 
-                    b.Property<string>("Id")
-                        .HasColumnType("nvarchar(max)");
+                    b.Property<string>("LikedById")
+                        .HasColumnType("nvarchar(450)");
 
                     b.Property<DateTime?>("ModifiedOn")
                         .HasColumnType("datetime2");
 
-                    b.HasKey("LikedById", "PostId");
+                    b.Property<string>("PostId")
+                        .HasColumnType("nvarchar(450)");
+
+                    b.HasKey("Id");
 
                     b.HasIndex("PostId");
 
-                    b.ToTable("PostLike", (string)null);
+                    b.HasIndex("LikedById", "PostId")
+                        .IsUnique()
+                        .HasFilter("[LikedById] IS NOT NULL AND [PostId] IS NOT NULL");
+
+                    b.ToTable("PostLike");
                 });
 
             modelBuilder.Entity("FriendyFy.Models.PostTagged", b =>
@@ -889,7 +896,7 @@ namespace FriendyFy.Data.Migrations
 
                     b.HasIndex("PostId");
 
-                    b.ToTable("PostTagged", (string)null);
+                    b.ToTable("PostTagged");
                 });
 
             modelBuilder.Entity("FriendyFy.Models.RemoveSuggestionFriend", b =>
@@ -915,7 +922,7 @@ namespace FriendyFy.Data.Migrations
 
                     b.HasIndex("UserId");
 
-                    b.ToTable("RemoveSuggestionFriend", (string)null);
+                    b.ToTable("RemoveSuggestionFriend");
                 });
 
             modelBuilder.Entity("FriendyFy.Models.UserFriend", b =>
@@ -947,7 +954,7 @@ namespace FriendyFy.Data.Migrations
 
                     b.HasIndex("FriendId");
 
-                    b.ToTable("UserFriends", (string)null);
+                    b.ToTable("UserFriends");
                 });
 
             modelBuilder.Entity("GroupInterest", b =>
@@ -962,7 +969,7 @@ namespace FriendyFy.Data.Migrations
 
                     b.HasIndex("InterestsId");
 
-                    b.ToTable("GroupInterest", (string)null);
+                    b.ToTable("GroupInterest");
                 });
 
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityRole", b =>
@@ -1400,15 +1407,11 @@ namespace FriendyFy.Data.Migrations
                 {
                     b.HasOne("FriendyFy.Models.ApplicationUser", "LikedBy")
                         .WithMany("Likes")
-                        .HasForeignKey("LikedById")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
+                        .HasForeignKey("LikedById");
 
                     b.HasOne("FriendyFy.Models.Post", "Post")
                         .WithMany("Likes")
-                        .HasForeignKey("PostId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
+                        .HasForeignKey("PostId");
 
                     b.Navigation("LikedBy");
 

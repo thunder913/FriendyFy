@@ -196,8 +196,11 @@ public class UserService : IUserService
         const int usersToTake = 4;
         var users = await userRepository
             .AllAsNoTracking()
-            .Where(x => x.Id != userId && blocked.All(y => y != x.Id)
-                                       && !(x.Friends.Any(y => y.FriendId == x.Id && y.CurrentUserId == userId) 
+            .Where(x => 
+                    x.Id != userId 
+                    && x.FinishedFirstTimeLogin
+                    && blocked.All(y => y != x.Id)
+                    && !(x.Friends.Any(y => y.FriendId == x.Id && y.CurrentUserId == userId) 
                                             || x.Friends.Any(y => y.CurrentUserId == x.Id && y.FriendId == userId)))
             .OrderByDescending(x => x.Events.Where(x => x.Time < DateTime.UtcNow).Count(y => y.Users.Any(z => z.Id == userId)) +
                                     x.Friends.Where(x => x.IsFriend).Count(y => y.Id == userId) * 2 +

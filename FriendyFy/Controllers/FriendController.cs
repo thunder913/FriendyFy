@@ -157,7 +157,7 @@ public class FriendController : BaseController
     }
 
     [HttpDelete("suggestion")]
-    public async Task<IActionResult> GetFriendRecommendations(UserIdRequest dto)
+    public async Task<IActionResult> RemoveFriendRecommendations(UserIdRequest dto)
     {
         var userId = GetUserIdByToken();
 
@@ -171,7 +171,7 @@ public class FriendController : BaseController
     }
 
     [HttpGet("suggestions")]
-    public async Task<IActionResult> GetRightNavRecommendations()
+    public async Task<IActionResult> GetPeopleYouProbablyMet()
     {
         var userId = GetUserIdByToken();
 

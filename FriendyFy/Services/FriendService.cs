@@ -279,6 +279,7 @@ public class FriendService : IFriendService
             .All()
             .Where(x =>
                 x.Id != userId
+                && x.FinishedFirstTimeLogin
                 && x.BlockedUserSuggestions.All(y => y.UserId != userId)
                 && ((x.Latitude < user.Latitude && x.Latitude + 5 > user.Latitude) || (x.Latitude - 5 < user.Latitude && x.Latitude > user.Latitude))
                 && ((x.Longitude < user.Longitude && x.Longitude + 5 > user.Longitude) || (x.Longitude - 5 < user.Longitude && x.Longitude > user.Longitude))
@@ -305,6 +306,7 @@ public class FriendService : IFriendService
                 .All()
                 .Where(x =>
                     x.Id != user.Id
+                    && x.FinishedFirstTimeLogin
                     && x.BlockedUserSuggestions.All(y => y.UserId != userId)
                     && x.Friends.All(y => y.CurrentUserId != userId && y.FriendId != userId))
                 .Where(x => !recommendations.Select(y => y.Username).Contains(x.UserName))

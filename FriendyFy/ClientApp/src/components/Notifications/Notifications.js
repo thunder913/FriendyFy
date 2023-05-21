@@ -89,6 +89,7 @@ const Notifications = () => {
 
     useEffect(() => {
         if (connection) {
+            console.log(loggedIn.id)
             connection.on(loggedIn.id, (notification) => {
                 if (show) {
                     seeNotification(notification.id);

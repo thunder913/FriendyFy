@@ -28,7 +28,7 @@ export function makePost(privacySetting, postMessage, locationLat, locationLng, 
   }
 
   export function getTaggedPeople(postId, skip, take) {
-    return fetch('/post/tagged' + new URLSearchParams({postId, skip, take}), {
+    return fetch('/post/tagged?' + new URLSearchParams({postId, skip, take}), {
         method: 'GET',
         headers: {'Content-Type': 'application/json'},
     });

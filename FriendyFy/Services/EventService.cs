@@ -561,6 +561,7 @@ public class EventService : IEventService
         {
             events.AddRange(await eventPostRepository
                 .AllAsNoTracking()
+                .Where(x => x.Creator.Friends.Any(y => y.FriendId == user.Id && y.IsFriend))
                 .Where(x => user == null || x.CreatorId != user.Id)
                 .OrderByDescending(x => x.CreatedOn)
                 .Where(x => !ids.Contains(x.Id))

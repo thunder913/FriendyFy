@@ -23,8 +23,8 @@ public class NotificationService : INotificationService
     private readonly IBlobService blobService;
     private readonly IEventService eventService;
     private readonly IMapper mapper;
-    public NotificationService(IRepository<Notification> notificationRepository, 
-        IDeletableEntityRepository<Event> eventRepository, 
+    public NotificationService(IRepository<Notification> notificationRepository,
+        IDeletableEntityRepository<Event> eventRepository,
         IDeletableEntityRepository<ApplicationUser> userRepository,
         IBlobService blobService,
         IEventService eventService)
@@ -44,7 +44,8 @@ public class NotificationService : INotificationService
             .Where(x => x.Users.All(y => y.UserName != inviteeUsername))
             .Select(x => new
             {
-                x.Id, x.Name
+                x.Id,
+                x.Name
             })
             .FirstOrDefaultAsync(x => x.Id == eventId);
 
@@ -100,33 +101,47 @@ public class NotificationService : INotificationService
     {
         var notifications = await notificationRepository
             .AllAsNoTracking()
+            .Include(x => x.Inviter)
             .Where(x => x.InviteeId == userId)
-            .OrderByDescending(x => x.CreatedOn)
+             .OrderByDescending(x => x.CreatedOn)
             .Skip(skip)
             .Take(take)
-            .Select(x => new NotificationDto
+            .Select(x => new NotificationViewModel
             {
                 Id = x.Id,
-                ImageName = x.Inviter.ProfileImage.Id + x.Inviter.ProfileImage.ImageExtension,
+                Image = x.Inviter.ProfileImage.Id + x.Inviter.ProfileImage.ImageExtension,
                 Name = x.Inviter.FirstName,
                 Type = x.Event != null ? "event" : "profile",
                 EventName = x.Event.Name,
-                InviterUsername = x.Inviter.UserName,
-                Date = x.ModifiedOn,
-                EventId = x.EventId,
-                IsAvailable = x.IsAvailable
+                InviterUsername = x.Inviter.UserName
             })
             .ToListAsync();
+
+        var toSee = notificationRepository
+                    .All()
+                    .Where(x => !x.IsSeen);
+
+        foreach (var item in toSee)
+        {
+            item.IsSeen = true;
+        }
 
         await notificationRepository.SaveChangesAsync();
 
         return notifications
-            .Select(x =>
+            .Select(x => new NotificationViewModel
             {
-                var model = mapper.Map<NotificationViewModel>(x);
-                model.Image = blobService.GetBlobUrl(x.ImageName, GlobalConstants.BlobPictures);
-                return model;
-            }).ToList();
+                Id = x.Id,
+                EventName = x.EventName,
+                Image = blobService.GetBlobUrl(x.Image, GlobalConstants.BlobPictures),
+                Type = x.Type,
+                Name = x.Name,
+                InviterUsername = x.InviterUsername,
+                Date = x.Date,
+                EventId = x.EventId,
+                IsAvailable = x.IsAvailable
+            })
+            .ToList();
     }
 
     public async Task<bool> ChangeEventStatusAsync(string notificationId, ApplicationUser user, bool joinEvent)
@@ -166,7 +181,7 @@ public class NotificationService : INotificationService
             .AllAsNoTracking()
             .CountAsync(x => !x.IsSeen && x.InviteeId == userId);
     }
-        
+
     public async Task<bool> SeeNotificationAsync(string userId, string notificationId)
     {
         var notification = await notificationRepository
@@ -183,9 +198,9 @@ public class NotificationService : INotificationService
 
         var existingNotification = await notificationRepository
             .All()
-            .FirstOrDefaultAsync(x => x.InviteeId == inviteeUser.Id && 
-                                      x.InviterId == inviter.Id && 
-                                      x.IsAvailable && 
+            .FirstOrDefaultAsync(x => x.InviteeId == inviteeUser.Id &&
+                                      x.InviterId == inviter.Id &&
+                                      x.IsAvailable &&
                                       x.EventId == null);
 
         if (existingNotification != null)
@@ -211,7 +226,7 @@ public class NotificationService : INotificationService
             Image = blobService.GetBlobUrl(inviter.ProfileImage.Id + inviter.ProfileImage.ImageExtension, GlobalConstants.BlobPictures),
             Name = inviter.FirstName,
             Type = "profile",
-            EventName = inviter.FirstName+" "+inviter.LastName,
+            EventName = inviter.FirstName + " " + inviter.LastName,
             InviterUsername = inviter.UserName,
             Date = notification.ModifiedOn,
         };
@@ -223,9 +238,9 @@ public class NotificationService : INotificationService
     {
         var existingNotification = await notificationRepository
             .All()
-            .FirstOrDefaultAsync(x => x.InviteeId == inviteeId && 
-                                      x.InviterId == inviterId && 
-                                      x.IsAvailable && 
+            .FirstOrDefaultAsync(x => x.InviteeId == inviteeId &&
+                                      x.InviterId == inviterId &&
+                                      x.IsAvailable &&
                                       x.EventId == null);
 
         if (existingNotification == null)
