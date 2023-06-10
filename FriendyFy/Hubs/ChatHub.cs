@@ -40,3 +40,4 @@ public class ChatHub : Hub
         return true;
     }
 }
+

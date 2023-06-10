@@ -128,6 +128,7 @@ public class NotificationService : INotificationService
 
         await notificationRepository.SaveChangesAsync();
 
+        // TODO make it actually get the isAvailable. should be if you are invited to an event.
         return notifications
             .Select(x => new NotificationViewModel
             {
@@ -139,7 +140,7 @@ public class NotificationService : INotificationService
                 InviterUsername = x.InviterUsername,
                 Date = x.Date,
                 EventId = x.EventId,
-                IsAvailable = x.IsAvailable
+                IsAvailable = x.Type == "profile"
             })
             .ToList();
     }

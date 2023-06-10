@@ -39,7 +39,7 @@
 .event-page-top .photos .add-event-image, .event-page-top .photos .big-add-image{
     background-color: transparent;
     border: 0px;
-    color: white;
+    color: var(--text-main);
     background-color: var(--slightly-light);
     transition: 0.3s;
 }

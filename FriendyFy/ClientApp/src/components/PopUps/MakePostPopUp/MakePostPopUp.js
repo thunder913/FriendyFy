@@ -40,6 +40,7 @@ const MakePostPopUp = ({ hasImage, show, setShow, setRefreshToken }) => {
                 let result = await (res.json());
                 if (result.success) {
                     setShow(false);
+                    setPostMessage('');
                     if(typeof setRefreshToken === 'function'){
                         setRefreshToken(prev => !prev);
                     }
