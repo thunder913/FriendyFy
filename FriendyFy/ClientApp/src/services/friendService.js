@@ -37,9 +37,9 @@ function checkFriendStatus(userId){
     });
 }
 
-function getFriends(userId, count, skip, searchQuery){
-    let query = searchQuery ?? '';
-    return fetch('/friend?' + new URLSearchParams({userId, count, skip, query}), {
+function getFriends(userId, count, skip, query){
+    let searchQuery = query ?? '';
+    return fetch('/friend?' + new URLSearchParams({ userId, count, skip, searchQuery }), {
         method: 'GET',
         headers: {'Content-Type': 'application/json'},
     });

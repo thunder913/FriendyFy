@@ -109,6 +109,7 @@ public class NotificationService : INotificationService
             .Select(x => new NotificationViewModel
             {
                 Id = x.Id,
+                EventId = x.EventId,
                 Image = x.Inviter.ProfileImage.Id + x.Inviter.ProfileImage.ImageExtension,
                 Name = x.Inviter.FirstName,
                 Type = x.Event != null ? "event" : "profile",

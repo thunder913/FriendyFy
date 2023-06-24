@@ -121,3 +121,7 @@
         left: 10%;
     }
 }
+
+.search-options .search{
+    z-index: 1;
+}
