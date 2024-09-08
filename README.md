@@ -57,7 +57,6 @@ Users can:
 ### Back End (.NET)
 - ASP.NET Core 7.0
 - Entity Framework (EF) Core 7.0
-- Razor View Engine
 - ASP.NET Identity System
 - Web API
 - SignalR
