@@ -1,7 +1,5 @@
 # FriendyFy
 
-**Link to the website -> https://friendyfy20221127171333.azurewebsites.net/**
-
 **ASP .NET Core 7.0 with ReactJS**
 
 The website is a **social network** website just like facebook, where the main focus is on **meeting with people, by creating events**. Everything is based on **interests**. Upon registering every user chooses **his interests** and based on them, he can find **events and people with simillar ones**.
